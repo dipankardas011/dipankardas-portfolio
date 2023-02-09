@@ -68,15 +68,15 @@ paginate = 5
     languageName = "English"
     title = "My Portfolio"
     subtitle = "A simple, retro theme for Hugo"
-    owner = ""
-    keywords = ""
+    owner = "Dipankar Das"
+    keywords = "hugo;"
     copyright = ""
     menuMore = "Show more"
     readMore = "Read more"
     readOtherPosts = "Read other posts"
     newerPosts = "Newer posts"
     olderPosts = "Older posts"
-    missingContentMessage = "Page not found..."
+    missingContentMessage = "404 Page not found..."
     missingBackButtonLabel = "Back to home page"
 
     [languages.en.params.logo]
@@ -86,15 +86,15 @@ paginate = 5
     [languages.en.menu]
       [[languages.en.menu.main]]
         identifier = "about"
-        name = "About"
-        url = "/about"
-      [[languages.en.menu.main]]
-        identifier = "showcase"
-        name = "Showcase"
-        url = "/showcase"
+        name = "About Me"
+        url = "/posts/aboutme"
       [[languages.en.menu.main]]
         identifier = "projects"
         name = "Projects"
-        url = "/projects"
+        url = "/posts/projects"
+      [[languages.en.menu.main]]
+        identifier = "blogs"
+        name = "Blogs"
+        url = "/posts/blogs"
 
 
