@@ -56,17 +56,24 @@ https://github.com/dipankardas011/AirportBooking
 
 # My Open Source contributions
 
-- CNCF
-  - [PR1](https://github.com/cncf/glossary/pull/628)
-  - [PR2](https://github.com/cncf/glossary/pull/634)
-  - [PR3](https://github.com/cncf/glossary/pull/635)
+- CNCF Glossary
+  - [Missing link for Vertical-scaling in bare_metal_machine.md](https://github.com/cncf/glossary/pull/628)
+  - [Missing link to Vertical Scaling](https://github.com/cncf/glossary/pull/634)
+  - [Typo Changes from 'document' to 'manifest file'](https://github.com/cncf/glossary/pull/635)
 - Kubernetes
-  - [PR1](https://github.com/kubernetes/kubernetes/pull/112085)
-  - [PR2](https://github.com/kubernetes/website/pull/34067)
-  - [PR3](https://github.com/kubernetes/kubernetes/pull/113870)
-  - [PR4](https://github.com/kubernetes/website/pull/36667)
-  - [PR5](https://github.com/kubernetes/kubernetes/pull/114894)
+  - [Code Refactoring of Pod under pkg/api](https://github.com/kubernetes/kubernetes/pull/112085)
+  - [modifications to taint-and-tolerations page2](https://github.com/kubernetes/website/pull/34067)
+  - [Error Suppression in printer/internalversion/printers3](https://github.com/kubernetes/kubernetes/pull/113870)
+  - [Added make module-init command in Readme](https://github.com/kubernetes/website/pull/36667)
+  - [Added error handling in ValidateAdmissionPolicy](https://github.com/kubernetes/kubernetes/pull/114894)
 - Monokle by KubeShop
-  - [PR1](https://github.com/kubeshop/monokle-default-templates-plugin/pull/4)
-  - [PR2](https://github.com/kubeshop/monokle/pull/2308)
+  - [Addition of more in-build templates](https://github.com/kubeshop/monokle-default-templates-plugin/pull/4)
+  - [feat(terminal): added ZSH shell for Linux based OS ](https://github.com/kubeshop/monokle/pull/2308)
+- Meshery by Layer5
+  - [\[UI\] Removal of unused variables with comments](https://github.com/meshery/meshery/pull/6422)
+  - [\[Server\] Refactoring of Function Comments](https://github.com/meshery/meshery/pull/6421)
+- Datreeio
+  - [docs: add uninstall for helm release](https://github.com/datreeio/admission-webhook-datree/pull/77)
+- Kubescape by Armo
+  - [Cosign for quay.io in Github Action](https://github.com/kubescape/kubescape/pull/826)
 
