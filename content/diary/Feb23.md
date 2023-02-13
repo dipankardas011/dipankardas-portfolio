@@ -9,6 +9,7 @@ description = "Let's talk about my February 2023"
 1. college studies
 2. college tests
 3. added goreleaser to the ksctl project
+4. how to create gpg key and use it to sign the commits help from `Github Docs`
 
 # Date 2023-02-12
 
