@@ -88,17 +88,14 @@ paginate = 5
         identifier = "about"
         name = "About Me"
         url = "/posts/aboutme"
-
       [[languages.en.menu.main]]
         identifier = "projects"
         name = "Projects"
         url = "/posts/projects"
-
       [[languages.en.menu.main]]
         identifier = "blogs"
         name = "Blogs"
         url = "/posts/blogs"
-      
       [[languages.en.menu.main]]
         identifier = "diary"
         name = "My Diary"
