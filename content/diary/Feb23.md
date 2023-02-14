@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2023"
 +++
 
+# Date 2023-02-14
+1. had 2 college exams
+2. added one liner command to install and uninstall ksctl
+3. did the course study on vault policies and cka on kubernetes cluster update
+
 # Date 2023-02-13
 1. college studies
 2. college tests
