@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2023"
 +++
 
+# Date 2023-02-15
+1. how to create a ec2 instance with gitlab CE as AMI
+2. used and configured the AWS CodeCOmmit, CodeBuilder, CodePipleine
+3. done adding the ksctl azure credentials
+4. day of starting Devops intern
+
 # Date 2023-02-14
 1. had 2 college exams
 2. added one liner command to install and uninstall ksctl
