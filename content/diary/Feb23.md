@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2023"
 +++
 
+# Date 2023-02-17
+1. Added the complete azure managed cluster support with some Major TODOs
+2. done 90% of my first internship taks
+3. Got to know about golang best practises from the kubesimplify's twitter space
+4. where I taught my class on `"inter-quatile range and how to detect outliers in data-set"`
+5. Reading out Vault policies i.e. sys capabilities such as sudo access
+
 # Date 2023-02-16
 1. did ksctl bi-weekly meeting
 2. done 60% of my first internship task
