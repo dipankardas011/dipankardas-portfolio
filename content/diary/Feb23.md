@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2023"
 +++
 
+# Date 2023-02-18
+1. Completed the addition of Azure managed cluster ksctl
+2. Done task in kodekloud engineer
+3. Done Vault course submodule on policies
+4. Used the learning and created the user with specific policy
+
 # Date 2023-02-17
 1. Added the complete azure managed cluster support with some Major TODOs
 2. done 90% of my first internship taks
