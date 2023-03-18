@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2023"
 +++
 
+# Date 2023-02-19 to 2023-02-28
+1. Attended FOSS Kolkata
+2. Done with new ksctl release having ksctl
+3. Tried out Rust programming language
+
 # Date 2023-02-18
 1. Completed the addition of Azure managed cluster ksctl
 2. Done task in kodekloud engineer
