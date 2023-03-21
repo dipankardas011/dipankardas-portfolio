@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2023-03-21
+1. Attended the KIIT Placement orentation
+2. LR parser in syntax analysis in Compiler design
+3. Had first meeting on Minor project
+4. Solved one DSA problem
+
 # Date 2023-03-20
 1. Done with some issue in ksctl
 2. Done with apk signing in Microsoft AppCenter build (Internship)
