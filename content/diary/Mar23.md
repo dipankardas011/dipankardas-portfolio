@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2023-03-22 to 2023-03-26
+1. Done with another Internship task
+2. Rust learning
+3. Puri trip
+4. Tried out DSA problems, unable to work on them
+5. Wrote blog on Vault
+6. Studied about Hashicorp vault
+7. Learning about stock market
+
 # Date 2023-03-21
 1. Attended the KIIT Placement orentation
 2. LR parser in syntax analysis in Compiler design
