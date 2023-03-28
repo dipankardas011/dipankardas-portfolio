@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2023-03-28
+1. Done with internship documentation creation
+2. Rust data type
+3. Hashicorp vault learning
+
+
 # Date 2023-03-22 to 2023-03-26
 1. Done with another Internship task
 2. Rust learning
