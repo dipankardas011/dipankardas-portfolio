@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2023-03-29
+1. Functional & expression in rust
+2. first hello program in WASM
+3. trying out mongodb
+4. some college placement assessment tests
+5. trying out NIX and Helix
+6. Vault and CKA learning
+
 # Date 2023-03-28
 1. Done with internship documentation creation
 2. Rust data type
