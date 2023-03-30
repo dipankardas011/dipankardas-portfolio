@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2023-03-30
+1. Done with basic college cognitive tasks
+2. 0 attendance in ksctl biweekly
+3. how to create serviceaccount  in gcp for google play developer
+4. added a script to set the max_limit for sound (100%)
+
 # Date 2023-03-29
 1. Functional & expression in rust
 2. first hello program in WASM
