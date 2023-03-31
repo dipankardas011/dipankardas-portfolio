@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2023-03-31
+1. Done with a lot of college placements
+2. AWS Lab to do (CLoudtrail, RDS)
+3. First time used google play developer to deploy an app
+
 # Date 2023-03-30
 1. Done with basic college cognitive tasks
 2. 0 attendance in ksctl biweekly
