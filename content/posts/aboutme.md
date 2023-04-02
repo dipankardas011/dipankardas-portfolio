@@ -8,7 +8,7 @@ description = "Let's talk about me"
 +++
 
 # About Me
-I am Dipankar Das, currently in my 3rd year B.Tech doing Computer Science Major, Kubesimplify Ambassador, ♥️ Open Source and write technical blogs
+I am Dipankar Das, currently in my 3rd year B.Tech doing Computer Science Major, DevOps Intern at Viamagus, Kubesimplify Ambassador, ♥️ Open Source and write technical blogs
 
 ## Interests
 - DevOps Tools
