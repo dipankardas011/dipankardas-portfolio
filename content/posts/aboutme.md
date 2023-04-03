@@ -49,5 +49,4 @@ I am Dipankar Das, currently in my 3rd year B.Tech doing Computer Science Major,
 
 # Latest Resume
 
-[Resume_Link](https://raw.githubusercontent.com/dipankardas011/dipankardas011/main/Resume.pdf)
-
+[![resume-preview](/img/resume-preview.jpg)](https://raw.githubusercontent.com/dipankardas011/dipankardas011/main/Resume.pdf)
