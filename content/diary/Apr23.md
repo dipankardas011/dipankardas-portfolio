@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2023"
 +++
 
+# Date 2023-04-06
+1. Done creating build and publish to Gplay store
+2. Jenkins learning
+3. college exame
+4. Vault course (dynamic secrets)
+
 # Date 2023-04-05
 1. Some internship work
 2. rust learning on structure
