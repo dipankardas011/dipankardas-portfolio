@@ -8,6 +8,11 @@ description = "Let's talk about me"
 +++
 
 # About Me
+
+
+{{< image src="/img/profile_small.jpg" alt="PDF-Editor" position="center" style="border-radius: 8px;" scale="10" >}}
+
+
 I am Dipankar Das, currently in my 3rd year B.Tech doing Computer Science Major, DevOps Intern at Viamagus, Kubesimplify Ambassador, ♥️ Open Source and write technical blogs
 
 ## Interests
