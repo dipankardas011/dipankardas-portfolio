@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2023"
 +++
 
+# Date 2023-04-09
+1. Learned about OAM (open application model)
+2. company docs is done
+
+# Date 2023-04-08
+1. Watch John Wick 4 😄
+
 # Date 2023-04-06
 1. Done creating build and publish to Gplay store
 2. Jenkins learning
