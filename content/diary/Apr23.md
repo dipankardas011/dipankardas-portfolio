@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2023"
 +++
 
+# Date 2023-04-11
+1. checked out some Pytorch videos
+2. internship work
+3. monokle (open source) PR
+4. Getting prepared for hackathon
+5. got to know which part of compiler is responsible for behavioral or intelligence (**Semantic**)
+
 # Date 2023-04-09
 1. Learned about OAM (open application model)
 2. company docs is done
