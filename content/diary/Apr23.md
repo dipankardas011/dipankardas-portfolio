@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2023"
 +++
 
+# Date 2023-04-12
+1. Figure out the napptive kafka deployment
+2. internship work getting finalized
+3. vault kv store done
+4. got college exam marks (17.6 / 20)
+
 # Date 2023-04-11
 1. checked out some Pytorch videos
 2. internship work
