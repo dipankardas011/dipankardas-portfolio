@@ -5,6 +5,17 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2023"
 +++
 
+# Date 2023-04-14
+1. TOday trained a model for soil classification
+2. enjoyed with college friends
+3. vault course 
+4. etcd backups
+
+# Date 2023-04-13
+1. Decided the teams for the napptive hackathon
+2. kafka OAM template failure
+3. after 3 yrs again came back to train DeepLearning models
+
 # Date 2023-04-12
 1. Figure out the napptive kafka deployment
 2. internship work getting finalized
