@@ -5,6 +5,17 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2023"
 +++
 
+# Date 2023-04-15 to 2023-04-21
+1. learned bout OAM and how to use it
+  - converted PDF-Editor project to OAM
+2. Added some ksctl docs website
+3. won the wemakedevs napptive hackathon
+4. preparing for the end-sem
+5. learned new stuff witrespective to computer from compilers to software planning
+6. found how to extrace raw mercis from a given VM (NodeExporter)
+7. started to work on internship subtask
+8. joined the Github community/maintainers repo
+
 # Date 2023-04-14
 1. TOday trained a model for soil classification
 2. enjoyed with college friends
