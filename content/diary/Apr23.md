@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2023"
 +++
 
+# Date 2023-04-22 to 2023-04-25
+1. Successfully created the iOS certificate keys learning for iOS dev
+2. ksctl documentation website updated with reoadmap
+3. got all the college marks
+4. stressed out with college assignments, exams
+5. preparing for the end-sem (last core subjects)
+6. understood more about compiler optimization
+
 # Date 2023-04-15 to 2023-04-21
 1. learned bout OAM and how to use it
   - converted PDF-Editor project to OAM
