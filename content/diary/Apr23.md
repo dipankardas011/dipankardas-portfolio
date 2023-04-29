@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2023"
 +++
 
+# Date 2023-04-26 to 2023-04-29
+1. had kubesimplify workshop
+2. done with college assignment and other stuff before the endsem
+3. got started with ebpf
+4. learned about `xargs` and `parallel` in bash commands and their utilities
+
 # Date 2023-04-22 to 2023-04-25
 1. Successfully created the iOS certificate keys learning for iOS dev
 2. ksctl documentation website updated with reoadmap
