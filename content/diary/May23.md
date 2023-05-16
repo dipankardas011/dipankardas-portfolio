@@ -5,6 +5,16 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2023"
 +++
 
+# Date 2023-05-16
+1. Done with some DSA proactise with golang
+2. ksctl docs website improved
+3. some wasm with docker and kubernetes runtiem with `spins`
+4. doing machine learning
+
+# Date 2023-05-15
+1. returned home and continuing to learn new tech
+2. some rest
+
 # Date 2023-05-13
 1. Completed with my exams
 2. hostel is over and going to continue college in virtual mode
