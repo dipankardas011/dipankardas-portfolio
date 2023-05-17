@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2023"
 +++
 
+# Date 2023-05-17
+1. came to know whhy deep learning is having such big leap
+2. tried kubernetes custom contoller
+3. internship work with respective to the iOS mobile app
+
 # Date 2023-05-16
 1. Done with some DSA proactise with golang
 2. ksctl docs website improved
