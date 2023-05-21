@@ -12,13 +12,13 @@ paginate = 5
   contentTypeName = "posts"
 
   # ["orange", "blue", "red", "green", "pink"]
-  themeColor = "blue"
+  themeColor = "orange"
 
   # if you set this to 0, only submenu trigger will be visible
   showMenuItems = 4
 
   # show selector to switch language
-  showLanguageSelector = false
+  showLanguageSelector = true
 
   # set theme to full screen width
   fullWidthTheme = false
@@ -33,7 +33,7 @@ paginate = 5
 
   # set post to show the last updated
   # If you use git, you can set `enableGitInfo` to `true` and then post will automatically get the last updated
-  showLastUpdated = false
+  showLastUpdated = true
 
   # set a custom favicon (default is a `themeColor` square)
   favicon = "/img/favicon.ico"
@@ -60,8 +60,8 @@ paginate = 5
   # set Twitter handles for Twitter cards
   # see https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started#card-and-content-attribution
   # do not include @
-  creator = "DipankarDas011"
-  site = "https://twitter.com/DipankarDas011"
+  # creator = "DipankarDas011"
+  site = "@DipankarDas011"
 
 [languages]
   [languages.en]
@@ -98,7 +98,7 @@ paginate = 5
         identifier = "blogs"
         name = "Blogs"
         url = "/posts/blogs"
-      
+
       [[languages.en.menu.main]]
         identifier = "diary"
         name = "My Diary"

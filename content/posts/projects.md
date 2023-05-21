@@ -25,7 +25,7 @@ https://github.com/dipankardas011/PDF-Editor
 
 ### Description
 
-Single CLI tool used to manage Kubernetes clusters among multiple cloud providers
+A Command-Line tool which can manage Kubernetes clusters on multiple cloud providers
 
 {{< image src="https://github.com/kubesimplify/ksctl/raw/main/img/ksctl-logo.png" alt="PDF-Editor" position="center" style="border-radius: 8px;" >}}
 
