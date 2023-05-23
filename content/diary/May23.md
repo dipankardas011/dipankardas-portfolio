@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2023"
 +++
 
+# Date 2023-05-18 to 2023-05-23
+1. Learned a lot about WASM
+2. Rust beginerrs done
+3. Done some pretty cool DSA problems
+4. ksctl version 1.0 released
+5. completed the internship automation of release of reactive native apps for android and iOS
+6. came to know difference between deep learning and some standard matrix multiplication
+and how the weight corrections is done througth the gradient descent
+
 # Date 2023-05-17
 1. came to know whhy deep learning is having such big leap
 2. tried kubernetes custom contoller
