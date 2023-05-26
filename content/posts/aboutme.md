@@ -84,6 +84,7 @@ LFD103: A Beginner's Guide to Linux Kernel Development | [![badge image](/img/ba
 
 [![Hashnode](https://img.shields.io/badge/Hashnode-2962FF.svg?style=for-the-badge&logo=Hashnode&logoColor=white)](https://dipankardas011.hashnode.dev/)
 
+
 # Latest Resume
 
 [![resume-preview](/img/resume-preview.jpg)](https://raw.githubusercontent.com/dipankardas011/dipankardas011/main/Resume.pdf)

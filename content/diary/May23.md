@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2023"
 +++
 
+# Date 2023-05-24 2023-05-26
+1. Rust basics on vector done
+2. created a small demo rust project
+3. prepared the LFX mentorship proposals
+4. got reached out by kyverno
+5. able to deploy nextjs apps to s3, storageaccount, vercel
+6. improve ksctl scripts
+7. improved understanding of wasm , why it is needed
+
 # Date 2023-05-18 to 2023-05-23
 1. Learned a lot about WASM
 2. Rust beginerrs done
