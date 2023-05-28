@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2023"
 +++
 
+# Date 2023-05-28
+1. start to design new architecture for ksctl
+2. completeddsa course by the primegen
+3. implemented lru cache
+
 # Date 2023-05-27
 1. revision of all computer science concepts (though something got into 🧠 )
 2. successfully created kubeadm cluster on civo (HA having 3 cp and 2 wp)
