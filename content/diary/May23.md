@@ -5,9 +5,16 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2023"
 +++
 
+# Date 2023-05-29
+1. got rejected for LFX mentorship in kyverno because of unable to meet 40 hrs/week
+2. almost done with documentation of internship work
+3. Practised Rust
+4. Created the LRU for golang
+5. interview with Kunak K got postpointed
+
 # Date 2023-05-28
 1. start to design new architecture for ksctl
-2. completeddsa course by the primegen
+2. completed dsa course by theprimeagen
 3. implemented lru cache
 
 # Date 2023-05-27
