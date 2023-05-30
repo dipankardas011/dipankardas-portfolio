@@ -10,6 +10,7 @@ description = "Let's talk about my May 2023"
 2. documentations done for the internship
 3. Created a small transformer Deep learning model in huggingface
 4. fixed some issue in docs of ksctl
+5. started with error handling in Rust
 
 # Date 2023-05-29
 1. got rejected for LFX mentorship in kyverno because of unable to meet 40 hrs/week
