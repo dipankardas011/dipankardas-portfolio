@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2023"
 +++
 
+# Date 2023-05-30
+1. Tried put wasm and wasi to compile ksctl failed but came to know a lot
+2. documentations done for the internship
+3. Created a small transformer Deep learning model in huggingface
+4. fixed some issue in docs of ksctl
+
 # Date 2023-05-29
 1. got rejected for LFX mentorship in kyverno because of unable to meet 40 hrs/week
 2. almost done with documentation of internship work
