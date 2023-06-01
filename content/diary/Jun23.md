@@ -11,4 +11,5 @@ description = "Let's talk about my June 2023"
 3. Gave a twitch live stream demo on how to build a application using pretrained ML model HuggingFace
 4. Came to know more about Synk
 5. Got started to use the tmux
+6. Compiled the Rust CLI tool to wasm and ran using wasmedge (wasm32/wasi)
 
