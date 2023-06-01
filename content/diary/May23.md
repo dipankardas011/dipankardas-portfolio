@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2023"
 +++
 
+# Date 2023-05-31
+1. Created some amazing demo pre-trained model on tex2text and other in huggingface
+2. Tried out some Golang projects
+3. Learn of Rust
+4. Started to use the Snyk
+
 # Date 2023-05-30
 1. Tried put wasm and wasi to compile ksctl failed but came to know a lot
 2. documentations done for the internship
