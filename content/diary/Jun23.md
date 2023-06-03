@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-02
+1. Done synk integration with jenkins and also added email notification of generated report.html
+2. Rust get request (spent almost 3 to 4 hours) but now its done just that wasm doesn't support it
+3. ksctl meeting for the firewall rules
+4. Komiser repo contribution and learned how to abstract different components of the project
+
 # Date 2023-06-01
 1. Done daily DSA problem
 2. Started to do the Rust programming
