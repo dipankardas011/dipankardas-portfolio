@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-03
+1. Completed the Snyk integration with Jenkins
+2. updated my fedora 37 -> 38
+3. Created a raw rust http server to handle huggingface bot requests
+4. fixed my laptop's battery alert system
+5. Done DSA problem
+6. Done Kodekloud devops task
+
+
 # Date 2023-06-02
 1. Done synk integration with jenkins and also added email notification of generated report.html
 2. Rust get request (spent almost 3 to 4 hours) but now its done just that wasm doesn't support it
