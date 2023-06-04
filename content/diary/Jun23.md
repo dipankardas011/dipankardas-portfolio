@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-04
+1. Done with ksctl integration with codecov
+2. had time with family
+3. had few twitter spaces, was speaker in one of them
+4. created the new draft ksctl new design of architecture
+5. learning about building deep learning models from scratch
+
 # Date 2023-06-03
 1. Completed the Snyk integration with Jenkins
 2. updated my fedora 37 -> 38
