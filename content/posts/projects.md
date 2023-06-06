@@ -69,6 +69,9 @@ https://github.com/dipankardas011/AirportBooking
 - Monokle by KubeShop
   - [Addition of more in-build templates](https://github.com/kubeshop/monokle-default-templates-plugin/pull/4)
   - [feat(terminal): added ZSH shell for Linux based OS ](https://github.com/kubeshop/monokle/pull/2308)
+- Komiser by tailwarden
+  - [fix: Dockerfile MAINTAINER label](https://github.com/tailwarden/komiser/pull/835)
+  - [enhancement: add new ascii art logo](https://github.com/tailwarden/komiser/pull/833)
 - Meshery by Layer5
   - [\[UI\] Removal of unused variables with comments](https://github.com/meshery/meshery/pull/6422)
   - [\[Server\] Refactoring of Function Comments](https://github.com/meshery/meshery/pull/6421)
