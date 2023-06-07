@@ -10,6 +10,8 @@ description = "Let's talk about my June 2023"
 2. checked out the ksctl the design proposal
 3. done with the nginx reverse proxy demo
 4. had kubesimplify monthly meeting
+5. Done DSA problems
+6. Came to know how to operate Rust
 
 # Date 2023-06-04
 1. Done with ksctl integration with codecov
