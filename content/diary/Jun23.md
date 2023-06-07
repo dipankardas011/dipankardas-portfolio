@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-05 to 2023-06-07
+1. Wasted time on wasm
+2. checked out the ksctl the design proposal
+
 # Date 2023-06-04
 1. Done with ksctl integration with codecov
 2. had time with family
