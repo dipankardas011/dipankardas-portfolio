@@ -8,6 +8,8 @@ description = "Let's talk about my June 2023"
 # Date 2023-06-05 to 2023-06-07
 1. Wasted time on wasm
 2. checked out the ksctl the design proposal
+3. done with the nginx reverse proxy demo
+4. had kubesimplify monthly meeting
 
 # Date 2023-06-04
 1. Done with ksctl integration with codecov
