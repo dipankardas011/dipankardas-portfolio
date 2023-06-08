@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-08
+1. Made the existing Rust bot app to have a nice basic ui
+2. Done some OSS
+    - K8s node-sigs
+    - kubernetes scale
+    - wasmedge
+    - k8s website
+
 # Date 2023-06-05 to 2023-06-07
 1. Wasted time on wasm
 2. checked out the ksctl the design proposal
