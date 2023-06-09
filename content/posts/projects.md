@@ -61,11 +61,13 @@ https://github.com/dipankardas011/AirportBooking
   - [Missing link to Vertical Scaling](https://github.com/cncf/glossary/pull/634)
   - [Typo Changes from 'document' to 'manifest file'](https://github.com/cncf/glossary/pull/635)
 - Kubernetes
+  - [Removal of the bases field as it is deprecated by kustomize](https://github.com/kubernetes-sigs/node-feature-discovery/pull/1246)
+  - [Use of exponentialTimeout instead of ImmediateTimeout for resource scaling](https://github.com/kubernetes/kubernetes/pull/116961)
   - [Code Refactoring of Pod under pkg/api](https://github.com/kubernetes/kubernetes/pull/112085)
-  - [modifications to taint-and-tolerations page2](https://github.com/kubernetes/website/pull/34067)
   - [Error Suppression in printer/internalversion/printers3](https://github.com/kubernetes/kubernetes/pull/113870)
-  - [Added make module-init command in Readme](https://github.com/kubernetes/website/pull/36667)
   - [Added error handling in ValidateAdmissionPolicy](https://github.com/kubernetes/kubernetes/pull/114894)
+  - [modifications to taint-and-tolerations page2](https://github.com/kubernetes/website/pull/34067)
+  - [Added make module-init command in Readme](https://github.com/kubernetes/website/pull/36667)
 - Monokle by KubeShop
   - [Addition of more in-build templates](https://github.com/kubeshop/monokle-default-templates-plugin/pull/4)
   - [feat(terminal): added ZSH shell for Linux based OS ](https://github.com/kubeshop/monokle/pull/2308)
