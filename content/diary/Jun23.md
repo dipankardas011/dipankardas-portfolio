@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-09 to Date 2023-06-11
+1. ksctl monthly meeting
+2. HTTPS diagram
+3. DSA practise
+4. Kubernetes Course on Certificates
+5. Go dependency graph from the aws cloudformation stack
+6. checkout weather forcast using google model using google earth
+7. used Google cloud and also bought my own dns `www.dipankardas.in`
+
 # Date 2023-06-08
 1. Made the existing Rust bot app to have a nice basic ui
 2. Done some OSS
