@@ -9,6 +9,29 @@ description = "Let's talk about my projects and other contributions"
 
 # My project collection
 
+## AWS Resource Dependency-graph generator
+
+### Description
+
+As AWS doesn't provide a way to get a dependency grpah for what all resources connected
+this tool will help you generated the a diagram for all the dependencies between resources
+
+Image `TODO`
+
+### Links
+https://gitlab.com/dipankardas011/aws-resource-dependency-graph
+
+## Chat Bot using GPT-2
+
+### Description
+
+it shows how to create a basic http server using rust and have it to handle my text2text generator bot in huggingface
+
+Image `TODO`
+
+### Links
+https://github.com/dipankardas011/bot-request-handler-rust
+
 ## PDF-Editor
 
 ### Description
