@@ -5,7 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
-# Date 2023-06-09 to Date 2023-06-11
+# Date 2023-06-11
+1. create the dependency graph for the AWS resource like EC2 and cloudformation
+2. DSA problem
+3. fixed my custom_ds for golang
+4. gave a companies intership process test
+
+# Date 2023-06-09 to Date 2023-06-10
 1. ksctl monthly meeting
 2. HTTPS diagram
 3. DSA practise
