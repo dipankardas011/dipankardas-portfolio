@@ -9,7 +9,8 @@ description = "Let's talk about my June 2023"
 1. DSA problem
 2. had discussion on kubernetes
 3. some eBPF blog from kubernetes
-4. tried out wasmer
+4. Rust programming
+5. tried out wasmer
 ```bash
 cargo wasix build
 wasmer run target/wasm32-wasmer-wasi/debug/first-cli.rustc.wasm --allow-multiple-wasi-versions -- reverse dcds
@@ -20,6 +21,7 @@ wasmer run target/wasm32-wasmer-wasi/debug/first-cli.rustc.wasm --allow-multiple
 2. had discussion on docker and solve one problem in internship
 3. tried out Qiskit for some quantum computing
 4. ksctl pr stuff
+5. Rust programming
 
 # Date 2023-06-11
 1. create the dependency graph for the AWS resource like EC2 and cloudformation
