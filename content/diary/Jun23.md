@@ -5,6 +5,22 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-13
+1. DSA problem
+2. had discussion on kubernetes
+3. some eBPF blog from kubernetes
+4. tried out wasmer
+```bash
+cargo wasix build
+wasmer run target/wasm32-wasmer-wasi/debug/first-cli.rustc.wasm --allow-multiple-wasi-versions -- reverse dcds
+```
+
+# Date 2023-06-12
+1. done 4 assessments in turing.com (kubernetes, aws, docker, go)
+2. had discussion on docker and solve one problem in internship
+3. tried out Qiskit for some quantum computing
+4. ksctl pr stuff
+
 # Date 2023-06-11
 1. create the dependency graph for the AWS resource like EC2 and cloudformation
 2. DSA problem
