@@ -13,8 +13,8 @@ description = "Let's talk about my projects and other contributions"
 
 ### Description
 
-As AWS doesn't provide a way to get a dependency grpah for what all resources connected
-this tool will help you generated the a diagram for all the dependencies between resources
+As AWS doesn't provide a way to get a dependency graph of how all resources are connected,
+this tool will help you generate the diagram for all the dependencies between resources
 
 Image `TODO`
 
@@ -25,7 +25,7 @@ https://gitlab.com/dipankardas011/aws-resource-dependency-graph
 
 ### Description
 
-it shows how to create a basic http server using rust and have it to handle my text2text generator bot in huggingface
+It shows how to create a basic http server using rust and have it to handle my text2text generator bot in huggingface
 
 Image `TODO`
 
@@ -70,7 +70,7 @@ https://github.com/dipankardas011/Weather-App
 
 ### Description
 
-An application that is used to book airplane tickets and also visualization of seating arrangement via a picture generated
+An application that is used to book Aeroplane tickets and also visualization of seating arrangement via a generated picture
 
 {{< image src="https://github.com/dipankardas011/AirportBooking/raw/main/CoverPage.jpg" alt="PDF-Editor" position="center" style="border-radius: 8px;" >}}
 
