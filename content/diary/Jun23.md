@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-14
+1. Rust programming
+2. done the wasmedge with tls plugin
+3. internship work
+4. ibm Qiskit done 
+
 # Date 2023-06-13
 1. DSA problem
 2. had discussion on kubernetes

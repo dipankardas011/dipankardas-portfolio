@@ -16,7 +16,8 @@ description = "Let's talk about my projects and other contributions"
 As AWS doesn't provide a way to get a dependency grpah for what all resources connected
 this tool will help you generated the a diagram for all the dependencies between resources
 
-Image `TODO`
+{{< image src="https://gitlab.com/dipankardas011/aws-resource-dependency-graph/-/raw/main/cover_cloudformation.png" alt="AWS Resource Dependency-graph generator" position="center" style="border-radius: 8px;" >}}
+
 
 ### Links
 https://gitlab.com/dipankardas011/aws-resource-dependency-graph
@@ -27,10 +28,14 @@ https://gitlab.com/dipankardas011/aws-resource-dependency-graph
 
 it shows how to create a basic http server using rust and have it to handle my text2text generator bot in huggingface
 
-Image `TODO`
+{{< image src="https://raw.githubusercontent.com/dipankardas011/my-wasm-learning/main/wasi-bot/coverpage.png" alt="Chat Bot using GPT-2" position="center" style="border-radius: 8px;" >}}
 
-### Links
+### Links (Wasmedge using Rust)
+https://github.com/dipankardas011/my-wasm-learning/tree/main/wasi-bot
+
+### Links (Tokio, Async using Rust)
 https://github.com/dipankardas011/bot-request-handler-rust
+
 
 ## PDF-Editor
 
