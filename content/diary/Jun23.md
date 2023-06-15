@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-15
+1. Done DSA problem
+2. internship work
+
 # Date 2023-06-14
 1. Rust programming
 2. done the wasmedge with tls plugin
