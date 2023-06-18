@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-18
+1. DSA problems
+2. Cisco certifications
+
+# Date 2023-06-16 to 2023-06-17
+1. enjoyed KCD Mumbai
+2. attended spin workshops
+
 # Date 2023-06-15
 1. Done DSA problem
 2. internship work
