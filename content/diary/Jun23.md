@@ -8,6 +8,10 @@ description = "Let's talk about my June 2023"
 # Date 2023-06-18
 1. DSA problems
 2. Cisco certifications
+    - module 1 done CCNA
+    - module 1 done computer security
+    - module 1 done python 
+3. Learn Rust
 
 # Date 2023-06-16 to 2023-06-17
 1. enjoyed KCD Mumbai
