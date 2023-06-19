@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-19
+1. Cisco certs
+    - python begineers done
+    - security gave one module test
+2. Learn Rust
+3. Got marks of EndSem exams
+4. Watched the video on Dagger
+5. came to know when should one use the managed offering vs self-managed k8s
+
 # Date 2023-06-18
 1. DSA problems
 2. Cisco certifications
