@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-21
+1. done jenkins automation script
+2. uploaded a new yt video
+3. doing python cisco
+4. ksctl design diagrams
+
 # Date 2023-06-20
 1. added the dagger to the ksctl
 2. automated the jenkins job creation and trigger
