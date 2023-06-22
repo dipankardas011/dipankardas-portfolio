@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-22
+1. DSA problem
+2. Cisco training
+3. had discussion with kubesimplify ambassadors about carrier
+
 # Date 2023-06-21
 1. done jenkins automation script
 2. uploaded a new yt video
