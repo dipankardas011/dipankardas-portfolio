@@ -10,15 +10,15 @@ description = "Let's talk about me"
 # About Me
 
 
-{{< image src="/img/profile_small.jpg" alt="PDF-Editor" position="center" style="border-radius: 8px;" scale="10" >}}
+{{< image src="/img/profile_small.jpg" alt="profile image" position="center" style="border-radius: 8px;" scale="10" >}}
 
 
-I am Dipankar Das, currently in my 3rd year B.Tech doing Computer Science Major, DevOps Intern at Viamagus, Kubesimplify Ambassador, ♥️ Open Source and write technical blogs
+I am Dipankar Das, DevOps Person who loves 🧑‍💻 currently persuing Computer Science Major, DevOps Intern at Viamagus, Kubesimplify Ambassador, ♥️ Open Source and write technical blogs
 
 ## Interests
-- DevOps Tools
 - Entire Project lifecycle
 - Managing Development and how we go ahead with deployment models
+- Infrastructure side as well
 
 ## Tools Used
 - ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5.svg?style=for-the-badge&logo=Kubernetes&logoColor=white)
@@ -47,25 +47,35 @@ I am Dipankar Das, currently in my 3rd year B.Tech doing Computer Science Major,
 
 ## Programming Languages
 - Go
+- Rust
+- Python
 - Java
 - C
-- Python
 - Javascript
-- HTML & CSS
 - Bash
 
-Fedora User
+Fedora and NixOs User
 ![](https://img.shields.io/badge/Fedora-51A2DA.svg?style=for-the-badge&logo=Fedora&logoColor=white)
 
 # Achievements
 
+- a PR wrangler in sig-docs
+- OSS Kubernetes code contributions and many CNCF related projects like monokle, kubescape, etc
+- Create a few projects based on software development, DevOps knowledge I attained
+- Helped the community around me
+- almost got selected for LFX mentorship
+
+## Certificates and Badges
 Name | link
 -|-
 Cisco Networking Course (PCAP - Programming Essentials in Python) | [Badge Link](https://drive.google.com/file/d/1a456llJhGmlh9lqQUGOJhjwtH5Soyhrp/view?usp=sharing)
 AWS Academy Graduate - AWS Academy Introduction to Cloud Semester 1 | [![badge image](/img/badges/aws-academy-graduate-aws-academy-introduction-to-cloud-semester-1.png)](https://www.credly.com/badges/b5388332-916b-4118-9da1-a8c05a6166e9/public_url)
+HashiCorp Certified: Vault Associate Certification (KodeKloud) | [certificate Link](https://kodekloud.com/certificate-verification/2D03EB671CD0-2D1219437F4C-2D01CCC2F228/)
+Terraform Basics Training Course (KodeKloud) | [certificate link](https://kodekloud.com/certificate-verification/2D03EB671CD0-2D01CD002300-2D01CCC2F228/)
 Cilium Cluster Mesh | [![badge image](/img/badges/cilium-cluster-mesh.png)](https://www.credly.com/badges/4cca6123-05fe-4446-9f1a-b7aa00fad681/public_url)
 Clilium Service Mesh | [![badge image](/img/badges/cilium-service-mesh.png)](https://www.credly.com/badges/55f26118-8541-4836-9347-6cf8b404f5e9/public_url)
 Cilium Getting Started | [![badge image](/img/badges/cilium-getting-started.png)](https://www.credly.com/badges/886d4bec-332f-461d-8747-d676ce3eb1e2/public_url)
+GitOps Fundamentals with ArgoGitOps Fundamentals with Argo(Codefresh) | [Certificate Link](https://drive.google.com/file/d/1bEVjKmpoGEXRH1133Tdaj7kAoPbp39b5/view?usp=sharing)
 Fundamentals for Istio Ambient Mesh by Solo.io | [![badge image](/img/badges/fundamentals-for-istio-ambient-mesh-by-solo-io.png)](https://www.credly.com/badges/66b3471a-394c-4f3e-b882-09969368d4bf/public_url)
 LFD103: A Beginner's Guide to Linux Kernel Development | [![badge image](/img/badges/lfd103-a-beginner-s-guide-to-linux-kernel-development.png)](https://www.credly.com/badges/f158dc79-d161-4c73-a921-491f5c0d4c54/public_url)
 
