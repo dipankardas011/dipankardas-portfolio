@@ -6,7 +6,7 @@ description = "Let's talk about my June 2023"
 +++
 
 # Date 2023-06-24
-1. Cisco 1-3 done (networking)\
+1. Cisco 1-4 done (networking)
 2. DSA problem
 
 # Date 2023-06-23
