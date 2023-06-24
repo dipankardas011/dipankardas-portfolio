@@ -61,6 +61,7 @@ Fedora User
 
 Name | link
 -|-
+Cisco Networking Course (PCAP - Programming Essentials in Python) | [Badge Link](https://drive.google.com/file/d/1a456llJhGmlh9lqQUGOJhjwtH5Soyhrp/view?usp=sharing)
 AWS Academy Graduate - AWS Academy Introduction to Cloud Semester 1 | [![badge image](/img/badges/aws-academy-graduate-aws-academy-introduction-to-cloud-semester-1.png)](https://www.credly.com/badges/b5388332-916b-4118-9da1-a8c05a6166e9/public_url)
 Cilium Cluster Mesh | [![badge image](/img/badges/cilium-cluster-mesh.png)](https://www.credly.com/badges/4cca6123-05fe-4446-9f1a-b7aa00fad681/public_url)
 Clilium Service Mesh | [![badge image](/img/badges/cilium-service-mesh.png)](https://www.credly.com/badges/55f26118-8541-4836-9347-6cf8b404f5e9/public_url)
