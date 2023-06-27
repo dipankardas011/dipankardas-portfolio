@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-25 2023-06-26
+1. Done cisco network chap 9
+2. DSA practise
+3. discovered spin http trigger request
+
 # Date 2023-06-24
 1. Cisco 1-4 done (networking)
 2. DSA problem
