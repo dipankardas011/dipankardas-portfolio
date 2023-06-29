@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-27 2023-06-29
+1. Comeplete CISCO networking course
+2. unable to dedicate time for DSA
+3. got into Kubernetes ISSUE for the interactive delete operation
+
 # Date 2023-06-25 2023-06-26
 1. Done cisco network chap 9
 2. DSA practise
