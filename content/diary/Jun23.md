@@ -9,6 +9,10 @@ description = "Let's talk about my June 2023"
 1. Comeplete CISCO networking course
 2. unable to dedicate time for DSA
 3. got into Kubernetes ISSUE for the interactive delete operation
+4. Discussion on ksctl
+5. cisco seucity essentials continue
+6. got to travel outside
+7. waiting for some suprise
 
 # Date 2023-06-25 2023-06-26
 1. Done cisco network chap 9
