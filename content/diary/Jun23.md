@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2023"
 +++
 
+# Date 2023-06-30
+1. done a stream on ksctl
+2. DSA practise
+3. Comepleted 5th module of the cisco security essentials
+4. had a lot of fun in socials
+
 # Date 2023-06-27 2023-06-29
 1. Comeplete CISCO networking course
 2. unable to dedicate time for DSA
