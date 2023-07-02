@@ -33,6 +33,9 @@ It shows how to create a basic http server using rust and have it to handle my t
 ### Links (Wasmedge using Rust)
 https://github.com/dipankardas011/my-wasm-learning/tree/main/wasi-bot
 
+### Links (Spin by Fermyon using Rust)
+https://github.com/dipankardas011/my-wasm-learning/tree/main/gpt2-bot
+
 ### Links (Tokio, Async using Rust)
 https://github.com/dipankardas011/bot-request-handler-rust
 

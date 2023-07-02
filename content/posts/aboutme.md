@@ -68,7 +68,9 @@ Fedora and NixOs User
 ## Certificates and Badges
 Name | link
 -|-
-Cisco Networking Course (PCAP - Programming Essentials in Python) | [Badge Link](https://drive.google.com/file/d/1a456llJhGmlh9lqQUGOJhjwtH5Soyhrp/view?usp=sharing)
+Cisco Cybersecurity Essentials | [Badge Link](https://drive.google.com/file/d/1g-evjWia3Kb6dQW7qaPu50q3rX_wqc5u/view?usp=sharing)
+Cisco Cybersecurity Introduction | [Badge Link](https://drive.google.com/file/d/1Q4SLZ0tPtWD0wmflEnougjnAfWzU4kJu/view?usp=sharing)
+Cisco Programming Essentials on Python | [Badge Link](https://drive.google.com/file/d/1a456llJhGmlh9lqQUGOJhjwtH5Soyhrp/view?usp=sharing)
 AWS Academy Graduate - AWS Academy Introduction to Cloud Semester 1 | [![badge image](/img/badges/aws-academy-graduate-aws-academy-introduction-to-cloud-semester-1.png)](https://www.credly.com/badges/b5388332-916b-4118-9da1-a8c05a6166e9/public_url)
 HashiCorp Certified: Vault Associate Certification (KodeKloud) | [certificate Link](https://kodekloud.com/certificate-verification/2D03EB671CD0-2D1219437F4C-2D01CCC2F228/)
 Terraform Basics Training Course (KodeKloud) | [certificate link](https://kodekloud.com/certificate-verification/2D03EB671CD0-2D01CD002300-2D01CCC2F228/)
