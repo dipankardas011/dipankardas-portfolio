@@ -3,12 +3,12 @@
 title = "About Me"
 date = "2023-02-09"
 author = "Dipankar Das"
-cover = "img/cover.png"
 description = "Let's talk about me"
 +++
 
 # About Me
 
+<!-- cover = "img/cover.png" -->
 
 {{< image src="/img/profile_small.jpg" alt="profile image" position="center" style="border-radius: 8px;" scale="10" >}}
 
@@ -68,8 +68,8 @@ Fedora and NixOs User
 ## Certificates and Badges
 Name | link
 -|-
-Cisco Cybersecurity Essentials | [Badge Link](https://drive.google.com/file/d/1g-evjWia3Kb6dQW7qaPu50q3rX_wqc5u/view?usp=sharing)
-Cisco Cybersecurity Introduction | [Badge Link](https://drive.google.com/file/d/1Q4SLZ0tPtWD0wmflEnougjnAfWzU4kJu/view?usp=sharing)
+Cisco Cybersecurity Essentials | [![Badge Link](/img/badges/cybersecurity-essentials.png)](https://drive.google.com/file/d/1g-evjWia3Kb6dQW7qaPu50q3rX_wqc5u/view?usp=sharing)
+Cisco Cybersecurity Introduction | [![Badge Link](/img/badges/introduction-to-cybersecurity.png)](https://drive.google.com/file/d/1Q4SLZ0tPtWD0wmflEnougjnAfWzU4kJu/view?usp=sharing)
 Cisco Programming Essentials on Python | [Badge Link](https://drive.google.com/file/d/1a456llJhGmlh9lqQUGOJhjwtH5Soyhrp/view?usp=sharing)
 AWS Academy Graduate - AWS Academy Introduction to Cloud Semester 1 | [![badge image](/img/badges/aws-academy-graduate-aws-academy-introduction-to-cloud-semester-1.png)](https://www.credly.com/badges/b5388332-916b-4118-9da1-a8c05a6166e9/public_url)
 HashiCorp Certified: Vault Associate Certification (KodeKloud) | [certificate Link](https://kodekloud.com/certificate-verification/2D03EB671CD0-2D1219437F4C-2D01CCC2F228/)
