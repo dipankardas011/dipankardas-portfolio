@@ -80,21 +80,21 @@ GitOps Fundamentals with ArgoGitOps Fundamentals with Argo(Codefresh) | [Certifi
 Fundamentals for Istio Ambient Mesh by Solo.io | [![badge image](/img/badges/fundamentals-for-istio-ambient-mesh-by-solo-io.png)](https://www.credly.com/badges/66b3471a-394c-4f3e-b882-09969368d4bf/public_url)
 LFD103: A Beginner's Guide to Linux Kernel Development | [![badge image](/img/badges/lfd103-a-beginner-s-guide-to-linux-kernel-development.png)](https://www.credly.com/badges/f158dc79-d161-4c73-a921-491f5c0d4c54/public_url)
 
-# Connect With Me
+<!-- # Connect With Me -->
 
-[![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=for-the-badge&logo=GitHub&logoColor=white)](https://github.com/dipankardas011)
+<!-- [![GitHub](https://img.shields.io/badge/GitHub-181717.svg?style=for-the-badge&logo=GitHub&logoColor=white)](https://github.com/dipankardas011) -->
 
-[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2.svg?style=for-the-badge&logo=Twitter&logoColor=white)](https://twitter.com/DipankarDas011)
+<!-- [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2.svg?style=for-the-badge&logo=Twitter&logoColor=white)](https://twitter.com/DipankarDas011) -->
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2.svg?style=for-the-badge&logo=LinkedIn&logoColor=white)](https://www.linkedin.com/in/dipankar-das-1324b6206/)
+<!-- [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2.svg?style=for-the-badge&logo=LinkedIn&logoColor=white)](https://www.linkedin.com/in/dipankar-das-1324b6206/) -->
 
-[![LFX Profile Page](https://img.shields.io/badge/Linux%20Foundation-003366.svg?style=for-the-badge&logo=Linux-Foundation&logoColor=white)](https://openprofile.dev/profile/dipsonu10)
+<!-- [![LFX Profile Page](https://img.shields.io/badge/Linux%20Foundation-003366.svg?style=for-the-badge&logo=Linux-Foundation&logoColor=white)](https://openprofile.dev/profile/dipsonu10) -->
 
-[![Outlook](https://img.shields.io/badge/Gmail-EA4335.svg?style=for-the-badge&logo=Gmail&logoColor=white)](mailto:dipankardas0115@gmail.com)
+<!-- [![Outlook](https://img.shields.io/badge/Gmail-EA4335.svg?style=for-the-badge&logo=Gmail&logoColor=white)](mailto:dipankardas0115@gmail.com) -->
 
-[![YouTube Badge](https://img.shields.io/badge/YouTube-FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white)](https://www.youtube.com/channel/UCoLkuTgWPsQSeh0BhDFgXVw)
+<!-- [![YouTube Badge](https://img.shields.io/badge/YouTube-FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white)](https://www.youtube.com/channel/UCoLkuTgWPsQSeh0BhDFgXVw) -->
 
-[![Hashnode](https://img.shields.io/badge/Hashnode-2962FF.svg?style=for-the-badge&logo=Hashnode&logoColor=white)](https://dipankardas011.hashnode.dev/)
+<!-- [![Hashnode](https://img.shields.io/badge/Hashnode-2962FF.svg?style=for-the-badge&logo=Hashnode&logoColor=white)](https://dipankardas011.hashnode.dev/) -->
 
 
 # Latest Resume
