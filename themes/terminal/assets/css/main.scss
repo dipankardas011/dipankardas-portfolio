@@ -16,7 +16,9 @@ body {
   line-height: 1.54;
   letter-spacing: -0.02em;
   background-color: $background;
+  background: radial-gradient(circle at 100%, #333, #333 50%, #eee 75%, #333 75%);
   color: $color;
+  text-shadow: $text-shadow;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "liga", "tnum", "zero", "ss01", "locl";
