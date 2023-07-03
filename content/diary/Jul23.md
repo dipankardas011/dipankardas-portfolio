@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-03
+1. Gave a new look to the portfolio
+2. ksctl design discussion with preeteek
+3. got all the cisco certs
+4. wasm spin deployment failed
+5. applied for 3 to 4 jobs
+
 # Date 2023-07-02
 1. Done all the 4 courses for the cisco within 10 days
 2. Checkout the wasm component model
