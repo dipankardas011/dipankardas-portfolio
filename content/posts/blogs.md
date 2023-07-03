@@ -4,11 +4,11 @@ title = "Blogs"
 date = "2023-02-09"
 author = "Dipankar Das"
 description = "Let's talk about my written blogs"
+cover = "img/cover-blogs.jpeg"
 +++
 
 # Tech Blogs
 
-<!-- cover = "img/cover-blogs.jpeg" -->
 ## how-get-started-with-hashicorp-vault
 {{< image src="https://cdn.hashnode.com/res/hashnode/image/upload/v1679422200451/d896987e-3418-429a-bb2a-ada6dccef6ed.png" alt="how-get-started-with-hashicorp-vault" position="center" style="border-radius: 8px;" >}}
 

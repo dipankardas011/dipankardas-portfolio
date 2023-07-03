@@ -4,11 +4,11 @@ title = "About Me"
 date = "2023-02-09"
 author = "Dipankar Das"
 description = "Let's talk about me"
+cover = "img/cover.png"
 +++
 
 # About Me
 
-<!-- cover = "img/cover.png" -->
 
 {{< image src="/img/profile_small.jpg" alt="profile image" position="center" style="border-radius: 8px;" scale="10" >}}
 

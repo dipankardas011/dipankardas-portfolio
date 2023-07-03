@@ -4,10 +4,10 @@ title = "Projects"
 date = "2023-02-09"
 author = "Dipankar Das"
 description = "Let's talk about my projects and other contributions"
+cover = "/img/cover-project.png"
 +++
 
 # My project collection
-<!-- cover = "/img/cover-project.png" -->
 
 ## AWS Resource Dependency-graph generator
 
