@@ -1,22 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&family=Playfair+Display&display=swap');
 
-body {
-  font-family: 'Montserrat', sans-serif;
+h1,h2,h3,h4,h5,h6 {
+  font-family: 'Playfair Display', serif;
 }
 
-// @font-face {
-//   font-display: swap;
-//   font-family: "Nabla";
-//   font-style:  normal;
-//   font-weight: 400;
-//   src: url("../fonts/FiraCode-Regular.woff") format("woff");
-// }
+@font-face {
+  font-display: swap;
+  font-family: 'Fira Code';
+  font-style:  normal;
+  font-weight: 400;
+  src: url("../fonts/FiraCode-Regular.woff") format("woff");
+}
 
-// @font-face {
-//   font-display: swap;
-//   font-family: "Nabla";
-//   font-style:  normal;
-//   font-weight: 800;
-//   src: url("../fonts/FiraCode-Bold.woff") format("woff");
-// }
+@font-face {
+  font-display: swap;
+  font-family: 'Fira Code';
+  font-style:  normal;
+  font-weight: 800;
+  src: url("../fonts/FiraCode-Bold.woff") format("woff");
+}

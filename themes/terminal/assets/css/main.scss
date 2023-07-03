@@ -38,7 +38,6 @@ body {
   h5,
   h6 {
     line-height: 1.3;
-    font-family: 'Playfair Display', serif;
 
     &:not(first-child) {
       margin-top: 40px;
@@ -49,16 +48,12 @@ body {
   h2,
   h3 {
     font-size: 1.4rem;
-    font-family: 'Playfair Display', serif;
-
   }
 
   h4,
   h5,
   h6 {
     font-size: 1.2rem;
-    font-family: 'Playfair Display', serif;
-
   }
 }
 
@@ -69,6 +64,10 @@ a {
   // &:has(code) {
     text-decoration-color: $accent;
   // }
+}
+
+a::hover {
+  background-color: $accent;
 }
 
 img {
