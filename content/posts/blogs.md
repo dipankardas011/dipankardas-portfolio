@@ -1,9 +1,8 @@
 
 +++
 title = "Blogs"
-date = "2023-02-09"
 author = "Dipankar Das"
-description = "Let's talk about my written blogs"
+description = "Tech blogs"
 cover = "img/cover-blogs.jpeg"
 +++
 

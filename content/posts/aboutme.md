@@ -1,7 +1,6 @@
 
 +++
 title = "About Me"
-date = "2023-02-09"
 author = "Dipankar Das"
 description = "Let's talk about me"
 cover = "img/cover.png"
