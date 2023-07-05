@@ -1,16 +1,9 @@
 /* COLOR VARIABLES */
 $background: mix($accent, #1D1E28, 2%);
-$color: rgba(255, 255, 255, 1);
-$border-color: rgba(255, 255, 255, .1);
+$color: #caf3dd;
+$border-color: rgba(255, 255, 255, 0.507);
 
-$background-style: radial-gradient(circle at 5%, mix(rgb(255, 255, 255), rgb(142, 140, 138)) 35px, transparent 40px),
-radial-gradient(circle at 200px 950px , #ffffff6b 1px, transparent 5px),
-radial-gradient(circle at 100px 750px , #ffffff6b 1px, transparent 5px),
-radial-gradient(circle at 280px 220px , #ffffff6b 1px, transparent 5px),
-radial-gradient(circle at 50px 330px , #ffffff6b 1px, transparent 5px),
-radial-gradient(circle at 300px 450px , #ffffff6b 1px, transparent 5px),
-radial-gradient(circle at 95%, #151515, #333 50%, mix(rgb(222, 192, 59), red) 65%, #151515 66%);
-
+$background-style: radial-gradient(ellipse at center, #092c79 5%, #000000 30%);
 
 /* MEDIA QUERIES */
 $phone: "max-width: 684px";
