@@ -9,7 +9,7 @@ cover = "img/cover-blogs.png"
 # Tech Blogs
 
 ## how-get-started-with-hashicorp-vault
-{{< image src="https://cdn.hashnode.com/res/hashnode/image/upload/v1679422200451/d896987e-3418-429a-bb2a-ada6dccef6ed.png" alt="how-get-started-with-hashicorp-vault" position="center" style="border-radius: 8px;" >}}
+{{< image src="https://logowik.com/content/uploads/images/hashicorp-vault8233.jpg" alt="how-get-started-with-hashicorp-vault" position="center" style="border-radius: 8px;" >}}
 
 [Blog Link](https://blog.kubesimplify.com/how-get-started-with-hashicorp-vault)
 
