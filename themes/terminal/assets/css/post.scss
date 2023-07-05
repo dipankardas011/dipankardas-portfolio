@@ -73,10 +73,10 @@
   }
 
   &-cover {
-    border: 20px solid $accent;
+    border: 5px solid $accent;
     background: transparent;
     margin: 40px 0;
-    padding: 20px;
+    padding: 10px;
 
     @media ($phone) {
       padding: 10px;
