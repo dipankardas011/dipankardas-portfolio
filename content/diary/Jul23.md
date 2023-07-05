@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-04
+1. deployed the spin app in the azure webapps
+2. check out how to generate SBOM artifacts via syft
+3. snyk can generate the test report as a json
+4. travel with brother
+5. research on XxYyZz # it is hashed
+
 # Date 2023-07-03
 1. Gave a new look to the portfolio
 2. ksctl design discussion with preeteek
