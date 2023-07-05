@@ -25,9 +25,9 @@
   margin: 20px auto;
   padding: 20px 0;
 
-  &:not(:last-of-type) {
-    border-bottom: 1px solid $border-color;
-  }
+  // &:not(:last-of-type) {
+  //   border-bottom: 1px solid $border-color;
+  // }
 
   &-meta {
     font-size: 1rem;

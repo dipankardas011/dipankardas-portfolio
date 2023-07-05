@@ -3,7 +3,7 @@ $background: mix($accent, #1D1E28, 2%);
 $color: #caf3dd;
 $border-color: rgba(255, 255, 255, 0.507);
 
-$background-style: radial-gradient(ellipse at center, #092c79 5%, #000000 30%);
+$background-style: radial-gradient(circle at center, #092c79 5%, #000000 30%);
 
 /* MEDIA QUERIES */
 $phone: "max-width: 684px";
