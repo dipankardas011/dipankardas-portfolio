@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-05
+1. Complete revamp of the personal portfolio
+2. ksctl redesign started (coding)
+3. Done DSA today
+4. internship work
+5. gave a weird companies assessment total disaster
+6. research
+
 # Date 2023-07-04
 1. deployed the spin app in the azure webapps
 2. check out how to generate SBOM artifacts via syft
