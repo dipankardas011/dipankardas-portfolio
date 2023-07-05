@@ -3,7 +3,7 @@
 title = "Blogs"
 author = "Dipankar Das"
 description = "Tech blogs"
-cover = "img/cover-blogs.jpeg"
+cover = "img/cover-blogs.png"
 +++
 
 # Tech Blogs

@@ -3,7 +3,7 @@
 title = "Projects"
 author = "Dipankar Das"
 description = "Projects and OSS contribs"
-cover = "/img/cover-project.png"
+cover = "/img/cover-projects.png"
 +++
 
 # My project collection
