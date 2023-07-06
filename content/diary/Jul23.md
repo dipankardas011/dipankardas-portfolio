@@ -1,9 +1,15 @@
 +++
 title = "Diary for July 2023"
-date = 2023-07-01
 author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
+
+# Date 2023-07-06
+1. Some more reading on research
+2. Rust programming
+3. OPen source (kubesimplify website to wasm spin), checking out cilium
+4. internship work
+5. cisco studies
 
 # Date 2023-07-05
 1. Complete revamp of the personal portfolio
