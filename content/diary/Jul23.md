@@ -10,6 +10,7 @@ description = "Let's talk about my July 2023"
 3. OPen source (kubesimplify website to wasm spin), checking out cilium
 4. internship work
 5. cisco studies
+6. Tried out jira and was successful to create issue add automation for the vulnerability (snyk)
 
 # Date 2023-07-05
 1. Complete revamp of the personal portfolio
