@@ -4,6 +4,14 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-07
+1. Done DSA question
+2. Deployed the kubesimplify website on fermyon and added AWS Cloudfront(CDN) for edge deployment (cacheing)
+3. Cisco network assignments
+4. Had call with some of the folks in fermyon cloud as well
+5. Done the research thing
+6. FInally upgrade to a new earphone
+
 # Date 2023-07-06
 1. Some more reading on research
 2. Rust programming
