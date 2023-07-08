@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-08
+1. UNderstood IPv6 addressing configurations
+2. Wrote a blog on the fermyon cloud and docusurous website
+3. Tried out cilium project again
+4. some ksctl project discussion
+5. research
+
 # Date 2023-07-07
 1. Done DSA question
 2. Deployed the kubesimplify website on fermyon and added AWS Cloudfront(CDN) for edge deployment (cacheing)
