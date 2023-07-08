@@ -8,6 +8,12 @@ cover = "img/cover-blogs.png"
 
 # Tech Blogs
 
+## Bridging Distances: Deploying Docusaurus Website on Fermyon Cloud using Spin, AWS Cloudfront, and the Magic of WebAssembly
+
+{{< image src="https://cdn.hashnode.com/res/hashnode/image/upload/v1688792089271/a310523d-05c6-4fec-9cc1-8f6e730f6577.png" alt="Supercharging Docusaurus: Deploy with Spin, Fermyon Cloud & AWS Cloudfront" style="border-radius: 8px;" >}}
+
+[Blog Link](https://dipankardas011.hashnode.dev/deploying-docusaurus-website-using-spin-wasm)
+
 ## how-get-started-with-hashicorp-vault
 {{< image src="https://logowik.com/content/uploads/images/hashicorp-vault8233.jpg" alt="how-get-started-with-hashicorp-vault" position="center" style="border-radius: 8px;" >}}
 
