@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-09
+1. ksctl code done for the all the providers (cloud and kubernetes distro)
+2. DSA done
+3. meet on the hackathon for AWS hashnode
+
 # Date 2023-07-08
 1. UNderstood IPv6 addressing configurations
 2. Wrote a blog on the fermyon cloud and docusurous website
