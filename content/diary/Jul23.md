@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-10
+1. Added the state manager to ksctl (just the interfaces)
+2. Cisco assignment5
+3. internship work to focus on the managed kubernetes
+4. migrated the lunarvim to nvchad
+5. research
+
 # Date 2023-07-09
 1. ksctl code done for the all the providers (cloud and kubernetes distro)
 2. DSA done
