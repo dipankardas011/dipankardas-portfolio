@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-11
+1. added complete interfaces for the ksctl
+2. Done DSA questions
+3. cisco assignment 7 done
+4. Tried out gateway api (nginx gateway)
+
 # Date 2023-07-10
 1. Added the state manager to ksctl (just the interfaces)
 2. Cisco assignment5
