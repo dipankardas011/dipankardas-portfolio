@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-12
+1. Prepared for the cisco round 1 exam
+2. Done with the nginx loadbalcner with tls and the gateway api research
+3. done some OSS
+4. ksctl issues
+
 # Date 2023-07-11
 1. added complete interfaces for the ksctl
 2. Done DSA questions
