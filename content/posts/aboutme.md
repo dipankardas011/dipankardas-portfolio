@@ -67,6 +67,7 @@ Fedora and NixOs User
 ## Certificates and Badges
 Name | link
 -|-
+Certified Kubernetes Application Developer (CKAD) (KodeKloud) | [certificate link](https://kodekloud.com/certificate-verification/2D03EB671CD0-2D01CCFF5DBB-2D01CCC2F228/)
 Cisco Network Introduction | [![Badge Link](/img/badges/ccna-introduction-to-networks.png)](https://drive.google.com/file/d/1litYROTDl_F-MBmwyQrz-efayT3ZogXT/view?usp=sharing)
 Cisco Cybersecurity Essentials | [![Badge Link](/img/badges/cybersecurity-essentials.png)](https://drive.google.com/file/d/1g-evjWia3Kb6dQW7qaPu50q3rX_wqc5u/view?usp=sharing)
 Cisco Cybersecurity Introduction | [![Badge Link](/img/badges/introduction-to-cybersecurity.png)](https://drive.google.com/file/d/1Q4SLZ0tPtWD0wmflEnougjnAfWzU4kJu/view?usp=sharing)
