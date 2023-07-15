@@ -4,6 +4,16 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-15
+1. done ksctl issues and PR
+2. research 
+3. Rust programming
+4. completed the ckad from kodekloud
+5. some practise in cka
+6. DSA done
+7. cilium docs
+8. internship work
+
 # Date 2023-07-14
 1. HTTPS for gateway api and ingress done k8s
 2. migrated from the lunarvim, nvchad to raw neovim config
