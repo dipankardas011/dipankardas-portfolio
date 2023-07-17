@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-16
+1. Done research
+2. ksctl call on design with other maintainers
+3. Queriy to sig-network on gateway
+4. Kodekloud courses
+
 # Date 2023-07-15
 1. done ksctl issues and PR
 2. research 
