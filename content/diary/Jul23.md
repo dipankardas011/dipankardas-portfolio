@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-18
+1. research paper findings
+2. internship on kubernetes gateway diagram
+3. Kodekloud cka course
+4. ksctl state configurations
+
 # Date 2023-07-17
 1. Done the ksctl integration with the controllers
 2. collected some research papers
