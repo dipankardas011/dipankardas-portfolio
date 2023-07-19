@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-19
+1. DSA problem
+2. came to know about pm2 to run nodejs apps
+3. kodekloud cka
+4. OSS to fermyon and cilium
+5. rust programming
+
 # Date 2023-07-18
 1. research paper findings
 2. internship on kubernetes gateway diagram
