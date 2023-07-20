@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-20
+1. Solved a fermyon/spin issue (first rust based project contrib)
+2. college elective 2 started
+3. kodekloud cousrse CKA almost done
+4. research
+
 # Date 2023-07-19
 1. DSA problem
 2. came to know about pm2 to run nodejs apps
