@@ -4,6 +4,9 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-21
+1. Merged 2 PR in fermyon repos
+
 # Date 2023-07-20
 1. Solved a fermyon/spin issue (first rust based project contrib)
 2. college elective 2 started
