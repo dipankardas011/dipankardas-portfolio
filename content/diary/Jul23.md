@@ -6,6 +6,10 @@ description = "Let's talk about my July 2023"
 
 # Date 2023-07-21
 1. Merged 2 PR in fermyon repos
+2. DSA problem
+3. Research papers
+4. internship
+5. some marketting courses
 
 # Date 2023-07-20
 1. Solved a fermyon/spin issue (first rust based project contrib)
