@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-22
+1. Done Open Elective course
+2. ksctl planing
+3. research
+
 # Date 2023-07-21
 1. Merged 2 PR in fermyon repos
 2. DSA problem
