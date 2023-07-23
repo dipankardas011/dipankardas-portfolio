@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-23
+1. Done DSA problem
+2. some college exit tests
+3. Ksctl monthly meet and a lot of progress in ksctl
+4. college elective II
+
 # Date 2023-07-22
 1. Done Open Elective course
 2. ksctl planing
