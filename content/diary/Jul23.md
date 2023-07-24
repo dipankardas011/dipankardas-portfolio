@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-24
+1. Done some reaseach study
+2. ksctl far thinking
+3. internship
+4. marketting course coursera week 1 done
+5. Had a call with Kunal Kushwaha on the occassion of wining Napptive Hackathon
+
 # Date 2023-07-23
 1. Done DSA problem
 2. some college exit tests
