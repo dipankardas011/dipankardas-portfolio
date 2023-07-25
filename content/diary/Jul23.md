@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-25
+1. Done DSA Question
+2. failed to pass one of the campus placement exam
+3. Internship some EKS discussion
+4. research
+5. ksctl doubts regarding which component should help in what
+
 # Date 2023-07-24
 1. Done some reaseach study
 2. ksctl far thinking
