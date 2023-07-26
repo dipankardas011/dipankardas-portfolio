@@ -9,6 +9,7 @@ description = "Let's talk about my July 2023"
 2. Some on-campus placement drives
 3. open elective II 
 4. research
+5. reviewed a lot of issues and PR from cilium, kubernetes, spin
 
 # Date 2023-07-25
 1. Done DSA Question
