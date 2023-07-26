@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-26
+1. Internship
+2. Some on-campus placement drives
+3. open elective II 
+4. research
+
 # Date 2023-07-25
 1. Done DSA Question
 2. failed to pass one of the campus placement exam
