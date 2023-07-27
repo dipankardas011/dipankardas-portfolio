@@ -4,6 +4,14 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-27
+1. Private Container resitry demo
+2. DSA
+3. Marketing course
+4. ksctl discussion
+5. discussion of CFP
+6. make a demo application for a go client to a Mysql server
+
 # Date 2023-07-26
 1. Internship
 2. Some on-campus placement drives
