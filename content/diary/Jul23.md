@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-28
+1. New ksctl codebase redesign
+2. INternship
+3. marketing course
+
 # Date 2023-07-27
 1. Private Container resitry demo
 2. DSA
