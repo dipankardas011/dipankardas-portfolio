@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-29
+1. practical testing ec2
+2. got invitation for kubernetes and kubernetes-sigs
+3. ksctl important decisions
+4. management course
+5. tried out caching via the redis for data rather fetching
+
 # Date 2023-07-28
 1. New ksctl codebase redesign
 2. INternship
