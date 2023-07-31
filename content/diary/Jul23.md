@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2023"
 +++
 
+# Date 2023-07-31
+1. internship with kubernetes EKS setup
+2. DSA problem custom LCS
+
 # Date 2023-07-30
 1. Done internship month logging
 2. new DSA about segment trees
