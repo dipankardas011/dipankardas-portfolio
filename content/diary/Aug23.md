@@ -5,6 +5,13 @@ description = "Let's talk about my August 2023"
 +++
 
 # Date 2023-08-03
+1. ksctl major create and delete managed civo cluster done
+2. internship
+3. research
+4. marketing week 3 started
+5. Open source contrributions and some plans
+
+# Date 2023-08-02
 1. first network create call from new ksctl design to civo
 2. applyed to suse
 3. internship
