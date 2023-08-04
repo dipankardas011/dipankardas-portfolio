@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-04
+1. ksctl discussion
+2. internship
+3. marketing course
+4. lfx kubernetes propsal submitted
+5. DSA
+
 # Date 2023-08-03
 1. ksctl major create and delete managed civo cluster done
 2. internship

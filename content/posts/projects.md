@@ -95,6 +95,7 @@ https://github.com/dipankardas011/AirportBooking
   - [Missing link to Vertical Scaling](https://github.com/cncf/glossary/pull/634)
   - [Typo Changes from 'document' to 'manifest file'](https://github.com/cncf/glossary/pull/635)
 - Kubernetes
+  - [added Note for secret in same namespace as the Deployment, Pods](https://github.com/kubernetes/website/pull/42329)
   - [Removal of the bases field as it is deprecated by kustomize](https://github.com/kubernetes-sigs/node-feature-discovery/pull/1246)
   - [Use of exponentialTimeout instead of ImmediateTimeout for resource scaling](https://github.com/kubernetes/kubernetes/pull/116961)
   - [Code Refactoring of Pod under pkg/api](https://github.com/kubernetes/kubernetes/pull/112085)
