@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-05
+1. college study
+2. Added replay logic to ksctl
+3. internship
+4. marketing course
+
 # Date 2023-08-04
 1. ksctl discussion
 2. internship
