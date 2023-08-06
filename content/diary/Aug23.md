@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-06
+1. Done managed cluster and added pretty printing table
+2. internal meeting on ksctl
+3. marketing course
+4. error handling in the controller and manager in the ksctl
+5. DSA problem
+
 # Date 2023-08-05
 1. college study
 2. Added replay logic to ksctl
