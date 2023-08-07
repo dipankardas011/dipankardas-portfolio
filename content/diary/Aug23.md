@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-07
+1. ksctl ha setup done
+2. marketing couse
+
 # Date 2023-08-06
 1. Done managed cluster and added pretty printing table
 2. internal meeting on ksctl
