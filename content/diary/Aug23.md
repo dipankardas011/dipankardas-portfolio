@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-08
+1. done ksctl added k3s configuration for add and dele workernode but bugs
+2. dsa
+3. marketing course
+4. onecampus placement exams
+
 # Date 2023-08-07
 1. ksctl ha setup done
 2. marketing couse
