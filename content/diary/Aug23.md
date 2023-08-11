@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-10 2023-08-11
+1. internship
+2. Done local provider ksctl and now started for azure
+3. dsa problem
+4. marketing course
+
 # Date 2023-08-09
 1. done ksctl bug fix for add and remove workerplane
 2. dsa problem
