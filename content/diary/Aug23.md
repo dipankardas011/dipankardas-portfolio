@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-12
+1. dsa problem
+2. addded support or the azure ha and managed cluster
+
 # Date 2023-08-10 2023-08-11
 1. internship
 2. Done local provider ksctl and now started for azure
