@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-13
+1. done ksctl core api migration
+2. need to resolve bugs of new cli
+3. marketing course
+
 # Date 2023-08-12
 1. dsa problem
 2. addded support or the azure ha and managed cluster
