@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-14
+1. DSA problem
+2. fixed the bugs of the ksctl cli added unit tests (increaseed code coverage)
+3. internship terraform to deploy eks
+
 # Date 2023-08-13
 1. done ksctl core api migration
 2. need to resolve bugs of new cli
