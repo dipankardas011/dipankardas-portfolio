@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-15
+1. done ksctl task (mocks are now posponed)
+2. done jenkins configuration for the e2e tests
+
 # Date 2023-08-14
 1. DSA problem
 2. fixed the bugs of the ksctl cli added unit tests (increaseed code coverage)
