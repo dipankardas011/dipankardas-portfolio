@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-16
+1. done eks cluster steup
+2. internship
+3. ksctl e2e test now gets triggered by webhook and jenkins server with https via lets encrypt
+4. dsa problems
+5. Marketing course almost done
+
 # Date 2023-08-15
 1. done ksctl task (mocks are now posponed)
 2. done jenkins configuration for the e2e tests
