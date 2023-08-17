@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-17
+1. Comepleted e2e testing via the jenkins for ksctl
+2. how to make multiple IAM users can access eks cluster
+3. merged the pr which improved the ksctl core with new architecture
+4. release candaiate 1 got release for ksctl
+5. marketing course I completed
+
 # Date 2023-08-16
 1. done eks cluster steup
 2. internship
