@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-18
+1. ksctl e2e tests pipeline improved
+2. dsa problem done
+3. internship
+4. research
+5. marketing course II started
+
 # Date 2023-08-17
 1. Comepleted e2e testing via the jenkins for ksctl
 2. how to make multiple IAM users can access eks cluster
