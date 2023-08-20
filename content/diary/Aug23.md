@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-20
+1. accomplishment able to do mocking and seperation of civogo client from the actual code base for more easy testing
+2. DSA problem
+3. Marketing course
+
 # Date 2023-08-19
 1. done ksctl docs website updates
 2. internship
