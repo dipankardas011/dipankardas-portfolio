@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-21
+1. started to move the azure go clients to the Azurego interface
+2. internship
+3. given a exam of on campus placement
+4. Marketing course
+
 # Date 2023-08-20
 1. accomplishment able to do mocking and seperation of civogo client from the actual code base for more easy testing
 2. DSA problem
