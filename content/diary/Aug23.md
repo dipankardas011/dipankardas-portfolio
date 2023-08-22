@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-22
+1. ksctl azure client got abstracted
+2. internship
+3. DSA problem
+
 # Date 2023-08-21
 1. started to move the azure go clients to the Azurego interface
 2. internship
