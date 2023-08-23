@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-23
+1. ksctl testing done (unit, e2e, mocks) ci updated
+2. internship
+
 # Date 2023-08-22
 1. ksctl azure client got abstracted
 2. internship
