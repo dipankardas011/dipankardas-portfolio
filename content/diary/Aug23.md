@@ -9,6 +9,7 @@ description = "Let's talk about my August 2023"
 2. internship
 3. Marketing course 2
 4. another movie
+5. Research
 
 # Date 2023-08-24
 1. ksctl test cases for the api/
