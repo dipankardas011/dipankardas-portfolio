@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-26
+1. Done DSA problem
+2. learn goroutine to solve one challenge in ksctl
+3. Marketing course 2
+4. research
+
 # Date 2023-08-25
 1. completed my part in making ksctl
 2. internship
