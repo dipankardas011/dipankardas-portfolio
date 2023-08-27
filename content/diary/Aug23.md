@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-27
+1. done parallel resource creation in civo ksctl
+2. DSA problem
+3. Marketing course 2
+4. college related tasks
+
 # Date 2023-08-26
 1. Done DSA problem
 2. learn goroutine to solve one challenge in ksctl
