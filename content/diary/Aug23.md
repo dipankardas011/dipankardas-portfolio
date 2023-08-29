@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-29
+1. done with parallel creation and deletion in ksctl
+2. College studies
+3. Internship
+
 # Date 2023-08-27
 1. done parallel resource creation in civo ksctl
 2. DSA problem
