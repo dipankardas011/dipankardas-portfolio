@@ -43,9 +43,9 @@ https://github.com/dipankardas011/bot-request-handler-rust
 
 ### Description
 
-A Command-Line tool which can manage Kubernetes clusters on multiple cloud providers
+A Generic Kubernetes Management CLI tool which can manage Kubernetes clusters on multiple cloud providers
 
-{{< image src="https://github.com/kubesimplify/ksctl/raw/main/img/ksctl-logo.png" alt="PDF-Editor" position="center" style="border-radius: 8px;" >}}
+{{< image src="https://github.com/kubesimplify/ksctl/raw/main/img/ksctl-cover.png" alt="PDF-Editor" position="center" style="border-radius: 8px;" >}}
 
 ### Links
 https://github.com/kubesimplify/ksctl
