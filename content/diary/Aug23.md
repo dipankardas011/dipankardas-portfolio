@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2023"
 +++
 
+# Date 2023-08-31
+1. College on-campus placements exams
+2. research
+3. tried to install kubernetes apps like argocd using k8s client go
+4. internship debugging root cause found
+5. college assignment done
+
 # Date 2023-08-30
 1. improvement to ksctl
 2. college studies
