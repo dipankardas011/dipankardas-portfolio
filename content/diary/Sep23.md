@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-03
+1. kubernetes go-client to apply manifests
+2. learned openapiv3 with goa to demonstrate ksctl basic functionality
+3. ksctl bi-weekly meet
+4. Marketing course
+5. DSA problem
+
 # Date 2023-09-02
 1. understood about kubernetes client go how it descrutcture and structues types
 2. golang and again growing love for C and Go
