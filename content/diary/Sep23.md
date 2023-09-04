@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-04
+1. swaggerui done for the openapiv3
+2. internship
+3. Marketing course
+
 # Date 2023-09-03
 1. kubernetes go-client to apply manifests
 2. learned openapiv3 with goa to demonstrate ksctl basic functionality
