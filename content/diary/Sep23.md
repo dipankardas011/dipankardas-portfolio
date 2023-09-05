@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-05
+1. done with some major project work
+2. internship
+3. DSA problem
+4. Marketing course 2 week 3 done
+
 # Date 2023-09-04
 1. swaggerui done for the openapiv3
 2. internship
