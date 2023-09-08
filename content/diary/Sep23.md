@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-08
+1. some ksctl and cfp related discussions
+2. mid semister prep
+
 # Date 2023-09-07
 1. done todays dsa problem
 2. marketing course
