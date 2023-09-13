@@ -4,6 +4,15 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-13
+1. marketing course
+2. created ksctl group for bi-weekly
+3. kubesimplify ambassador meet
+4. found how to do scaling for ksctl
+
+# Date 2023-09-9 2023-09-12
+1. college mid semister
+
 # Date 2023-09-08
 1. some ksctl and cfp related discussions
 2. mid semister prep
@@ -15,7 +24,7 @@ description = "Let's talk about my September 2023"
 4. completed 6 months internship
 
 # Date 2023-09-06
-1. started with mid semister  prep
+1. started with mid semister prep
 2. major project first app done
 3. last day of internship
 
