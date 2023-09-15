@@ -4,10 +4,16 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-15
+1. done with ksctl install configmap and other stuff after creation of cluster
+2. done a stream on the basic and intermediate golang
+3. DSA problems
+
 # Date 2023-09-14
 1. done ksctl http server
 2. marketing courses done
 3. major project layout and init coding done for backend
+4. DSA problem
 
 # Date 2023-09-13
 1. marketing course
