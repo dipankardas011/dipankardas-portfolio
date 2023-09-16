@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-16
+1. was able to fetch required info from the ksctl cli and apply configmap, secret, and deployment for httpserver for scaling up and down
+2. and just relax
+
 # Date 2023-09-15
 1. done with ksctl install configmap and other stuff after creation of cluster
 2. done a stream on the basic and intermediate golang
