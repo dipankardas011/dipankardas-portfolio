@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-18
+1. did 2 on-campus technical exams
+2. AICTE internship modules
+3. Major project
+
 # Date 2023-09-17
 1. almost done with http server and security concenrs and tolerations and tains for ksctl scaleup and scaledown
 
