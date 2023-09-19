@@ -4,6 +4,14 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-19
+1. done dsa problem
+2. migrated from the goa to gin http server for the major project
+3. ksctl pre seeting up for the support of k8s controller almost done with some minor bugs for planning for the feature flags to hide from end users
+4. AICTE internsjip modules
+5. revise some of the CSE concepts
+6. Puja as well
+
 # Date 2023-09-18
 1. did 2 on-campus technical exams
 2. AICTE internship modules
