@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-20
+1. ksctl PR done about setting up support for k8s controllers
+2. Major project
+3. AICTE internship
+4. revise some of the CSE concepts
+
 # Date 2023-09-19
 1. done dsa problem
 2. migrated from the goa to gin http server for the major project
