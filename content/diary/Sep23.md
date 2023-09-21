@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-21
+1. fixed the jenkins e2e tests of ksctl
+2. merged the pr of ksctl
+3. DSA problem
+4. AICTE intenrship
+5. major project
+
 # Date 2023-09-20
 1. ksctl PR done about setting up support for k8s controllers
 2. Major project
