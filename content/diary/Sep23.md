@@ -4,6 +4,15 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-22 to 2023-09-23
+1. Done a lot of ksctl improvement
+2. Revision of CS topics
+3. DSA problem
+4. AICTE intenrsip 
+5. research
+6. Created a custom CI/CD pipeline tool
+7. Major project authetication nserver
+
 # Date 2023-09-21
 1. fixed the jenkins e2e tests of ksctl
 2. merged the pr of ksctl
