@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-24
+1. JWT token generation leanted in go
+2. major project to implement better error handlined and better maintable code for the http server
+
 # Date 2023-09-22 to 2023-09-23
 1. Done a lot of ksctl improvement
 2. Revision of CS topics
