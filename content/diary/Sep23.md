@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-25
+1. DSA problem
+2. Major project. achieved go server with error handler wrapper
+3. Completed another AWS course (AICTE internship)
+4. ksctl Debugging session with one of the contributor
+
 # Date 2023-09-24
 1. JWT token generation leanted in go
 2. major project to implement better error handlined and better maintable code for the http server
