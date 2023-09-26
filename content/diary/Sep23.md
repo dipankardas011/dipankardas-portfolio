@@ -4,6 +4,14 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-26
+1. done some ksctl e2e test automation fixes
+2. college stuff
+3. revise CSE notes
+4. major project
+5. AICTE internship
+6. some new learning plans
+
 # Date 2023-09-25
 1. DSA problem
 2. Major project. achieved go server with error handler wrapper
