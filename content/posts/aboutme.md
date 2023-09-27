@@ -15,6 +15,9 @@ I am Dipankar Das, automation engineer by developing platforms that can automate
 
 Did my **DevOps Intern** from Viamagus
 
+Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2** [Results Link](https://napptive.com/blog/napptive-wemakedevs-cloud-native-hackathon-results/)
+
+
 As a Kubesimplify ambassador, I write technical blogs that aim to simplify complicated concepts.
 
 I have also created and actively maintain the **ksctl** project, which helps manage multiple Kubernetes clusters across different cloud providers.
