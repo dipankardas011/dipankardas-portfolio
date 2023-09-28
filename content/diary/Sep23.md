@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-28
+1. Got my first full time offer
+2. ksctl maintainer work
+
 # Date 2023-09-27
 1. DSA problem
 2. ksctl project maintainance
