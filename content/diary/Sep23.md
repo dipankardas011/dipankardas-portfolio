@@ -4,6 +4,19 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-29
+1. DSA problem
+2. ksctl project issue resolving
+3. Major project
+  1. integrated the backend go auth server with mysql
+  2. jwt token better implementation
+4. AICTE internship
+  1. learning S3 lifecycle
+  2. CORS policies
+  3. Access control list (ACL)
+  4. Object or Bucket replication
+  5. Bucket Versioning
+
 # Date 2023-09-28
 1. Got my first full time offer
 2. ksctl maintainer work
