@@ -16,6 +16,7 @@ description = "Let's talk about my September 2023"
   3. Access control list (ACL)
   4. Object or Bucket replication
   5. Bucket Versioning
+5. Learning React
 
 # Date 2023-09-28
 1. Got my first full time offer
