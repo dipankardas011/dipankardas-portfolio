@@ -16,6 +16,7 @@ description = "Let's talk about my September 2023"
 * React learning on tic-tac-toe understood
 * revising of cse concepts done
 * Trying out gRPC
+* HTTP streams for live logs data from server to client
 
 # Date 2023-09-29
 * DSA problem
