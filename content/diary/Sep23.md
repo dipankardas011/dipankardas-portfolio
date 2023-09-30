@@ -4,6 +4,19 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2023"
 +++
 
+# Date 2023-09-30
+1. ksctl 1st aniverssary
+2. Major project
+  1. dockerize the db and the server
+  2. build docker compose file for it 
+3. AICTE internship
+  1. done Ec2 AMI create from existing EC2 and copy from one region to another
+  2. came to know about aws systems manager
+  3. EFS and EBS and instance-store
+4. React learning on tic-tac-toe understood
+5. revising of cse concepts done
+6. Trying out gRPC
+
 # Date 2023-09-29
 1. DSA problem
 2. ksctl project issue resolving
