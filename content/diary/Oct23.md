@@ -7,6 +7,7 @@ description = "Let's talk about my October 2023"
 # Date 2023-10-02
 * Major project image store and retrival
   * configure docker compose and redis db
+  * image and redis store the images and retrival
 * AICTE internship
   * New learnings in VPC
   * what is the internet gateway
