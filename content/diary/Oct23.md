@@ -1,8 +1,18 @@
 +++
-title = "[10-2023] Diary for October 2023"
+title = "[2023-10] Diary for October 2023"
 author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
+
+# Date 2023-10-02
+* Major project image store and retrival
+  * configure docker compose and redis db
+* AICTE internship
+  * New learnings in VPC
+  * what is the internet gateway
+  * what is the need of NAT gateway and EIP along with
+  * Private subnet and Public subnet
+* Ksctl pod schedule to controlplne fixed
 
 # Date 2023-10-01
 * DSA problem

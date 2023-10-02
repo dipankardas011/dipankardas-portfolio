@@ -1,5 +1,5 @@
 +++
-title = "[03-2023] Diary for March 2023"
+title = "[2023-03] Diary for March 2023"
 author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
