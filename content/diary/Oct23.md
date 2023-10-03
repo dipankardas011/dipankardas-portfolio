@@ -4,6 +4,21 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-03
+* Major Project backend done
+  * Recommender
+  * Image store and retrival
+* AICTE internship
+  * VPC peering
+  * VPC Endpoints
+  * VPC DIrect connect
+  * VPC point to point VPN
+* Universal CI/CD 
+  * more http routes for better results
+* DSA problem solving
+* Remote jobs
+* need to control screen time ;>
+
 # Date 2023-10-02
 * Major project image store and retrival
   * configure docker compose and redis db
