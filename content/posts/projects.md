@@ -8,6 +8,19 @@ cover = "/img/cover-projects.png"
 
 # My project collection
 
+
+## Universal CI/CD pipeline manager
+
+### Description
+
+this tool provides a convenient way to create a workflow aka pipeline for automated testing or CI workflow
+
+{{< image src="https://gitlab.com/dipankardas011/universalci-cd/-/raw/main/cover.png" alt="Universal CI/CD pipeline manager" position="center" style="border-radius: 8px;" >}}
+
+
+### Links
+https://gitlab.com/dipankardas011/universalci-cd
+
 ## AWS Resource Dependency-graph generator
 
 ### Description
