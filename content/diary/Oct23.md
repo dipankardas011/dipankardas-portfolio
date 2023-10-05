@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-05
+1. done Universal CI/CD project
+2. DSA problem
+3. ksctl important next milestones
+
 # Date 2023-10-04
 * AICTE internship
   * finally understand the IAM role and policy (diff)
