@@ -4,10 +4,20 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-06
+* fixed the universal CI/CD project
+* refactor the project directory namingfor ksctl
+* AICTE internship
+  * Auto scaling rgoup
+  * loadbalancer and target groups
+  * route 53 different protocol
+* learning about go webhooks
+* had a stream with prateek on kubebuilder and how to use it to create custom k8s controller
+
 # Date 2023-10-05
-1. done Universal CI/CD project
-2. DSA problem
-3. ksctl important next milestones
+* done Universal CI/CD project
+* DSA problem
+* ksctl important next milestones
 
 # Date 2023-10-04
 * AICTE internship
