@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-07
+* DSA problems
+* AICTE intenrship
+  * actually using aws cloud formation templates
+  * aws code commit and aws code pipeline
+* some search on websockets in go
+
 # Date 2023-10-06
 * fixed the universal CI/CD project
 * refactor the project directory namingfor ksctl
