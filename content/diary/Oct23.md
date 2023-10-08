@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-08
+* AICTE internship
+  * aws clodfront
+* Websocket
+* ksctl consts in error added and some issue and pr checks
+* enjoyed worldcup match
+
 # Date 2023-10-07
 * DSA problems
 * AICTE intenrship
