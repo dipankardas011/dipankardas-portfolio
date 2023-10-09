@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-09
+* done Websocket testing
+* ksctl install apps (argocd, argo-rollouts)
+* AICTE internship
+  * about SNS, SQS
+* DSA problem
+
 # Date 2023-10-08
 * AICTE internship
   * aws clodfront
