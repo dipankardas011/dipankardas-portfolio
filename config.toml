@@ -67,7 +67,7 @@ paginate = 5
   [languages.en]
     languageName = "English"
     title = "My Portfolio"
-    subtitle = "A simple, retro theme for Hugo"
+    subtitle = "my portfolio website"
     owner = "Dipankar Das"
     keywords = "hugo;"
     copyright = ""

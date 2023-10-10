@@ -55,6 +55,7 @@ In addition, I have developed a small web application called **PDF-Editor** that
 
 Name | link
 -|-
+AWS Academy Graduate - AWS Academy Cloud Architecting | [![Badge](/img/badges/aws-academy-architecting-kiit.png)](https://www.credly.com/badges/63a7c0ba-6f8b-40c8-b97d-b65e2b857aeb/public_url)
 AWS Academy Graduate - AWS Academy Cloud Foundations | [![Badge](/img/badges/aws-academy-kiit.png)](https://www.credly.com/earner/earned/badge/b37dea43-f280-4983-918b-e3544d4764cc)
 DevOps Internship Completion Certificate (Viamagus) | [Certificate link](https://drive.google.com/file/d/1T04L-b_93_B_BnlGlyzfGjH5aP-_lP-m/view?usp=sharing)
 Certified Kubernetes Administrator (CKA) (KodeKloud) | [Certificate link](https://kodekloud.com/certificate-verification/2D03EB671CD0-2D01CCFFAE35-2D01CCC2F228/)
