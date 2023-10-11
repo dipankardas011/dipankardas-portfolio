@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-11
+* finally figured out the helm client 
+* now the ksctl has support for helm and also istion support
+* DSA problem
+* nice WorldCup match
+
 # Date 2023-10-10
 * AICTE internship completed
 * added backend loadbalancer for Major project
