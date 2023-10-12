@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-12
+* ksctl new version out; now managed clusters can install apps as well
+* ksctl ppt
+
 # Date 2023-10-11
 * finally figured out the helm client 
 * now the ksctl has support for helm and also istion support
