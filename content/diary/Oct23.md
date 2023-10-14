@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-13 2023-10-14
+* enjoyed Todays Ind vs Pak match
+* DSA problem
+* added support for the ksctl Prometheus stack
+
 # Date 2023-10-12
 * ksctl new version out; now managed clusters can install apps as well
 * ksctl ppt
