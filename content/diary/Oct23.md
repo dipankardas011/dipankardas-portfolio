@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-15
+* done DSA problem
+* ksctl bi-weekly meet
+* Learning about fine tuning of LLMA
+* navratri started :>
+
 # Date 2023-10-13 2023-10-14
 * enjoyed Todays Ind vs Pak match
 * DSA problem
