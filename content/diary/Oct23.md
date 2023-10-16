@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-16
+* Deep learning clourse done
+* azure-go-sdk issue resolved
+* college revision
+
 # Date 2023-10-15
 * done DSA problem
 * ksctl bi-weekly meet
