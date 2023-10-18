@@ -4,6 +4,9 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-18
+* college revision
+
 # Date 2023-10-17
 * ksctl new repos and fixed major issues with go modules for azure
 * DSA problem
