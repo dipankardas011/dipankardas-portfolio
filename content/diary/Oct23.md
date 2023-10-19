@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-19
+* dsa problem
+* ksctl ppt
+* college revision
+* icc worldcup match
+
 # Date 2023-10-18
 * college revision
 
