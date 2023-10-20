@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-20
+* ksctl live stream
+* rust learning
+
 # Date 2023-10-19
 * dsa problem
 * ksctl ppt
