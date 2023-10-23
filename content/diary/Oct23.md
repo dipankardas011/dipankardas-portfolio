@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-23
+* ksctl migration
+* ressearch
+* amazing cricket match ind v nz
+
 # Date 2023-10-21
 * ksctl new unit test cases
 * research
