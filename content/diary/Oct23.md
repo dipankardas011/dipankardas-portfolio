@@ -4,6 +4,9 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-24
+* done with ksctl  core and ksctl cli release cycles
+
 # Date 2023-10-23
 * ksctl migration
 * ressearch
