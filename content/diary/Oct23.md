@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-25
+* done dsa problem
+* ksctl cli and the ksctl core
+* ksctl maintainer meet with saiyam
+* getting started with cncf tag sustanability channel and getting started with the environment related stuff
+
 # Date 2023-10-24
 * done with ksctl  core and ksctl cli release cycles
 
