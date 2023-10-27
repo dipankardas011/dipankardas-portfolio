@@ -4,6 +4,14 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-27
+* so many things happened
+* DSA problem
+* ksctl docs website update and new repo
+* getting involved in cncf tag sustanability group
+* ksctl interface for logger and storage improvement
+* meet with prateeek on how to work on custom auto-scaler controller
+
 # Date 2023-10-25
 * done dsa problem
 * ksctl cli and the ksctl core
