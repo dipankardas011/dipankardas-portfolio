@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-28
+* Ksctl logger issue
+* CNCF WG Green contrib
+* Just relax
+
 # Date 2023-10-27
 * so many things happened
 * DSA problem
