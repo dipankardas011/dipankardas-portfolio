@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-29
+* ksctl logger to the civo
+* amazing bowling by the indvsEng cricket match
+* open source contributions
+* ksctl bi-weekly meet
+
 # Date 2023-10-28
 * Ksctl logger issue
 * CNCF WG Green contrib
