@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-30
+* ksctl migration of existing code to the new logger
+* got upgrade for my personal phone
+
 # Date 2023-10-29
 * ksctl logger to the civo
 * amazing bowling by the indvsEng cricket match
