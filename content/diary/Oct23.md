@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2023"
 +++
 
+# Date 2023-10-31
+* ksctl logger seperation and fixed the e2e tests with new core changes
+* dsa problem
+* open source contrib in CNCF TAG Green
+* eBPF coding
+
 # Date 2023-10-30
 * ksctl migration of existing code to the new logger
 * got upgrade for my personal phone
