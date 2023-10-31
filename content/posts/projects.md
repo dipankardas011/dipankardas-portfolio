@@ -56,12 +56,15 @@ https://github.com/dipankardas011/bot-request-handler-rust
 
 ### Description
 
-A Generic Kubernetes Management CLI tool which can manage Kubernetes clusters on multiple cloud providers
+Cloud Agnostic Kubernetes Management tool which can manage Kubernetes clusters on multiple cloud providers. Option to choose between self-managed HA clusters and cloud managed clusters
 
 {{< image src="https://github.com/kubesimplify/ksctl/raw/main/img/ksctl-cover.png" alt="PDF-Editor" position="center" style="border-radius: 8px;" >}}
 
 ### Links
 https://github.com/kubesimplify/ksctl
+https://github.com/kubesimplify/ksctl-cli
+https://github.com/kubesimplify/ksctl-dashboard
+https://github.com/kubesimplify/ksctl-docs
 
 
 ## PDF-Editor
@@ -100,6 +103,8 @@ https://github.com/dipankardas011/AirportBooking
 
 # My Open Source contributions
 
+- CNCF TAG ENV
+  - [Issue on design docs](https://github.com/cncf-tags/green-reviews-tooling/issues/1)
 - Fermyon (WASM)
   - [Added cargo build via --bin flag](https://github.com/fermyon/developer/pull/744)
   - [fix: added error handling `spin trigger [USAGE]`](https://github.com/fermyon/spin/pull/1671)
