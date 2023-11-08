@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2023"
 +++
 
+# Date 2023-11-06 2023-11-08
+* DSA problems
+* ksctl maintainers role
+* college revision
+* got travel plans for the kubeday India
+* CNCF tag green
+
 # Date 2023-11-02 2023-11-05
 * Ksctl logger done
 * ssh keygen replacement
