@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2023"
 +++
 
+# Date 2023-11-09
+* Ksctl roadmap stages diagram
+* college revision
+* Diwali celebration prep
+
 # Date 2023-11-06 2023-11-08
 * DSA problems
 * ksctl maintainers role
