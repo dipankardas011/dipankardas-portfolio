@@ -4,6 +4,14 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2023"
 +++
 
+# Date 2023-11-10 2023-11-11
+* enjoyed loki season 2
+* DSA problems
+* ksctl more robust architecture design
+* college revision
+* CNCF tag green contrib
+* diwali
+
 # Date 2023-11-09
 * Ksctl roadmap stages diagram
 * college revision
