@@ -4,6 +4,15 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2023"
 +++
 
+# Date 2023-11-12 2023-11-14
+* some college assignments
+* icc WC enjoymenet
+* revisions
+* grpc leatning
+* DSA problem
+* ksctl docsy docs mods
+* diwali done
+
 # Date 2023-11-10 2023-11-11
 * enjoyed loki season 2
 * DSA problems
