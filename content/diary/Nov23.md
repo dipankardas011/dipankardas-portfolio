@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2023"
 +++
 
+# Date 2023-11-15 2023-11-16
+* amazing Inv vs nz match
+* DSA problems
+* ksctl major bug fixes and updated the cli
+
 # Date 2023-11-12 2023-11-14
 * some college assignments
 * icc WC enjoymenet
