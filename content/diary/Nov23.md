@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2023"
 +++
 
+# Date 2023-11-18 2023-11-20
+* ksctl minor checks
+* cookie and token play in making the major project (college)
+* sad that ind lost the icc wcw 23
+* prep for the last college semister
+
 # Date 2023-11-17
 * Ksctl maintainer meet
 * new learning on the actor model of software architecture
