@@ -4,6 +4,11 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2023"
 +++
 
+# Date 2023-11-21 2023-11-28
+* done with cncf tag green contributions
+* learned about terraform remote_exec and much more
+* done with all the semister sessional exams for the college
+
 # Date 2023-11-18 2023-11-20
 * ksctl minor checks
 * cookie and token play in making the major project (college)
