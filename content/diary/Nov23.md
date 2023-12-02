@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2023"
 +++
 
+# Date 2023-11-29 2023-11-30
+* enjoyed some cricket match
+* Actor model in golang
+* ksctl working
+* Major project
+
 # Date 2023-11-21 2023-11-28
 * done with cncf tag green contributions
 * learned about terraform remote_exec and much more
