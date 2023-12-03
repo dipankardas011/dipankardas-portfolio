@@ -4,7 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-03
+* learn about react and nextjs
+* major project 95% completed
+
 # Date 2023-12-01 2023-12-02
 * dsa problem done
 * Major project
 * Generative AI things
+* AWS Gp3 snapshot
