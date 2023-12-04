@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-04
+* improved the major project
+* implemented the poc for etcd with no-tls for ksctl
+* contributed to the cncf green 
+* ksctl maintainer meet
+
 # Date 2023-12-03
 * learn about react and nextjs
 * major project 95% completed
