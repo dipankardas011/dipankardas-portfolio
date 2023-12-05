@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-05
+* done ksctl issue triages
+* ksctl mongo db poc
+
 # Date 2023-12-04
 * improved the major project
 * implemented the poc for etcd with no-tls for ksctl
