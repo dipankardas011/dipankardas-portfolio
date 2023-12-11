@@ -4,6 +4,18 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-06 2023-12-11
+* ksctl work
+  * mongodb client for storage done
+  * etcd poc
+  * extermal learnings
+  * bi-weekly meet
+* major prpject
+* Went to kubeday india 23 and it was quite a fun
+  * learn about some interesting new development in kubernetes
+  * talked with people
+  * exchanged knowledge
+
 # Date 2023-12-05
 * done ksctl issue triages
 * ksctl mongo db poc
