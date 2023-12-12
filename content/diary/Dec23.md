@@ -4,6 +4,15 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-12
+* DSA problem done
+* ksctl
+  * mongodb servers client
+  * etcd pr added auto-tls for peer connection
+* Distributed consenses
+  * etcd
+  * raft
+
 # Date 2023-12-06 2023-12-11
 * ksctl work
   * mongodb client for storage done
