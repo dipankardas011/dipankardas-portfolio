@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-13
+* etcd support with auto-tls done for ksctl
+* etcd videos about distributed consensus
+* started to read about raft consensus algorithm
+* had a meet with cncf tag-green member on what all things need to be worked on next and more
+
 # Date 2023-12-12
 * DSA problem done
 * ksctl
