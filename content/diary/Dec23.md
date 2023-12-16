@@ -4,6 +4,13 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-16
+* DSA problem
+* some travel
+* automated the tls certs generation for etcd tls feature
+* learning about kubernetes 1.29 features
+* some other oper source projects
+
 # Date 2023-12-15
 * major project completed
 * etcd tls part done
