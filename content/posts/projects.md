@@ -103,7 +103,7 @@ https://github.com/dipankardas011/AirportBooking
 
 # My Open Source contributions
 
-- CNCF TAG ENV
+- CNCF TAG Green
   - [Issue on design docs](https://github.com/cncf-tags/green-reviews-tooling/issues/1)
   - [Provision-cluster-with-OpenTofu-and-K3s-cilium-cni](https://github.com/cncf-tags/green-reviews-tooling/pull/6)
   - [flux-based-helm-install-of-kepler](https://github.com/cncf-tags/green-reviews-tooling/pull/17)
