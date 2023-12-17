@@ -4,6 +4,9 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-17
+* ksctl kubeadm bootstrap poc now external etcd config is left
+
 # Date 2023-12-16
 * DSA problem
 * some travel
