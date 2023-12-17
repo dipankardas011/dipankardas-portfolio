@@ -105,6 +105,8 @@ https://github.com/dipankardas011/AirportBooking
 
 - CNCF TAG ENV
   - [Issue on design docs](https://github.com/cncf-tags/green-reviews-tooling/issues/1)
+  - [Provision-cluster-with-OpenTofu-and-K3s-cilium-cni](https://github.com/cncf-tags/green-reviews-tooling/pull/6)
+  - [flux-based-helm-install-of-kepler](https://github.com/cncf-tags/green-reviews-tooling/pull/17)
 - Fermyon (WASM)
   - [Added cargo build via --bin flag](https://github.com/fermyon/developer/pull/744)
   - [fix: added error handling `spin trigger [USAGE]`](https://github.com/fermyon/spin/pull/1671)
