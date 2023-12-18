@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-18
+* dsa problem
+* done poc for external etcd, kubeadm
+* raft algorithm paper read
+* some ml videos
+
 # Date 2023-12-17
 * ksctl kubeadm bootstrap poc now external etcd config is left
 
