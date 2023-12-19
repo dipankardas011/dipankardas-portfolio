@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-19
+* Done with kepler install via helm fluxcd and prometheus attachment
+* also merged the PR
+* ksctl 2 POC completed
+* graceful termination work started
+
 # Date 2023-12-18
 * dsa problem
 * done poc for external etcd, kubeadm
