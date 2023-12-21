@@ -4,6 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-20 2023-12-21
+* learning from mistakes in go context and channels
+* some docs reading time for go
+* ksctl work on aws
+* implementaed some preety nice stuff
+
 # Date 2023-12-19
 * Done with kepler install via helm fluxcd and prometheus attachment
 * also merged the PR
