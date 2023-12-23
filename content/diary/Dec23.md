@@ -4,8 +4,12 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-23
+* completed the raft implementation via grpc with client and peer
+* still facing issues with amount of resources used :<
+
 # Date 2023-12-22
-* raft implmentation for demonstration
+* raft implementation for demonstration
 
 # Date 2023-12-20 2023-12-21
 * learning from mistakes in go context and channels
