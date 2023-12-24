@@ -8,6 +8,19 @@ cover = "/img/cover-projects.png"
 
 # My project collection
 
+## Raft based Distributed Consensus enabled datastore
+
+### Description
+it demonstrates the use of distributed consensus model. Using Raft developed the node with peer and client connections with GRPC.
+And using the cli client you can save key=value data in the raft model
+also under the hood it helps to read,write,delete data from the external database through leader of the raft nodes
+
+{{< image src="https://gitlab.com/dipankardas011/go-playground/-/raw/main/raft-based-distributed-consensus/img/read.png" alt="Raft based Distributed Consensus enabled datastore" position="center" style="border-radius: 8px;" >}}
+
+
+### Links
+https://gitlab.com/dipankardas011/go-playground/-/tree/main/raft-based-distributed-consensus?ref_type=heads
+
 
 ## Universal CI/CD pipeline manager
 
