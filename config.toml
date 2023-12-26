@@ -60,7 +60,7 @@ paginate = 5
   # set Twitter handles for Twitter cards
   # see https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started#card-and-content-attribution
   # do not include @
-  creator = "DipankarDas"
+  creator = "DipankarDas011"
   site = "DipankarDas011"
 
 [languages]

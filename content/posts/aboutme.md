@@ -11,18 +11,52 @@ cover = "img/cover.png"
 
 {{< image src="/img/profile_small.jpg" alt="profile image" position="center" style="border-radius: 8px;" scale="10" >}}
 
-I am Dipankar Das, automation engineer by developing platforms that can automate repetitive tasks. Currently, Also, a member of the **Kubernetes organization** and have made open-source contributions to various cloud-native projects such as **Kubernetes**, **Armo**, **Kubeshop**, **Datree**, and more.
+I am Dipankar Das, automation engineer by developing platforms that can automate repetitive tasks. Currently, Also, a member of the **Kubernetes organization** and have made open-source contributions to various cloud-native projects: **CNCF Tag Green**, **Kubernetes**, **Armo**, **Kubeshop**, **Cilium**, and more.
 
-Did my **DevOps Intern** from Viamagus
+Currently working as a **DevOps Engineer** at [**rtCamp**](/posts/aboutme/#rtcamp)
 
 Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2** [Results Link](https://napptive.com/blog/napptive-wemakedevs-cloud-native-hackathon-results/)
 
+## Experience
 
-As a Kubesimplify ambassador, I write technical blogs that aim to simplify complicated concepts.
+{{< image src="/img/experience/rtcamp.png" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="10" >}}
+### rtCamp
+`Tenure`: 01/2024 to Present
 
-I have also created and actively maintain the **ksctl** project, which helps manage multiple Kubernetes clusters across different cloud providers.
+`Role`: **DevOps Engineer**
 
-In addition, I have developed a small web application called **PDF-Editor** that can merge and rotate PDF files
+`Knowledge Areas`
+- TBD
+
+
+{{< image src="/img/experience/kubesimplify.png" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="10" >}}
+### Kubesimplify
+`Tenure`: 03/2022 to Present
+
+`Role`: **Ambassador & Maintainer and Creator of Ksctl**
+
+`Knowledge Areas`
+- Wrote blogs on kubesimplify [**Refer**](/posts/blogs/)
+- Done some Twitch sessions about Golang and general Go Development
+- Ksctl Creator and Maintainer
+
+
+{{< image src="/img/experience/viamagus.jpg" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="5" >}}
+### Viamagus
+`Tenure`: 03/2023 to 09/2023
+
+`Role`: **DevOps Intership**
+
+`Knowledge Areas`
+- Learning in domains of Mobile app development and publish in production.
+- Snyk integration with projects
+- Kubernetes Migration to EKS and use Gateway API via Nginx Controller
+- Dockerization of existing nodeJS apps
+- Migration step for reverse-proxy from the apache HTTP server to Nginx
+- Jenkins job automation to create CLI tool for automating the jenkins job creation
+- letsencrypt for SSL cert generation
+- Promethus for capturing the live metrics from existing running VMs
+- migrating Gitlab repos to AWS codecommit
 
 
 ## Interests
@@ -33,7 +67,7 @@ In addition, I have developed a small web application called **PDF-Editor** that
 
 ## Tools and Technologies
 
-`#Kubernetes` `#Docker` `#Linux` `#Git` `#AWS` `#Azure` `#Github` `#GitLab` `#Ansible` `#Terraform` `#Jenkins` `#Civo`
+`#Kubernetes` `#Docker` `#Linux` `#Git` `#AWS` `#Azure` `#Restful-API` `#GRPC` `#Github` `#GitLab` `#Ansible` `#Terraform` `#Jenkins` `#Civo`
 
 
 ## Programming Languages
