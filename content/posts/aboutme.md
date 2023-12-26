@@ -19,8 +19,9 @@ Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2*
 
 ## Experience
 
-{{< image src="/img/experience/rtcamp.png" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="10" >}}
+{{< image src="/img/experience/rtcamp.png" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="5" >}}
 ### rtCamp
+
 `Tenure`: 01/2024 to Present
 
 `Role`: **DevOps Engineer**
