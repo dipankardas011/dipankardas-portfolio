@@ -4,6 +4,15 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-24 2023-12-27
+* done implementing raft
+* actor model started
+* ksctl bi weekly meet
+* ksctl pr and issue triage
+* update to portfolio
+* DSA problems
+* improved the understanding of go channels
+
 # Date 2023-12-23
 * completed the raft implementation via grpc with client and peer
 * still facing issues with amount of resources used :<
