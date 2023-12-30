@@ -4,6 +4,10 @@ author = "Dipankar Das"
 description = "Let's talk about my December 2023"
 +++
 
+# Date 2023-12-30
+* done some github actions optimization in ksctl
+* AWS client with waiter done
+
 # Date 2023-12-29
 * done with Actor model
 * some play around go sdk v2 and creating some vpc with waiter attached
