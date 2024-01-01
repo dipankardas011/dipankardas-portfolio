@@ -5,5 +5,8 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
-## NULL 
+# Date 2024-01-01
+* Ksctl linear app issue tracking
+* fixed the storage interface
+* ML learnings
 
