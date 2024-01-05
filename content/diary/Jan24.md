@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-05
+* finally done with ksctl storage class updates
+* ml leanings
+* done dsa problem
+
 # Date 2024-01-03 2024-01-04
 * done DSA problems
 * ksctl storage class for local system resolved, now need to try out mongodb
