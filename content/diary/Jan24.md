@@ -5,6 +5,9 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-06
+* merged the PR for the ksctl storage class
+
 # Date 2024-01-05
 * finally done with ksctl storage class updates
 * ml leanings
