@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-08 2024-01-09
+* DSA problems
+* fixed ksctl issues
+* a lot of maths learning in Deeplearnings
+* learn how to remove a particu;lr folder from git history
+
 # Date 2024-01-07
 * learning linear algorithm, loss functions(cross entropy, mean squared), regulizations (L1, L2) and finally loss optmization (adam, SDE+momentum) finally getting to understand deep learning things
 * fixed a lot of issues in ksctl
