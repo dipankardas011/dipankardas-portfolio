@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-10
+* learn about actually how the convolutionaly neural network works
+* ksctl aws pr triage
+* cncf green review meet
+
 # Date 2024-01-08 2024-01-09
 * DSA problems
 * fixed ksctl issues
