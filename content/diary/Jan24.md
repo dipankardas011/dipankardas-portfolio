@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-12
+* cncf green-review 2 PR done
+  * came to know about interesting bug in kube-prometheus-stack in serviceMonitor
+  * there is a grafana sidecar to check for new garafana dashboards
+  * kubeconfig generate with specific role
+* ksctl bi-weekly maintainer meet
+* big achievement that ksctl crossed 200 stars in github
+
 # Date 2024-01-11
 * cncf green review PR triage
 * a lot of learning about resnet in deeplearning
