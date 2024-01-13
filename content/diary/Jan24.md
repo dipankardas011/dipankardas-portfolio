@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-13
+* keaning of Deep neural netowkr hardware and software
+  * pytorch way of building stuff
+* cncf green review fixes
+
 # Date 2024-01-12
 * cncf green-review 2 PR done
   * came to know about interesting bug in kube-prometheus-stack in serviceMonitor
