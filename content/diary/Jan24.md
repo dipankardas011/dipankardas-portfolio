@@ -5,8 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-14
+* deep neural network activation functions, data aggregation, normalization..
+* ksctl maintainers meet on cluster auto-scaler
+
 # Date 2024-01-13
-* keaning of Deep neural netowkr hardware and software
+* leaning of Deep neural netowkr hardware and software
   * pytorch way of building stuff
 * cncf green review fixes
 
