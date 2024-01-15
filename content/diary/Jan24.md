@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-15
+* DSA problem
+* more notes on hyperparameters and other aspecits in deep learning
+* cncf green reviews
+* added members list to the raft implementation project
+* understanding major project Conv neural network
+
 # Date 2024-01-14
 * deep neural network activation functions, data aggregation, normalization..
 * ksctl maintainers meet on cluster auto-scaler
