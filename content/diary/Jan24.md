@@ -5,8 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-16
+* Implemented conv neural network for my custom soild classification in problem
+* implemented resnet18, 152 for soil classification and also for the cifar-10 dataset
+* learning about Recurrent neural network
+
 # Date 2024-01-15
 * DSA problem
+* devops revision
 * more notes on hyperparameters and other aspecits in deep learning
 * cncf green reviews
 * added members list to the raft implementation project
