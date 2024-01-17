@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-17
+* came to know about default clusterroles in k8s
+* how to aggregate clusterroles and use them
+* finished with cncf green review pr
+* learned about RNNs and lstm
+* DSA problem
+
 # Date 2024-01-16
 * Implemented conv neural network for my custom soild classification in problem
 * implemented resnet18, 152 for soil classification and also for the cifar-10 dataset
