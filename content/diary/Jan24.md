@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-18
+* wasm learning
+* transformer in LLMs
+* some spin apps
+
 # Date 2024-01-17
 * came to know about default clusterroles in k8s
 * how to aggregate clusterroles and use them
