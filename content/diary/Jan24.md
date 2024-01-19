@@ -5,6 +5,16 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-19
+* learning about gneerative images in the deeplearning course
+* NextJS app pges setup
+* dsa problems
+* some play with spin apps
+* finally got to understand a lof about wasm component model
+  * from the WIT
+  * to joining components
+  * and composing them to make the app us them
+
 # Date 2024-01-18
 * wasm learning
 * transformer in LLMs
