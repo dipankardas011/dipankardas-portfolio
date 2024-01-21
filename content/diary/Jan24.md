@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-20 2024-01-21
+* DSA problem
+* some object detection and segmentation techniques in image and deep learning
+* improvied by frontend skills
+
 # Date 2024-01-19
 * learning about gneerative images in the deeplearning course
 * NextJS app pges setup
