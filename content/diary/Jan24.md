@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-22 2024-01-23
+* getting to know how video classification work and 3-d images
+* generative models indeptn
+* cncf green review contrib
+* ksctl bi-weekly meet
+
 # Date 2024-01-20 2024-01-21
 * DSA problem
 * some object detection and segmentation techniques in image and deep learning
