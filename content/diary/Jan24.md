@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-24 2024-01-25
+* learn about linear-gradient text in css
+* contribution to cncf tag green
+* ksctl ha blog in hashnode almost done
+* completed the deeplearning course
+
 # Date 2024-01-22 2024-01-23
 * getting to know how video classification work and 3-d images
 * generative models indeptn
