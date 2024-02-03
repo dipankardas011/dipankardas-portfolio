@@ -5,6 +5,9 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2024"
 +++
 
+# Date 2024-01-26 2024-01-31
+* shifting to Pune from jamshedpur
+
 # Date 2024-01-24 2024-01-25
 * learn about linear-gradient text in css
 * contribution to cncf tag green
