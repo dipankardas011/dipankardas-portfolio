@@ -8,6 +8,7 @@ description = "Let's talk about my February 2024"
 # Date 2024-02-05
 * learning about nginx with openresty with ssl using acme
 * configuring the macos
+* contributed to cncf green reviews
 
 # Date 2024-02-04
 * expereiencing some low times in open source contribution
