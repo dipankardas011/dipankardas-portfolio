@@ -8,6 +8,24 @@ cover = "img/cover-blogs.png"
 
 # Tech Blogs
 
+## OpenResty with HTTPS using Certbot
+
+{{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/http2https.jpg" alt="openresty+certbot" style="border-radius: 8px;" >}}
+
+[Blog Link](https://rtcampblogsdipankardas.wordpress.com/2024/02/05/openresty-with-https/)
+
+## Nginx Basics and Php with FPM
+
+{{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/pexels-photo-11035538.jpeg" alt="php+nginx" style="border-radius: 8px;" >}}
+
+[Blog Link](https://rtcampblogsdipankardas.wordpress.com/2024/02/05/nginx-basics-and-php/)
+
+## Creating your Own Kubernetes HA cluster from start to end
+
+{{< image src="https://cdn.hashnode.com/res/hashnode/image/stock/unsplash/GSiEeoHcNTQ/upload/0dd732f706f64bd2a9872854072fe738.jpeg" alt="HA cluster" style="border-radius: 8px;" >}}
+
+[Blog Link](https://blog.kubesimplify.com/ha-kubernetes)
+
 ## Bridging Distances: Deploying Docusaurus Website on Fermyon Cloud using Spin, AWS Cloudfront, and the Magic of WebAssembly
 
 {{< image src="https://cdn.hashnode.com/res/hashnode/image/upload/v1688792089271/a310523d-05c6-4fec-9cc1-8f6e730f6577.png" alt="Supercharging Docusaurus: Deploy with Spin, Fermyon Cloud & AWS Cloudfront" style="border-radius: 8px;" >}}
