@@ -8,6 +8,18 @@ cover = "img/cover-blogs.png"
 
 # Tech Blogs
 
+## WordPress site without wp-cli
+
+{{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/pexels-photo-847393.jpeg" alt="openresty+certbot" style="border-radius: 8px;" >}}
+
+[Blog Link](https://rtcampblogsdipankardas.wordpress.com/2024/02/08/wordpress-site-without-wp-cli/)
+
+## Wordpress with wp-cli
+
+{{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/automating-installation-wordpress-unit_topology.png" alt="wordpress with wp-cli" style="border-radius: 8px;" >}}
+
+[Blog Link](https://rtcampblogsdipankardas.wordpress.com/2024/02/08/wordpress-using-wp-cli/)
+
 ## OpenResty with HTTPS using Certbot
 
 {{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/http2https.jpg" alt="openresty+certbot" style="border-radius: 8px;" >}}

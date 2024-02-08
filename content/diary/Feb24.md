@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2024"
 +++
 
+# Date 2024-02-06 2024-02-07
+* learning about php and nginx with openresty
+* wordpress deploy using wp-cli and src
+* learning about the backup and sys team docs
+
 # Date 2024-02-05
 * learning about nginx with openresty with ssl using acme
 * configuring the macos
