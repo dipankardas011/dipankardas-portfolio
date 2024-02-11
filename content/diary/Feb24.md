@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2024"
 +++
 
+# Date 2024-02-18 2024-02-11
+* more advance docker compose in job
+* some nice development approaches for ksctl
+* and a lot of learning about myself
+
 # Date 2024-02-06 2024-02-07
 * learning about php and nginx with openresty
 * wordpress deploy using wp-cli and src
