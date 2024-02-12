@@ -8,6 +8,17 @@ cover = "img/cover-blogs.png"
 
 # Tech Blogs
 
+## Wordpress dockerization
+### HTTP
+
+{{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/wpdock.jpg" alt="docker wordpress http" style="border-radius: 8px;" >}}
+[Blog Link](https://rtcampblogsdipankardas.wordpress.com/2024/02/12/wordpress-dockerization/)
+
+### HTTPS
+
+{{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/images.png" alt="docker wordpress https" style="border-radius: 8px;" >}}
+[Blog Link](https://rtcampblogsdipankardas.wordpress.com/2024/02/12/dockerization-of-wordpress-with-https/)
+
 ## WordPress site without wp-cli
 
 {{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/pexels-photo-847393.jpeg" alt="openresty+certbot" style="border-radius: 8px;" >}}
