@@ -8,15 +8,30 @@ cover = "img/cover-blogs.png"
 
 # Tech Blogs
 
+
+## github action to deploy docker-compose on a remote ssh based server
+
+{{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/snettscom-github-actions-ssh-deploy-featured-1100x575-1.jpg" alt="image" style="border-radius: 8px;" >}}
+[Blog Link](https://rtcampblogsdipankardas.wordpress.com/2024/02/15/github-action-to-deploy-docker-compose-on-a-remote-ssh-based-server/)
+
+
+## Seamless DevOps: Automating Deployment and Releases with GitHub Actions
+
+{{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/dallc2b7e-2024-02-15-16.27.38-illustrate-a-dynamic-and-modern-technological-thumbnail-for-a-blog-post.-the-scene-should-depict-a-seamless-integration-of-several-key-processes_-a-gi.webp" alt="image" style="border-radius: 8px;" >}}
+
+[Blog Link](https://rtcampblogsdipankardas.wordpress.com/2024/02/15/seamless-devops-automating-deployment-and-releases-with-github-actions/)
+
 ## Wordpress dockerization
 ### HTTP
 
 {{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/wpdock.jpg" alt="docker wordpress http" style="border-radius: 8px;" >}}
+
 [Blog Link](https://rtcampblogsdipankardas.wordpress.com/2024/02/12/wordpress-dockerization/)
 
 ### HTTPS
 
 {{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/images.png" alt="docker wordpress https" style="border-radius: 8px;" >}}
+
 [Blog Link](https://rtcampblogsdipankardas.wordpress.com/2024/02/12/dockerization-of-wordpress-with-https/)
 
 ## WordPress site without wp-cli

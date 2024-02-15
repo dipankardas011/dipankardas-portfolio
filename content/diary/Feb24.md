@@ -5,7 +5,16 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2024"
 +++
 
-# Date 2024-02-18 2024-02-11
+# Date 2024-02-12 2024-02-15
+* gh action with custom relase using api, ghcr
+* docker compose
+* automation of ssh via gh action
+* new-relic for php app
+* used easy-engine
+* cncf green review pr got merged!
+* ksctl one PR got merged!
+
+# Date 2024-02-08 2024-02-11
 * more advance docker compose in job
 * some nice development approaches for ksctl
 * and a lot of learning about myself
