@@ -10,9 +10,10 @@ description = "Let's talk about my February 2024"
 * docker compose
 * automation of ssh via gh action
 * new-relic for php app
-* used easy-engine
+* used easy-engine and wp-cli to export and import posts
 * cncf green review pr got merged!
 * ksctl one PR got merged!
+* worked on k8s controller
 
 # Date 2024-02-08 2024-02-11
 * more advance docker compose in job
