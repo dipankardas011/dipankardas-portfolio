@@ -84,13 +84,12 @@ https://github.com/dipankardas011/bot-request-handler-rust
 
 Cloud Agnostic Kubernetes Management tool which can manage Kubernetes clusters on multiple cloud providers. Option to choose between self-managed HA clusters and cloud managed clusters
 
-{{< image src="https://github.com/kubesimplify/ksctl/raw/main/img/ksctl-cover.png" alt="PDF-Editor" position="center" style="border-radius: 8px;" >}}
+{{< image src="https://github.com/ksctl/ksctl/raw/main/img/Ksctl-logos.jpeg" alt="Ksctl" position="center" style="border-radius: 8px;" >}}
 
 ### Links
-https://github.com/kubesimplify/ksctl
-https://github.com/kubesimplify/ksctl-cli
-https://github.com/kubesimplify/ksctl-dashboard
-https://github.com/kubesimplify/ksctl-docs
+https://github.com/ksctl/ksctl
+https://github.com/ksctl/cli
+https://github.com/ksctl/docs
 
 
 ## PDF-Editor
