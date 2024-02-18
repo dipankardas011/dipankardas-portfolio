@@ -139,6 +139,8 @@ https://github.com/dipankardas011/AirportBooking
 - Fermyon (WASM)
   - [Added cargo build via --bin flag](https://github.com/fermyon/developer/pull/744)
   - [fix: added error handling `spin trigger [USAGE]`](https://github.com/fermyon/spin/pull/1671)
+- Kubesimplify (WASM)
+  - [feature: Added the spin support](https://github.com/kubesimplify/website/pull/233)
 - CNCF Glossary
   - [Missing link for Vertical-scaling in bare_metal_machine.md](https://github.com/cncf/glossary/pull/628)
   - [Missing link to Vertical Scaling](https://github.com/cncf/glossary/pull/634)
