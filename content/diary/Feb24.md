@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2024"
 +++
 
+# Date 2024-02-16 2024-02-18
+* Today I learn to use gh actions with ghcr.io
+* Google tag manager
+* Cloudflare workers
+
 # Date 2024-02-12 2024-02-15
 * gh action with custom relase using api, ghcr
 * docker compose
