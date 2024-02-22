@@ -5,10 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2024"
 +++
 
-# Date 2024-02-16 2024-02-18
-* Today I learn to use gh actions with ghcr.io
-* Google tag manager
-* Cloudflare workers
+# Date 2024-02-16 2024-02-23
+* rootless docker
+* google tag manager
+* amazing finding in easy engine
+* applyed in gsoc
+* ksctl got a new organization
+* learned about cloudflare workers
+* multiple architecture docker buildx and push to gchr.io
+* aws terms and conditions read and came to know about the details of saving plan 
 
 # Date 2024-02-12 2024-02-15
 * gh action with custom relase using api, ghcr
