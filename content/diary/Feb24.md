@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2024"
 +++
 
+# Date 2024-02-24
+* learning about gsoc codebase
+* learning about custom controllers, crds, webhooks from kubbuilder book
+
 # Date 2024-02-16 2024-02-23
 * rootless docker
 * google tag manager
