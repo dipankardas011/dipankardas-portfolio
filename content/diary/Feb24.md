@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2024"
 +++
 
+# Date 2024-02-25 2024-02-29
+* Nice completed 1 month of coorporate life
+* jaeger gsoc some nice progress
+
 # Date 2024-02-24
 * learning about gsoc codebase
 * learning about custom controllers, crds, webhooks from kubbuilder book
