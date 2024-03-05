@@ -9,3 +9,4 @@ description = "Let's talk about my March 2023"
 * reading some nice books
 * came to know about a lot of kubernetes
 * created custom controllers and webhooks
+* worked on kactl improves hostname and k8s nodenames for upcomming aws support 
