@@ -5,6 +5,16 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2024-03-07 2024-03-09
+* tryed gke with wordpress
+  * came to know about standard-rwx and when to use 
+  * how to setup the certmanager in the gke
+  * tls
+* blog post on the above as wel
+* ksctl autoscaler design done now implementation started
+* came to know about finailizers in k8s controllers importace
+* enjoy
+
 # Date 2024-03-06
 * tried the wordpress deployment for the wordpress
   * catch is need to use a different custom image
