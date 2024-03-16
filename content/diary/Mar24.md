@@ -5,6 +5,17 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2024-03-10 2024-03-16
+* learning about challenges in RWX mode of PVC and what are the solutions
+  * all the managed solutions have there file store but we need to use and find what things to use
+  * used the google cloud bucket fuse in gke for rwx with quite good solutions but issues with no support of file permissions store as it is a bucket
+* ksctl updates
+  * etcd supprt added
+  * ksctl agent got a pretty good start
+  * aws ha support got its first phase of review done
+* reading a lot of books and enjoying them
+* helping frends in there journey
+
 # Date 2024-03-07 2024-03-09
 * tryed gke with wordpress
   * came to know about standard-rwx and when to use 
