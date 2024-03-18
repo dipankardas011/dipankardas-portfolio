@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2024-03-17 2024-03-18
+* kubernetes ci/cd with argocd with image tag updates and wordpress deployyment with s3
+* etcd support for the k3s is completed
+* kubeadm and faster k8s bootstrap for ksctl
+
 # Date 2024-03-10 2024-03-16
 * learning about challenges in RWX mode of PVC and what are the solutions
   * all the managed solutions have there file store but we need to use and find what things to use
