@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2024-03-19 2024-03-20
+* Fixed Production server
+* some stress testing
+* book reads
+* ksctl kubeadm support work
+
 # Date 2024-03-17 2024-03-18
 * kubernetes ci/cd with argocd with image tag updates and wordpress deployyment with s3
 * etcd support for the k3s is completed
