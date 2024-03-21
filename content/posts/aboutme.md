@@ -27,7 +27,26 @@ Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2*
 `Role`: **DevOps Engineer**
 
 `Knowledge Areas`
-- TBD
+- Nginx indepth understanding
+  - with SSL and openresty
+- wordpress
+  - understanding php code and folder structure
+  - install and use in docker compose with https and volumes
+- new-relic for monitoring php apps
+- github actions
+  - write releases using raw github api curl requests
+  - ghcr pacakage releases
+- Google Tag manager
+  - deployment and understading how its use
+- docker rootless POC
+- research on AWS Savings plan indepth for ec2 and rds services
+- used fail2ban with cloudflare integration to ban ips which are denied access for fixed amount of failed attempts
+- kubernetes
+  - Storage class with RWX in GCP
+  - RWX use either a file storage option for example{NFS, standard-rwx} or bucket (there are latencies)
+  - using s3 for uploading static data
+  - wordpress deployment with kustomize
+  - gitops workflow with argocd
 
 
 {{< image src="/img/experience/kubesimplify.png" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="10" >}}
