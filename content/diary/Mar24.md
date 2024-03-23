@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2024-03-21 2024-03-23
+* argo rollouts
+* came to know about google cloud sql proxy
+* kubeadm support for ksctl done
+* kubernetes distribution bootstrap concurrency support in progress
+* Issue and PR triage for ksctl
+* book reading
+
 # Date 2024-03-19 2024-03-20
 * Fixed Production server
 * some stress testing
