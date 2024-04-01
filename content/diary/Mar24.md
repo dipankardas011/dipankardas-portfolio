@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2023"
 +++
 
+# Date 2024-03-24 2024-03-31
+* ksctl new ssh support
+* stable ksctl aws merge
+* removed jenkins and replaced with ksctl custom gh runners for e2e
+* ksctl agent coding
+* IPL matches
+* book reads
+* go best practices for concurrency [Link](https://blog.laisky.com/p/golang-race/?lang=en)
+
 # Date 2024-03-21 2024-03-23
 * argo rollouts
 * came to know about google cloud sql proxy
