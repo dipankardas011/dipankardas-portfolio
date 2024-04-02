@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2024"
 +++
 
+# Date 2024-04-02
+* kubernetes and cloud sql infra in terraform for gke
+* how to use mongosh for fetching data and fixed ksctl support for mongodb as ext datastore
+* did some yoga
+
 # Date 2024-04-01
 * ksctl project roadmp for this iteration
 * ksctl agent planning and coding
