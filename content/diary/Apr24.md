@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2024"
 +++
 
+# Date 2024-04-03 2024-04-06
+* terraform with hpa and vpa with cluster autoscaler with k6 stress test to see how it works in real GKE tf
+* ksctl agent and ksctl storage drivers with export and import
+  * bi-weekly community calls
+* you can use docker to do log rotations for you [Refer](https://docs.docker.com/config/containers/logging/local/), [Why is in Tips](https://docs.docker.com/config/containers/logging/configure/)
+
 # Date 2024-04-02
 * kubernetes and cloud sql infra in terraform for gke
 * how to use mongosh for fetching data and fixed ksctl support for mongodb as ext datastore
