@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2024"
 +++
 
+# Date 2024-04-07
+* added export and import functions
+* worked with kubebuilder and folder structre in ksctl
+* also added controllers for storage.ksctl.com and grpc client and server
+* discussion on standarization of error in ksctl with one of the contributor
+
 # Date 2024-04-03 2024-04-06
 * terraform with hpa and vpa with cluster autoscaler with k6 stress test to see how it works in real GKE tf
 * ksctl agent and ksctl storage drivers with export and import
