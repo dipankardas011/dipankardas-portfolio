@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2024"
 +++
 
+# Date 2024-04-08 2024-04-10
+* started the integration of ksctl agent and importstorage controller
+  * did fixing the controller and the kubernetes storage and added docs for it to run
+  * did the tryout and it all worked
+  * left to determine how we are going to deploy it  
+* came to use k6 lot thanks to work
+* come contributions to cncf-green-reviews
+* came to know about dagger and gptscript
+
 # Date 2024-04-07
 * added export and import functions
 * worked with kubebuilder and folder structre in ksctl
