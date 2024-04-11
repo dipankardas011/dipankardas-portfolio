@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2024"
 +++
 
+# Date 2024-04-11
+* used fail2ban and cloudflare with abuseip
+* updated the issue tracking in ksctl
+* added some fixes and docs for the ksctl feature of ksctl agent and storage controller
+
 # Date 2024-04-08 2024-04-10
 * started the integration of ksctl agent and importstorage controller
   * did fixing the controller and the kubernetes storage and added docs for it to run
