@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2024"
 +++
 
+# Date 2024-04-12
+* came to understand how to do ssl renew better
+  * dns-cloudflare
+  * webroot (initially generate the certificate with nginx 80 and then expose 443 after reciving certs)
+
 # Date 2024-04-11
 * used fail2ban and cloudflare with abuseip
 * updated the issue tracking in ksctl
@@ -14,7 +19,7 @@ description = "Let's talk about my April 2024"
 * started the integration of ksctl agent and importstorage controller
   * did fixing the controller and the kubernetes storage and added docs for it to run
   * did the tryout and it all worked
-  * left to determine how we are going to deploy it  
+  * left to determine how we are going to deploy it
 * came to use k6 lot thanks to work
 * come contributions to cncf-green-reviews
 * came to know about dagger and gptscript

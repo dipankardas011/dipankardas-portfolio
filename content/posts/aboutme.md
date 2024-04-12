@@ -9,7 +9,7 @@ cover = "img/cover.png"
 # About Me
 
 
-{{< image src="/img/profile_small.jpg" alt="profile image" position="center" style="border-radius: 8px;" scale="10" >}}
+{{< image src="/img/profile.jpg" alt="profile image" position="center" style="border-radius: 8px;" scale="10" >}}
 
 I am Dipankar Das, automation engineer by developing platforms that can automate repetitive tasks. Currently, Also, a member of the **Kubernetes organization** and have made open-source contributions to various cloud-native projects: **CNCF Tag Green**, **Kubernetes**, **Armo**, **Kubeshop**, **Cilium**, and more.
 
@@ -47,7 +47,13 @@ Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2*
   - using s3 for uploading static data
   - wordpress deployment with kustomize
   - gitops workflow with argocd
-
+  - terraform module for GKE standard cluster with HPA and Cluster AutoScaler
+- play with cloudflare
+- certbot
+  - nginx
+  - dns-cloudflare
+  - webroot
+  - standlone
 
 {{< image src="/img/experience/kubesimplify.png" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="10" >}}
 ### Kubesimplify
