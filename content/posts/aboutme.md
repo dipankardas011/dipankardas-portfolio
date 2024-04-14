@@ -9,7 +9,7 @@ cover = "img/cover.png"
 # About Me
 
 
-{{< image src="/img/profile.jpg" alt="profile image" position="center" style="border-radius: 8px;" scale="10" >}}
+{{< image src="/img/profile.jpg" alt="profile image" position="center" style="border-radius: 8px;" scale="2" >}}
 
 I am Dipankar Das, automation engineer by developing platforms that can automate repetitive tasks. Currently, Also, a member of the **Kubernetes organization** and have made open-source contributions to various cloud-native projects: **CNCF Tag Green**, **Kubernetes**, **Armo**, **Kubeshop**, **Cilium**, and more.
 
@@ -24,7 +24,7 @@ Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2*
 
 `Tenure`: 01/2024 to Present
 
-`Role`: **DevOps Engineer**
+`Role`: **DevOps Engineer (Platform Engineer)**
 
 `Knowledge Areas`
 - Nginx indepth understanding
@@ -54,6 +54,21 @@ Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2*
   - dns-cloudflare
   - webroot
   - standlone
+
+
+{{< image src="/img/experience/ksctl-logo.png" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="10" >}}
+### Ksctl
+`Tenure`: 07/2022 to Present
+
+`Role`: **Founder**
+
+`Knowledge Areas`
+- Go Programming
+- Kubernetes in and out
+- aws go sdk, civo go sdk, azure go sdk
+- Makefile, e2e tests, mocks
+- github actions
+
 
 {{< image src="/img/experience/kubesimplify.png" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="10" >}}
 ### Kubesimplify
