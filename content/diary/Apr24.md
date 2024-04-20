@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2024"
 +++
 
+# Date 2024-04-15 2024-04-20
+* ksctl storage and automation of ksctl specific apps componenets updates
+* hardened my vault server
+* did k6 test on my friends server and destroyed this server
+* understanding wasm by watching wasmio talks
+* knowledge sharing on infra and coding aspects
+
 # Date 2024-04-14
 * discussion on ksctl future
 * discussion on the finaly project submittion in college
