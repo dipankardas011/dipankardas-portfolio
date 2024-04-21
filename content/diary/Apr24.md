@@ -5,7 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2024"
 +++
 
+# Date 2024-04-21
+* ksctl automation of ksctl agent and the controller deployment
+
 # Date 2024-04-15 2024-04-20
+* write some blogs on rate limiting wit nginx
 * ksctl storage and automation of ksctl specific apps componenets updates
 * hardened my vault server
 * did k6 test on my friends server and destroyed this server
