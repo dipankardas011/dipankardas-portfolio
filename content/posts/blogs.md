@@ -9,6 +9,18 @@ cover = "img/cover-blogs.png"
 # Tech Blogs
 
 
+## Kubernetes GKE setup (Batteries included)
+
+> From Terraform setup to Cluster autoscaler, wordpress app with HPA configured, ingress controller, monitoring, loadtesting
+
+{{< image src="https://cdn.hashnode.com/res/hashnode/image/stock/unsplash/6IsCeQBIPmo/upload/d82a9a2f1cc4faf1d31d60e230af48a7.jpeg" alt="image" style="border-radius: 8px;" >}}
+[Blog Link](https://dipankardas011.hashnode.dev/kubernetes-gke-setup-batteries-included)
+
+## Deploy GKE with wordpress with HTTPS
+
+{{< image src="https://cdn.hashnode.com/res/hashnode/image/upload/v1709911236457/e5e1c66d-0127-44d5-bb58-0bc12eb56ade.png" alt="image" style="border-radius: 8px;" >}}
+[Blog Link](https://dipankardas011.hashnode.dev/deploy-gke-with-wordpress-with-https)
+
 ## github action to deploy docker-compose on a remote ssh based server
 
 {{< image src="https://rtcampblogsdipankardas.files.wordpress.com/2024/02/snettscom-github-actions-ssh-deploy-featured-1100x575-1.jpg" alt="image" style="border-radius: 8px;" >}}

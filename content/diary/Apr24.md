@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2024"
 +++
 
+# Date 2024-04-22 2024-04-23
+* written kubernetes gke blog post
+* ksctlstorage importer and crd apply using kubernetes client go
+* ksctl application feature
+* improved my makefile skills
+* ansible script at work
+
 # Date 2024-04-21
 * ksctl automation of ksctl agent and the controller deployment
 
