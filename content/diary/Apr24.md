@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2024"
 +++
 
+# Date 2024-04-24
+* Kubernetes controller build
+  * nice makefile improvements
+  * helm go client to uninstall charts
+  * leaderElectionID in each k8s controller is important otherwise if > 1 share the same one will acquire the leader lock and another cannt
+* Ansible scripting
+
 # Date 2024-04-22 2024-04-23
 * written kubernetes gke blog post
 * ksctlstorage importer and crd apply using kubernetes client go
