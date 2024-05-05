@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2024"
 +++
 
+# Date 2024-04-25 2024-04-30
+* got selected for jaeger gsoc but got rejected due to internal reasons
+* ksctl relase for the v1.1.4 done
+* ksctl core got updated
+* ksctl event driven architecture new interface was merged
+
 # Date 2024-04-24
 * Kubernetes controller build
   * nice makefile improvements
