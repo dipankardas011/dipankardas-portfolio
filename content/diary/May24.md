@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2024"
 +++
 
+# Date 2024-05-12
+* ksctl new context aware logging with much better logging
+* came to understand how is wasmimport compile directive is working
+
 # Date 2024-05-08 2024-05-11
 * understood how is wasm support in go added (wasip1)
 * cncf green reviews Trigger and Deplyo proposal is almost there
