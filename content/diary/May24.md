@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2024"
 +++
 
+# Date 2024-05-13
+* got some advice on how to debug logs
+* some compiler level directive understanding for wasip1 support in go
+* ksctl PR where removed the storageIMporter and used simpler approach kubeapi server endpoints to talk and load the state if needed
+
 # Date 2024-05-12
 * ksctl new context aware logging with much better logging
 * came to understand how is wasmimport compile directive is working
