@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2024"
 +++
 
+# Date 2024-05-14 2024-05-20
+* ksctl grpc testing, how to write better cdode
+* cncf green reviews contributions
+* go/wasip2 KT from the maintainers
+* company work
+
 # Date 2024-05-13
 * got some advice on how to debug logs
 * some compiler level directive understanding for wasip1 support in go
