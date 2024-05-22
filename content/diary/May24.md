@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2024"
 +++
 
+# Date 2024-05-21 2024-05-22
+* ksctl grpc and http test cases
+* and a lot check the progress in 334 issue
+* cncf green reviews proposal 1 almost done
+* company work
+
 # Date 2024-05-14 2024-05-20
 * ksctl grpc testing, how to write better cdode
 * cncf green reviews contributions
