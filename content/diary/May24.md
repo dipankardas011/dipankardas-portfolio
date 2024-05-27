@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2024"
 +++
 
+# Date 2024-05-23 2024-05-27
+* learning about watt time for green software foundation for collecting co2 emits per region
+* ksctl nice improvements in context based and new manager architecture
+* writing e2e test scripts for office work
+* enjoyed home stay
+* gave my vote ;>
+
 # Date 2024-05-21 2024-05-22
 * ksctl grpc and http test cases
 * and a lot check the progress in 334 issue
