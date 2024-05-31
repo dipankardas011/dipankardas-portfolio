@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2024"
 +++
 
+# Date 2024-05-28 2024-06-31
+* ksctl core release v1.2 and cli on the way
+* networking and harddrive knowledge
+
 # Date 2024-05-23 2024-05-27
 * learning about watt time for green software foundation for collecting co2 emits per region
 * ksctl nice improvements in context based and new manager architecture
