@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2024"
 +++
 
+# Date 2024-06-03 2024-06-06
+* ksctl error handling
+* cncf tag-greeen proposal 1 implementation
+* ansible auditd and how to configure it
+* new docs website for ksctl now live
+
 # Date 2024-06-02
 * got some patch fixes for ksctl v1.2.1 is out
 * wasm tiny go wasip2 support pr checkout
