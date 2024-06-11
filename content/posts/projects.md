@@ -129,6 +129,8 @@ https://github.com/dipankardas011/AirportBooking
 # My Open Source contributions
 
 - CNCF TAG Green
+  - [Proposal 1: Trigger and Deploy](https://github.com/cncf-tags/green-reviews-tooling/pull/88)
+  - [Upgrade flux and use latest api versions](https://github.com/cncf-tags/green-reviews-tooling/pull/81)
   - [feat: added nodeSelector based on k8s node labels for kube-prometheus, kepler](https://github.com/cncf-tags/green-reviews-tooling/pull/44)
   - [enhancement: add port-forward permission to the read-only kubeconfig](https://github.com/cncf-tags/green-reviews-tooling/pull/35)
   - [install-kepler-dashboard](https://github.com/cncf-tags/green-reviews-tooling/pull/22)
@@ -136,6 +138,8 @@ https://github.com/dipankardas011/AirportBooking
   - [flux-based-helm-install-of-kepler](https://github.com/cncf-tags/green-reviews-tooling/pull/17)
   - [Provision-cluster-with-OpenTofu-and-K3s-cilium-cni](https://github.com/cncf-tags/green-reviews-tooling/pull/6)
   - [Issue on design docs](https://github.com/cncf-tags/green-reviews-tooling/issues/1)
+- Bytecode Alliance (WASI)
+  - [patch: for tinygo wasip2 support](https://github.com/bytecodealliance/component-docs/pull/142)
 - Fermyon (WASM)
   - [Added cargo build via --bin flag](https://github.com/fermyon/developer/pull/744)
   - [fix: added error handling `spin trigger [USAGE]`](https://github.com/fermyon/spin/pull/1671)
