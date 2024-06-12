@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2024"
 +++
 
+# Date 2024-06-12
+* ksctl auto scaling of the infra
+* go script for cncf green reviews working
+* debuggind sessions on wordpress
+* exepereience on B2B meetings
+
 # Date 2024-06-11
 * debugging nginx proxy withing proxy
 * cncf go script to update the variables based on cron
