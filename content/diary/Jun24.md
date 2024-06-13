@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2024"
 +++
 
+# Date 2024-06-13
+* added terraform for hetzner vm creation
+* added ansible code to join and removal of custom runner as one wants
+
 # Date 2024-06-12
 * ksctl auto scaling of the infra
 * go script for cncf green reviews working
