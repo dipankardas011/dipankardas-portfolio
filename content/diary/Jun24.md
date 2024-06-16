@@ -5,6 +5,17 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2024"
 +++
 
+# Date 2024-06-14 2024-06-16
+* Ksctl
+  * AWS EKS code review for ksctl
+  * Community call
+  * working on Info cluster feature
+  * e2e with complete autoscaling is live (0 -> 3 -> 0) no of VMs
+    * ansible debugging and much more on github api side of things
+* CNCF Green Reviews trigger go script development
+* Book reading
+* Debugging sessions in office
+
 # Date 2024-06-13
 * added terraform for hetzner vm creation
 * added ansible code to join and removal of custom runner as one wants
