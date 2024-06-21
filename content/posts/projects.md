@@ -129,6 +129,7 @@ https://github.com/dipankardas011/AirportBooking
 # My Open Source contributions
 
 - CNCF TAG Green
+  - [Project Trigger](https://github.com/cncf-tags/green-reviews-tooling/pull/106)
   - [Proposal 1: Trigger and Deploy](https://github.com/cncf-tags/green-reviews-tooling/pull/88)
   - [Upgrade flux and use latest api versions](https://github.com/cncf-tags/green-reviews-tooling/pull/81)
   - [feat: added nodeSelector based on k8s node labels for kube-prometheus, kepler](https://github.com/cncf-tags/green-reviews-tooling/pull/44)

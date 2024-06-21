@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2024"
 +++
 
+# Date 2024-06-17 2024-06-21
+* creation of automation on pa11y a accessability checker
+* ksctl core@1.2.4, cli@1.2.3 are out witj info cluster done
+* cncf green review ci pipeline
+* automate github custom runner bootstrapping
+* Debugging sessions
+
 # Date 2024-06-14 2024-06-16
 * Ksctl
   * AWS EKS code review for ksctl
