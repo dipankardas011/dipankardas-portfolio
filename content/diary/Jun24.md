@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2024"
 +++
 
+# Date 2024-06-22
+* create the demo for ksctl cli@1.2.3
+* wasm work for ksctl
+* dive deep on aws eks kubeconfig fetch with praful
+* book reading
+
 # Date 2024-06-17 2024-06-21
 * creation of automation on pa11y a accessability checker
 * ksctl core@1.2.4, cli@1.2.3 are out witj info cluster done
