@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2024"
 +++
 
+# Date 2024-06-23
+* wasm project to build rust cli anto wasip2, python to build wasip2 with random
+* green reviewd cncf contrib
+* open ai image generation seen
+* book reading
+* ksctl aws reads
+
 # Date 2024-06-22
 * create the demo for ksctl cli@1.2.3
 * wasm work for ksctl
