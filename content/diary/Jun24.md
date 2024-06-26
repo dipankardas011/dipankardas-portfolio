@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2024"
 +++
 
+# Date 2024-06-24 2024-06-26
+* Pretty hard debugging of Wasi Rust and python for multiple tools to get more fimilar for wit bindgen go
+* ksctl little contrib
+* book reading
+* doks hugo usage
+* wireguard learnings
+* got conformed as a devops fe
+
 # Date 2024-06-23
 * wasm project to build rust cli anto wasip2, python to build wasip2 with random
 * green reviewd cncf contrib
