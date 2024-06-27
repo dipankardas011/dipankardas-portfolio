@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2024"
 +++
 
+# Date 2024-06-27
+* Wasm http doesn't work on rust and python a lof of work gone
+* ksctl wasm support working has resumed
+* wireguard setup
+* wit-bindge-go tried out
+* openai api docs read
+
 # Date 2024-06-24 2024-06-26
 * Pretty hard debugging of Wasi Rust and python for multiple tools to get more fimilar for wit bindgen go
 * ksctl little contrib
