@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2024"
 +++
 
+# Date 2024-06-28 2024-06-30
+* seen Team India lift the WTC t20 2024
+* Ksctl wasm and application support improvements
+* creating a amazing project where wasi@v0.2 usage from cli to http client
+* reading books
+
 # Date 2024-06-27
 * Wasm http doesn't work on rust and python a lof of work gone
 * ksctl wasm support working has resumed
