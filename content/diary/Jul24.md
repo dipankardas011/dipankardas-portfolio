@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-06
+* completed the wasm project
+* done learning about watttime and understood the data pointers
+* assitant in openai is the next good thing after the boring chat completion
+* some nice projects under the way
+
 # Date 2024-07-04 2024-07-05
 * almost done with the wasm small project
 * came to know about watttime
