@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-08
+* added wasm http server by removing Polling allocator for <= wasmtime@23.0
+* Understood why we need pre-compiled wasm binary
+* understanding about frappe and also ansible python module
+
 # Date 2024-07-07
 * ksctl improved application support
 * ksctl aws EKS review of the PR and also merged new contributor PR
