@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-09
+* Ksctl application controller updates
+  * docs and core PR are created
+* frappe and ansible module explored (ansible_runner and ansible) PyPI
+* read about the repo docs for wasi::(http, sock, poll, filesystem, ...)
+* make the wae project fon wasi experiments docs ready and also added social cover
+* came to know how to use the `wit-bindgen markdown` usage
+
 # Date 2024-07-08
 * added wasm http server by removing Polling allocator for <= wasmtime@23.0
 * Understood why we need pre-compiled wasm binary
