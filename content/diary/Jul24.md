@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-10
+* Read book
+* frappe docktype and ansible tags and extra vars using ansible-runner
+  * frappe status field
+* ksctl PR for hybrid client to install application added
+
 # Date 2024-07-09
 * Ksctl application controller updates
   * docs and core PR are created

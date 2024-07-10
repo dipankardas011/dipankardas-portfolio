@@ -8,6 +8,19 @@ cover = "/img/cover-projects.png"
 
 # My project collection
 
+
+## wae (Wasi App Experiment)
+
+### Description
+A project which showcases latest development in wasi world. Currently its updated for wasi@v0.2. It Helps in accumulate learnings from ML, Green Software and Wasi into a single repo
+
+{{< image src="https://github.com/dipankardas011/wae/blob/main/cover.png?raw=true" alt="wae" position="center" style="border-radius: 8px;" >}}
+
+
+### Links
+https://github.com/dipankardas011/wae
+{{<tweet DipankarDas011 1809538678835847218>}}
+
 ## Raft based Distributed Consensus enabled datastore
 
 ### Description
