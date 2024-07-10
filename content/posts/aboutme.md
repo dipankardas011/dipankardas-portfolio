@@ -49,6 +49,8 @@ Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2*
   - gitops workflow with argocd
   - terraform module for GKE standard cluster with HPA and Cluster AutoScaler
 - play with cloudflare
+- frappe development for internal toolings
+- github custom multi-runner for single VM using ansible
 - certbot
   - nginx
   - dns-cloudflare
