@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-11
+* read openai assistant
+* successfully build a nice wrapper for interacting with ansible using frappe controllers
+* read about the wasi interfaces and their docs
+
 # Date 2024-07-10
 * Read book
 * frappe docktype and ansible tags and extra vars using ansible-runner
