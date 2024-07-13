@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-12
+* read the SCI green software foundation
+* updated the ksctl docs with new versioning
+* banking stuff
+
 # Date 2024-07-11
 * read openai assistant
 * successfully build a nice wrapper for interacting with ansible using frappe controllers
