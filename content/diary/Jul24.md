@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-13 2024-07-15
+* Go programming fundamentals
+* came to know who and when to use bufferende cna dunbufferend channels
+* also came to know how to implement graceful termination, http Handle wit custom Servemux in go
+* came to know about go mod importing and excluding specific versions of a mod deps
+* helping with CNCF Tag Green code review
+* frappe learning with client side and server side controllers
+* reading books
+
 # Date 2024-07-12
 * read the SCI green software foundation
 * updated the ksctl docs with new versioning
