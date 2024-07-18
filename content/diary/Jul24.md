@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-16 2024-07-18
+* frappe virtual doctype
+* go validator
+* gorilla mux and more advance methods of using standatd go http server
+* got hands dirty with mermaid
+* reading books
+* ksctl component overidings design and coding phase
+
 # Date 2024-07-13 2024-07-15
 * Go programming fundamentals
 * came to know who and when to use bufferende cna dunbufferend channels
