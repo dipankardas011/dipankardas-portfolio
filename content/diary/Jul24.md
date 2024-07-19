@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-19
+* did ksctl compoentn wise overridings
+* some nice development and some discussion on ansible
+* reading books
+* came to know about go-swagger for openapi spec based server and client and redoc for UI
+
 # Date 2024-07-16 2024-07-18
 * frappe virtual doctype
 * go validator
