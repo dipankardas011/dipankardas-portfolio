@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-20
+* ksctl application componentize overridng significant progress
+* go-swagger client generation and more rest api server and client development
+* reading books
+* came to know about crowdstrike and windows problems ;)
+
 # Date 2024-07-19
 * did ksctl compoentn wise overridings
 * some nice development and some discussion on ansible
