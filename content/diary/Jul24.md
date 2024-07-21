@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-21
+* ksctl application v2 mapping done finally, next need to update the consumers
+* go http server cors using gorilla mux
+* reading books
+
 # Date 2024-07-20
 * ksctl application componentize overridng significant progress
 * go-swagger client generation and more rest api server and client development
