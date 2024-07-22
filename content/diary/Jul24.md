@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-22
+* reading books
+* came to know about grpc byte and json types
+* able to use `interface{}` as a crd struct type for k8s-kubebuilder based controller
+* python learnings
+
 # Date 2024-07-21
 * ksctl application v2 mapping done finally, next need to update the consumers
 * go http server cors using gorilla mux
