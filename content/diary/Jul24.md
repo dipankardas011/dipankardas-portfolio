@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-23
+* reading books
+* file server setup in go
+* ksctl grpc bytes and controller intergation
+
 # Date 2024-07-22
 * reading books
 * came to know about grpc byte and json types
