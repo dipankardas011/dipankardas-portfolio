@@ -9,6 +9,7 @@ description = "Let's talk about my July 2024"
 * reading books
 * file server setup in go
 * ksctl grpc bytes and controller intergation
+* green reviews mermaid daigram for propoal 001
 
 # Date 2024-07-22
 * reading books
