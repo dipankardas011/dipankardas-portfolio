@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-25
+* reading books
+* python coding
+* ksctl aws EKS code base fix on waiter Client
+* green reviews PR merged
+* came to know why, how and when to use http multipart forms
+
 # Date 2024-07-24
 * reading books
 * becoming better at frappe and python
