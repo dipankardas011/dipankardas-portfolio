@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-26
+* reading books
+* python coding and frappe connections between doctypes
+* ksctl aws EKS code bug fixes and also found another problem
+
 # Date 2024-07-25
 * reading books
 * python coding
