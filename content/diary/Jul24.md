@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-27 2024-07-29
+* reading books
+* reading some green software and engery reduction papers on networking
+* gzip http server in go
+* grpc server in go and its best practises
+* Ksctl eks problem is fixed with the waiter
+* ksctl application stack is done now left is more test cases
+
 # Date 2024-07-26
 * reading books
 * python coding and frappe connections between doctypes
