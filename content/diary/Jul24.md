@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-30
+* reading books
+* ptyhon coding
+* aws eks version findings
+* learning from one of the senior go developer how to write good testable code for ksctl
+* added more test cases for ksctl kubernetes pkg
+
 # Date 2024-07-29
 * reading books
 * python and frappe learning about some challenges in hooks for a controller
