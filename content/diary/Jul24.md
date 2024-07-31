@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2024"
 +++
 
+# Date 2024-07-31
+* reading books
+* python coding for wireguard vpn client
+* aws eks PR final review and closer to merge for next window
+* learnings about better code refactoring in grpc and http server project
+* you can use `-ldflags` to override any global variable inside a package in go
+* completed my probation period at work and now a full time employee
+
 # Date 2024-07-30
 * reading books
 * ptyhon coding
