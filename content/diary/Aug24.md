@@ -5,6 +5,18 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-07 2024-08-10
+* frappe development
+* reading books
+* ksctl wasm support
+  * came to know how to parse yamls in go
+  * how to utilize dynamic client in k8s-go client
+    * and also caching of the dynamic client
+  * oci:// artifact support in helm chart
+  * merged the nice PR based easy testing of the controllers via PR comments
+* wireguard easy
+* learning about vaious tools in the infrastructure landcape
+
 # Date 2024-08-06
 * python code to interact with wireguard easy and also build a python app
   * create, dlete peer and config
