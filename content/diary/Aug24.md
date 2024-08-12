@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-12
+* reading books
+* ksctl design decisions for the stack and also how to get latest release regularly with hitting rate limits of api.github.com
+
 # Date 2024-08-11
 * ksctl test cases and the wasm spinKube and wasmedge explore for kwasm
 * cloud native green tag explore on energat
