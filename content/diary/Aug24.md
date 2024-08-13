@@ -5,9 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-13
+* reading books
+* ksctl new poller to help us get the releases for repos and have a cache to get without api.github calls
+  * with nice unit test case of ~95% coverage
+
 # Date 2024-08-12
 * reading books
 * ksctl design decisions for the stack and also how to get latest release regularly with hitting rate limits of api.github.com
+* learning nice python project design principles
 
 # Date 2024-08-11
 * ksctl test cases and the wasm spinKube and wasmedge explore for kwasm
