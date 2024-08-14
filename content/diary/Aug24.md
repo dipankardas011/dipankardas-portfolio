@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-14
+* reading books
+* learning how to write more testable code in python in actualy product
+* ksctl github api caller added test cases now need to decide how to transfer the poller to various parts
+
 # Date 2024-08-13
 * reading books
 * ksctl new poller to help us get the releases for repos and have a cache to get without api.github calls
