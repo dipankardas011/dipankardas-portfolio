@@ -8,6 +8,7 @@ description = "Let's talk about my August 2024"
 # Date 2024-08-15
 * reading books
 * completed the ksctl poller and the github releases as well as kwasm and spinkueb intergation, left to merge the PR and final review process
+  * came to know how to construct singelton pattern in go and also how to make code more testable
 * learning about some finance
 
 # Date 2024-08-14
