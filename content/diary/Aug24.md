@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-16
+* reading books
+* ksctl kwasm, spinkube support PR is green for merge
+* more python coding in office
+
 # Date 2024-08-15
 * reading books
 * completed the ksctl poller and the github releases as well as kwasm and spinkueb intergation, left to merge the PR and final review process
