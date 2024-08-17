@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-17
+* reading books
+* came to know how to update the status fields in the k8s crd resources inside the controller
+* ksctl kwasm-wasmedge, spinkube support PR is merged
+* ksctl logger improved and also codecov updated
+* updated the docs for the application stack
+
 # Date 2024-08-16
 * reading books
 * ksctl kwasm, spinkube support PR is green for merge
