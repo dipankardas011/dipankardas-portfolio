@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-18
+* reading books
+* ksctl writing test cases with major improvements for the ksctl component like k3s and etcd, kubeadm latest version 
+* ksctl cli new looks
+
 # Date 2024-08-17
 * reading books
 * came to know how to update the status fields in the k8s crd resources inside the controller
