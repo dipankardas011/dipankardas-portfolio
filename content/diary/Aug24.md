@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-19
+* reading books
+* came to know about go semver package for comparing between versions (ksctl)
+* improved the versioning support in ksctl for etcd, haproxy, ...
+* learning about frappe and how to build better system and making it demo ready
+
 # Date 2024-08-18
 * reading books
 * ksctl writing test cases with major improvements for the ksctl component like k3s and etcd, kubeadm latest version 
