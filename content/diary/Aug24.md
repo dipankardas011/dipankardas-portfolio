@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-20
+* ksctl came to know how to write better testable code with pkg level info and exported package level functions
+* frappe coding and design decisions
+* ksctl code base new design change aka refactoring
+* started to read yet another research paper
+
 # Date 2024-08-19
 * reading books
 * came to know about go semver package for comparing between versions (ksctl)
