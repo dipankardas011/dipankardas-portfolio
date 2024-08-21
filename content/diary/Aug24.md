@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-21
+* reading books
+* reading paper
+* came to know about `container` and `services` in github workflow which enables to run the workflow in a container with several services
+* ksctl k3s, kubeadm version thing is merged with scaledown and up no need to speciffiy the bootstrap it takes from stateDoc
+
 # Date 2024-08-20
 * ksctl came to know how to write better testable code with pkg level info and exported package level functions
 * frappe coding and design decisions
