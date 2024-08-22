@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-22
+* reading books
+* ksctl pre-installed apps enhancement
+* frappe permissions and other things
+
 # Date 2024-08-21
 * reading books
 * reading paper
