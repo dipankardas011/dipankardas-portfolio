@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-23 2024-08-24
+* reading books
+* able to understand how to connect external monitor in linux
+* frappe permissions and other plays
+* ksctl pre-installed and the argocd and argo roloouts are fixed
+* ksctl new cli and the core are released with new enhancements in the cli where you can access the cluster not just via the export KUBECONFIG but with shell
+
 # Date 2024-08-22
 * reading books
 * ksctl pre-installed apps enhancement
