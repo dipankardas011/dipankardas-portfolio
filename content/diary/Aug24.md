@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-25
+* reading books
+* read green paper
+* read blog post on state based policy management
+* read about unikernel docs from unikraft
+* reading about how 'EBS' in aws was made 'Cloud-Optimized Transport Protocol for Elastic and Scalable HPC'
+
 # Date 2024-08-23 2024-08-24
 * reading books
 * able to understand how to connect external monitor in linux
