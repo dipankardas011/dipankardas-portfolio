@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2024"
 +++
 
+# Date 2024-08-26 2024-08-31
+* health recovery
+* compays' frappe internal project stable release we were able to release
+
 # Date 2024-08-25
 * reading books
 * read green paper
