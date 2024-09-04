@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-04
+* reading books
+* reading article about the The tension between flexibility and simplicity in Infrastructure as Code
+* useful python and system design discussions in day job
+* updated my resume
+
 # Date 2024-09-03
 * reading books
 * learning about abstract classes bases in python and typings Protocols
