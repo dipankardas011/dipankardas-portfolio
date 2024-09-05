@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-05
+* reading books
+* came to know about alrwetive to GitOPS which is [Rendered manifest pattern](https://akuity.io/blog/the-rendered-manifests-pattern/)
+* reading blog post on Advantages of storing configuration in container registries rather than git
+* understanding abput semgrepignore and how to configure them
+* better python test cases
+* came to know about function defination mutation based on function name know as monkey patching for testing
+
 # Date 2024-09-04
 * reading books
 * reading article about the The tension between flexibility and simplicity in Infrastructure as Code
