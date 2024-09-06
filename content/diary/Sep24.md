@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-06
+* reading books
+* about system design for a orchestration system for a distributed system trying to get info about connected servers and workloads running inside them
+* reading blog on "On using the Kubernetes Resource Model for Declarative Configuration"
+* personal project work
+
 # Date 2024-09-05
 * reading books
 * came to know about alrwetive to GitOPS which is [Rendered manifest pattern](https://akuity.io/blog/the-rendered-manifests-pattern/)
