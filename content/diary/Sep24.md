@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-07 2024-09-08
+* reading books
+* contributing in buildsafedev
+* reading blog on "Application configuration and feature flags"
+* released `v1.3.1` for ksctl@cli with wasmtime and wasmedge better support
+
 # Date 2024-09-06
 * reading books
 * about system design for a orchestration system for a distributed system trying to get info about connected servers and workloads running inside them
