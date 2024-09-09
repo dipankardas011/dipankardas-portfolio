@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-09
+* reading books
+* reading blog on challenges and problem in helm and what peopele are using
+* more python coding with more test case writing
+
 # Date 2024-09-07 2024-09-08
 * reading books
 * contributing in buildsafedev
