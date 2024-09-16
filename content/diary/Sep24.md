@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-10 2024-09-16
+* reading books
+* fixing my health
+* went to bhubaneswar for a recieving b.tech degree
+* some terraform code base aka client one for work
+* reading blogs on kubernetes different scheduling and also challenges of kubernetes migration from zero
+* some more python work
+
 # Date 2024-09-09
 * reading books
 * reading blog on challenges and problem in helm and what peopele are using
