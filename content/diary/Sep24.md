@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-17
+* learning about terraform production modules how to add cloudfront and waf intergation with it all in production codebase came to know about backend-config and var-file specify cmd params and other best practices
+* reading books
+
 # Date 2024-09-10 2024-09-16
 * reading books
 * fixing my health
