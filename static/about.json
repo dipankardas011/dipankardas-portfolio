@@ -17,7 +17,8 @@
     "tech_skills": {
         "languages": ["Go", "Python", "Bash", "Java", "Rust" ,"C++"],
         "databases": ["PostgreSQL", "MongoDB", "Redis", "MySQL", "MariaDB"],
-        "tools": ["Docker", "Git", "GitHub", "GitLab", "Jenkins", "Kubernetes", "Prometheus", "Grafana", "Nginx", "Apache", "HAProxy"],
+        "frameworks": ["FastApi", "Next.js", "Frappe"],
+        "tools": ["Docker", "Git", "GitHub", "GitLab", "Jenkins", "Kubernetes", "Prometheus", "Grafana", "Nginx", "Apache", "HAProxy", "Terraform", "Ansible", "Helm"],
         "cloud": ["AWS", "GCP", "Azure", "Hetzner" ]
     },
     "work_experience": {
