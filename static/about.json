@@ -1,0 +1,43 @@
+{
+    "personal_info": {
+        "name": "Dipankar Das",
+        "email": "dipankar@dipankar-das.com",
+        "country": "India",
+        "born": "Oct 2001",
+        "description": "I am a platform engineer with a passion for open-source software and cloud-native technologies. I am a self-taught developer and have been working in the tech industry for the past 2 years. I am a quick learner and love to work on challenging projects. I am a strong believer in the power of community and always try to give back to the community through my work.",
+        "domains": ["DevOps", "Operating Systems", "Cloud Computing", "Distributed Systems", "Sustanable Computing"]
+    },
+    "social_links": {
+        "github": "dipankardas011",
+        "gitlab": "dipankardas011",
+        "linkedin": "dipankar-das-1324b6206",
+        "twitter": "DipanakarDas011"
+    },
+    "timezone": "UTC+5:30",
+    "tech_skills": {
+        "languages": ["Go", "Python", "Bash", "Java", "Rust" ,"C++"],
+        "databases": ["PostgreSQL", "MongoDB", "Redis", "MySQL", "MariaDB"],
+        "tools": ["Docker", "Git", "GitHub", "GitLab", "Jenkins", "Kubernetes", "Prometheus", "Grafana", "Nginx", "Apache", "HAProxy"],
+        "cloud": ["AWS", "GCP", "Azure", "Hetzner" ]
+    },
+    "work_experience": {
+        "rtCamp": {
+            "role": "DevOps Engineer",
+            "duration": "Jan 2024 - Present",
+            "location": "inoffice",
+            "rq": "in"
+        },
+        "ksctl": {
+            "role": "Founder",
+            "duration": "Sept 2022 - Present",
+            "location": "remote",
+            "rq": "in"
+        },
+        "Viamagus": {
+            "role": "DevOps Engineer",
+            "duration": "Mar 2023 - Sept 2023",
+            "location": "remote",
+            "rq": "in"
+        }
+    }
+}

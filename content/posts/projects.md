@@ -19,7 +19,7 @@ A project which showcases latest development in wasi world. Currently its update
 
 ### Links
 https://github.com/dipankardas011/wae
-{{<tweet DipankarDas011 1809538678835847218>}}
+{{<tweet user="DipankarDas011" id="1809538678835847218">}}
 
 ## Raft based Distributed Consensus enabled datastore
 
@@ -33,7 +33,7 @@ also under the hood it helps to read,write,delete data from the external databas
 
 ### Links
 https://gitlab.com/dipankardas011/go-playground/-/tree/main/raft-based-distributed-consensus?ref_type=heads
-{{<tweet DipankarDas011 1738513901753352687>}}
+{{<tweet user="DipankarDas011" id="1738513901753352687">}}
 
 ## Actor model
 
@@ -43,7 +43,7 @@ reading blogs and understanding by reverse engineering stuff
 
 ### Links
 https://gitlab.com/dipankardas011/go-playground/-/tree/main/actor-system?ref_type=heads
-{{<tweet DipankarDas011 1740682428396527678 >}}
+{{<tweet user="DipankarDas011" id="1740682428396527678" >}}
 
 
 ## Universal CI/CD pipeline manager
@@ -57,7 +57,7 @@ this tool provides a convenient way to create a workflow aka pipeline for automa
 
 ### Links
 https://gitlab.com/dipankardas011/universalci-cd
-{{<tweet DipankarDas011 1709901427731038677>}}
+{{<tweet user="DipankarDas011" id="1709901427731038677">}}
 
 ## AWS Resource Dependency-graph generator
 
@@ -71,7 +71,7 @@ this tool will help you generate the diagram for all the dependencies between re
 
 ### Links
 https://gitlab.com/dipankardas011/aws-resource-dependency-graph
-{{<tweet DipankarDas011 1667853065372794882>}}
+{{<tweet user="DipankarDas011" id="1667853065372794882">}}
 
 ## Chat Bot using GPT-2
 

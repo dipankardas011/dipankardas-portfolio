@@ -40,7 +40,7 @@ description = "Let's talk about my April 2024"
 * discussion on ksctl future
 * discussion on the finaly project submittion in college
 * play with wasm with binary and also grayscale image as well
-  {{<tweet DipankarDas011 1779567112891031952>}}
+  {{<tweet user="DipankarDas011" id="1779567112891031952">}}
 
 # Date 2024-04-13
 * portfolio updates
