@@ -24,21 +24,26 @@
     "work_experience": {
         "rtCamp": {
             "role": "DevOps Engineer",
+            "website": "rtcamp.com",
             "duration": "Jan 2024 - Present",
             "location": "inoffice",
             "rq": "in"
         },
         "ksctl": {
             "role": "Founder",
+            "website": "ksctl.com",
             "duration": "Sept 2022 - Present",
             "location": "remote",
             "rq": "in"
         },
         "Viamagus": {
             "role": "DevOps Engineer",
+            "website": "viamagus.com",
             "duration": "Mar 2023 - Sept 2023",
             "location": "remote",
             "rq": "in"
         }
-    }
+    },
+    "blogs": "https://dipankar-das.com/posts/blogs/",
+    "projects": "https://dipankar-das.com/posts/projects/"
 }
