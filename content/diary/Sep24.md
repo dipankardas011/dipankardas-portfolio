@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-19
+* learning about helm with nix
+* terraform cloudfront + waf rules + aws certificate manager
+* learning about astro for ksctl homepage
+* came to know about some nice go best practises when initialization of a struct object
+* reading about challenges faced by a company while migrating to kubernetes or using it
+
 # Date 2024-09-18
 * learning about how to write better terraform code
 * reading about "IDP" and "Why we moved from Helm to Gitpod Installer"
