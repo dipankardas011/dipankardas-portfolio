@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-20
+* some more DNS routing debugging and final PR raised for client on cloudfront +waf + acm
+* reading about problems in kubernetes configuration which is yaml and helm so created [example](https://github.com/ksctl/enhancements/tree/main/poc/jsonnet)
+* reading books
+
 # Date 2024-09-19
 * learning about helm with nix
 * terraform cloudfront + waf rules + aws certificate manager
