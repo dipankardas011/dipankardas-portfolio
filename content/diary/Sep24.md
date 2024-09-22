@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-22
+* reading books
+* new ksctl website is live
+* call with people on how they are using the kubernetes or any large distributed systems and what are the callenges they are facing
+
 # Date 2024-09-21
 * reading some more challenges in kubernetes configuration managemtnt
   * more practical dsicussion about jsonnet and helm
