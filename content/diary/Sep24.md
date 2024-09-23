@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-23
+* again some nice design principles for application development and which to use for what kind of application like if the controller is consuming events and evtns have its operations aka options of behaviour how to handle it efficiently and with lest amount of shit code and better maintainbility than just have a huge no of lines in for handling the decision and logical part
+* reading books
+* call with people on how they are using the kubernetes or any large distributed systems and what are the callenges they are facing
+
 # Date 2024-09-22
 * reading books
 * new ksctl website is live
