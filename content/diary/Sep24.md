@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-25
+* learning about positional and keyword arguments in python
+* wordpress caching and performance optimization (page cache, object cache, opcode cache)
+* reading about how to write better terraform  like when to use for_each and count
+
 # Date 2024-09-24
 * completed 2 books
 * learning how to write better tweeraform code which is environment aware
