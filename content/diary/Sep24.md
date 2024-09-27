@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2024"
 +++
 
+# Date 2024-09-26 2024-09-27
+* reading more about terraform dynamic block and nested for_each
+* python frappe framework work in dayjob
+* ksctl calls with people on their challenges and how they are using it
+* bsf community internal developement
+
 # Date 2024-09-25
 * learning about positional and keyword arguments in python
 * wordpress caching and performance optimization (page cache, object cache, opcode cache)
