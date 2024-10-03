@@ -5,7 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-03
+* reading article on why cloud UX sucks
+* buildsafe work
+* some python automation scripting
+* rclone for s3 backups
+
 # Date 2024-10-01 2024-10-02
+* reading about Software design principles
+  * reading about caching, high avability ,...
 * traveling back to Pune
 * some more learning and requirements gathering for ksctl
 * doing some buildsafe work
