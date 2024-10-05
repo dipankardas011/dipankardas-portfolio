@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-04 2024-10-05
+* more thought about ksctl goals and the problem it solves
+* came to know how to do git log with os exec in go
+* Reading more articles and Problems in IAC and Gitops space
+* review one of the cncf green reviews PR
+
 # Date 2024-10-03
 * reading article on why cloud UX sucks
 * buildsafe work
