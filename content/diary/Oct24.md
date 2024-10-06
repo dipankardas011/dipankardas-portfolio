@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-06
+* reading about more blog posts on Problems of IaC 
+* explored GLassKube
+* a lot of though on ksctl and how to make it better
+* getting into green software foundation's **Carbon aware SDK**
+
 # Date 2024-10-04 2024-10-05
 * more thought about ksctl goals and the problem it solves
 * came to know how to do git log with os exec in go
