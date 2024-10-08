@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-07 2024-10-08
+* created a market analysis doc for ksctl
+* learning 100go.co
+  * errorGroups
+  * sync.Cond
+  * many more
+* python coding
+
 # Date 2024-10-06
 * reading about more blog posts on Problems of IaC 
 * explored GLassKube
