@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-09
+* came to know more about integrating frappe with static page
+* buildsafe github ci work
+  * nix os and its build as a docker image
+* azure k8s management
+
 # Date 2024-10-07 2024-10-08
 * created a market analysis doc for ksctl
 * learning 100go.co
