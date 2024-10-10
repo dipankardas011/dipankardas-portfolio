@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-10
+* learning about git shallow-since argument
+* debugging docker and k8s issues
+* debugging and working with shit python untyped dict and list
+
 # Date 2024-10-09
 * came to know more about integrating frappe with static page
 * buildsafe github ci work
