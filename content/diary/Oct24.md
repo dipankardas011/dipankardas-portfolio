@@ -7,12 +7,16 @@ description = "Let's talk about my October 2024"
 
 # Date 2024-10-11
 * finally utlized set() in real world problem
-* came to know about `git clone --filter=tree:0` command is used to perform a partial clone of a Git repository:
-  * It clones a repository without downloading all the file contents immediately.
-  * Only the bare minimum data (like commit history and tree structure) is fetched.
-  * File contents are downloaded on-demand when you actually need them
-  * reference: https://github.blog/open-source/git/get-up-to-speed-with-partial-clone-and-shallow-clone/
+* some advance git clone commands
+  * `--filter=blob:none` (These clones download all reachable commits and trees while fetching blobs on-demand.)
+  * `--filter=tree:0` (These clones download all reachable commits while fetching trees and blobs on-demand.)
+  * `--depth=1` (These clones truncate the commit history to reduce the clone size. This creates some unexpected behavior issues, limiting which Git commands are possible.)
+  * blobs: These represent file contents.
+  * trees: These represent directories.
+  * commits: These are snapshots in time
+  * reference: <https://github.blog/open-source/git/get-up-to-speed-with-partial-clone-and-shallow-clone/>
 * started to learn how to do market research
+* youtube system design from bytebytego
 
 # Date 2024-10-10
 * learning about git shallow-since argument
