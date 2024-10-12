@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-12
+* some nice good night walk 
+* some more market research for ksctl
+* reading about git clone advance blog post by the github team
+* came to know about alternatiev solution for k8s
+
 # Date 2024-10-11
 * finally utlized set() in real world problem
 * some advance git clone commands
