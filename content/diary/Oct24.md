@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-13
+* reading about SLSA <https://slsa.dev/spec/v1.0/terminology> and docker buildx build support for it <https://docs.docker.com/reference/cli/docker/buildx/build/#sbom>
+* completed one market research for ksctl
+* reading book
+* read about graceful termination and how to avoid getting new requests in k8s pod when doing so
+  * one hacky way or correct way is to have an endpoint `/v1/healthz` which will return 200 when pod is ready to terminate and 503 when it is not, which we can control as a global variable in the code and when we recieve a sigterm from runtime we can set that variable to some value and it in return make the endpoint to return 503, so if we have the liveliness probe setup k8s will stop sending new requests to the terminating pod and by that time we can gracefully terminate the exeiting connections and then exit the pod
+* epereienced the choopstick way of holding a landing 1st stage booster (ctx: spaceX)
+
 # Date 2024-10-12
 * some nice good night walk 
 * some more market research for ksctl
