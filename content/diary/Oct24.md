@@ -6,9 +6,10 @@ description = "Let's talk about my October 2024"
 +++
 
 # Date 2024-10-14
-* learning about SLSA security levels
+* learning about SLSA security levels, Producing artifacts
 * frappe after_migrate hook, inbuilt slack webhook with notification doctype usecase
 * reading books
+* learning about the key differences b/w kafka and nats
 
 # Date 2024-10-13
 * reading about SLSA <https://slsa.dev/spec/v1.0/terminology> and docker buildx build support for it <https://docs.docker.com/reference/cli/docker/buildx/build/#sbom>
