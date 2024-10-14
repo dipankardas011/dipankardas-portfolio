@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-14
+* learning about SLSA security levels
+* frappe after_migrate hook, inbuilt slack webhook with notification doctype usecase
+* reading books
+
 # Date 2024-10-13
 * reading about SLSA <https://slsa.dev/spec/v1.0/terminology> and docker buildx build support for it <https://docs.docker.com/reference/cli/docker/buildx/build/#sbom>
 * completed one market research for ksctl
