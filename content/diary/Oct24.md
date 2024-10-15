@@ -7,6 +7,7 @@ description = "Let's talk about my October 2024"
 
 # Date 2024-10-15
 * learning about Distributing provenance, verifying artifacts in SLSA
+* buildsafedev working on CI/CD
 
 # Date 2024-10-14
 * learning about SLSA security levels, Producing artifacts
