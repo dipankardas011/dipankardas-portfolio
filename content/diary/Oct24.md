@@ -5,6 +5,9 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-15
+* learning about Distributing provenance, verifying artifacts in SLSA
+
 # Date 2024-10-14
 * learning about SLSA security levels, Producing artifacts
 * frappe after_migrate hook, inbuilt slack webhook with notification doctype usecase
