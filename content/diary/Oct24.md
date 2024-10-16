@@ -8,10 +8,15 @@ description = "Let's talk about my October 2024"
 # Date 2024-10-16
 * learning about SLSA `verify build platform` `threats and migrations`
 * learning about crowdsec
+* 
 
 # Date 2024-10-15
 * learning about Distributing provenance, verifying artifacts in SLSA
 * buildsafedev working on CI/CD
+* learning about the key differences b/w kafka and nats more about consumers and different modesl of getting data (push and pull)
+  * kafka based consumers need to handle the offset and also the partition and sequence number
+  * need to fix the no of partitiions for each topic as each pariton of a given sequence in kafka can be consumed by only one consumer
+  * nats based consumers are more like pubsub model and can be consumed by multiple consumers no need to handle the offset and partition
 
 # Date 2024-10-14
 * learning about SLSA security levels, Producing artifacts
