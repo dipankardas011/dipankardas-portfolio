@@ -5,10 +5,19 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-18
+* learning about gcloud run and artifact registry and secret management
+* office work
+* buildsafe work
+
+# Date 2024-10-17
+* learning about SLSA concepts
+* office work
+* buildsafe work
+
 # Date 2024-10-16
 * learning about SLSA `verify build platform` `threats and migrations`
 * learning about crowdsec
-* 
 
 # Date 2024-10-15
 * learning about Distributing provenance, verifying artifacts in SLSA
