@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-19 2024-10-20
+* learning about OpenShift Platform Plus
+* call with Harsh on another aspect of interesting alternative arch for k8s
+* Completed and understood about gcloud run service
+* artifact registry with CI/CD
+* Ksctl work
+* eBPF learnings
+
 # Date 2024-10-18
 * learning about gcloud run and artifact registry and secret management
 * office work
