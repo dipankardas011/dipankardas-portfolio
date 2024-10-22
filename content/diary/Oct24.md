@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-22
+* completed the buildsafe ci/cd end to end
+* reading books
+* learning about redhat openshift
+
 # Date 2024-10-21
 * reading books
 * call with harsh and saiyam on new ideas and plans on ksctl future
