@@ -6,8 +6,9 @@ description = "Let's talk about my October 2024"
 +++
 
 # Date 2024-10-24
-* reading about redhat openshift multi cluster engine
+* reading about redhat openshift multi cluster engine, Operator Lifecycle Manager, Platform Lifecycle Manager
 * reading books
+* buildsafedev work
 
 # Date 2024-10-23
 * cncf tag green PR help
