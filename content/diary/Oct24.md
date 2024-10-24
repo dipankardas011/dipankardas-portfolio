@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-24
+* reading about redhat openshift multi cluster engine
+* reading books
+
+# Date 2024-10-23
+* cncf tag green PR help
+* office work
+* reading books
+
 # Date 2024-10-22
 * completed the buildsafe ci/cd end to end
 * reading books
