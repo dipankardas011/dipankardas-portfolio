@@ -5,10 +5,19 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-25
+* came to learning OpenShift
+  * Hosted control plane concept and how it can be used to manage multi clusters
+  * GPU support and also about how nvidia and redhat both have colloborated to solve a lot of problems
+* some nice debugging in office
+* some nice archietcture CI/CD diagrams
+* buildsafedev work
+
 # Date 2024-10-24
 * reading about redhat openshift multi cluster engine, Operator Lifecycle Manager, Platform Lifecycle Manager
 * reading books
 * buildsafedev work
+* some nice brainstorming of creating a cusom manager for vscode environment (the resource and the controller perspective)
 
 # Date 2024-10-23
 * cncf tag green PR help
