@@ -5,8 +5,18 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-26
+* reading books
+* designing some next project design docs
+* buildsafedev work
+* market research came to learning OpenShift
+  * about ignition and how it can be used to bootstrap the cluster
+  * RHCOS and how it setups the cluster and the difference
+  * customizations present
+  * default admission plugins present
+
 # Date 2024-10-25
-* came to learning OpenShift
+* market research came to learning OpenShift
   * Hosted control plane concept and how it can be used to manage multi clusters
   * GPU support and also about how nvidia and redhat both have colloborated to solve a lot of problems
 * some nice debugging in office
