@@ -11,6 +11,7 @@ description = "Let's talk about my October 2024"
 * market research came to learning OpenShift
   * security and compliance of RHCOS and OpenShift
 * reading about PKI blog and CFSSL
+* reading about how hard is it to use helm chart from other sources and customization for specific usecase of yours
 
 # Date 2024-10-26
 * reading books
