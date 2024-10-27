@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-27
+* reading books
+* learning about sql testing in go and also sqlite
+* market research came to learning OpenShift
+  * security and compliance of RHCOS and OpenShift
+* reading about PKI blog and CFSSL
+
 # Date 2024-10-26
 * reading books
 * designing some next project design docs
