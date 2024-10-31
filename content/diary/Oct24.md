@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2024"
 +++
 
+# Date 2024-10-30 2024-10-31
+* reading books
+* buildsafedev work
+* updated the ksctl docs and the website
+  * came to know how to write build time based github stars badge in astro
+* office work
+
 # Date 2024-10-28 2024-10-29
 * reading books
 * buildsafedev work
