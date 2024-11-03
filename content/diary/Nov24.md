@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-03
+* spicedb relationship learnings (authzed)
+* reading books
+* reading about redhat openContainerPlatform security, compliance, authentication, authorization aka container security it offers
+* better understand about SSO and OAUTH2
+
 # Date 2024-11-02
 * read about a interesting blog post on eBPF
 * reading about redhat opensift in terms of security and compliance
