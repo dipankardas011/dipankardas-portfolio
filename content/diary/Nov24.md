@@ -5,6 +5,17 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-07
+* reading books
+* buildsafe work
+* learning about some interesting releation creation between objects in spicedb
+  * super admins
+  * attribute based access control
+  * rbac
+  * practiced some of the ReBAC with my own example
+* terraform and ansible integration
+* some more research
+
 # Date 2024-11-06
 * reading books
 * buildsafe work
