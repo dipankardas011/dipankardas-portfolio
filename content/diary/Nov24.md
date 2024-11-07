@@ -14,7 +14,7 @@ description = "Let's talk about my November 2024"
   * rbac
   * practiced some of the ReBAC with my own example
 * terraform and ansible integration
-* some more research
+* learning about certificate management by RHCOS
 
 # Date 2024-11-06
 * reading books
