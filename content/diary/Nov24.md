@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-08
+* reading books
+* buildsafe work
+* learning and gaining expereience in spiceDB schema design
+* market analysis
+* terraform interesting things you can do with outputs
+
 # Date 2024-11-07
 * reading books
 * buildsafe work
