@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-09
+* reading books
+* grpc amazing status.Error and status.New() withDetails() and errstatus package `google.golang.org/genproto/googleapis/rpc/errdetails` to add more details to the error also came to know about google some buf package for validating the proto message fields
+* buildsafe work
+* Learning some more `gorebuild` and `govulncheck` for ksctl and also `sbomqs` score for generating scores for ksctl
+* learning about why nix is the OG
+* market analysis
+
 # Date 2024-11-08
 * reading books
 * buildsafe work
