@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-10
+* came to know about differenredhar Openshift complanance things, how it does and what all policies it handlers, like NIST, ..
+  * learning about the sequence of execution for all these complaiance testing
+* came to know about UNIX epoch time and how to convert it to human readable time `date -d @timestamp --utc`
+* came to know about ":Z and :z" in container volume mounts
+  * `:Z or :z` - tells the container to share the volume with SELinux and label the content
+* reading books
+* BFD for BGP by isovalent and cisco
+
 # Date 2024-11-09
 * reading books
 * grpc amazing status.Error and status.New() withDetails() and errstatus package `google.golang.org/genproto/googleapis/rpc/errdetails` to add more details to the error also came to know about google some buf package for validating the proto message fields
