@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-11
+* reading books
+* came to know about terraform provider alias and also how to do aws get vm_types per region and also how difficult it is
+* file integrity operator in OpenShift
+* learning the things about BGP and duplex connection in general
+
 # Date 2024-11-10
 * came to know about differenredhar Openshift complanance things, how it does and what all policies it handlers, like NIST, ..
   * learning about the sequence of execution for all these complaiance testing
