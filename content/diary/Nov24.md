@@ -9,7 +9,7 @@ description = "Let's talk about my November 2024"
 * reading books
 * learning about aws api and cli how it works and also came to know about `curl -I --user $AWS_ACCESS_KEY:$AWS_SECRET_ACCESS_KEY --aws-sigv4 "aws:amz:$REGION:$SERVICE_NAME"`
 * buildsafe work
-* attending some nice demo of another company
+* attending some nice demo of another company Qumulus
 
 # Date 2024-11-11
 * reading books
