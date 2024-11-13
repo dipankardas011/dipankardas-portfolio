@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-13
+* reading books
+* having a ncnf tag green review call and a lot of planning
+* buildsafedev work
+* terraform aws pricing api
+
 # Date 2024-11-12
 * reading books
 * learning about aws api and cli how it works and also came to know about `curl -I --user $AWS_ACCESS_KEY:$AWS_SECRET_ACCESS_KEY --aws-sigv4 "aws:amz:$REGION:$SERVICE_NAME"`
