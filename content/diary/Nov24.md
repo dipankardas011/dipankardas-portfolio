@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-15
+* reading books
+* buildsafe work
+* terraforming
+* cncf green reviews tag
+
 # Date 2024-11-14
 * reading books
 * buildsafe work, came to know about the `grpc quota status error` from errdetails
