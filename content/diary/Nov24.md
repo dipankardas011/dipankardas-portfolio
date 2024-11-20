@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-20
+* reading books
+* office work on ansible + terraform module
+* learning about certmanager in the Openshift
+* improved the ksctl homepage
+
 # Date 2024-11-19
 * learning about `issuer-ambient-credentials` in cert-manager
   * 'Ambient Credentials' are credentials drawn from the environment, metadata services, or local files which are not explicitly configured in the Issuer API object. When this flag is enabled, the following sources for credentials are also used: AWS - All sources the Go SDK defaults to, notably including any EC2 IAM roles available via instance metadata.
