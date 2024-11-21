@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-21
+* reading books
+* interesting optimization for cloudfront + acm to reduce downtime between manual to tf automation
+* Ksctl homepage nice `line-height` improvement
+* learning about audit logs in openshift
+* cncf green reviews
+
 # Date 2024-11-20
 * reading books
 * office work on ansible + terraform module
