@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-22
+* done reading books
+* aws pricing api works only on us-east-1 region
+* buildsafe work
+* tls certs in openshift
+* enjoyed the match b/w India vs Australia BGT
+
 # Date 2024-11-21
 * reading books
 * interesting optimization for cloudfront + acm to reduce downtime between manual to tf automation
