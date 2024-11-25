@@ -5,8 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-25
+* Some office work
+* ksctl work
+
 # Date 2024-11-23 2024-11-24
-* reading books
 * buildsafe work
 * learning about the focus areas of redhat openshift container platform
 * ksctl docs and website redesign and some issues in ksctl
