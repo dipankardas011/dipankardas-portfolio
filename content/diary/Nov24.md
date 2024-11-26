@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
+# Date 2024-11-26
+* terraform and ansible coding
+* learning about tf import
+* research work
+
 # Date 2024-11-25
 * Some office work
 * ksctl work
