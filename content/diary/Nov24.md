@@ -5,11 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
-# Date 2024-11-27
+# Date 2024-11-27 2024-11-28
 * cncf green reviews call and work
 * ksctl cncf doc and saiyam call and also new contributor message resp
 * terraform import usage and how to work with it
 * buildsafedev work
+* some terraform import hands on experience
 
 # Date 2024-11-26
 * terraform and ansible coding
