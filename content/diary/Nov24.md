@@ -5,11 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2024"
 +++
 
-# Date 2024-11-29
+# Date 2024-11-29 2024-11-30
 * client terraform infra code to import state and thus zero downtime
 * cncf green reviews work
 * buildsafedev work
-* analysis of redhat openshift container platform
+* Done analysis of redhat openshift container platform
 
 # Date 2024-11-27 2024-11-28
 * cncf green reviews call and work
