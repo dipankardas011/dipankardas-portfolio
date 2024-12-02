@@ -6,6 +6,11 @@ description = "Let's talk about my December 2024"
 +++
 
 ## Date 2024-12-02
+* Redhat Business model on openshift
+* Buildsafedev
+* working on frappe
+
+## Date 2024-12-01
 * buildsafedev work
 * learning about almost all the aspects of redhat Openshift ecosystem
   * used it in azure openshift service and tried the dashboard for the first time
