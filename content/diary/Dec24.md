@@ -5,12 +5,19 @@ date = 2024-12-01
 description = "Let's talk about my December 2024"
 +++
 
-## Date 2024-12-02
+# Date 2024-12-03 2024-12-04
+* practial terraform import experience and also on custom wrapper module usecase
+* learning more about Open RAN
+* working on frappe
+* working on javascript after a long time
+* Reading Patents on terraform internal design philosophy
+
+# Date 2024-12-02
 * Redhat Business model on openshift
 * Buildsafedev
 * working on frappe
 
-## Date 2024-12-01
+# Date 2024-12-01
 * buildsafedev work
 * learning about almost all the aspects of redhat Openshift ecosystem
   * used it in azure openshift service and tried the dashboard for the first time
