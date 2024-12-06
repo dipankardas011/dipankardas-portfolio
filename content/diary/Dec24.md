@@ -5,6 +5,11 @@ date = 2024-12-01
 description = "Let's talk about my December 2024"
 +++
 
+# Date 2024-12-05 2024-12-06
+* working on python code base
+* buildsafedev work and learning about github apps
+* AKS in depth learning
+
 # Date 2024-12-03 2024-12-04
 * practial terraform import experience and also on custom wrapper module usecase
 * learning more about Open RAN
