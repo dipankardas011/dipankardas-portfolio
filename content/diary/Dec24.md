@@ -5,6 +5,11 @@ date = 2024-12-01
 description = "Let's talk about my December 2024"
 +++
 
+# Date 2024-12-14
+* reading about AKS backup and restore
+* reading patents on service mesh
+* quantum computing and setting up local development environment with dockerfile
+
 # Date 2024-12-17 2024-12-13
 * attended KubeCon India 2024
   * learning about a lot of problems and how a lot of starup and companies are solving them
