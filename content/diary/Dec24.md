@@ -5,6 +5,10 @@ date = 2024-12-01
 description = "Let's talk about my December 2024"
 +++
 
+# Date 2024-12-15
+* reading about AKS metrics, logs and monitoring in general
+* reading patents on service mesh
+
 # Date 2024-12-14
 * reading about AKS backup and restore
 * reading patents on service mesh
