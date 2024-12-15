@@ -8,6 +8,9 @@ description = "Let's talk about my December 2024"
 # Date 2024-12-15
 * reading about AKS metrics, logs and monitoring in general
 * reading patents on service mesh
+* learning about how the Qiskit SDK changed from the 0.xx to 1.3
+  * earning about the method to create the circut to measurement of it
+  * able to plot the statevector of a single qubit in a bloch sphere
 
 # Date 2024-12-14
 * reading about AKS backup and restore
