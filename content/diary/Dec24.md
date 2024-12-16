@@ -5,6 +5,10 @@ date = 2024-12-01
 description = "Let's talk about my December 2024"
 +++
 
+# Date 2024-12-16
+* reading about AKS Access and Identity
+* Learning qiskit superpositing creation using hadamard gate and measurement
+
 # Date 2024-12-15
 * reading about AKS metrics, logs and monitoring in general
 * reading patents on service mesh
