@@ -5,6 +5,13 @@ date = 2024-12-01
 description = "Let's talk about my December 2024"
 +++
 
+# Date 2024-12-17 2024-12-18
+* learning about how to make a Quantum circuit for superposition and entanglement and also interfernence
+* frappe work
+* AKS Security Section
+* buildsafedev work
+* ksctl issue and code work started
+
 # Date 2024-12-16
 * reading about AKS Access and Identity
 * Learning qiskit superpositing creation using hadamard gate and measurement
