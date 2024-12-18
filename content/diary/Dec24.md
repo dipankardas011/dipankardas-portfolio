@@ -11,6 +11,7 @@ description = "Let's talk about my December 2024"
 * AKS Security Section
 * buildsafedev work
 * ksctl issue and code work started
+* Completed the one of the patent reads as well
 
 # Date 2024-12-16
 * reading about AKS Access and Identity
