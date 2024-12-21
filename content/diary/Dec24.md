@@ -15,6 +15,9 @@ description = "Let's talk about my December 2024"
 * reading patents on security advisor
 * improving my linux i3 experience and also updated my setup in the dotfiles
 * able to know how to make the chromium only run in gpu acceleration by changing the config in `/etc/chromium/*.conf`
+* learning about how to add precommit for the license addition to the codebase and also go abd proto based files
+* learning about RAG based GenAI workloads
+* reading about some more brian blogs on IaC
 
 # Date 2024-12-17 2024-12-18
 * learning about how to make a Quantum circuit for superposition and entanglement and also interfernence
