@@ -5,6 +5,17 @@ date = 2024-12-01
 description = "Let's talk about my December 2024"
 +++
 
+# Date 2024-12-19 2024-12-21
+* Quantum circult with teleportation to see how to transfer quantum state to another person
+* Ksctl project refactoring
+  * some interesting feature ideas
+* AKS Networking section
+* frappe work
+* learning about terraform s3 backend encrypt flag and also for workspace it uses `env://` in the root of the s3 bucket
+* reading patents on security advisor
+* improving my linux i3 experience and also updated my setup in the dotfiles
+* able to know how to make the chromium only run in gpu acceleration by changing the config in `/etc/chromium/*.conf`
+
 # Date 2024-12-17 2024-12-18
 * learning about how to make a Quantum circuit for superposition and entanglement and also interfernence
 * frappe work
