@@ -5,6 +5,14 @@ date = 2024-12-01
 description = "Let's talk about my December 2024"
 +++
 
+# Date 2024-12-23
+* ksctl refactoring and civo provider deprication
+* patent reading
+* reading about AKS scaling of nodes and the workloads
+* Reading blogs
+* terraform + ansible debugging module
+* some health checkups
+
 # Date 2024-12-22
 * reading about AKS Network and security, Volumes
 * Qiskit about Quantum bit representation in linear, longitutinal and bloch sphere
