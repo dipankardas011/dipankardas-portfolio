@@ -12,6 +12,7 @@ description = "Let's talk about my December 2024"
 * Reading blogs
 * terraform + ansible debugging module
 * some health checkups
+* learning how to setup goog analytics to my sites
 
 # Date 2024-12-22
 * reading about AKS Network and security, Volumes
