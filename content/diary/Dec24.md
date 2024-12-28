@@ -5,6 +5,14 @@ date = 2024-12-01
 description = "Let's talk about my December 2024"
 +++
 
+# Date 2024-12-27 2024-12-28
+* reading blog on Kubernetes "Claim" model
+* ksctl refactor
+* learning about how you can write terraform provider from scratch using hte plugin based architecture
+* Quantum computing
+* AKS best practises part
+* reading patents on service mesh
+
 # Date 2024-12-25 2024-12-26
 * Quibit how the superposition and entanglement works in physical world
 * reading about AKS Servic mesh, dapr, and other features and its addons
