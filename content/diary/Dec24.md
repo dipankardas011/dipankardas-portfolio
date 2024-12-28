@@ -10,7 +10,7 @@ description = "Let's talk about my December 2024"
 * ksctl refactor
 * learning about how you can write terraform provider from scratch using hte plugin based architecture
 * Quantum computing
-* AKS best practises part
+* AKS technical doc and the overall features done
 * reading patents on service mesh
 
 # Date 2024-12-25 2024-12-26
