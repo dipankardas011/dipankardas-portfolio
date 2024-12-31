@@ -5,6 +5,11 @@ date = 2024-12-01
 description = "Let's talk about my December 2024"
 +++
 
+# Date 2024-12-31
+* Done with ksctl tasks
+* just relax and nice evening walk
+* reading about Sustainable workloads by AKS
+
 # Date 2024-12-29 2024-12-30
 * completed the core refactor for ksctl
 * reading blog posts
