@@ -5,6 +5,17 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2025"
 +++
 
+# Date 2025-01-03 2025-01-05
+* reading blogs on IaC and design patterns
+* done reading patent about terraform modules with worspaces and IAC token based system
+* AKS sustanability efforts read
+* qiskit Basic gates and also universal gates done
+* ksctl
+  * learning about Aws pricing structure for ec2, ebs, EKS
+  * leaning about azure pricing structure for AKS, managed disks, compute
+  * ksctl refactor structure and some interesting open doors for extensions
+* working on frappe
+
 # Date 2025-01-02
 * reading a blog post of monorepo or multi repo, configuration sprawl
 * reading patent about terraform modules with worspaces and IAC token based system
