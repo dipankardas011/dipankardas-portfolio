@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2025"
 +++
 
+# Date 2025-01-06
+* learning about busy database
+* Learning about CX, CY, CZ gates in multi-qubits
+* ksctl main branch patches
+* EKS features
+* frappe work
+* reading blogs by Brian Grant
+
 # Date 2025-01-03 2025-01-05
 * reading blogs on IaC and design patterns
 * done reading patent about terraform modules with worspaces and IAC token based system
