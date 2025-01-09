@@ -5,6 +5,16 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2025"
 +++
 
+# Date 2025-01-08 2025-01-09
+* Reading about Busy Frontend anitpatterns
+* Qiskit learning about multi-qubit gates
+* ksctl changes in the CNI and addons handling
+* frappe work
+* dagger with understanding about iptables and nftables and which is supported by the cni in docker
+* green reviews meeting attended
+* reading blogs by Brain Grant
+* learning about EKS as a whole from their docs
+
 # Date 2025-01-06
 * learning about busy database
 * Learning about CX, CY, CZ gates in multi-qubits
