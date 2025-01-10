@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2025"
 +++
 
+# Date 2025-01-10
+* ksctl cluster addons feature added
+* patent read on data plan event reduction
+
 # Date 2025-01-08 2025-01-09
 * Reading about Busy Frontend anitpatterns
 * Qiskit learning about multi-qubit gates
