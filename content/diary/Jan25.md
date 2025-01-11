@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2025"
 +++
 
+# Date 2025-01-11
+* ksctl ci and other improvements
+* chatty I/O anitpattern
+* market research for EKS
+* quqntum computing learnings about CCX, CCCX and measuring
+* ksctl eks addons
+
 # Date 2025-01-10
 * ksctl cluster addons feature added
 * patent read on data plan event reduction
