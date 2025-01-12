@@ -19,8 +19,9 @@ Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2*
 
 ## Experience
 
-{{< image src="/img/experience/rtcamp.png" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="5" >}}
 ### rtCamp
+{{< image src="/img/experience/rtcamp.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="5" >}}
+
 
 `Tenure`: 01/2024 to Present
 
@@ -58,8 +59,8 @@ Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2*
   - standlone
 
 
-{{< image src="/img/experience/ksctl-logo.png" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="10" >}}
 ### Ksctl
+{{< image src="/img/experience/ksctl-logo.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="10" >}}
 `Tenure`: 07/2022 to Present
 
 `Role`: **Founder**
@@ -72,9 +73,9 @@ Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2*
 - github actions
 
 
-{{< image src="/img/experience/kubesimplify.png" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="10" >}}
 ### Kubesimplify
-`Tenure`: 03/2022 to Present
+{{< image src="/img/experience/kubesimplify.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="10" >}}
+`Tenure`: 03/2022 to 07/2024
 
 `Role`: **Ambassador & Maintainer and Creator of Ksctl**
 
@@ -84,8 +85,8 @@ Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2*
 - Ksctl Creator and Maintainer
 
 
-{{< image src="/img/experience/viamagus.jpg" alt="profile image" style="border-radius: 8px;float: left;margin-right: 20px;" scale="5" >}}
 ### Viamagus
+{{< image src="/img/experience/viamagus.jpg" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="5" >}}
 `Tenure`: 03/2023 to 09/2023
 
 `Role`: **DevOps Intership**

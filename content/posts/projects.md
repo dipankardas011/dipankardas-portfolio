@@ -2,7 +2,7 @@
 +++
 title = "Projects"
 author = "Dipankar Das"
-description = "Projects and OSS contribs"
+description = "Projects and OSS"
 cover = "/img/cover-projects.png"
 +++
 
