@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2025"
 +++
 
+# Date 2025-01-12
+* Extraneous Fetching anitpattern
+* ksctl vm image to ubuntu 24
+
 # Date 2025-01-11
 * ksctl ci and other improvements
 * chatty I/O anitpattern

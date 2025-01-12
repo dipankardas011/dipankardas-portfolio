@@ -8,6 +8,14 @@ cover = "img/cover-blogs.png"
 
 # Tech Blogs
 
+## My Experience with WASI Preview 2
+
+> Created a working project using the wasi's new composition feature
+
+{{< image src="https://github.com/dipankardas011/wae/blob/main/cover.png?raw=true" alt="WASI Preview 2" style="border-radius: 8px;" >}}
+[Blog Link]({{< baseurl >}}posts/blogs/wasip2)
+[GitHub Repo](https://github.com/dipankardas011/wae)
+
 
 ## Kubernetes GKE setup (Batteries included)
 
