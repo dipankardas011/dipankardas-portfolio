@@ -10,7 +10,7 @@ description = "Let's talk about my January 2025"
 * reading about the quantum computing
 * recovering from health problems
 * reading about Dynamic resource allocation in k8s
-* ksctl work
+* ksctl work and practical exp on k8s owner references
 * work
 * research paper on data plane reduction for eventing components
 
