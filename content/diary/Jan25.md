@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2025"
 +++
 
+# Date 2025-01-13 2025-01-22
+* shifted from pune to home town
+* reading about the quantum computing
+* recovering from health problems
+* reading about Dynamic resource allocation in k8s
+* ksctl work
+* research paper
+
 # Date 2025-01-12
 * Extraneous Fetching anitpattern
 * ksctl vm image to ubuntu 24
