@@ -5,6 +5,15 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2025"
 +++
 
+# Date 2025-01-24
+* reading about improper instantiation anitpattern
+* frappe work
+* Blog on KRM (Kubernetes Resource Model) for declaritive configurations
+* ksctl work on application
+
+# Date 2025-01-23
+* ksctl work on helm incluster client
+
 # Date 2025-01-13 2025-01-22
 * shifted from pune to home town
 * reading about the quantum computing
