@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2025"
 +++
 
+# Date 2025-01-25
+* learning about v2 onwards go module version handling
+* ksctl ka, kcm and how internal k8s dynamic client works
+* Blog on KRM (Kubernetes Resource Model) for declaritive configurations
+
 # Date 2025-01-24
 * reading about improper instantiation anitpattern
 * frappe work
