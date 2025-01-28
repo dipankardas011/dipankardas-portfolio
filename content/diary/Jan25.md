@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2025"
 +++
 
+# Date 2025-01-26 2025-01-27
+* ksctl new cli ux development
+* terraform and some nice UX and system design learnings
+
 # Date 2025-01-25
 * learning about v2 onwards go module version handling
 * ksctl ka, kcm and how internal k8s dynamic client works
