@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2025"
 +++
 
+# Date 2025-01-28 2025-01-31
+* quantum computing
+* ksctl work creds
+* ksctl cli new menu driven work
+* frappe work and wordpress
+
 # Date 2025-01-26 2025-01-27
 * ksctl new cli ux development
 * terraform and some nice UX and system design learnings
