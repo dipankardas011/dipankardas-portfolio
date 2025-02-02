@@ -5,6 +5,9 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-02
+* ksctl azure pricing with properties of vm, disks, aks
+
 # Date 2025-02-01
 * learning about qiskit terra and ran first quantum circuit on IBM Q
 * read blog post on GitOps, IAC statefile
