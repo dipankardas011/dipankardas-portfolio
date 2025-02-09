@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-03 2025-02-09
+* ksctl cli to core all the features are done
+* vaction mode one ;)
+* quantum computing with qiskit
+* software design patterns
+
 # Date 2025-02-02
 * ksctl azure pricing with properties of vm, disks, aks
 
