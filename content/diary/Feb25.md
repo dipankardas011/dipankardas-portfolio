@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-10 2025-02-11
+* quntum computing with qiskit
+* ksctl addons
+* green reviews call and dagger
+* reading patents from redhat
+* reading blog on Modularity and blast radius in Infrastructure as Code
+
 # Date 2025-02-03 2025-02-09
 * ksctl cli to core all the features are done
 * vaction mode one ;)
