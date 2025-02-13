@@ -5,7 +5,19 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
-# Date 2025-02-10 2025-02-11
+# Date 2025-02-12 2025-02-13
+* retry storm anitpattern
+* ksctl cli fixes and bugs to version release
+* reading about "5 Cs: Configuring access to backing services"
+  * **Coordinates**: networking details like IP address or DNS name, protocol, and port (if not well known), or service discovery details, such as account, region, and resource
+  * **Credentials**: proof of identity
+  * **Configuration**: other parameters, such as which database name or pubsub topic
+  * **Consent**: authorization
+  * **Connectivity**: network egress/ingress, firewalls, allowed IP ranges, etc.
+* Attended "Service Mesh Academy: OpenTelemetry and Linkerd"
+* patents reading
+
+# Date 2025-02-10 2025-02-12
 * quntum computing with qiskit
 * ksctl addons
 * green reviews call and dagger
