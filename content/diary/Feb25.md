@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-14
+* bug fixes in ksct cli and core and finally release v2.0.0
+* office work
+* reading patents
+* started writing blog post for ksctl release v2
+
 # Date 2025-02-12 2025-02-13
 * retry storm anitpattern
 * ksctl cli fixes and bugs to version release
