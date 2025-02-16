@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-16
+* Ambassador pattern
+* writing blog post for ksctl release v2
+* reading patents
+
 # Date 2025-02-15
 * ksctl release fixes
 * reading patents
