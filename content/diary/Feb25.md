@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-17
+* writing blog post on m wasip2 experience
+* reading patents
+* learning about database locks in mariadb and more hands on db dumps and restore
+
 # Date 2025-02-16
 * Ambassador pattern
 * writing blog post for ksctl release v2
