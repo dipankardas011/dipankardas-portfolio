@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-18
+* finally was able to undersnatd about posthog and implemented in cloudflare proxy worker and in ksctl cli
+* some js learning
+
 # Date 2025-02-17
 * writing blog post on m wasip2 experience
 * reading patents
