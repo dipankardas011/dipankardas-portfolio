@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-19 2025-02-21
+* started with part time work
+* reading patents
+* learning about quantum computing
+* ksctl and posthog integration
+* some relaxing time
+
 # Date 2025-02-18
 * finally was able to undersnatd about posthog and implemented in cloudflare proxy worker and in ksctl cli
 * some js learning
