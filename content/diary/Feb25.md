@@ -5,6 +5,18 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-23
+* ksctl bug fixes
+* quantum circuit pulse simulation for low level, compusting & parameterized quantum circuits
+* some nice ind vs pak match
+* blog post read
+* learning about anti-corruption layer
+
+# Date 2025-02-22
+* completing reading patents
+* learning about new otel and connected log,metric,trace at the same place with grafana some basic dashboard
+* ksctl and posthog integration
+
 # Date 2025-02-19 2025-02-21
 * started with part time work
 * reading patents
