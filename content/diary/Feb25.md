@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-24
+* ksctl issue triage
+* Reading about Async Reply/Request pattern
+* some more terraform+ansiballz coding in python
+* blog post reading
+* learning about owasp zap and used for testing docs.ksctl.com
+
 # Date 2025-02-23
 * ksctl bug fixes
 * quantum circuit pulse simulation for low level, compusting & parameterized quantum circuits
