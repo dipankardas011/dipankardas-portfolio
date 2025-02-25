@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-25
+* backends for frontends pattern
+* Getting started with pulse simulator for quantum circuits more specifically about sumulator backend keywords, methods and how to use them
+* ksctl issue triage
+* frappe codebase
+* blog post reading
+* owasp zap docker based package execution for docs.ksctl.com
+
 # Date 2025-02-24
 * ksctl issue triage
 * Reading about Async Reply/Request pattern
