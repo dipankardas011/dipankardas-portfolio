@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my February 2025"
 +++
 
+# Date 2025-02-26 2025-02-27
+* quantum pulse scheduler and opreations to view the graphs and ...
+* cncf green reviews call and worked on romql query for collecting data
+* reading about Builkhead pattern
+* blog post reading
+
 # Date 2025-02-25
 * backends for frontends pattern
 * Getting started with pulse simulator for quantum circuits more specifically about sumulator backend keywords, methods and how to use them
