@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-03 2025-03-05
+* working with ksctl provision new design to learn about graph topology and other aspects
+* extra work on owasp zap and cncf green reviews
+* frappe in office
+
 # Date 2025-03-02
 * completed the pulse schedules
 * successful setup owasp zap as proxy service and came to know about firefox and chrome proxy settings with https based custom certificates allow
