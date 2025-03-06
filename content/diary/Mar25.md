@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-06
+* quantum circuit with transpiler, visualization module for circuits and backend
+* ksctl provisioner thing learning about slog advance features and usage
+* some project development in python ;)
+* security tool work
+
 # Date 2025-03-03 2025-03-05
 * working with ksctl provision new design to learn about graph topology and other aspects
 * extra work on owasp zap and cncf green reviews
