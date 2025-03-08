@@ -5,8 +5,9 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
-# Date 2025-03-07
+# Date 2025-03-07 2025-03-08
 * reading about Compensating Transaction, Competing Consumers patterns
+* completed quantum circuit with transpiler, visualization module for circuits and backend
 
 # Date 2025-03-06
 * quantum circuit with transpiler, visualization module for circuits and backend
