@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-21
+* getting back to work after vacation.
+* extra work and some consulting work
+* understanding 'Compute resource consolidation' pattern
+
 # Date 2025-03-07 2025-03-08
 * reading about Compensating Transaction, Competing Consumers patterns
 * completed quantum circuit with transpiler, visualization module for circuits and backend
