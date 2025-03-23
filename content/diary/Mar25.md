@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-23
+* another ksctl release day
+* learning about CQRS pattern
+* quantum qiskit statevectors
+* preparing presentations
+
 # Date 2025-03-22
 * learning about qiskit simulators, backend execute with backend_options
 * ksctl virtual machine category feature
