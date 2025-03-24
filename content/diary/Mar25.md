@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-24
+* learning about how to fetch data like all regions, all vmtypes in azure via terraform
+* was able to make the multi region single instance cost comparasion
+* ksctl work on PPT
+* office work
+* some more kubernetes learning
+
 # Date 2025-03-23
 * another ksctl release day
 * learning about CQRS pattern
