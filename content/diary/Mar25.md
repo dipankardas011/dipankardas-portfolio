@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-25
+* learning about Pritunl VPN setup and configuration
+* some apache configuration about its ingress, egress and other websocket configurations
+* ksctl recommendation for instancetype wrt to region for cost optimization
+* office work on agent based systems for logging systems
+
 # Date 2025-03-24
 * learning about how to fetch data like all regions, all vmtypes in azure via terraform
 * was able to make the multi region single instance cost comparasion
