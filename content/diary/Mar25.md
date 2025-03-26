@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-26
+* learning about apache proxy and other configurations
+* working logging and agent based systems
+* done with ksctl recommendation system wrt to cost on instancetype across regions
+
 # Date 2025-03-25
 * learning about Pritunl VPN setup and configuration
 * some apache configuration about its ingress, egress and other websocket configurations
