@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-27
+* some interensting js and python coding
+* ksctl new v2.3 is out and also blog post
+* learning about python whl based package distribution
+* qiskit unitary simulator
+
 # Date 2025-03-26
 * learning about apache proxy and other configurations
 * working logging and agent based systems
