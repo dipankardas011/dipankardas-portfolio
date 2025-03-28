@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-28
+* Some interesting JS type annotations
+* working with python whl based docker image build
+* ksctl co2 emission research and climatetrace api
+
 # Date 2025-03-27
 * some interensting js and python coding
 * ksctl new v2.3 is out and also blog post
