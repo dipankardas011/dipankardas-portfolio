@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-29
+* experimented with co2 emission apis
+* learning how to inject noise in a quantum circuit executor
+* Learning about development stamps
+* some nice ml deployment aka mlops ;)
+
 # Date 2025-03-28
 * Some interesting JS type annotations
 * working with python whl based docker image build
