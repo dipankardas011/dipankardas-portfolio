@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-30
+* ksctl able to get embodded emission of cloud provider instance types
+* learning about quantum circuits and noise injection in qiskit
+  * thermal relaxation, readout, decoherence errors, ...
+* learning about Development stamps, edge workload, event sourcing, external configuration store, federating identity
+
 # Date 2025-03-29
 * experimented with co2 emission apis
 * learning how to inject noise in a quantum circuit executor
