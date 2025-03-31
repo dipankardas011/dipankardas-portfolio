@@ -9,6 +9,7 @@ description = "Let's talk about my March 2025"
 * learning about gatekeeper pattern
 * came to know how to extract a python whl file to get the source code 
 * some frappe code base
+* learning about mcp protocol (model contrext protocol), how to scalable high throughput logging solution.
 
 # Date 2025-03-30
 * ksctl able to get embodded emission of cloud provider instance types
