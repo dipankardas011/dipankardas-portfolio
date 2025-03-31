@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my March 2025"
 +++
 
+# Date 2025-03-31
+* learning about gatekeeper pattern
+* came to know how to extract a python whl file to get the source code 
+* some frappe code base
+
 # Date 2025-03-30
 * ksctl able to get embodded emission of cloud provider instance types
 * learning about quantum circuits and noise injection in qiskit
