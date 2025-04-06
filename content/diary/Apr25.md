@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-06
+* reading about challenges of huge k8s clusters vs small multi clusters CNCF kubecon
+* wasmio 2025 of next features for upcoming wasi@v0.3.0
+* ksctl embodied carbon of instances added
+* learning about gateway routing
+* learning about various gold options interms of finance from phy, digital, ETF, SGB
+
 # Date 2025-04-05
 * ksctl emissions work
 
