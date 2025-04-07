@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-07
+* ksctl emission work
+* learning about frappe.qb
+* learning about tags in grafana k6 and interesting prebuilt dashboards
+* snyk ai for code security
+
 # Date 2025-04-06
 * reading about challenges of huge k8s clusters vs small multi clusters CNCF kubecon
 * wasmio 2025 of next features for upcoming wasi@v0.3.0
