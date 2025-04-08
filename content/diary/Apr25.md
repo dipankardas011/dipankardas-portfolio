@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-08
+* ksctl emission for recommendation got fixed
+* snyk ai product lines
+* some nice brain storming for zero downtime deployment
+* ksctl:cli@v2.4.0
+
 # Date 2025-04-07
 * ksctl emission work
 * learning about frappe.qb
