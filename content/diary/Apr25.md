@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-09
+* ksctl emissions+cost for new recommendation
+* MCP security problems
+* learning about snyk ai tools
+* came to know how to use gemina screen share and debugging feature in natural language
+
 # Date 2025-04-08
 * ksctl emission for recommendation got fixed
 * snyk ai product lines
