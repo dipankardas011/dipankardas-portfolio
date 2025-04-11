@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-10 2025-04-11
+* ksctl emissions work where we got to make card based UX in TUI
+* learning about docker model and ollama and mcp server
+
 # Date 2025-04-09
 * ksctl emissions+cost for new recommendation
 * MCP security problems
