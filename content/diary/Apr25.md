@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-12
+* ksctl new emission feature almost done with interesting DSA problems
+* some investing learnings
+* agent based models
+
 # Date 2025-04-10 2025-04-11
 * ksctl emissions work where we got to make card based UX in TUI
 * learning about docker model and ollama and mcp server
