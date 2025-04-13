@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-13
+* ksctl new card based selection method stablized
+* learning about dagger agents and how to multi workflow around them and learning about what it is 
+* learning about direct or normal Murtual F
+
 # Date 2025-04-12
 * ksctl new emission feature almost done with interesting DSA problems
 * some investing learnings
