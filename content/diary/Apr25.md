@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-14 2025-04-15
+* updated the ksctl homepage and docs
+* learning about geodes
+* anthropic learning efficient agents
+* Used snyk AI paid plan
+
 # Date 2025-04-13
 * ksctl new card based selection method stablized
 * learning about dagger agents and how to multi workflow around them and learning about what it is 
