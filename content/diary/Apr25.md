@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-16
+* ksctl new UI improvements
+* learning ahout healthz
+* learning about vLLm and BYOC aka terraform as well for LLMs
+* Quantum error mitigation
+
 # Date 2025-04-14 2025-04-15
 * updated the ksctl homepage and docs
 * learning about geodes
