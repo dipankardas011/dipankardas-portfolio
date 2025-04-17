@@ -5,6 +5,9 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-17
+* learning about indexing tables
+
 # Date 2025-04-16
 * ksctl new UI improvements
 * learning ahout healthz
