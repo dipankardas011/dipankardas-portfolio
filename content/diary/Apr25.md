@@ -5,6 +5,9 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-21
+* ksctl slides where updated, docs feature rewordings
+
 # Date 2025-04-17 2025-04-20
 * ksctl new cluster summary
 * learning about health endpoints, index tables, leader election, materialized view, messaging bridge
