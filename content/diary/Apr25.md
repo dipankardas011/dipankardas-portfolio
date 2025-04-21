@@ -7,6 +7,9 @@ description = "Let's talk about my April 2025"
 
 # Date 2025-04-21
 * ksctl slides where updated, docs feature rewordings
+* some interesting ksctl fixes
+* learning about pipe and filter architecture
+* vLLm and g5.2xlarge instance and reading about knoledge distillation
 
 # Date 2025-04-17 2025-04-20
 * ksctl new cluster summary
