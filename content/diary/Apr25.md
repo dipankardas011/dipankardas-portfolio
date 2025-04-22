@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-22
+* ksctl analysis and marketing
+* learning about aws Inf1 instances
+* terraform to create g5 series instance with spot based and ran ollama and configured zed to use that endpoint
+* learning about interesting cost optimmization when dealing with open source LLMs running on cloud
+* was able to setup delve with stdin and stdout in same neovim and also wrote a blog post
+
 # Date 2025-04-21
 * ksctl slides where updated, docs feature rewordings
 * some interesting ksctl fixes
