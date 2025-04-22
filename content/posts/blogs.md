@@ -8,6 +8,12 @@ cover = "img/cover-blogs.png"
 
 # Tech Blogs
 
+## Complete Go delve setup for advance debugging
+> A Working Go debegging setup with neovim having stdout and stdin capabilities
+
+{{< image src="https://raw.githubusercontent.com/go-delve/delve/master/assets/delve_horizontal.png" alt="godebug" style="border-radius: 8px;" >}}
+[Blog Link]({{< baseurl >}}posts/blogs/godebug)
+
 ## My Experience with WASI Preview 2
 
 > Created a working project using the wasi's new composition feature
