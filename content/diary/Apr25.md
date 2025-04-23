@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-23
+* cncf tag green wg call
+* qiskit T1 losss in a circuit via a graph
+* terraform code for ML workloads, and learnign aws Inf1, g5.2xlarge
+* Some businees learning
+
+
 # Date 2025-04-22
 * ksctl analysis and marketing
 * learning about aws Inf1 instances
