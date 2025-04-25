@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-24 2025-04-25
+* learning about vpc privatelink and sharing a resource across aws accounts
+* learning about cilium IPAM, Encryption, and some other features
+* learning about Priority queue, PubSub, Quaratine principles
+* ksctl implementation of the cni plugin customization from cli perspective
+
 # Date 2025-04-23
 * cncf tag green wg call
 * qiskit T1 losss in a circuit via a graph
