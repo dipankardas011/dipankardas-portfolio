@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my April 2025"
 +++
 
+# Date 2025-04-29 2025-04-30
+* revisting go concurrency with nice example
+* terraform modules with practical experience
+
 # Date 2025-04-26 2025-04-28
 * ksctl new feature for Cilium and flannel customization and release v2.6 and also started the work on the cluster summary
 * learning about:
