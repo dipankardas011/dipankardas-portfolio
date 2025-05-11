@@ -17,6 +17,7 @@ description = "Let's talk about my May 2025"
   * balanced and constant function
   * deutsch jozsa
   * bernstein-vazirani
+* learning about Synergic Quantum Generative Machine Learning (SQGEN)
 
 # Date 2025-05-04
 * learning about qiskit $T_1$, $T_2$ and $T_2^*$ decay of qiskit and also readout errors mitigations
