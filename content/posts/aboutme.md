@@ -58,6 +58,18 @@ Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2*
   - webroot
   - standlone
 
+### Viamagus
+{{< image src="/img/experience/viamagus.jpg" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="5" >}}
+`Tenure`: 02/2025 to 04/2025
+
+`Role`: **DevSecOps Consultant**
+
+`Knowledge Areas`
+- Worked on OWASP ZAP for security testing with custom deployment for proxy
+- Worked on Snyk integration
+- Optimization of LLM based internal Project for dockerization and efficeiency from disk to network to name a few
+- Deploying vLLM with AWS ASG and VPC PrivateLink based product Infra
+- Audited whether best practises are followed across projects
 
 ### Ksctl
 {{< image src="/img/experience/ksctl-logo.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="10" >}}
