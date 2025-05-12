@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2025"
 +++
 
+# Date 2025-05-12
+* qiskit quantum gover search, shor's algorithm, quantum fourier transform
+* day work with terraform backend and best practises
+
 # Date 2025-05-05 2025-05-11
 * learning about astro dynamic routing
 * learning about astro multi page application, cloudflare pages
