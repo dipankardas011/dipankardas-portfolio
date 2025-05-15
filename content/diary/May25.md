@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2025"
 +++
 
+# Date 2025-05-13 2025-05-15
+* ksctl new features working rbac
+* learning about mcp and revision of existing knowledge base
+* Some interesting terraform practizes experienced by failing problems
+
 # Date 2025-05-12
 * qiskit quantum gover search, shor's algorithm, quantum fourier transform
 * day work with terraform backend and best practises
