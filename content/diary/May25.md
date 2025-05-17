@@ -5,6 +5,9 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2025"
 +++
 
+# Date 2025-05-16 2025-05-17
+* ksctl
+
 # Date 2025-05-13 2025-05-15
 * ksctl new features working rbac
 * learning about mcp and revision of existing knowledge base
