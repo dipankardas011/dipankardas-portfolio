@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2025"
 +++
 
+# Date 2025-05-18
+* Refresher system design with job based http request and response for long running jobs (ksctl)
+* Mongodb, redis client
+
 # Date 2025-05-16 2025-05-17
 * ksctl
 
