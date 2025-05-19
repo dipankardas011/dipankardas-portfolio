@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2025"
 +++
 
+# Date 2025-05-19
+* ksctl new storage driver for mongodb single connection $N$ x database conn
+* learning about how to extract cloud provider region's country codes
+* learning about agentic systems
+
 # Date 2025-05-18
 * Refresher system design with job based http request and response for long running jobs (ksctl)
 * Mongodb, redis client
