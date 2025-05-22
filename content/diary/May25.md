@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2025"
 +++
 
+# Date 2025-05-20 2025-05-22
+* learning about grafana k6 influxdb setup with dashboard with overrides, also some interesting system node expoerter metrics
+* trying google adk, agno, and learnings regardging workload, sequencial, parallel, loop agents
+* learning about systemdesign by design stuff
+
 # Date 2025-05-19
 * ksctl new storage driver for mongodb single connection $N$ x database conn
 * learning about how to extract cloud provider region's country codes
