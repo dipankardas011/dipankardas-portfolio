@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2025"
 +++
 
+# Date 2025-05-23 2025-05-24
+* Learning about K6 and NodeMetrics with interesting sysctl tuning and kernel-level fine-tuning.
+* PHP-FPM tuning.
+* Exploring Google ADK, starting with document reading, and using Google Search to MCP as a tool for coding to Slack.
+
 # Date 2025-05-20 2025-05-22
 * learning about grafana k6 influxdb setup with dashboard with overrides, also some interesting system node expoerter metrics
 * trying google adk, agno, and learnings regardging workload, sequencial, parallel, loop agents
