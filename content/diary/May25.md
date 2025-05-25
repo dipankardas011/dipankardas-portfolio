@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2025"
 +++
 
+# Date 2025-05-25
+* learning about before_, after_hook for tools, agent, llm in adk, also mcp server with google maps, ...
+* ksctl platform call
+* event driven architecture for adk
+
 # Date 2025-05-23 2025-05-24
 * Learning about K6 and NodeMetrics with interesting sysctl tuning and kernel-level fine-tuning.
 * PHP-FPM tuning.
