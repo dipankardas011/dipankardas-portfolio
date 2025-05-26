@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2025"
 +++
 
+# Date 2025-05-26
+* ksctl work
+* deployment production setup
+
 # Date 2025-05-25
 * learning about before_, after_hook for tools, agent, llm in adk, also mcp server with google maps, ...
 * ksctl platform call
