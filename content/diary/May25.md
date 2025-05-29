@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2025"
 +++
 
+# Date 2025-05-27 2025-05-29
+* ksctl queue based write, read in distrubuted system
+* new system is released in day work
+* some more learnings in agent based systems
+
 # Date 2025-05-26
 * ksctl work
 * deployment production setup
