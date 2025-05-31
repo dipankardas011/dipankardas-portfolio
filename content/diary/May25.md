@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my May 2025"
 +++
 
+# Date 2025-05-30 2025-05-31
+* ksctl work and call for something interesting in terms of product
+* learning about the difference b/w A2A and MCP and when to use
+* mograted all my i3 based workflow to hyprland in linux work system
+
 # Date 2025-05-27 2025-05-29
 * ksctl queue based write, read in distrubuted system
 * new system is released in day work
