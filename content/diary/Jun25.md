@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2025"
 +++
 
+# Date 2025-06-14
+* worked on ksctl vault provider, sqllite and subscription for enterprise needs
+* turso database
+
 # Date 2025-06-05 2025-06-13
 * learning about mongodb locking, hasicorp cloud secret app api
 * learnin gabout stripe model of subscription
