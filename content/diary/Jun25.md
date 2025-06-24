@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2025"
 +++
 
+# Date 2025-06-15 2025-06-24
+* some nice learning in stripe, payments, subscriptions, stripe webhooks, authentication, authorization
+* turso JSON datatype
+* learning about some more weather, green api endpoints
+* promql seralization and datamodel
+* server stats using simple bash script
+* creating signup and login flows and user invites
+
 # Date 2025-06-14
 * worked on ksctl vault provider, sqllite and subscription for enterprise needs
 * turso database
