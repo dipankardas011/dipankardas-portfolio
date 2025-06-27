@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2025"
 +++
 
+# Date 2025-06-25 2025-06-27
+* working on better go project architecture
+* cncf green reviews call and able to serialize the promql and dagger container file export to the host file, filtering
+
 # Date 2025-06-15 2025-06-24
 * some nice learning in stripe, payments, subscriptions, stripe webhooks, authentication, authorization
 * turso JSON datatype
