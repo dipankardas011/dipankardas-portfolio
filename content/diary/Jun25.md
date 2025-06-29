@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2025"
 +++
 
+# Date 2025-06-28 2025-06-29
+* learning about how actually oauth works
+* design production level api designing
+* learning about how to use geminin code, claude code, opencode, etc.
+* learning about how memory in AI agents is going to impletant aka mongodb memorizz
+
 # Date 2025-06-25 2025-06-27
 * working on better go project architecture
 * cncf green reviews call and able to serialize the promql and dagger container file export to the host file, filtering
