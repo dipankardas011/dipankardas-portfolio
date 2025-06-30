@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my June 2025"
 +++
 
+# Date 2025-06-30
+* learning about oauth2 and how to create the flow ain practical implementation
+* user flow in office
+
 # Date 2025-06-28 2025-06-29
 * learning about how actually oauth works
 * design production level api designing
