@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2025"
 +++
 
+# Date 2025-07-12 2025-07-14
+* learning about nextjs and about how to create nice looking UI. learning about useEffect, useState of nextJs
+* learning about gcp cloud run IAP and how to configure it using terraform
+
 # Date 2025-07-11
 * learning about how gcp cloud run continuous deployment works
   * it uses cloud build with trigger on push to a github repo
