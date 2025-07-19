@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2025"
 +++
 
+# Date 2025-07-15 2025-07-19
+* learning about coding in typescript with react.
+* some interesting backend engineering stuff from gcp, terraform, cloud run
+* Finally company launch dash.easyengine.io which I was part of the team to build it.
+
 # Date 2025-07-12 2025-07-14
 * learning about nextjs and about how to create nice looking UI. learning about useEffect, useState of nextJs
 * learning about gcp cloud run IAP and how to configure it using terraform
