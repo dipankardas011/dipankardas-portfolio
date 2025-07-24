@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2025"
 +++
 
+# Date 2025-07-20 2025-07-24
+* learning about brevo and how newletter services work on contacts and lists.
+* some deployments with self managed cluster and interesting free version of redis.
+* came to know about nats and jetstreams and how it works.
+* updated my resume
+
 # Date 2025-07-15 2025-07-19
 * learning about coding in typescript with react.
 * some interesting backend engineering stuff from gcp, terraform, cloud run
