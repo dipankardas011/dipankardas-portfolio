@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2025"
 +++
 
+# Date 2025-07-25 2025-07-28
+* new platform new frontend and a lot of new UI improvements and also learning about better nextjs changes
+* learning about ansible client wrapper in python
+* learning about the server metrics and how to make it efficient with less resources
+
 # Date 2025-07-20 2025-07-24
 * learning about brevo and how newletter services work on contacts and lists.
 * some deployments with self managed cluster and interesting free version of redis.
