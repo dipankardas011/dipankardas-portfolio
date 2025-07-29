@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my July 2025"
 +++
 
+# Date 2025-07-29
+* learning some systems thinking on how things can break in dash.easyengine.io
+* some configuration tokens seperation between prod and dev
+
 # Date 2025-07-25 2025-07-28
 * new platform new frontend and a lot of new UI improvements and also learning about better nextjs changes
 * learning about ansible client wrapper in python
