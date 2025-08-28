@@ -8,118 +8,102 @@ cover = "img/cover.png"
 
 # About Me
 
-
 {{< image src="/img/profile.jpg" alt="profile image" position="center" style="border-radius: 8px;" scale="2" >}}
 
-I am Dipankar Das, automation engineer by developing platforms that can automate repetitive tasks. Currently, Also, a member of the **Kubernetes organization** and have made open-source contributions to various cloud-native projects: **CNCF Tag Green**, **Kubernetes**, **Armo**, **Kubeshop**, **Cilium**, and more.
+I am **Dipankar Das**, an automation and platform engineer passionate about building **reliable, scalable, and sustainable systems** that eliminate repetitive tasks and accelerate developer productivity. I specialize in **DevOps, Kubernetes, cloud-native platforms, and infrastructure automation**, with a strong interest in **environmentally conscious computing** and reducing the carbon footprint of cloud workloads.  
 
-Currently working as a **DevOps Engineer** at [**rtCamp**](/posts/aboutme/#rtcamp)
+I am an active **member of the Kubernetes organization** and have contributed to several **CNCF and open-source projects**, including **CNCF TAG Green**, **Kubernetes**, **Armo**, **Kubeshop**, **Cilium**, and more. My open-source work focuses on **improving developer workflows, benchmarking cloud-native applications, and building sustainable infrastructure tooling**.  
 
-Won a Hackathon `Napptive + WeMakeDevs Cloud Native Hackathon` on the **Track 2** [Results Link](https://napptive.com/blog/napptive-wemakedevs-cloud-native-hackathon-results/)
+Currently, I work as a **DevOps Engineer (Platform Engineer) at [rtCamp](/posts/aboutme/#rtcamp)**, and I am also the **Founder of Ksctl**, a cloud-agnostic and carbon-aware Kubernetes lifecycle management tool. I have experience across **platform engineering, DevSecOps, MLOps, and infrastructure automation**, and I enjoy building solutions that **reduce operational complexity, increase reliability, and improve developer productivity**.  
+
+🏆 **Achievements & Recognitions**  
+- Winner of the **Napptive + WeMakeDevs Cloud Native Hackathon** (Track 2) – [Results Link](https://napptive.com/blog/napptive-wemakedevs-cloud-native-hackathon-results/)  
+- Built **Ksctl**, a sustainable Kubernetes management CLI supporting multi-cloud, carbon-aware provisioning, and dynamic GitHub Actions runners.  
+- Developed internal **DevSecOps and MLOps pipelines** for automated security testing, scalable LLM deployments, and CI/CD optimization.  
+
+## Core Skills & Expertise
+- **Cloud & Infrastructure:** AWS, GCP, Azure, Kubernetes (EKS/GKE/AKS/K3s), Terraform, Helm, GitOps (ArgoCD)  
+- **Programming & Automation:** Go, Python, Bash, Ansible, Makefile, Docker, Dagger, CI/CD pipelines, GitHub Actions  
+- **Security & Observability:** OWASP ZAP, Snyk, Prometheus, New Relic, SSL automation, network security integrations  
+- **Sustainability & Efficiency:** Carbon-aware provisioning, multi-cloud optimization, resource-efficient ML deployments  
+
 
 ## Experience
 
 ### rtCamp
 {{< image src="/img/experience/rtcamp.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="5" >}}
 
+`Tenure`: 01/2024 to Present  
+`Role`: **DevOps Engineer (Platform Engineer)**  
 
-`Tenure`: 01/2024 to Present
+`Key Contributions`
+- Implemented **self-hosted multi-runner architecture**, improving CI/CD developer velocity by **50%** and optimizing infrastructure utilization by **40%**.  
+- Migrated to **self-hosted Google Tag Manager**, reducing network calls to third-party consumers and improving page performance.  
+- Designed **Kubernetes-based WordPress deployments** with **10× higher availability and fault tolerance**.  
+- Built a **deployment dashboard** with Terraform-powered **BYOC support**, reducing site go-live time by **2×**.  
+- Developed **internal automation tools** with Frappe and Ansible (multi-runner provisioning, certbot integration, monitoring with New Relic).  
+- Implemented optimizations for **AWS Savings Plans** (EC2 + RDS) and integrated **Cloudflare + Fail2Ban** for enhanced security.  
 
-`Role`: **DevOps Engineer (Platform Engineer)**
-
-`Knowledge Areas`
-- Nginx indepth understanding
-  - with SSL and openresty
-- wordpress
-  - understanding php code and folder structure
-  - install and use in docker compose with https and volumes
-- new-relic for monitoring php apps
-- github actions
-  - write releases using raw github api curl requests
-  - ghcr pacakage releases
-- Google Tag manager
-  - deployment and understading how its use
-- docker rootless POC
-- research on AWS Savings plan indepth for ec2 and rds services
-- used fail2ban with cloudflare integration to ban ips which are denied access for fixed amount of failed attempts
-- kubernetes
-  - Storage class with RWX in GCP
-  - RWX use either a file storage option for example{NFS, standard-rwx} or bucket (there are latencies)
-  - using s3 for uploading static data
-  - wordpress deployment with kustomize
-  - gitops workflow with argocd
-  - terraform module for GKE standard cluster with HPA and Cluster AutoScaler
-- play with cloudflare
-- frappe development for internal toolings
-- github custom multi-runner for single VM using ansible
-- certbot
-  - nginx
-  - dns-cloudflare
-  - webroot
-  - standlone
 
 ### Viamagus
 {{< image src="/img/experience/viamagus.jpg" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="5" >}}
-`Tenure`: 02/2025 to 04/2025
 
-`Role`: **DevSecOps Consultant**
+`Tenure`: 02/2025 to 04/2025  
+`Role`: **DevSecMLOps Consultant**  
 
-`Knowledge Areas`
-- Worked on OWASP ZAP for security testing with custom deployment for proxy
-- Worked on Snyk integration
-- Optimization of LLM based internal Project for dockerization and efficeiency from disk to network to name a few
-- Deploying vLLM with AWS ASG and VPC PrivateLink based product Infra
-- Audited whether best practises are followed across projects
+`Key Contributions`
+- Implemented **OWASP ZAP** for automated security testing with custom proxy deployment.  
+- Integrated **Snyk** for continuous vulnerability detection in CI/CD pipelines.  
+- Optimized an **internal LLM project** for containerization, disk/network efficiency, and faster inference.  
+- Deployed **vLLM on AWS** using **Auto Scaling Groups and VPC PrivateLink**, enabling secure, scalable ML workloads.  
+- Conducted **DevSecOps best-practice audits** across multiple projects, ensuring compliance and reliability.  
+
 
 ### Ksctl
 {{< image src="/img/experience/ksctl-logo.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="10" >}}
-`Tenure`: 07/2022 to Present
 
-`Role`: **Founder**
+`Tenure`: 07/2022 to Present  
+`Role`: **Founder**  
 
-`Knowledge Areas`
-- Go Programming
-- Kubernetes in and out
-- aws go sdk, civo go sdk, azure go sdk
-- Makefile, e2e tests, mocks
-- github actions
+`Key Contributions`
+- Developed **Ksctl**, a **single-command CLI** for fully automated Production/Dev/Staging Kubernetes cluster creation.  
+- Engineered a **network-resilient, concurrent SSH bootstrapper**, reducing setup time by **20×**.  
+- Integrated **carbon-aware provisioning**, recommending regions and instance types with lower emissions and cost.  
+- Built a **dynamic GitHub Actions runner pipeline (0→N→0)** that scales without Kubernetes, minimizing idle costs.  
+- Unified **multi-cloud support (EKS, GKE, AKS, K3s, kubeadm)** and **addon management** under a single CLI interface.  
 
 
 ### Kubesimplify
 {{< image src="/img/experience/kubesimplify.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="10" >}}
-`Tenure`: 03/2022 to 07/2024
 
-`Role`: **Ambassador & Maintainer and Creator of Ksctl**
+`Tenure`: 03/2022 to 07/2024  
+`Role`: **Ambassador & Maintainer (Creator of Ksctl)**  
 
-`Knowledge Areas`
-- Wrote blogs on kubesimplify [**Refer**](/posts/blogs/)
-- Done some Twitch sessions about Golang and general Go Development
-- Ksctl Creator and Maintainer
+`Key Contributions`
+- Authored blogs and tutorials on Kubernetes and Go ([**Refer**](/posts/blogs/)).  
+- Conducted **Twitch live sessions** on cloud-native development and Golang best practices.  
+- Maintained and improved **Ksctl**, contributing to CNCF-aligned open-source tooling.  
 
 
 ### Viamagus
 {{< image src="/img/experience/viamagus.jpg" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="5" >}}
-`Tenure`: 03/2023 to 09/2023
 
-`Role`: **DevOps Intership**
+`Tenure`: 03/2023 to 09/2023  
+`Role`: **DevOps Intern**  
 
-`Knowledge Areas`
-- Learning in domains of Mobile app development and publish in production.
-- Snyk integration with projects
-- Kubernetes Migration to EKS and use Gateway API via Nginx Controller
-- Dockerization of existing nodeJS apps
-- Migration step for reverse-proxy from the apache HTTP server to Nginx
-- Jenkins job automation to create CLI tool for automating the jenkins job creation
-- letsencrypt for SSL cert generation
-- Promethus for capturing the live metrics from existing running VMs
-- migrating Gitlab repos to AWS codecommit
+`Key Contributions`
+- Supported **Kubernetes migration to EKS** with **NGINX Gateway API** for traffic management.  
+- **Dockerized Node.js applications** and migrated reverse proxy from Apache → NGINX.  
+- Automated **Jenkins job creation** using a CLI tool, streamlining CI/CD workflows.  
+- Integrated **Snyk** for vulnerability scanning and **Prometheus** for real-time observability.  
+- Migrated repositories to **AWS CodeCommit** and automated SSL provisioning with **Let’s Encrypt**.  
 
 
 ## Interests
-- Entire Project lifecycle
-- Managing Development and how we go ahead with deployment models
-- Infrastructure side as well
-- Programming tools which help automate tasks
+- Full **project lifecycle management**, from development to deployment.  
+- Designing **scalable and sustainable cloud-native infrastructures**.  
+- Automating repetitive tasks with **programming and DevOps tools**.  
+- Contributing to **open-source projects** that improve developer productivity and sustainability.
 
 ## Tools and Technologies
 
