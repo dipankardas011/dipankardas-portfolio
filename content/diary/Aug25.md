@@ -5,6 +5,9 @@ author = "Dipankar Das"
 description = "Let's talk about my August 2025"
 +++
 
+# Date 2025-08-30 2025-08-31
+* new platform k8s cluster agent and how to make a good arch for both sync and asunc needs via events.
+
 # Date 2025-08-25 2025-08-29
 * learning about how to implementing rate limiting to a go backend system
 * circuit breaker logic for a specific failure scenario for a specific api call
