@@ -8,7 +8,11 @@ cover = "img/cover.png"
 
 # About Me
 
-{{< image src="/img/profile.jpg" alt="profile image" position="center" style="border-radius: 8px;" scale="2" >}}
+{{< image 
+    src="/img/profile_v2.jpeg" 
+    alt="profile image" 
+    style="float: left; margin: 0 15px 15px 0; border-radius: 8px; width: 350px;" 
+>}}
 
 I am **Dipankar Das**, an automation and platform engineer passionate about building **reliable, scalable, and sustainable systems** that eliminate repetitive tasks and accelerate developer productivity. I specialize in **DevOps, Kubernetes, cloud-native platforms, and infrastructure automation**, with a strong interest in **environmentally conscious computing** and reducing the carbon footprint of cloud workloads.  
 
