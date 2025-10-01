@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my September 2025"
 +++
 
+# Date 2025-09-23 2025-09-30
+* working on kubernetes production frappe app deployment with different volume strategies.
+* Implementation of Support for kubmin dashboard.
+* new dashboard as a product `kubmin` inside ksctl company.
+* working with terraform module of cloudflare for email routing and forward to google groups and configurations needed.
+
 # Date 2025-09-17 2025-09-22
 * learning about how exactly RAPL and non RAPL (estimator modals work). Current challenges with making energy per process/container inside a non RAPL environment like CLoud provider on demand VMs.
 * Some best practising of creating AI Agent Tools form antropic.
