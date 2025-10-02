@@ -5,6 +5,9 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-02
+* learning about how to create Finite State machines in go to make complex workflows easier to manage.
+
 # Date 2025-10-01
 * learning about AWS SES configurations and also email anti spam and DKIM, SPF, DMARC records.
 * working on new features like email notifications.
