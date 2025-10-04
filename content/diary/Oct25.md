@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-03 2025-10-04
+* was able to make the cluster create and cluster delete statemachine work with Emails and SES with postHooks.
+* nice waterfall hiking
+
 # Date 2025-10-02
 * learning about how to create Finite State machines in go to make complex workflows easier to manage.
 
