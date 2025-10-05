@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-05
+* working on NATS Subscrioption Terminate vs NACK and ACK in production practical usecase.
+* Learning about complicaated EMAIL SPF entrie and email forwardings.
+* overall system architecture and the design decisions
+
 # Date 2025-10-03 2025-10-04
 * was able to make the cluster create and cluster delete statemachine work with Emails and SES with postHooks.
 * nice waterfall hiking
