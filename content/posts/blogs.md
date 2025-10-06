@@ -6,6 +6,7 @@ description = "Tech blogs"
 cover = "img/cover-blogs.png"
 +++
 
+
 # Tech Blogs
 
 ## Complete Go delve setup for advance debugging
@@ -166,5 +167,15 @@ cover = "img/cover-blogs.png"
 {{< image src="https://cdn.hashnode.com/res/hashnode/image/upload/v1647950304968/X2_I11UsZX.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress,format&format=webp" alt="my-learnings-and-achievements-from-2022" position="center" style="border-radius: 8px;" >}}
 
 [Blog Link](https://dipankardas011.hashnode.dev/create-your-own-k8s-cluster-in-azure)
+
+
+# Personal Blogs
+
+## My September 2025 Experience
+> A recap of my exciting tech journey in September 2025
+
+{{< image src="/img/blogs/sept2025experience.png" alt="september experience 2025 cover image" style="border-radius: 8px;" >}}
+[Blog Link]({{< baseurl >}}posts/blogs/septwrap25)
+
 
 # [My Personal blog site](https://dipankardas011.hashnode.dev/)

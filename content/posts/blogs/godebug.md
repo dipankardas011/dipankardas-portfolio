@@ -1,4 +1,3 @@
-
 +++
 title = "Confiuration for making Delve work with neovim"
 author = "Dipankar Das"
