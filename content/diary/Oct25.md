@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-06
+* Tried out n8n workflow to start automating my social media posts.
+* learning about why do people use longhorn and its usacase where it shines.
+
 # Date 2025-10-05
 * working on NATS Subscrioption Terminate vs NACK and ACK in production practical usecase.
 * Learning about complicaated EMAIL SPF entrie and email forwardings.
