@@ -12,7 +12,6 @@ cover = "img/blogs/sept2025experience.png"
 What an incredible September it's been! This past month, I've been diving deep into some cutting-edge tech and exciting new projects. Here's a quick recap of my highlights:
 
 **Cloud-Native & DevOps Adventures:**
-*   Successfully deployed Kubernetes production Frappe apps with diverse volume strategies.
 *   Spearheaded the Email support with AWS SES integrations and came to know about DMARC, DKIM, and SPF configurations.
 *   Explored advanced Terraform modules for Cloudflare, focusing on email routing and Google Groups integration.
 *   Delved into the intricacies of `helm upgrade` for existing releases using `ksctl/ksctl` go package.
