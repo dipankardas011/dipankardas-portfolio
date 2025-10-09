@@ -5,6 +5,14 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-07 2025-10-09
+* learning about k8s sidecar containers. new feature
+* learning about stripe compitator polar
+* bluetooth sound systems differen codec and when its used aka available bandwidth and quality tradeoff.
+* working on k8s for frappe
+* otel app instrumentation for better logging and tracing.
+* writing blog post with n8n aka automation. ;)
+
 # Date 2025-10-06
 * Tried out n8n workflow to start automating my social media posts.
 * learning about why do people use longhorn and its usacase where it shines.
