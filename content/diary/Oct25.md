@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-10 2025-10-12
+* learning about placement groups usage any Cloud provider also the microsecond latencies and how to measure them.
+* learning about how to instrument a go app with opentelemetry for better logging and tracing for a production workload having multiple external services and find bottlenecks.
+* learning about longhorn RWX across workernodes and how it does replication among them and what happens if all the nodes loose data when its being used by applications.
+* learning about Linux Bluetooth and Audio codecs and AAC vs HAAC... and things ike pipewire and bluez and alsa and pulseaudio and how they interact with each other.
+* k8s sidecar containers which is now official feature since k8s 1.30
+
 # Date 2025-10-07 2025-10-09
 * learning about k8s sidecar containers. new feature
 * learning about stripe compitator polar
