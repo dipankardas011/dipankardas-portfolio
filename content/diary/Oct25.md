@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-13
+* learning about configMapGenerator and SecretMapGenerator with disable random suffix for kustomize. with debugging env variables play.
+* learning about when do we use Otel Event vs Otel Span for tracing the HARD WAY.
+* when to use otel span at all and all about the different context propagation methods and its evential consistency property which traces have.
+
 # Date 2025-10-10 2025-10-12
 * learning about placement groups usage any Cloud provider also the microsecond latencies and how to measure them.
 * learning about how to instrument a go app with opentelemetry for better logging and tracing for a production workload having multiple external services and find bottlenecks.
