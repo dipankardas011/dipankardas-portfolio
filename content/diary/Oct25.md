@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-14
+* learning about _helpers.tpl and hooks in Helm charts. some more advance reusable functions.
+* learning of otel context propgatioand sand when to switch off/on telemetry for certain parts of the code based on the logic.
+
 # Date 2025-10-13
 * learning about configMapGenerator and SecretMapGenerator with disable random suffix for kustomize. with debugging env variables play.
 * learning about when do we use Otel Event vs Otel Span for tracing the HARD WAY.
