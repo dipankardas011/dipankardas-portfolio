@@ -5,6 +5,9 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-15 2025-10-16
+* working on helm hooks and some of the edge cases associated with them.
+
 # Date 2025-10-14
 * learning about _helpers.tpl and hooks in Helm charts. some more advance reusable functions.
 * learning of otel context propgatioand sand when to switch off/on telemetry for certain parts of the code based on the logic.
