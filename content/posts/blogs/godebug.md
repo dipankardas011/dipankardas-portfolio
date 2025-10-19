@@ -4,6 +4,7 @@ author = "Dipankar Das"
 date = 2025-04-22
 description = "Configuration for making Delve work with neovim"
 cover = "https://raw.githubusercontent.com/go-delve/delve/master/assets/delve_horizontal.png"
+tags = ["go", "debugging", "troubleshooting"]
 [build]
   list = 'never'
   render = 'always'

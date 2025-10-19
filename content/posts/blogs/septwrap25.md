@@ -4,6 +4,7 @@ author = "Dipankar Das"
 date = 2025-10-06
 description = "A recap of my exciting tech journey in September 2025"
 cover = "img/blogs/sept2025experience.png"
+tags = ["personal"]
 [build]
   list = 'never'
   render = 'always'

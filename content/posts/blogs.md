@@ -9,6 +9,12 @@ cover = "img/cover-blogs.png"
 
 # Tech Blogs
 
+## When Docker's Firewall Blocks Your Virt-Manager VM
+> How to resolve network connectivity issues between Docker and virt-manager VMs
+
+{{< image src="/img/blogs/networkcoexistence.png" alt="september experience 2025 cover image" style="border-radius: 8px;" >}}
+[Blog Link]({{< baseurl >}}posts/blogs/networkcoexistence)
+
 ## Complete Go delve setup for advance debugging
 > A Working Go debegging setup with neovim having stdout and stdin capabilities
 
