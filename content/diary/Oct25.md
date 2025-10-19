@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-17 2025-10-19
+* working on kepler and understanding how it used to work with the model estimators.
+* learning about cpu/\[0,N\]/msr, rapl and how does kepler use that to estimate.
+* wrote a blog post on resolve-virtmanager-network
+* able to make zero downtime deployments when there is a event based worker processing events and about draining it before making releases, all thanks to helm 
+* learning how to better check for suitable limits, requests for cpu and memory for k8s workloads.
+
 # Date 2025-10-15 2025-10-16
 * working on helm hooks and some of the edge cases associated with them.
 
