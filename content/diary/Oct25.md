@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-20
+* diwali celebrations :)
+* learning about how to use longhorn and a hack for putting things inside the workernodes in a EKS setup via daemonset.
+* Learning about go embed for sql migrations and how to use it with golang-migrate tool.
+
 # Date 2025-10-17 2025-10-19
 * working on kepler and understanding how it used to work with the model estimators.
 * learning about cpu/\[0,N\]/msr, rapl and how does kepler use that to estimate.
