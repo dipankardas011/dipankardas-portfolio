@@ -5,6 +5,11 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-21 2025-10-23
+* working on Gateway APi in k8s, helm upgrade hooks and some more longhorn specific learning
+* EKS deployment with Terraform with cluster autoscaler provisined with IRSA and OIDC things.
+* learning about RAPL and its sile structure and what all info it provides us with.
+
 # Date 2025-10-20
 * diwali celebrations :)
 * learning about how to use longhorn and a hack for putting things inside the workernodes in a EKS setup via daemonset.
