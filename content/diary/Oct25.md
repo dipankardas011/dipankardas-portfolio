@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-24
+* learning when to use RWO based storage class in k8s. Using Cluster Backup says a lot of things.
+* learning about longhron backup and velero backups.
+
 # Date 2025-10-21 2025-10-23
 * working on Gateway APi in k8s, helm upgrade hooks and some more longhorn specific learning
 * EKS deployment with Terraform with cluster autoscaler provisined with IRSA and OIDC things.
