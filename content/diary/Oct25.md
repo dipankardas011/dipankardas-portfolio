@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-25 2025-10-26
+* learning about SCI calculation and some of the proper way to cacluate some like emboddied emissions
+* some learning on the virtio on what does these virtual devices mean
+
 # Date 2025-10-24
 * learning when to use RWO based storage class in k8s. Using Cluster Backup says a lot of things.
 * learning about longhron backup and velero backups.
