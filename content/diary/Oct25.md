@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my October 2025"
 +++
 
+# Date 2025-10-27 2025-10-31
+* working on the EKS cluster autoscaler, Some nodepool management with SPOT instances and on demand instances mix.
+* making a application stateless and some of the weird things about `defaultMode` in k8s volumeMount, `root` as uid for new folder mount as volume and guid managed by secerutyPolicy of fsGroup.
+* learning about how to make nice UI with the Help of AI ;)
+* Some nice rework and complex problems to solve
+* virtualization space of linux and some study time
+
 # Date 2025-10-25 2025-10-26
 * learning about SCI calculation and some of the proper way to cacluate some like emboddied emissions
 * some learning on the virtio on what does these virtual devices mean
