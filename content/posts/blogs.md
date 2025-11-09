@@ -9,8 +9,8 @@ cover = "img/cover-blogs.png"
 
 # Tech Blogs
 
-## My learnings from instrumenting an application with OpenTelemetry
-> It give guidelines and advice on why when and how to use OpenTelemetry to instrument your projects.
+## My First Two Months with OpenTelemetry: A Practical Guide
+> A developer's practical guide to instrumenting applications with OpenTelemetry, sharing key learnings on spans, context propagation, and sampling.
 
 {{< image src="/img/blogs/otel-cover.png" alt="otel-cover" style="border-radius: 8px;" >}}
 [Blog Link]({{< baseurl >}}posts/blogs/otel)

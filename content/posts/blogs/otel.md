@@ -1,8 +1,8 @@
 +++
-title = "My learnings from instrumenting an application with OpenTelemetry"
+title = "My First Two Months with OpenTelemetry: A Practical Guide"
 author = "Dipankar Das"
 date = 2025-11-07
-description = "It give guidelines and advice on why when and how to use OpenTelemetry to instrument your projects."
+description = "A developer's practical guide to instrumenting applications with OpenTelemetry, sharing key learnings on spans, context propagation, and sampling."
 cover = "img/blogs/otel-cover.png"
 tags = ["go", "otel", "troubleshooting", "debugging", "grafana", "prometheus"]
 [build]
@@ -10,124 +10,201 @@ tags = ["go", "otel", "troubleshooting", "debugging", "grafana", "prometheus"]
   render = 'always'
 +++
 
-## What exactly is OpenTelemetry?
+"Why is this request so slow?" "Where did the error originate?" "What's the actual path of a user request through our microservices?" If you've ever found yourself debugging a complex or distributed system, these questions are probably all too familiar. For the past two months, I've been diving deep into OpenTelemetry (OTEL), and it has fundamentally changed how I answer them.
 
-OpenTelemetry (often abbreviated as OTEL) is an open-source observability framework that provides a set of tools, APIs, and SDKs for collecting, processing, and exporting telemetry data from applications and services.
+This post isn't just a theoretical overview; it's a collection of my practical learnings and takeaways from instrumenting a real-world application. I'll cover the why, what, and how of using OpenTelemetry, so you can avoid some of the hurdles I encountered.
 
-It changes how we monitor our application with Observability data like Traces, Metrics and Logs (3 core pillars of observability) to help developers and operators understand the performance and behavior of their software systems.
+## Why Bother? The Payoff of Good Instrumentation
+Before we get into the technical details, let's talk about the motivation. What do you actually get in return for the effort of instrumenting your application? The answer is **clarity**.
 
-It has 2 main components which you need to take note of:
-1. Programming APIs and SDKs: OpenTelemetry provides language-specific APIs and SDKs (like Go, Java, Python, etc.) that developers can use to instrument their applications. These SDKs allow you to create and manage telemetry data, such as traces and metrics.
-2. Collectors and Exporters: OpenTelemetry includes a collector component that can receive telemetry data from instrumented applications. The collector can process and export this data to various backends, such as Promtheus, Jaeger, Tempo, Loki, etc.
+When your application is properly instrumented with traces, metrics, and logs, you can build powerful dashboards in tools like Grafana. This gives you a unified view of your system's health and behavior.
 
-the the collector is the main component in this as it manages the event comming from various instrumented applications perform some processing on them and export them to the desired backend. Thats it by this we get a unified way to collect and export telemetry data from different applications and services. only otel sdk is needed to be installed in the application and a single grpc/http endpoint to connect and you are ready to go. and all the main storage part is handled by the upstream backends like prometheus, jaeger, loki, etc.
+1.  **Deep Visibility with Traces**: Understand what's happening under the hood of your application. You can see which functions are called, how long they take, and where failures occur. A distributed trace can often make a complex stack trace much easier to follow.
+2.  **Correlated Traces and Logs**: One of the most powerful features is correlating traces with logs. With a single `trace_id`, you can instantly find all the logs associated with a specific request, even as it hops across multiple services. ![searching-traceId](/img/blogs/tracetolog001.png)
+3.  **Powerful Metrics**: Monitor key indicators of your application's health. Are requests per second dropping? Is the error rate for a specific service increasing? Are your background workers keeping up with the queue? Metrics help you answer these questions proactively.
+4.  **Insightful Dashboards**: You can create detailed admin panels and operational dashboards using only your OTEL data, providing instant insights without needing a separate frontend. Here’s an example of a dashboard showing application health:
+    ![](/img/blogs/tracetolog004.png)
 
-## what are the ways we can instrument an application with OpenTelemetry?
-1. Manual Instrumentation: This involves adding OpenTelemetry SDK calls directly into your application code. You can use the SDK to create spans, record metrics, and log events at specific points in your code. This method provides fine-grained control over what telemetry data is collected but requires more effort from developers. (I will not tell lies this is the most common way of instrumenting an application, and is actually fun but can be tedious at times)
-2. Automatic Instrumentation: Some OpenTelemetry SDKs provide automatic instrumentation capabilities. This means that the SDK can automatically instrument certain libraries and frameworks without requiring manual code changes. This is often done through instrumentation plugins or middleware that intercepts calls to popular libraries. This method is easier to implement but may not provide as much control over the collected data. (This is very easy to get going but may not cover all use cases, You also need to know how your application runs and whatare the system level tools it runs on like in python check if it rungs via WSGI/ASGI server or simple script, ....)
+## The Core Concepts: What is OpenTelemetry?
 
-> **Note**: If you are the owner/developer of the application you can go for manual instrumentation as you have full control over the codebase, but if you are working on a 3rd party application where you dont have access to the codebase automatic instrumentation is the way to go as you most likely will not be able to change the codebase. But Remember with automatic instrumentation it can sometimes make more resources than manual instrumentation as it instruments everything by default.
+OpenTelemetry (OTEL) is an open-source observability framework that provides a standardized way to collect, process, and export telemetry data (traces, metrics, and logs).
 
+It has two main parts:
+1.  **APIs and SDKs**: Language-specific libraries (for Go, Python, Java, etc.) that you use to generate telemetry data from your application.
+2.  **The Collector**: A central component that receives data from your instrumented applications. The collector can process this data (e.g., add attributes, filter, or batch) and export it to one or more backends like Jaeger, Prometheus, or Loki. Example configuration
+```yaml
+receivers:
+  # Receive traces and logs via OTLP (standard ports)
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
 
-## What you actually get in return so that you are motivated to instrument your application with OpenTelemetry?
-Yes you get the unified way to collect telemetry data from your application but what actual benefits you get from it.
-When you have all the 3 components working then we can create grafana dashboard with the datasources set to those backends.
+processors:
+  # Batch for efficient processing
+  batch:
+    timeout: 5s
+    send_batch_size: 512
 
-1. Now as you have added traces information you can understand what actually is happening under the hood of your application. what functions get called, time it takes even some times you don't even need stack trace as you can actually see the function calls into the span which failed (easier to follow along)
-2. Bonus with the first point of traces now you can even coorelate traces with your logs and by that when you want to get logs for any particular span (for now just think of span as a function call)
-3. With Metrics you can do something interesting like monitor some parts of your application like request per second, error rate of specific parts of your system, Get to know which backgrounder worker which has subscribed to a queue is failing or passing, are the events being properly loadbalanced among the workers, etc.
-4. You can even make a good enough admin dashboard without the need for additional frontend just your otel and your grafana setup is enough to give you insights about your application health. Example Admin dashboard ![](/img/blogs/tracetolog004.png)
+  # Memory limiter to prevent OOM
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 256
+    spike_limit_mib: 64
 
-## My takeaways and learnings from instrumenting an application with OpenTelemetry
+exporters:
+  # Export to stdout for local debugging
+  debug:
+    verbosity: detailed
+    sampling_initial: 10
+    sampling_thereafter: 50
 
-### What the is span and when to use them?
+  # Export traces to Jaeger
+  otlp/jaeger:
+    endpoint: jaeger:4317
+    tls:
+      insecure: true
 
-Spans are the building blocks of traces in OpenTelemetry. A span represents a single operation or unit of work within a trace. Each span has a start time and an end time, and it can contain additional metadata such as attributes, events, and status information.
+  # Export logs to Loki via OTLP
+  otlphttp/loki:
+    endpoint: http://loki:3100/otlp
+    tls:
+      insecure: true
 
-> **NOTE**: These are expensive resource so use them wisely.
-> Recommended way is to use it for api calls to external APIs/services like Database, cache, instead of tainting all the function call.
+  # Export metrics to Prometheus via Remote Write
+  prometheusremotewrite:
+    endpoint: http://prometheus:9090/api/v1/write
+    tls:
+      insecure: true
+    resource_to_telemetry_conversion:
+      enabled: true
 
-For Programming language like Go we would need to have context variabled passed along with the functions/method you need to add to the otel visibility then only you can work with creating addSpan things.
+extensions:
+  health_check:
+  zpages:
 
-Also our goal is to only add functions/methods to traces only if they are something significant otherwise too many spans will make your life harded to reack what is happening.
+service:
+  extensions: [health_check, zpages]
 
-Real Workload example of how does traces and logs correlate with the help of service_namespace in grafana
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug, otlp/jaeger]
 
-![correlation-traces-logs](/img/blogs/tracetolog002.png)
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug, otlphttp/loki]
 
-### Good Spans vs Bad Spans
-
-Instead of focusing on a hard number like 50, the key is to ensure your spans are **meaningful** and **manageable**.
-
-**Focus on Key Operations (The Good Spans):**
-- **External Boundaries:** A span for the inbound request to your service (the Root Span).
-- **Network Calls:** Spans for external HTTP requests, RPC calls (gRPC), and database queries.
-- **Messaging:** Spans for producing and consuming messages from queues/topics.
-- **Significant Internal Steps:** Spans for important, time-consuming business logic or internal function calls (e.g., `process_payment`, `generate_report`).
-
-**Avoid Excessive Spans (The Bad Spans):**
-- **Trivial or Repetitive Functions:** Creating a new span for every single getter/setter or a quick helper function inside a loop rapidly bloats your trace without adding useful context.
-- **High Cardinality in Names:** Span names should be generic (e.g., `GET /users`) not include IDs or dynamic values (e.g., `GET /users/123`). Use **span attributes** for unique identifiers.
-
-**Leverage Other Signals:**
-- For single points in time, like a state change or an exception, use a **Span Event** instead of creating a whole new span.
-- For verbose, general debugging, continue to use **Logs** and ensure they are correlated to the active `trace_id` and `span_id`.
-
-
-### Why we need Events for spans?
-In spans even though we have start time and end time but sometime we need to know what actually happened inside the span during its lifetime. For that we have events which can be added to spans to give more context about what happened during the span's execution.
-
-Also this feature can be useful when you want to log some important checkpoints inside a span without the need to create new spans for them.
-
-Example use case to lot what all write happened in a database without creating database write span for each write operation.
-![event-example](/img/blogs/tracetolog003.png)
-
-### Evential consistency
-Traces and spans in OpenTelemetry are designed to be eventually consistent. This means that the telemetry data collected by OpenTelemetry may not be immediately available for analysis or querying.
-
-
-### Propogate across services
-
-Most of the times used for event based or API based microservices where one service calls another service and you want to have the full trace of the request as it flows through multiple services.
-
-For those we have `TextMapPropagator` which helps in propagating the trace context across service boundaries. This allows you to maintain the trace context as requests move between different services, enabling end-to-end tracing of distributed systems. Mostly are stored as Headers in HTTP/gRPC calls. or for a message broker you can set a header/metadata field for the message/event with the trace context.
-
-```go
-type TextMapPropagator interface {
-
-	// Inject set cross-cutting concerns from the Context into the carrier.
-	Inject(ctx context.Context, carrier TextMapCarrier)
-
-	// Extract reads cross-cutting concerns from the carrier into a Context.
-	// Implementations may check if the carrier implements ValuesGetter,
-	// to support extraction of multiple values per key.
-	Extract(ctx context.Context, carrier TextMapCarrier) context.Context
-
-	// Fields returns the keys whose values are set with Inject.
-	Fields() []string
-}
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug, prometheusremotewrite]
 ```
 
-> Using with the help of Headers is quite easy to implement and mostly available across message or api based communication.
+> Where the core pipelining happens under `service.pipelines.(traces|logs|metrics)`
 
-### Sampling strategies
-When instrumenting applications with OpenTelemetry, it's important to consider sampling strategies to manage the volume of telemetry data collected. Sampling helps reduce the amount of data sent to backends, which can help control costs and improve performance.
-There are several sampling strategies available in OpenTelemetry, including:
-1. **Head-based Sampling**: This strategy samples traces based on the initial part of the trace (the "head"). For example, you might choose to sample only a certain percentage of traces that start with specific attributes or conditions.
-2. **Tail-based Sampling**: This strategy samples traces based on their duration or other criteria. For example, you might choose to sample only traces that exceed a certain duration threshold.
+This architecture provides a unified layer for instrumentation. You only need to add the OTEL SDK to your application and point it to a collector. The collector then handles the complexity of sending data to your chosen storage backends.
 
-Choosing the right sampling strategy depends on your application's requirements, the volume of telemetry data generated, and the capabilities of your backend systems. It's important to strike a balance between collecting enough data for effective monitoring and analysis while avoiding excessive data volumes that can lead to increased costs and performance issues. For more details check [Official Sampling Documentation](https://opentelemetry.io/docs/concepts/sampling/)
+### What is a Span and When Should I Use It?
 
+Spans are the building blocks of a trace. A single span represents one unit of work, like an API call, a database query, or a function execution. It has a start time, an end time, and associated metadata like attributes and events.
 
-### Linking Spans
-Usecase I came accross was when I had to have a grouped backgroundjob processing event which has multiple independent events running concurrency and consumed by independent workers. Here I wanted to have a grouped view of all the spans created by those independent workers under a single parent span to have a better visibility of the whole grouped job processing. And tracking of what all jobs were part of that grouped job.
+> **Note**: Spans are not free. Creating too many of them can add performance overhead and make traces noisy and difficult to read.
 
-![linking-spans](/img/blogs/tracetolog005.png)
+My rule of thumb: **create spans for operations that have a meaningful duration or cross a system boundary.** Good candidates for spans include:
+-   External API calls (e.g., to a third-party service).
+-   Database queries.
+-   Publishing or consuming messages from a queue.
+-   Significant, business-critical function calls.
 
-## Conclusion
+In Go, this often means passing a `context.Context` variable through your function calls so you can create new spans that are correctly nested under their parent.
 
-Instrumenting an application with OpenTelemetry can provide significant benefits in terms of observability and monitoring. By following best practices for span creation, event logging, context propagation, and sampling strategies, you can effectively leverage OpenTelemetry to gain insights into your application's performance and behavior. However, it's important to carefully consider the design and implementation of your instrumentation to ensure that it meets your specific use cases and requirements.
+![Example of correlated traces and logs in Grafana](/img/blogs/tracetolog002.png)
 
-Every application has different observability needs, so it's essential to tailor your OpenTelemetry implementation accordingly. Regularly review and refine your instrumentation strategy to ensure it continues to provide value as your application evolves.
+### Good Spans vs. Bad Spans
+
+The goal is to create **meaningful** and **manageable** traces.
+
+**DO:**
+-   **Trace Boundaries**: Create a root span for the initial inbound request to your service.
+-   **Trace Network Calls**: Wrap external HTTP requests, RPC calls, and database queries in spans.
+-   **Use Generic Names**: Name your spans with low-cardinality, generic names (e.g., `HTTP GET /users/{id}`).
+-   **Use Attributes for Details**: Store dynamic or high-cardinality values like user IDs or request parameters as **span attributes**.
+
+**DON'T:**
+-   **Trace Trivial Functions**: Avoid creating spans for simple getters, setters, or helper functions inside a tight loop. This adds noise, not clarity.
+-   **Use Dynamic Span Names**: A span name like `GET /users/123` creates a new "class" of span for every user, which can overwhelm your observability backend.
+
+### When to Use Events Instead of Spans
+
+Sometimes, you want to mark a point-in-time occurrence within a span's lifecycle without creating a whole new span. For this, use **Span Events**.
+
+Events are perfect for logging important checkpoints. For example, instead of creating a new span for every write in a batch database operation, you could have a single `db:batch_write` span and add an event for each record being written.
+
+![Example of using events within a span](/img/blogs/tracetolog003.png)
+
+## The "How": Instrumenting Your Application
+
+There are two primary ways to instrument an application.
+
+1.  **Manual Instrumentation**: You add OTEL SDK calls directly into your code. This gives you maximum control but requires more upfront effort. If you own the codebase, this is often the best approach for creating clean, meaningful telemetry.
+2.  **Automatic Instrumentation**: Some SDKs can automatically instrument popular libraries and frameworks without code changes. This is great for getting started quickly or for instrumenting third-party applications where you can't modify the source. However, it can sometimes generate more data than you need.
+
+### Propagating Context Across Services
+
+In a microservices architecture, you need a way to connect the spans from different services into a single, end-to-end trace. This is handled by **Context Propagation**.
+
+The `TextMapPropagator` is a tool that injects trace context (like the `trace_id`) into and extracts it from a carrier. For HTTP services, the carrier is usually the request headers. For message queues, it could be the message metadata.
+
+Here is a conceptual example of how it works in a client-server interaction:
+
+```go
+// Client Side: Injecting the context into HTTP headers
+req, _ := http.NewRequest("GET", "http://example.com", nil)
+// The propagator adds headers like "traceparent" to the request
+propagator.Inject(ctx, propagation.HeaderCarrier(req.Header)) 
+client.Do(req)
+
+// Server Side: Extracting the context from headers
+// The server reads headers from the incoming request
+ctx := propagator.Extract(r.Context(), propagation.HeaderCarrier(r.Header))
+// Now, any spans created will be part of the original trace
+```
+
+This mechanism is what allows you to see the full journey of a request across service boundaries.
+
+### Managing Data Volume with Sampling
+
+Instrumenting every single request can generate a massive amount of data and become expensive. **Sampling** is the solution. It allows you to control the volume of telemetry data you send to your backend.
+
+There are two main strategies:
+1.  **Head-based Sampling**: The decision to sample a trace is made at the very beginning (the "head"). For example, you might decide to keep only 10% of all traces. It's simple and efficient but means you might discard traces that later turn out to be interesting (e.g., ones that contain an error).
+2.  **Tail-based Sampling**: The decision is made after the trace has been completed (at the "tail"). This allows you to make more intelligent decisions, such as keeping all traces that contain an error or are longer than a certain duration. This is more powerful but requires a collector setup capable of buffering and analyzing traces.
+
+For more details, check the [Official Sampling Documentation](https://opentelemetry.io/docs/concepts/sampling/).
+
+### Linking Spans for Complex Workflows
+
+What if you have a workflow where one event triggers multiple independent background jobs? The jobs aren't children of the initial span in a traditional sense, but they are related. For this, you can use **Span Links**.
+
+I used this for a background job processing system. A single "group job" event would be consumed by multiple workers concurrently. By linking the spans from each worker back to the original parent span, I could create a unified view of the entire distributed operation.
+
+![Example of linking spans for a grouped job](/img/blogs/tracetolog005.png)
+
+## Conclusion: My Key Takeaways
+
+Instrumenting an application with OpenTelemetry is a journey, but the payoff in observability is immense. It's more than just a tool; it's a shift in how you think about and monitor your systems.
+
+Here are my biggest takeaways from the last two months:
+-   **Start with the "Why"**: Understand what you want to observe before you write a single line of instrumentation.
+-   **Spans are for Boundaries**: Use spans for network, database, or significant business logic boundaries. Use events for everything else.
+-   **Context is King**: Master context propagation. It's the key to unlocking true distributed tracing.
+-   **Sample Intelligently**: Don't drown in data. Start with head-based sampling and explore tail-based sampling as your needs evolve.
+
+Every application has different observability needs, so tailor your implementation accordingly. Start small, iterate, and continuously refine your strategy. The clarity you'll gain into your application's behavior is well worth the effort.
 
 Thank you for reading!
