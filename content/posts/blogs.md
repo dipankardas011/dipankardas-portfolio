@@ -9,10 +9,16 @@ cover = "img/cover-blogs.png"
 
 # Tech Blogs
 
+## My learnings from instrumenting an application with OpenTelemetry
+> It give guidelines and advice on why when and how to use OpenTelemetry to instrument your projects.
+
+{{< image src="/img/blogs/otel-cover.png" alt="otel-cover" style="border-radius: 8px;" >}}
+[Blog Link]({{< baseurl >}}posts/blogs/otel)
+
 ## When Docker's Firewall Blocks Your Virt-Manager VM
 > How to resolve network connectivity issues between Docker and virt-manager VMs
 
-{{< image src="/img/blogs/networkcoexistence.png" alt="september experience 2025 cover image" style="border-radius: 8px;" >}}
+{{< image src="/img/blogs/networkcoexistence.png" alt="firewall-blocked-for-vm" style="border-radius: 8px;" >}}
 [Blog Link]({{< baseurl >}}posts/blogs/networkcoexistence)
 
 ## Complete Go delve setup for advance debugging

@@ -2,8 +2,8 @@
 title = "My learnings from instrumenting an application with OpenTelemetry"
 author = "Dipankar Das"
 date = 2025-11-07
-description = "It give guidelines and advice on why, when and how to use OpenTelemetry to instrument your projects."
-cover = "https://github.com/dipankardas011/wae/blob/main/cover.png?raw=true"
+description = "It give guidelines and advice on why when and how to use OpenTelemetry to instrument your projects."
+cover = "img/blogs/otel-cover.png"
 tags = ["go", "otel", "troubleshooting", "debugging", "grafana", "prometheus"]
 [build]
   list = 'never'
