@@ -207,4 +207,6 @@ Here are my biggest takeaways from the last two months:
 
 Every application has different observability needs, so tailor your implementation accordingly. Start small, iterate, and continuously refine your strategy. The clarity you'll gain into your application's behavior is well worth the effort.
 
+Obviously, this is just the tip of the iceberg when it comes to OpenTelemetry. There's a whole ecosystem of tools and best practices to explore. But I hope this practical guide gives you a solid foundation to start your own observability journey.
+
 Thank you for reading!
