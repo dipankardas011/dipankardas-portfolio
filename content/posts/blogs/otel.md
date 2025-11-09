@@ -36,11 +36,11 @@ When you have all the 3 components working then we can create grafana dashboard 
 1. Now as you have added traces information you can understand what actually is happening under the hood of your application. what functions get called, time it takes even some times you don't even need stack trace as you can actually see the function calls into the span which failed (easier to follow along)
 2. Bonus with the first point of traces now you can even coorelate traces with your logs and by that when you want to get logs for any particular span (for now just think of span as a function call)
 3. With Metrics you can do something interesting like monitor some parts of your application like request per second, error rate of specific parts of your system, Get to know which backgrounder worker which has subscribed to a queue is failing or passing, are the events being properly loadbalanced among the workers, etc.
-4. You can even make a good enough admin dashboard without the need for additional frontend just your otel and your grafana setup is enough to give you insights about your application health.
+4. You can even make a good enough admin dashboard without the need for additional frontend just your otel and your grafana setup is enough to give you insights about your application health. Example Admin dashboard ![](/img/blogs/tracetolog004.png)
 
 ## My takeaways and learnings from instrumenting an application with OpenTelemetry
 
-### What the hack are spans and when to use them?
+### What the is span and when to use them?
 
 Spans are the building blocks of traces in OpenTelemetry. A span represents a single operation or unit of work within a trace. Each span has a start time and an end time, and it can contain additional metadata such as attributes, events, and status information.
 
@@ -51,40 +51,42 @@ For Programming language like Go we would need to have context variabled passed 
 
 Also our goal is to only add functions/methods to traces only if they are something significant otherwise too many spans will make your life harded to reack what is happening.
 
-For example
+Real Workload example of how does traces and logs correlate with the help of service_namespace in grafana
 
-![](/img/blogs/tracetolog002.png)
+![correlation-traces-logs](/img/blogs/tracetolog002.png)
+
+### Good Spans vs Bad Spans
+
+Instead of focusing on a hard number like 50, the key is to ensure your spans are **meaningful** and **manageable**.
+
+**Focus on Key Operations (The Good Spans):**
+- **External Boundaries:** A span for the inbound request to your service (the Root Span).
+- **Network Calls:** Spans for external HTTP requests, RPC calls (gRPC), and database queries.
+- **Messaging:** Spans for producing and consuming messages from queues/topics.
+- **Significant Internal Steps:** Spans for important, time-consuming business logic or internal function calls (e.g., `process_payment`, `generate_report`).
+
+**Avoid Excessive Spans (The Bad Spans):**
+- **Trivial or Repetitive Functions:** Creating a new span for every single getter/setter or a quick helper function inside a loop rapidly bloats your trace without adding useful context.
+- **High Cardinality in Names:** Span names should be generic (e.g., `GET /users`) not include IDs or dynamic values (e.g., `GET /users/123`). Use **span attributes** for unique identifiers.
+
+**Leverage Other Signals:**
+- For single points in time, like a state change or an exception, use a **Span Event** instead of creating a whole new span.
+- For verbose, general debugging, continue to use **Logs** and ensure they are correlated to the active `trace_id` and `span_id`.
+
 
 ### Why we need Events for spans?
 In spans even though we have start time and end time but sometime we need to know what actually happened inside the span during its lifetime. For that we have events which can be added to spans to give more context about what happened during the span's execution.
 
-also this feature can be useful when you want to log some important checkpoints inside a span without the need to create new spans for them.
+Also this feature can be useful when you want to log some important checkpoints inside a span without the need to create new spans for them.
 
-### Good Spans vs Bad Spans
-
-
-Instead of focusing on a hard number like 50, the key is to ensure your spans are **meaningful** and **manageable**.
-
-* **Focus on Key Operations (The Good Spans):**
-    * **External Boundaries:** A span for the inbound request to your service (the Root Span).
-    * **Network Calls:** Spans for external HTTP requests, RPC calls (gRPC), and database queries.
-    * **Messaging:** Spans for producing and consuming messages from queues/topics.
-    * **Significant Internal Steps:** Spans for important, time-consuming business logic or internal function calls (e.g., `process_payment`, `generate_report`).
-
-* **Avoid Excessive Spans (The Bad Spans):**
-    * **Trivial or Repetitive Functions:** Creating a new span for every single getter/setter or a quick helper function inside a loop rapidly bloats your trace without adding useful context.
-    * **High Cardinality in Names:** Span names should be generic (e.g., `GET /users`) not include IDs or dynamic values (e.g., `GET /users/123`). Use **span attributes** for unique identifiers.
-
-* **Leverage Other Signals:**
-    * For single points in time, like a state change or an exception, use a **Span Event** instead of creating a whole new span.
-    * For verbose, general debugging, continue to use **Logs** and ensure they are correlated to the active `trace_id` and `span_id`.
-
+Example use case to lot what all write happened in a database without creating database write span for each write operation.
+![event-example](/img/blogs/tracetolog003.png)
 
 ### Evential consistency
 Traces and spans in OpenTelemetry are designed to be eventually consistent. This means that the telemetry data collected by OpenTelemetry may not be immediately available for analysis or querying.
 
 
-### Sharing across services
+### Propogate across services
 
 Most of the times used for event based or API based microservices where one service calls another service and you want to have the full trace of the request as it flows through multiple services.
 
@@ -111,12 +113,21 @@ type TextMapPropagator interface {
 ### Sampling strategies
 When instrumenting applications with OpenTelemetry, it's important to consider sampling strategies to manage the volume of telemetry data collected. Sampling helps reduce the amount of data sent to backends, which can help control costs and improve performance.
 There are several sampling strategies available in OpenTelemetry, including:
-1. Head-based Sampling: This strategy samples traces based on the initial part of the trace (the "head"). For example, you might choose to sample only a certain percentage of traces that start with specific attributes or conditions.
-2. Tail-based Sampling: This strategy samples traces based on their duration or other criteria. For example, you might choose to sample only traces that exceed a certain duration threshold.
+1. **Head-based Sampling**: This strategy samples traces based on the initial part of the trace (the "head"). For example, you might choose to sample only a certain percentage of traces that start with specific attributes or conditions.
+2. **Tail-based Sampling**: This strategy samples traces based on their duration or other criteria. For example, you might choose to sample only traces that exceed a certain duration threshold.
 
 Choosing the right sampling strategy depends on your application's requirements, the volume of telemetry data generated, and the capabilities of your backend systems. It's important to strike a balance between collecting enough data for effective monitoring and analysis while avoiding excessive data volumes that can lead to increased costs and performance issues. For more details check [Official Sampling Documentation](https://opentelemetry.io/docs/concepts/sampling/)
 
 
-TODO
-Also need to talk about the span linking.
+### Linking Spans
+Usecase I came accross was when I had to have a grouped backgroundjob processing event which has multiple independent events running concurrency and consumed by independent workers. Here I wanted to have a grouped view of all the spans created by those independent workers under a single parent span to have a better visibility of the whole grouped job processing. And tracking of what all jobs were part of that grouped job.
 
+![linking-spans](/img/blogs/tracetolog005.png)
+
+## Conclusion
+
+Instrumenting an application with OpenTelemetry can provide significant benefits in terms of observability and monitoring. By following best practices for span creation, event logging, context propagation, and sampling strategies, you can effectively leverage OpenTelemetry to gain insights into your application's performance and behavior. However, it's important to carefully consider the design and implementation of your instrumentation to ensure that it meets your specific use cases and requirements.
+
+Every application has different observability needs, so it's essential to tailor your OpenTelemetry implementation accordingly. Regularly review and refine your instrumentation strategy to ensure it continues to provide value as your application evolves.
+
+Thank you for reading!
