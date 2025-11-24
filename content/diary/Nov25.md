@@ -5,6 +5,10 @@ author = "Dipankar Das"
 description = "Let's talk about my November 2025"
 +++
 
+# Date 2025-11-23 2025-11-24
+* learning about AKS and its azure backup slution which is built on top of velero.
+* learning about customer session portal of stripe and polar.sh
+
 # Date 2025-11-02 2025-11-22
 * able to get OTEL monitoring stack with tempo, loki, prometheus with interesting dashboards and also configuring the backends and also persistence and retention policies.
 * learning about fine tuning and much more of kubernetes cluster
