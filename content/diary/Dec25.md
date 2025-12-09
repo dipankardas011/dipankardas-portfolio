@@ -5,6 +5,10 @@ date = 2025-12-01
 description = "Let's talk about my December 2025"
 +++
 
+# Date 2025-12-09
+* learning about cncf postgres project
+* authzed self managing it and learning how to configure it to be zero scaled and even get neon to scale to zero when not in use.
+
 # Date 2025-12-01 2025-12-08
 * working on Database tls based connection.
 * complete rewamp of polarsh learnings.
