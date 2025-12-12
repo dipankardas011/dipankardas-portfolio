@@ -5,6 +5,12 @@ date = 2025-12-01
 description = "Let's talk about my December 2025"
 +++
 
+# Date 2025-12-10 2025-12-12
+* worked on the self managed authzed
+* learning with friends on socket connection of databases and even ssh -L for even docker socket to get the remote execution
+* learning about embed module in go sdk
+* learning more about how to use authzed sdk and other quarks
+
 # Date 2025-12-09
 * learning about cncf postgres project
 * authzed self managing it and learning how to configure it to be zero scaled and even get neon to scale to zero when not in use.
