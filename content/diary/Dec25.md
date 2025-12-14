@@ -5,6 +5,11 @@ date = 2025-12-01
 description = "Let's talk about my December 2025"
 +++
 
+# Date 2025-12-13 2025-12-14
+* working on the some interesting nice shadcn dashboard
+* making better authzed+db + dashboard integrations.
+* learning about nvidia NCCL for distributed training and inference.
+
 # Date 2025-12-10 2025-12-12
 * worked on the self managed authzed
 * learning with friends on socket connection of databases and even ssh -L for even docker socket to get the remote execution
