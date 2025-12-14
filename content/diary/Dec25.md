@@ -6,7 +6,7 @@ description = "Let's talk about my December 2025"
 +++
 
 # Date 2025-12-13 2025-12-14
-* working on the some interesting nice shadcn dashboard
+* working on the some interesting nice shadcn dashboard with show global.css colors can be used inside the nextjs and taildincss to match the exsiting colors
 * making better authzed+db + dashboard integrations.
 * learning about nvidia NCCL for distributed training and inference.
 
