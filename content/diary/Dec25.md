@@ -5,6 +5,14 @@ date = 2025-12-01
 description = "Let's talk about my December 2025"
 +++
 
+# Date 2025-12-15 2025-12-23
+* learning about the different access patterns of the rank and communicators and NCCL like GATER, ScATTER and ALLREDUCE...
+* able to use my learning of DS on the real world problems like circular Queues.
+* learning about redis distributed Locks and how to use them.
+* Improving my linux setup to be more stable.
+* understanding more about the SCI standard and what it actually means.
+* learning about carbon intensity / Kwh for any cloud region about their marginal and average and when to use that.
+
 # Date 2025-12-13 2025-12-14
 * working on the some interesting nice shadcn dashboard with show global.css colors can be used inside the nextjs and taildincss to match the exsiting colors
 * making better authzed+db + dashboard integrations.
