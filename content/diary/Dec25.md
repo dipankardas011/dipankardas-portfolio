@@ -5,6 +5,12 @@ date = 2025-12-01
 description = "Let's talk about my December 2025"
 +++
 
+# Date 2025-12-24
+* learning about stacked PRs and how to improve your workflow.
+* Improving some bugs.
+* some Authzed spiceDB schema building as well.
+* Profoling with the flamegraph for frappe app.
+
 # Date 2025-12-15 2025-12-23
 * learning about the different access patterns of the rank and communicators and NCCL like GATER, ScATTER and ALLREDUCE...
 * able to use my learning of DS on the real world problems like circular Queues.
