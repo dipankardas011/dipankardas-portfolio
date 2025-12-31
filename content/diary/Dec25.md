@@ -5,6 +5,11 @@ date = 2025-12-01
 description = "Let's talk about my December 2025"
 +++
 
+# Date 2025-12-25 2025-12-31
+* learning when do we need to use helm deployment rvision number to force a new delpoyment when a new update --install is triggered it can be helpful for configmap and secret changes. and sometimes a lot of places.
+* Making kubmin launched as public platform.
+* travelling to some new places.
+
 # Date 2025-12-24
 * learning about stacked PRs and how to improve your workflow.
 * Improving some bugs.
