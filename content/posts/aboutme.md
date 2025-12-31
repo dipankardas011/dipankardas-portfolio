@@ -38,7 +38,7 @@ Currently, I work as a **DevOps Engineer (Platform Engineer) at [rtCamp](/posts/
 {{< image src="/img/experience/rtcamp.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="5" >}}
 
 `Tenure`: 01/2024 to Present  
-`Role`: **DevOps Engineer (Platform Engineer)**  
+`Role`: **DevOps Engineer**  
 
 `Key Contributions`
 - Implemented **self-hosted multi-runner architecture**, improving CI/CD developer velocity by **50%** and optimizing infrastructure utilization by **40%**.  
@@ -47,6 +47,21 @@ Currently, I work as a **DevOps Engineer (Platform Engineer) at [rtCamp](/posts/
 - Built a **deployment dashboard** with Terraform-powered **BYOC support**, reducing site go-live time by **2×**.  
 - Developed **internal automation tools** with Frappe and Ansible (multi-runner provisioning, certbot integration, monitoring with New Relic).  
 - Implemented optimizations for **AWS Savings Plans** (EC2 + RDS) and integrated **Cloudflare + Fail2Ban** for enhanced security.  
+
+### Kubmin - Ksctl
+{{< image src="/img/experience/kubmin-logo.png" alt="kubmin image" style="border-radius: 8px;margin-right: 20px;" scale="10" >}}
+
+`Tenure`: 06/2025 to Present  
+`Role`: **Founder & Principal Engineer**  
+
+`Key Contributions`
+- **System Design**: Architected Go-based service with distributed SQLite (Turso), Redis caching, and NATS messaging for event based system, thus enabling cluster's workload lifecycle management across AWS, Azure, and GCP.
+- **Asynchronous Task Processing**: Built event-driven worker system with NATS messaging for long-running cluster operations, improving API responsiveness and enabling horizontal scalability. In Process got to create custom Statemachine for handling complex workflows from retry logic to what all errors can be retried with exploiting NAK and ACK mechanism.
+- **Enterprise RBAC & Quota System**: Implemented role-based access control with Authzed and multi-tenant quota enforcement for workload management across organization hierarchies.
+- **Full-Stack Platform**: Developed Next.js (App Router) SaaS frontend with TypeScript, Tailwind CSS, and shadcn/ui, featuring real-time monitoring and developer-centric UI.
+- **Agentic Workflows**: Leveraging Claude Code and Gemini CLI models to build autonomous agents during development phase of this paltform to help developers with higher velocity and less cognitive load.
+
+[Project Link](https://ksctl.com/product/kubmin/)
 
 
 ### Viamagus
@@ -63,11 +78,11 @@ Currently, I work as a **DevOps Engineer (Platform Engineer) at [rtCamp](/posts/
 - Conducted **DevSecOps best-practice audits** across multiple projects, ensuring compliance and reliability.  
 
 
-### Ksctl
+### KsctlCLI - ksctl
 {{< image src="/img/experience/ksctl-logo.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="10" >}}
 
-`Tenure`: 07/2022 to Present  
-`Role`: **Founder**  
+`Tenure`: 07/2022 to 07/2025
+`Role`: **Creator**  
 
 `Key Contributions`
 - Developed **Ksctl**, a **single-command CLI** for fully automated Production/Dev/Staging Kubernetes cluster creation.  
@@ -76,12 +91,13 @@ Currently, I work as a **DevOps Engineer (Platform Engineer) at [rtCamp](/posts/
 - Built a **dynamic GitHub Actions runner pipeline (0→N→0)** that scales without Kubernetes, minimizing idle costs.  
 - Unified **multi-cloud support (EKS, GKE, AKS, K3s, kubeadm)** and **addon management** under a single CLI interface.  
 
+[Project Link](https://ksctl.com/product/ksctl/)
 
 ### Kubesimplify
 {{< image src="/img/experience/kubesimplify.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="10" >}}
 
 `Tenure`: 03/2022 to 07/2024  
-`Role`: **Ambassador & Maintainer (Creator of Ksctl)**  
+`Role`: **Ambassador**  
 
 `Key Contributions`
 - Authored blogs and tutorials on Kubernetes and Go ([**Refer**](/posts/blogs/)).  
