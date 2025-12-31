@@ -55,7 +55,7 @@ Currently, I work as a **DevOps Engineer (Platform Engineer) at [rtCamp](/posts/
 `Role`: **Founder & Principal Engineer**  
 
 `Key Contributions`
-- **System Design**: Architected Go-based service with distributed SQLite (Turso), Redis caching, and NATS messaging for event based system, thus enabling cluster's workload lifecycle management across AWS, Azure, and GCP.
+- **System Design**: Architected Go-based stateless service which can share horizontally which is bascked by SQLite (Turso), Redis caching, Rate Limiting, and NATS messaging for event based system, thus enabling cluster's workload lifecycle management across AWS, Azure, and GCP.
 - **Asynchronous Task Processing**: Built event-driven worker system with NATS messaging for long-running cluster operations, improving API responsiveness and enabling horizontal scalability. In Process got to create custom Statemachine for handling complex workflows from retry logic to what all errors can be retried with exploiting NAK and ACK mechanism.
 - **Enterprise RBAC & Quota System**: Implemented role-based access control with Authzed and multi-tenant quota enforcement for workload management across organization hierarchies.
 - **Full-Stack Platform**: Developed Next.js (App Router) SaaS frontend with TypeScript, Tailwind CSS, and shadcn/ui, featuring real-time monitoring and developer-centric UI.
