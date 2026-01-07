@@ -5,6 +5,12 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2026"
 +++
 
+# Date 2026-01-07
+* actually getting the lookup in helm _hepler.tpl and also how to use the hostAlias and when we need that and how to get the serviceIp with this approach.
+* learnin about L-tree in postgres.
+* able to setup a local dev setup for the psotgres.
+* writing technical documentation for the project
+
 # Date 2026-01-06
 * learning about the hostAliases in Kubernetes and it's use cases.
 * Researching a complex logic and yes without AI was a quite a fun.
