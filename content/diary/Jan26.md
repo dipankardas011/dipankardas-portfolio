@@ -5,6 +5,13 @@ author = "Dipankar Das"
 description = "Let's talk about my January 2026"
 +++
 
+# Date 2026-01-08 2026-01-21
+* working on the new features for kubmin for more cost saving and some amazing opportunity to work on the maths and also statisticas data and some intereing problems and solutions.
+* authzed schema reseller feature in day job.
+* learning more about what all things to be clareful when dealing with the sql databases and where all you need indexes.
+* updating my experience on the resume.
+* playing with non-antropic models running in claude code.
+
 # Date 2026-01-07
 * actually getting the lookup in helm _hepler.tpl and also how to use the hostAlias and when we need that and how to get the serviceIp with this approach.
 * learnin about L-tree in postgres.
