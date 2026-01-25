@@ -9,6 +9,12 @@ cover = "img/cover-blogs.png"
 
 # Tech Blogs
 
+## PostgreSQL and Caching: Key Learnings for Scalable Systems
+> Practical insights and best practices for managing PostgreSQL databases and implementing effective caching strategies.
+
+{{< image src="/img/blogs/postgres-caching.png" alt="postgres-caching" style="border-radius: 8px;" >}}
+[Blog Link]({{< baseurl >}}posts/blogs/postgres-caching-learnings)
+
 ## My First Two Months with OpenTelemetry: A Practical Guide
 > A developer's practical guide to instrumenting applications with OpenTelemetry, sharing key learnings on spans, context propagation, and sampling.
 
