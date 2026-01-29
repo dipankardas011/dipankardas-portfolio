@@ -78,7 +78,7 @@ Currently, I work as a **DevOps Engineer (Platform Engineer) at [rtCamp](/posts/
 - Conducted **DevSecOps best-practice audits** across multiple projects, ensuring compliance and reliability.  
 
 
-### KsctlCLI - ksctl
+### kli - ksctl
 {{< image src="/img/experience/ksctl-logo.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="10" >}}
 
 `Tenure`: 07/2022 to 07/2025
@@ -91,7 +91,7 @@ Currently, I work as a **DevOps Engineer (Platform Engineer) at [rtCamp](/posts/
 - Built a **dynamic GitHub Actions runner pipeline (0→N→0)** that scales without Kubernetes, minimizing idle costs.  
 - Unified **multi-cloud support (EKS, GKE, AKS, K3s, kubeadm)** and **addon management** under a single CLI interface.  
 
-[Project Link](https://ksctl.com/product/ksctlcli/)
+[Project Link](https://ksctl.com/product/kli/)
 
 ### Kubesimplify
 {{< image src="/img/experience/kubesimplify.png" alt="profile image" style="border-radius: 8px;margin-right: 20px;" scale="10" >}}
