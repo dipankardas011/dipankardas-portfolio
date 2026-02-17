@@ -1,0 +1,76 @@
+---
+import { socialLinks, siteConfig } from "../data/site";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-app-border bg-app-surface">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Brand -->
+      <div>
+        <p class="text-lg font-bold text-app-text">{siteConfig.name}</p>
+        <p class="mt-2 text-sm text-app-gray">
+          Platform Engineer & DevOps Consultant
+        </p>
+        <p class="mt-1 text-sm text-app-gray">
+          <a href={`mailto:${siteConfig.email}`} class="hover:text-app-accent transition-colors">
+            {siteConfig.email}
+          </a>
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <p class="text-sm font-semibold text-app-text mb-3">Links</p>
+        <ul class="space-y-2 text-sm text-app-gray">
+          <li><a href="/blog/" class="hover:text-app-accent transition-colors">Blog</a></li>
+          <li><a href="/projects/" class="hover:text-app-accent transition-colors">Projects</a></li>
+          <li><a href="/services/" class="hover:text-app-accent transition-colors">Services</a></li>
+          <li><a href="/diary/" class="hover:text-app-accent transition-colors">Diary</a></li>
+          <li>
+            <a href={siteConfig.resumeUrl} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
+              Resume
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Social -->
+      <div>
+        <p class="text-sm font-semibold text-app-text mb-3">Connect</p>
+        <ul class="space-y-2 text-sm text-app-gray">
+          <li>
+            <a href={socialLinks.github} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a href={socialLinks.linkedin} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href={socialLinks.twitter} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
+              Twitter / X
+            </a>
+          </li>
+          <li>
+            <a href={socialLinks.gitlab} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
+              GitLab
+            </a>
+          </li>
+          <li>
+            <a href={socialLinks.hashnode} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
+              Hashnode
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 pt-6 border-t border-app-border text-center text-sm text-app-gray">
+      &copy; {year} {siteConfig.name}. All rights reserved.
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../components/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import ContactSection from "../components/ContactSection.astro";
+import { services } from "../data/services";
+import { projects } from "../data/projects";
+
+const featuredProjects = projects.filter((p) => p.featured);
+---
+
+<BaseLayout>
+  <Hero />
+
+  <!-- Services -->
+  <section class="py-20 bg-app-surface">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-semibold text-app-text">
+          What I do
+        </h2>
+        <p class="mt-3 text-app-gray text-lg">
+          Consulting and engineering services for modern infrastructure
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {services.map((s) => (
+          <ServiceCard
+            title={s.title}
+            icon={s.icon}
+            description={s.description}
+            skills={s.skills}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects -->
+  <section class="py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between mb-12">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-semibold text-app-text">
+            Featured projects
+          </h2>
+          <p class="mt-3 text-app-gray text-lg">
+            Open-source tools and systems I've built
+          </p>
+        </div>
+        <a
+          href="/projects/"
+          class="hidden sm:inline-flex items-center text-sm font-medium text-app-accent hover:text-app-accent-hover transition-colors"
+        >
+          View all projects &rarr;
+        </a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {featuredProjects.map((p) => (
+          <ProjectCard
+            title={p.title}
+            description={p.description}
+            image={p.image}
+            links={p.links}
+            tags={p.tags}
+          />
+        ))}
+      </div>
+      <div class="mt-8 text-center sm:hidden">
+        <a
+          href="/projects/"
+          class="text-sm font-medium text-app-accent hover:text-app-accent-hover transition-colors"
+        >
+          View all projects &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <ContactSection />
+</BaseLayout>

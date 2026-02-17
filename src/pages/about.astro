@@ -1,0 +1,108 @@
+---
+import BaseLayout from "../components/BaseLayout.astro";
+import Timeline from "../components/Timeline.astro";
+import ContactSection from "../components/ContactSection.astro";
+import { experiences, skills, languages, tools, achievements } from "../data/about";
+import { siteConfig } from "../data/site";
+---
+
+<BaseLayout
+  title="About - Dipankar Das"
+  description="Platform engineer passionate about DevOps, Kubernetes, and sustainable computing."
+>
+  <section class="py-16 md:py-20 animate-fade-in">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Intro -->
+      <div class="flex flex-col md:flex-row gap-10 items-start mb-16">
+        <img
+          src={siteConfig.profileImage}
+          alt={siteConfig.name}
+          class="w-48 h-48 rounded-2xl object-cover shadow-lg flex-shrink-0"
+          loading="eager"
+        />
+        <div>
+          <h1 class="text-4xl md:text-[56px] font-bold text-app-text">
+            About me
+          </h1>
+          <p class="mt-6 text-lg text-app-gray leading-relaxed">
+            I am <strong class="text-app-text">Dipankar Das</strong>, an automation and platform engineer passionate about building
+            <strong class="text-app-text">reliable, scalable, and sustainable systems</strong> that eliminate repetitive tasks and
+            accelerate developer productivity. I specialize in DevOps, Kubernetes, cloud-native platforms, and
+            infrastructure automation, with a strong interest in environmentally conscious computing.
+          </p>
+          <p class="mt-4 text-lg text-app-gray leading-relaxed">
+            I am an active <strong class="text-app-text">member of the Kubernetes organization</strong> and have contributed to
+            several CNCF and open-source projects, including CNCF TAG Green, Kubernetes, Armo, Kubeshop, Cilium, and more.
+            Currently, I work as a DevOps Engineer at rtCamp and am the Founder of Ksctl.
+          </p>
+        </div>
+      </div>
+
+      <!-- Achievements -->
+      <div class="mb-16">
+        <h2 class="text-2xl font-semibold text-app-text mb-6">Achievements</h2>
+        <ul class="space-y-3">
+          {achievements.map((a) => (
+            <li class="flex items-start gap-3 text-app-gray">
+              <span class="text-app-accent mt-1 flex-shrink-0">-</span>
+              <span>{a}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Skills -->
+      <div class="mb-16">
+        <h2 class="text-2xl font-semibold text-app-text mb-6">Core Skills</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {Object.entries(skills).map(([category, items]) => (
+            <div class="bg-white border border-app-border rounded-xl p-5">
+              <h3 class="text-sm font-semibold text-app-text mb-3">
+                {category}
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                {items.map((item) => (
+                  <span class="text-xs font-medium px-2 py-1 bg-app-accent-light text-app-accent rounded">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Languages & Tools -->
+      <div class="mb-16 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h2 class="text-2xl font-semibold text-app-text mb-4">Languages</h2>
+          <div class="flex flex-wrap gap-2">
+            {languages.map((l) => (
+              <span class="text-sm font-medium px-3 py-1.5 bg-app-surface text-app-text rounded-lg">
+                {l}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h2 class="text-2xl font-semibold text-app-text mb-4">Tools & Technologies</h2>
+          <div class="flex flex-wrap gap-2">
+            {tools.map((t) => (
+              <span class="text-sm font-medium px-3 py-1.5 bg-app-surface text-app-text rounded-lg">
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience Timeline -->
+      <div>
+        <h2 class="text-2xl font-semibold text-app-text mb-8">Experience</h2>
+        <Timeline experiences={experiences} />
+      </div>
+    </div>
+  </section>
+
+  <ContactSection />
+</BaseLayout>

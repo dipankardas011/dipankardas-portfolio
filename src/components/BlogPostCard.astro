@@ -1,0 +1,54 @@
+---
+interface Props {
+  title: string;
+  date: Date;
+  description?: string;
+  cover?: string;
+  slug?: string;
+  href?: string;
+  featured?: boolean;
+}
+
+const { title, date, description, cover, slug, href, featured = false } = Astro.props;
+
+const link = href || `/blog/${slug}/`;
+const formattedDate = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<a href={link} target={href ? "_blank" : undefined} rel={href ? "noopener" : undefined} class="block">
+  <article class:list={[
+    "bg-white border border-app-border rounded-xl overflow-hidden card-hover h-full",
+    featured && "md:col-span-2"
+  ]}>
+    {cover && (
+      <div class:list={["bg-app-surface overflow-hidden", featured ? "aspect-[2/1]" : "aspect-video"]}>
+        <img
+          src={cover}
+          alt={title}
+          class="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+    )}
+    <div class="p-5">
+      <time class="text-xs font-medium text-app-gray uppercase tracking-wider">
+        {formattedDate}
+      </time>
+      <h3 class:list={[
+        "font-semibold text-app-text mt-2 leading-snug",
+        featured ? "text-xl md:text-2xl" : "text-lg"
+      ]}>
+        {title}
+      </h3>
+      {description && (
+        <p class="text-sm text-app-gray mt-2 leading-relaxed line-clamp-3">
+          {description}
+        </p>
+      )}
+    </div>
+  </article>
+</a>

@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const entries = (await getCollection("diary")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+---
+
+<BaseLayout
+  title="Diary - Dipankar Das"
+  description="Monthly engineering diary entries tracking learnings and activities."
+>
+  <section class="py-16 md:py-20 animate-fade-in">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-12">
+        <h1 class="text-4xl md:text-[56px] font-bold text-app-text">Diary</h1>
+        <p class="mt-4 text-lg text-app-gray">
+          Monthly log of learnings, activities, and professional development
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        {entries.map((entry) => {
+          const d = entry.data.date;
+          const month = d.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+          });
+          return (
+            <a
+              href={`/diary/${entry.id}/`}
+              class="block bg-white border border-app-border rounded-xl p-5 card-hover"
+            >
+              <div class="flex items-center justify-between">
+                <div>
+                  <h2 class="text-lg font-semibold text-app-text">
+                    {entry.data.title}
+                  </h2>
+                  {entry.data.description && (
+                    <p class="text-sm text-app-gray mt-1">
+                      {entry.data.description}
+                    </p>
+                  )}
+                </div>
+                <time class="text-sm text-app-gray flex-shrink-0 ml-4">
+                  {month}
+                </time>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
