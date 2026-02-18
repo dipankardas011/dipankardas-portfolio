@@ -10,14 +10,25 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    title: "ksctl",
+    title: "kubmin",
+    description:
+      "Workload Intelligence. Brings workload intelligence provisioned on runners. Monitor, analyze, and optimize your workloads with energy-powered intelligence.",
+    image: "https://ksctl.com/kubmin-logo.svg",
+    links: [
+      { label: "Website", url: "https://ksctl.com/product/kubmin" },
+    ],
+    category: "Infra Tools",
+    tags: ["Go", "Kubernetes", "Multi-Cloud", "Sustainability"],
+    featured: true,
+  },
+  {
+    title: "kli",
     description:
       "Cloud-agnostic Kubernetes management tool supporting multi-cloud clusters (EKS, GKE, AKS, K3s, kubeadm). Features carbon-aware provisioning and cost-optimized region selection.",
-    image: "https://github.com/ksctl/ksctl/raw/main/img/Ksctl-logos.jpeg",
+    image: "https://ksctl.com/kli-logo.svg",
     links: [
-      { label: "GitHub", url: "https://github.com/ksctl/ksctl" },
-      { label: "CLI", url: "https://github.com/ksctl/cli" },
-      { label: "Docs", url: "https://github.com/ksctl/docs" },
+      { label: "GitHub", url: "https://github.com/ksctl/kli" },
+      { label: "Website", url: "https://ksctl.com/product/kli" },
     ],
     category: "Infra Tools",
     tags: ["Go", "Kubernetes", "Multi-Cloud", "Sustainability"],
@@ -29,7 +40,10 @@ export const projects: Project[] = [
       "Showcases latest WASI v0.2 development with composition features. Combines ML, Green Software, and WASI learnings into a single project.",
     image:
       "https://github.com/dipankardas011/wae/blob/main/cover.png?raw=true",
-    links: [{ label: "GitHub", url: "https://github.com/dipankardas011/wae" }],
+    links: [
+      { label: "GitHub", url: "https://github.com/dipankardas011/wae" },
+      { label: "Tweet", url: "https://twitter.com/DipankarDas011/status/1809538678835847218" },
+    ],
     category: "Distributed Systems",
     tags: ["Rust", "WASI", "WebAssembly", "Green Software"],
     featured: true,
@@ -39,16 +53,16 @@ export const projects: Project[] = [
     description:
       "Distributed consensus model using Raft with peer and client connections via gRPC. CLI client for key-value storage with leader-based external database operations.",
     image:
-      "https://gitlab.com/dipankardas011/go-playground/-/raw/main/raft-based-distributed-consensus/img/read.png",
+      "https://gitlab.com/dipankardas011/go-playground/-/raw/main/raft-based-distributed-consensus/img/read.png?raw=true",
     links: [
       {
         label: "GitLab",
         url: "https://gitlab.com/dipankardas011/go-playground/-/tree/main/raft-based-distributed-consensus",
       },
+      { label: "Tweet", url: "https://twitter.com/DipankarDas011/status/1738513901753352687" },
     ],
     category: "Distributed Systems",
     tags: ["Go", "Raft", "gRPC", "Distributed Systems"],
-    featured: true,
   },
   {
     title: "Actor Model Implementation",
@@ -59,6 +73,7 @@ export const projects: Project[] = [
         label: "GitLab",
         url: "https://gitlab.com/dipankardas011/go-playground/-/tree/main/actor-system",
       },
+      { label: "Tweet", url: "https://twitter.com/DipankarDas011/status/1740682428396527678" },
     ],
     category: "Distributed Systems",
     tags: ["Go", "Actor Model", "Concurrency"],
@@ -74,6 +89,10 @@ export const projects: Project[] = [
         label: "GitLab",
         url: "https://gitlab.com/dipankardas011/universalci-cd",
       },
+      {
+        label: "Tweet",
+        url: "https://twitter.com/DipankarDas011/status/1709901427731038677",
+      },
     ],
     category: "Infra Tools",
     tags: ["Go", "CI/CD", "Automation"],
@@ -88,6 +107,10 @@ export const projects: Project[] = [
       {
         label: "GitLab",
         url: "https://gitlab.com/dipankardas011/aws-resource-dependency-graph",
+      },
+      {
+        label: "Tweet",
+        url: "https://twitter.com/DipankarDas011/status/1667853065372794882",
       },
     ],
     category: "Infra Tools",

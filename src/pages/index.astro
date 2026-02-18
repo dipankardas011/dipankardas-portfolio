@@ -6,6 +6,7 @@ import ProjectCard from "../components/ProjectCard.astro";
 import ContactSection from "../components/ContactSection.astro";
 import { services } from "../data/services";
 import { projects } from "../data/projects";
+import { Tweet } from '@astro-community/astro-embed-twitter';
 
 const featuredProjects = projects.filter((p) => p.featured);
 ---
@@ -67,6 +68,7 @@ const featuredProjects = projects.filter((p) => p.featured);
           />
         ))}
       </div>
+      <!--   <Tweet id="https://twitter.com/DipankarDas011/status/1740682428396527678" /> -->
       <div class="mt-8 text-center sm:hidden">
         <a
           href="/projects/"
