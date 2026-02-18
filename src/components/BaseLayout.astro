@@ -52,6 +52,15 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <title>{title}</title>
   </head>
+<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9PXLCZL052"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9PXLCZL052');
+  </script>
+  <defer script async src="https://platform.twitter.com/widgets.js"></script>
   <body class="bg-white text-app-text min-h-screen flex flex-col">
     <Header />
     <main class="flex-1">
@@ -59,5 +68,4 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     </main>
     <Footer />
   </body>
-  <script async src="https://platform.twitter.com/widgets.js"></script>
 </html>
