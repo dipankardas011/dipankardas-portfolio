@@ -1,0 +1,45 @@
+---
+import { siteConfig, socialLinks } from "../data/site";
+---
+
+<section class="py-20 md:py-28 animate-fade-in">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row items-center gap-12">
+      <div class="flex-1 text-center md:text-left">
+        <p class="text-sm font-medium text-app-accent uppercase tracking-wider mb-4">
+          Platform Engineer & DevOps Consultant
+        </p>
+        <h1 class="text-4xl md:text-[56px] font-bold leading-tight text-app-text">
+          {siteConfig.name}
+        </h1>
+        <p class="mt-6 text-lg md:text-xl text-app-gray leading-relaxed max-w-xl">
+          {siteConfig.tagline}. Specializing in DevOps, Kubernetes, Golang, and System Design.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+          <a
+            href="/services/"
+            class="inline-flex items-center px-6 py-3 bg-app-accent text-white font-medium rounded-lg hover:bg-app-accent-hover transition-colors"
+          >
+            Work with me
+          </a>
+          <a
+            href={socialLinks.linkedin}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center px-6 py-3 border border-app-border text-app-text font-medium rounded-lg hover:border-app-accent hover:text-app-accent transition-colors"
+          >
+            Connect on LinkedIn
+          </a>
+        </div>
+      </div>
+      <div class="flex-shrink-0">
+        <img
+          src={siteConfig.profileImage}
+          alt={siteConfig.name}
+          class="w-56 h-56 md:w-72 md:h-72 rounded-2xl object-cover shadow-lg"
+          loading="eager"
+        />
+      </div>
+    </div>
+  </div>
+</section>

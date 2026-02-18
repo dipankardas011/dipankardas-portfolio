@@ -1,0 +1,57 @@
+---
+import type { Experience } from "../data/about";
+
+interface Props {
+  experiences: Experience[];
+}
+
+const { experiences } = Astro.props;
+---
+
+<div class="relative">
+  <!-- Timeline line -->
+  <div class="absolute left-6 top-0 bottom-0 w-px bg-app-border hidden md:block"></div>
+
+  <div class="space-y-10">
+    {experiences.map((exp) => (
+      <div class="relative md:pl-16">
+        <!-- Timeline dot -->
+        <div class="absolute left-4 top-1 w-4 h-4 rounded-full bg-app-accent border-4 border-white hidden md:block"></div>
+
+        <div class="bg-white border border-app-border rounded-xl p-6">
+          <div class="flex items-start gap-4 mb-4">
+            {exp.logo && (
+              <img
+                src={exp.logo}
+                alt={exp.company}
+                class="w-12 h-12 rounded-lg object-contain bg-app-surface p-1 flex-shrink-0"
+                loading="lazy"
+              />
+            )}
+            <div>
+              <h3 class="text-lg font-semibold text-app-text">
+                {exp.link ? (
+                  <a href={exp.link} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
+                    {exp.company}
+                  </a>
+                ) : (
+                  exp.company
+                )}
+              </h3>
+              <p class="text-sm font-medium text-app-accent">{exp.role}</p>
+              <p class="text-xs text-app-gray mt-1">{exp.tenure}</p>
+            </div>
+          </div>
+          <ul class="space-y-2">
+            {exp.contributions.map((c) => (
+              <li class="text-sm text-app-gray leading-relaxed flex gap-2">
+                <span class="text-app-accent mt-1 flex-shrink-0">-</span>
+                <span>{c}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>

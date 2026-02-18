@@ -1,0 +1,74 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { projects, ossContributions, categories } from "../../data/projects";
+---
+
+<BaseLayout
+  title="Projects - Dipankar Das"
+  description="Open-source projects, distributed systems, and infrastructure tools."
+>
+  <section class="py-16 md:py-20 animate-fade-in">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-12">
+        <h1 class="text-4xl md:text-[56px] font-bold text-app-text">
+          Projects
+        </h1>
+        <p class="mt-4 text-lg text-app-gray">
+          Tools, systems, and experiments I've built
+        </p>
+      </div>
+
+      {categories.map((cat) => {
+        const catProjects = projects.filter((p) => p.category === cat);
+        return catProjects.length > 0 ? (
+          <div class="mb-14">
+            <h2 class="text-2xl font-semibold text-app-text mb-6">{cat}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {catProjects.map((p) => (
+                <ProjectCard
+                  title={p.title}
+                  description={p.description}
+                  image={p.image}
+                  links={p.links}
+                  tags={p.tags}
+                />
+              ))}
+            </div>
+          </div>
+        ) : null;
+      })}
+
+      <!-- OSS Contributions -->
+      <div class="mt-16 border-t border-app-border pt-12">
+        <h2 class="text-2xl font-semibold text-app-text mb-8">
+          Open Source Contributions
+        </h2>
+        <div class="space-y-8">
+          {ossContributions.map((org) => (
+            <div>
+              <h3 class="text-lg font-semibold text-app-text mb-3">
+                {org.org}
+              </h3>
+              <ul class="space-y-2">
+                {org.prs.map((pr) => (
+                  <li class="flex items-start gap-2 text-sm">
+                    <span class="text-app-accent mt-0.5 flex-shrink-0">-</span>
+                    <a
+                      href={pr.url}
+                      target="_blank"
+                      rel="noopener"
+                      class="text-app-gray hover:text-app-accent transition-colors"
+                    >
+                      {pr.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

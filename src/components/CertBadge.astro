@@ -1,0 +1,32 @@
+---
+interface Props {
+  name: string;
+  badgeImage?: string;
+  link: string;
+}
+
+const { name, badgeImage, link } = Astro.props;
+---
+
+<a
+  href={link}
+  target="_blank"
+  rel="noopener"
+  class="flex flex-col items-center gap-2 p-4 bg-white border border-app-border rounded-xl card-hover text-center"
+>
+  {badgeImage ? (
+    <img
+      src={badgeImage}
+      alt={name}
+      class="w-16 h-16 object-contain"
+      loading="lazy"
+    />
+  ) : (
+    <div class="w-16 h-16 bg-app-accent-light rounded-lg flex items-center justify-center">
+      <span class="text-app-accent text-2xl font-bold">
+        {name.charAt(0)}
+      </span>
+    </div>
+  )}
+  <span class="text-xs font-medium text-app-gray leading-tight">{name}</span>
+</a>

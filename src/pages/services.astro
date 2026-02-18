@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../components/BaseLayout.astro";
+import ServiceCard from "../components/ServiceCard.astro";
+import CertBadge from "../components/CertBadge.astro";
+import ContactSection from "../components/ContactSection.astro";
+import { services, certifications } from "../data/services";
+---
+
+<BaseLayout
+  title="Services - Dipankar Das"
+  description="DevOps consulting, Kubernetes expertise, Go development, and sustainability engineering."
+>
+  <section class="py-16 md:py-20 animate-fade-in">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-12">
+        <h1 class="text-4xl md:text-[56px] font-bold text-app-text">
+          Services
+        </h1>
+        <p class="mt-4 text-lg text-app-gray max-w-2xl">
+          I help teams build reliable, scalable, and cost-efficient infrastructure.
+          From CI/CD pipelines to Kubernetes deployments, I bring hands-on experience to every engagement.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+        {services.map((s) => (
+          <ServiceCard
+            title={s.title}
+            icon={s.icon}
+            description={s.description}
+            skills={s.skills}
+          />
+        ))}
+      </div>
+
+      <!-- Certifications -->
+      <div class="border-t border-app-border pt-12">
+        <h2 class="text-2xl font-semibold text-app-text mb-2">
+          Certifications & Badges
+        </h2>
+        <p class="text-app-gray mb-8">
+          Industry-recognized credentials backing my expertise
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {certifications.map((cert) => (
+            <CertBadge
+              name={cert.name}
+              badgeImage={cert.badgeImage}
+              link={cert.link}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ContactSection />
+</BaseLayout>

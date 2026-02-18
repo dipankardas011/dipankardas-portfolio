@@ -1,0 +1,101 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* BCMS-inspired design tokens */
+@theme {
+  --color-app-text: #181A2C;
+  --color-app-gray: #696A6C;
+  --color-app-border: #E0E0E0;
+  --color-app-surface: #F2F2F2;
+  --color-app-accent: #06b6d4;
+  --color-app-accent-hover: #0891b2;
+  --color-app-accent-light: #cffafe;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+/* Global base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--color-app-text);
+  font-family: var(--font-sans);
+}
+
+/* Prose overrides for blog content */
+.prose {
+  --tw-prose-body: var(--color-app-gray);
+  --tw-prose-headings: var(--color-app-text);
+  --tw-prose-links: var(--color-app-accent);
+  --tw-prose-code: var(--color-app-text);
+  max-width: 72ch;
+}
+
+.prose a:hover {
+  color: var(--color-app-accent-hover);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+
+.prose pre {
+  background-color: var(--color-app-surface);
+  border: 1px solid var(--color-app-border);
+  border-radius: 0.5rem;
+}
+
+.prose img {
+  border-radius: 0.5rem;
+}
+
+/* Fade-in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease both;
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth link underline */
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-app-accent);
+  transition: width 0.2s ease;
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}

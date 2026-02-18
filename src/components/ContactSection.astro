@@ -1,0 +1,38 @@
+---
+import { siteConfig, socialLinks } from "../data/site";
+---
+
+<section class="py-20 bg-app-surface">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-app-text">
+      Let's work together
+    </h2>
+    <p class="mt-4 text-lg text-app-gray">
+      Looking for a DevOps consultant, Kubernetes expert, or Go developer? I'd love to hear about your project.
+    </p>
+    <div class="mt-8 flex flex-wrap gap-4 justify-center">
+      <a
+        href={`mailto:${siteConfig.email}`}
+        class="inline-flex items-center px-6 py-3 bg-app-accent text-white font-medium rounded-lg hover:bg-app-accent-hover transition-colors"
+      >
+        Get in touch
+      </a>
+      <a
+        href={socialLinks.linkedin}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center px-6 py-3 border border-app-border text-app-text font-medium rounded-lg hover:border-app-accent hover:text-app-accent transition-colors"
+      >
+        LinkedIn
+      </a>
+      <a
+        href={siteConfig.resumeUrl}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center px-6 py-3 border border-app-border text-app-text font-medium rounded-lg hover:border-app-accent hover:text-app-accent transition-colors"
+      >
+        Download Resume
+      </a>
+    </div>
+  </div>
+</section>
