@@ -45,7 +45,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Archivo:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
       rel="stylesheet"
     />
 
@@ -61,7 +61,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     gtag('config', 'G-9PXLCZL052');
   </script>
   <defer script async src="https://platform.twitter.com/widgets.js"></script>
-  <body class="bg-white text-app-text min-h-screen flex flex-col">
+  <body class="bg-app-body text-app-text min-h-screen flex flex-col font-sans antialiased">
     <Header />
     <main class="flex-1">
       <slot />

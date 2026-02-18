@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  className?: string;
+}
+
+const { title, subtitle, className = '' } = Astro.props;
+---
+
+<div class={`mb-8 lg:mb-10 ${className}`}>
+  <div class="flex items-center gap-2 lg:gap-4 mb-3 lg:mb-4">
+    <span class="w-1.5 h-1.5 lg:w-2.5 lg:h-2.5 bg-app-text rounded-full"></span>
+    <h2 class="text-2xl lg:text-[32px] font-display font-semibold text-app-text tracking-[var(--tracking-tight)] leading-none">
+      {title}
+    </h2>
+  </div>
+  {subtitle && (
+    <p class="text-base lg:text-lg text-app-gray-400 tracking-[var(--tracking-tight)] leading-[1.4] max-w-2xl">
+      {subtitle}
+    </p>
+  )}
+</div>

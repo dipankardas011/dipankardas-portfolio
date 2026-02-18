@@ -1,41 +1,70 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* BCMS-inspired design tokens */
+/* BCMS Reference Design Tokens */
 @theme {
-  --color-app-text: #181A2C;
-  --color-app-gray: #696A6C;
-  --color-app-border: #E0E0E0;
-  --color-app-surface: #F2F2F2;
+  /* Primary Colors */
   --color-app-accent: #06b6d4;
-  --color-app-accent-hover: #0891b2;
-  --color-app-accent-light: #cffafe;
+  --color-app-body: #ffffff;
+  --color-app-bg: #ffffff;
+  --color-app-text: #171717;
+  
+  /* Grayscale System */
+  --color-app-gray-100: #EBEBEB;
+  --color-app-gray-200: #D4D4D4;
+  --color-app-gray-300: #828282;
+  --color-app-gray-400: #636363;
+  --color-app-gray-500: #525252;
+  --color-app-gray-600: #242424;
+  
+  /* Background Variations */
+  --color-app-surface: #FAFAFA;
+  --color-app-surface-alt: #F7F7F7;
+  --color-app-border: #D9D9D9;
+  
+  /* Decorative Blur Colors */
+  --color-blur-purple: #3A437E;
+  --color-blur-yellow: #FFBF4B;
 
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  /* Typography - Google Fonts */
+  --font-display: "Archivo", -apple-system, "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  --font-sans: "Inter", -apple-system, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+  
+  /* Letter Spacing */
+  --tracking-tight: -0.41px;
+  
+  /* Font Family Utilities */
+  --font-family-display: var(--font-display);
+  --font-family-sans: var(--font-sans);
+  --font-family-mono: var(--font-mono);
 }
 
 /* Global base styles */
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   color: var(--color-app-text);
   font-family: var(--font-sans);
+  background-color: var(--color-app-body);
+}
+
+/* Display font utility */
+.font-display {
+  font-family: var(--font-display);
 }
 
 /* Prose overrides for blog content */
 .prose {
-  --tw-prose-body: var(--color-app-gray);
+  --tw-prose-body: var(--color-app-gray-300);
   --tw-prose-headings: var(--color-app-text);
   --tw-prose-links: var(--color-app-accent);
   --tw-prose-code: var(--color-app-text);
   max-width: 72ch;
-}
-
-.prose a:hover {
-  color: var(--color-app-accent-hover);
 }
 
 .prose code {
@@ -98,4 +127,18 @@ body {
 
 .link-underline:hover::after {
   width: 100%;
+}
+
+/* Swiper Custom Styles (BCMS Reference) */
+.swiper-pagination-bullet {
+  width: 1.5rem;
+  height: 3px;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  width: 5rem;
+  background-color: #ffffff;
 }

@@ -154,10 +154,30 @@ export const tools = [
   "Jenkins",
 ];
 
-export const achievements = [
-  "Winner of Napptive + WeMakeDevs Cloud Native Hackathon (Track 2)",
-  "Member of Kubernetes and Kubernetes-Sigs Organization",
-  "Invited to GitHub Maintainers repo",
-  "PR Wrangler in sig-docs (Kubernetes)",
-  "OSS contributions to Kubernetes, CNCF TAG Green, Kubescape, Monokle, and more",
+export interface Achievement {
+  title: string;
+  year: number;
+}
+
+export const achievements: Achievement[] = [
+  {
+    title: "OSS contributions to Kubernetes, CNCF TAG Green, Kubescape, Monokle, and more",
+    year: 2024,
+  },
+  {
+    title: "Invited to GitHub Maintainers repo",
+    year: 2024,
+  },
+  {
+    title: "PR Wrangler in sig-docs (Kubernetes)",
+    year: 2024,
+  },
+  {
+    title: "Member of Kubernetes and Kubernetes-Sigs Organization",
+    year: 2023,
+  },
+  {
+    title: "Winner of Napptive + WeMakeDevs Cloud Native Hackathon (Track 2)",
+    year: 2022,
+  },
 ];

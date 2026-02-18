@@ -1,42 +1,97 @@
 ---
 import { siteConfig, socialLinks } from "../data/site";
+import BlurDecoration from "./BlurDecoration.astro";
 ---
 
-<section class="py-20 md:py-28 animate-fade-in">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col md:flex-row items-center gap-12">
-      <div class="flex-1 text-center md:text-left">
-        <p class="text-sm font-medium text-app-accent uppercase tracking-wider mb-4">
-          Platform Engineer & DevOps Consultant
-        </p>
-        <h1 class="text-4xl md:text-[56px] font-bold leading-tight text-app-text">
-          {siteConfig.name}
-        </h1>
-        <p class="mt-6 text-lg md:text-xl text-app-gray leading-relaxed max-w-xl">
-          {siteConfig.tagline}. Specializing in DevOps, Kubernetes, Golang, and System Design.
-        </p>
-        <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+<section class="py-10 lg:pb-14 animate-fade-in">
+  <div class="container mx-auto">
+    <div class="grid grid-cols-2 gap-4 auto-rows-fr md:grid-cols-[2fr,3fr] lg:grid-cols-[500px,1fr] xl:grid-cols-[615px,1fr]">
+      <!-- Info Card with Blur Decorations -->
+      <div class="relative bg-app-surface rounded-3xl p-6 overflow-hidden xl:p-10">
+        <BlurDecoration variant="purple" position="top-right" />
+        <BlurDecoration variant="yellow" position="bottom-left" />
+        
+        <div class="relative z-10 h-full flex flex-col items-start">
+          <h1 class="text-lg leading-[1.2] tracking-[var(--tracking-tight)] font-display text-app-text mb-2.5 lg:text-[34px] lg:leading-[1.2] lg:mb-4">
+            Hi, I’m Dipankar, a Platform Engineer with 2+ years of experience
+          </h1>
+          <p class="text-xs leading-[1.4] tracking-[var(--tracking-tight)] text-app-gray-400 pr-[70px] mb-8 lg:text-base lg:leading-[1.4] lg:mb-8">
+            {siteConfig.tagline}. Specializing in DevOps, Kubernetes, Golang, and System Design.
+          </p>
+          
           <a
             href="/services/"
-            class="inline-flex items-center px-6 py-3 bg-app-accent text-white font-medium rounded-lg hover:bg-app-accent-hover transition-colors"
+            class="flex px-[18px] py-[14px] rounded-[32px] border border-app-gray-200 text-xs leading-none tracking-[var(--tracking-tight)] font-medium text-app-gray-500 uppercase mb-14 hover:border-app-text hover:bg-app-text hover:text-white transition-colors duration-300 lg:px-6 lg:py-4 lg:text-sm lg:leading-none"
           >
-            Work with me
+            Contact me
           </a>
-          <a
-            href={socialLinks.linkedin}
-            target="_blank"
-            rel="noopener"
-            class="inline-flex items-center px-6 py-3 border border-app-border text-app-text font-medium rounded-lg hover:border-app-accent hover:text-app-accent transition-colors"
-          >
-            Connect on LinkedIn
-          </a>
+          
+          <!-- Social Links at bottom -->
+          <ul class="flex items-center gap-3 mt-auto lg:gap-5">
+            <li>
+              <a
+                href={socialLinks.linkedin}
+                target="_blank"
+                rel="noopener"
+                class="flex items-center group"
+              >
+                <div class="w-4 h-4 mr-1.5 flex-shrink-0">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="1" width="14" height="14" rx="7" fill="#1275B1" class="group-hover:fill-app-accent transition-colors"></rect>
+                    <path d="M6.30928 4.84607C6.30928 5.31335 5.90426 5.69215 5.40464 5.69215C4.90502 5.69215 4.5 5.31335 4.5 4.84607C4.5 4.3788 4.90502 4 5.40464 4C5.90426 4 6.30928 4.3788 6.30928 4.84607Z" fill="white"></path>
+                    <path d="M4.62371 6.31405H6.1701V11H4.62371V6.31405Z" fill="white"></path>
+                    <path d="M8.65979 6.31405H7.1134V11H8.65979C8.65979 11 8.65979 9.52479 8.65979 8.60243C8.65979 8.04881 8.84883 7.49277 9.60309 7.49277C10.4555 7.49277 10.4504 8.21727 10.4464 8.77855C10.4412 9.51222 10.4536 10.2609 10.4536 11H12V8.52686C11.9869 6.94769 11.5754 6.22004 10.2216 6.22004C9.4177 6.22004 8.91936 6.58503 8.65979 6.91525V6.31405Z" fill="white"></path>
+                  </svg>
+                </div>
+                <span class="text-xs leading-none tracking-[var(--tracking-tight)] group-hover:text-app-accent transition-colors lg:text-base lg:leading-none">
+                  LinkedIn
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                href={socialLinks.github}
+                target="_blank"
+                rel="noopener"
+                class="flex items-center group"
+              >
+                <div class="w-4 h-4 mr-1.5 flex-shrink-0">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z" fill="#181717" class="group-hover:fill-app-accent transition-colors"/>
+                  </svg>
+                </div>
+                <span class="text-xs leading-none tracking-[var(--tracking-tight)] group-hover:text-app-accent transition-colors lg:text-base lg:leading-none">
+                  GitHub
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                href={socialLinks.twitter}
+                target="_blank"
+                rel="noopener"
+                class="flex items-center group"
+              >
+                <div class="w-4 h-4 mr-1.5 flex-shrink-0">
+                  <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                    <path d="M12.6 0h2.454l-5.36 6.778L16 16h-4.937l-3.867-5.594L2.771 16H.316l5.733-7.25L0 0h5.063l3.495 5.114L12.6 0Zm-.86 14.376h1.36L4.323 1.539H2.865l8.875 12.837Z" fill="#000" class="group-hover:fill-app-accent transition-colors"/>
+                  </svg>
+                </div>
+                <span class="text-xs leading-none tracking-[var(--tracking-tight)] group-hover:text-app-accent transition-colors lg:text-base lg:leading-none">
+                  Twitter
+                </span>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
-      <div class="flex-shrink-0">
+      
+      <!-- Profile Image -->
+      <div class="relative rounded-3xl overflow-hidden aspect-square md:aspect-auto xl:aspect-[1.3]">
         <img
           src={siteConfig.profileImage}
           alt={siteConfig.name}
-          class="w-56 h-56 md:w-72 md:h-72 rounded-2xl object-cover shadow-lg"
+          class="size-full object-cover"
           loading="eager"
         />
       </div>

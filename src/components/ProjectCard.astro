@@ -10,9 +10,9 @@ interface Props {
 const { title, description, image, links, tags } = Astro.props;
 ---
 
-<div class="bg-white border border-app-border rounded-xl overflow-hidden card-hover">
+<div class="bg-white border border-app-gray-100 rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-lg">
   {image && (
-    <div class="aspect-video bg-app-surface overflow-hidden">
+    <div class="aspect-[1.45] bg-app-surface overflow-hidden">
       <img
         src={image}
         alt={title}
@@ -21,25 +21,25 @@ const { title, description, image, links, tags } = Astro.props;
       />
     </div>
   )}
-  <div class="p-5">
-    <h3 class="text-lg font-semibold text-app-text mb-2">{title}</h3>
-    <p class="text-sm text-app-gray leading-relaxed mb-4 line-clamp-3">
+  <div class="p-6 lg:p-8">
+    <h3 class="text-lg lg:text-xl font-display font-semibold text-app-text mb-2 lg:mb-3 tracking-[var(--tracking-tight)]">{title}</h3>
+    <p class="text-sm lg:text-base text-app-gray-400 leading-[1.4] mb-4 lg:mb-6 line-clamp-3 tracking-[var(--tracking-tight)]">
       {description}
     </p>
-    <div class="flex flex-wrap gap-2 mb-4">
+    <div class="flex flex-wrap gap-2 mb-4 lg:mb-6">
       {tags.map((tag) => (
-        <span class="text-xs font-medium px-2 py-1 bg-app-accent-light text-app-accent rounded">
+        <span class="text-xs lg:text-sm font-medium px-3 py-1.5 bg-app-surface text-app-gray-500 rounded-lg tracking-[var(--tracking-tight)]">
           {tag}
         </span>
       ))}
     </div>
-    <div class="flex flex-wrap gap-3">
+    <div class="flex flex-wrap gap-3 lg:gap-4">
       {links.map((link) => (
         <a
           href={link.url}
           target="_blank"
           rel="noopener"
-          class="text-sm font-medium text-app-accent hover:text-app-accent-hover transition-colors link-underline"
+          class="text-sm lg:text-base font-medium text-app-gray-500 hover:text-app-text transition-colors duration-300 underline underline-offset-4 tracking-[var(--tracking-tight)]"
         >
           {link.label}
         </a>
