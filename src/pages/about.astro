@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../components/BaseLayout.astro";
+import AnimatedTitle from "../components/AnimatedTitle";
 import Timeline from "../components/Timeline.astro";
 import ContactSection from "../components/ContactSection.astro";
 import { experiences, skills, languages, tools, achievements } from "../data/about";
@@ -10,99 +11,82 @@ import { siteConfig } from "../data/site";
   title="About - Dipankar Das"
   description="Platform engineer passionate about DevOps, Kubernetes, and sustainable computing."
 >
-  <section class="py-16 md:py-20 animate-fade-in">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Intro -->
-      <div class="flex flex-col md:flex-row gap-10 items-start mb-16">
-        <img
-          src={siteConfig.profileImage}
-          alt={siteConfig.name}
-          class="w-48 h-48 rounded-2xl object-cover shadow-lg flex-shrink-0"
-          loading="eager"
-        />
+  <div class="pt-8 pb-10 overflow-hidden md:pb-20 lg:pt-[72px] lg:pb-[120px]">
+    <div class="container mx-auto mb-10 lg:mb-[128px] xl:pr-[220px]">
+      <AnimatedTitle 
+        title="About" 
+        client:load 
+      />
+      
+      <!-- Education Section -->
+      <div class="mb-8 lg:flex lg:items-start lg:gap-[98px] lg:mb-14">
+        <div class="flex items-center mb-[14px] flex-shrink-0 lg:w-[200px]">
+          <div class="w-1.5 h-1.5 flex-shrink-0 bg-app-text rounded-full mr-2 lg:w-2 lg:h-2 lg:mr-4"></div>
+          <div class="text-lg leading-none font-display tracking-[var(--tracking-tight)] lg:text-[32px]">
+            Education
+          </div>
+        </div>
         <div>
-          <h1 class="text-4xl md:text-[56px] font-bold text-app-text">
-            About me
-          </h1>
-          <p class="mt-6 text-lg text-app-gray leading-relaxed">
-            I am <strong class="text-app-text">Dipankar Das</strong>, an automation and platform engineer passionate about building
-            <strong class="text-app-text">reliable, scalable, and sustainable systems</strong> that eliminate repetitive tasks and
-            accelerate developer productivity. I specialize in DevOps, Kubernetes, cloud-native platforms, and
-            infrastructure automation, with a strong interest in environmentally conscious computing.
+          <p class="text-sm leading-[1.4] tracking-[var(--tracking-tight)] text-app-gray-400 mb-6 lg:text-base lg:leading-[1.4] lg:mb-8">
+            My academic background in computer science and engineering, providing the foundation for my technical expertise.
           </p>
-          <p class="mt-4 text-lg text-app-gray leading-relaxed">
-            I am an active <strong class="text-app-text">member of the Kubernetes organization</strong> and have contributed to
-            several CNCF and open-source projects, including CNCF TAG Green, Kubernetes, Armo, Kubeshop, Cilium, and more.
-            Currently, I work as a DevOps Engineer at rtCamp and am the Founder of Ksctl.
-          </p>
+          <div class="flex flex-wrap gap-3">
+            <div class="flex text-sm leading-none tracking-[var(--tracking-tight)] text-app-gray-500 font-medium px-4 py-3 border border-app-gray-200 rounded-[32px] lg:text-base lg:leading-none">
+              Bachelor of Technology
+            </div>
+            <div class="flex text-sm leading-none tracking-[var(--tracking-tight)] text-app-gray-500 font-medium px-4 py-3 border border-app-gray-200 rounded-[32px] lg:text-base lg:leading-none">
+              Computer Science
+            </div>
+          </div>
         </div>
       </div>
-
-      <!-- Achievements -->
-      <div class="mb-16">
-        <h2 class="text-2xl font-semibold text-app-text mb-6">Achievements</h2>
-        <ul class="space-y-3">
-          {achievements.map((a) => (
-            <li class="flex items-start gap-3 text-app-gray">
-              <span class="text-app-accent mt-1 flex-shrink-0">-</span>
-              <span>{a}</span>
-            </li>
-          ))}
-        </ul>
+      
+      <!-- Work History Section -->
+      <div class="mb-10 lg:mb-20">
+        <div class="flex items-center mb-6 lg:mb-10">
+          <div class="w-1.5 h-1.5 flex-shrink-0 bg-app-text rounded-full mr-2 lg:w-2 lg:h-2 lg:mr-4"></div>
+          <div class="text-lg leading-none font-display tracking-[var(--tracking-tight)] lg:text-[32px]">
+            Work history
+          </div>
+        </div>
+        <Timeline experiences={experiences} />
       </div>
-
-      <!-- Skills -->
-      <div class="mb-16">
-        <h2 class="text-2xl font-semibold text-app-text mb-6">Core Skills</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {Object.entries(skills).map(([category, items]) => (
-            <div class="bg-white border border-app-border rounded-xl p-5">
-              <h3 class="text-sm font-semibold text-app-text mb-3">
-                {category}
-              </h3>
-              <div class="flex flex-wrap gap-2">
-                {items.map((item) => (
-                  <span class="text-xs font-medium px-2 py-1 bg-app-accent-light text-app-accent rounded">
-                    {item}
-                  </span>
-                ))}
+    </div>
+    
+    <!-- Cover Image -->
+    <img
+      src={siteConfig.profileImage}
+      alt="Workspace"
+      class="w-full object-cover aspect-[1.84] mb-10 lg:aspect-[2.59] lg:mb-20"
+      loading="lazy"
+    />
+    
+    <!-- Awards Section -->
+    <div class="container mx-auto">
+      <div class="max-w-[969px] mx-auto">
+        <h2 class="text-lg leading-[1.2] tracking-[var(--tracking-tight)] font-display mb-6 lg:text-[40px] lg:mb-16">
+          Some of my achievements
+        </h2>
+        <div class="grid grid-cols-1 gap-[14px] lg:gap-6">
+          {achievements.map((achievement, index) => (
+            <div class="flex items-center justify-between pb-[14px] border-b border-app-gray-200 lg:pb-6">
+              <div class="flex">
+                <span class="text-xs leading-none tracking-[var(--tracking-tight)] mr-1 lg:text-base lg:leading-none lg:mr-2">
+                  {index + 1}<sup>st</sup>
+                </span>
+                <span class="text-sm leading-none tracking-[var(--tracking-tight)] text-app-gray-400 lg:text-2xl lg:leading-none">
+                  {achievement.title}
+                </span>
+              </div>
+              <div class="text-sm leading-none tracking-[var(--tracking-tight)] lg:text-base lg:leading-none">
+                ({achievement.year})
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      <!-- Languages & Tools -->
-      <div class="mb-16 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h2 class="text-2xl font-semibold text-app-text mb-4">Languages</h2>
-          <div class="flex flex-wrap gap-2">
-            {languages.map((l) => (
-              <span class="text-sm font-medium px-3 py-1.5 bg-app-surface text-app-text rounded-lg">
-                {l}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div>
-          <h2 class="text-2xl font-semibold text-app-text mb-4">Tools & Technologies</h2>
-          <div class="flex flex-wrap gap-2">
-            {tools.map((t) => (
-              <span class="text-sm font-medium px-3 py-1.5 bg-app-surface text-app-text rounded-lg">
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <!-- Experience Timeline -->
-      <div>
-        <h2 class="text-2xl font-semibold text-app-text mb-8">Experience</h2>
-        <Timeline experiences={experiences} />
-      </div>
     </div>
-  </section>
+  </div>
 
   <ContactSection />
 </BaseLayout>

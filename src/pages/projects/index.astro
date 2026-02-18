@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
+import AnimatedTitle from "../../components/AnimatedTitle";
 import ProjectCard from "../../components/ProjectCard.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
 import { projects, ossContributions, categories } from "../../data/projects";
 ---
 
@@ -8,23 +10,23 @@ import { projects, ossContributions, categories } from "../../data/projects";
   title="Projects - Dipankar Das"
   description="Open-source projects, distributed systems, and infrastructure tools."
 >
-  <section class="py-16 md:py-20 animate-fade-in">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-12">
-        <h1 class="text-4xl md:text-[56px] font-bold text-app-text">
-          Projects
-        </h1>
-        <p class="mt-4 text-lg text-app-gray">
-          Tools, systems, and experiments I've built
+  <AnimatedTitle title="Projects" client:load />
+  
+  <section class="py-10 lg:pb-14 animate-fade-in">
+    <div class="container mx-auto">
+      <!-- Intro -->
+      <div class="mb-10 lg:mb-[120px]">
+        <p class="text-base lg:text-lg text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] max-w-3xl">
+          Tools, systems, and experiments I've built to solve real-world infrastructure challenges
         </p>
       </div>
 
-      {categories.map((cat) => {
+      {categories.map((cat, catIndex) => {
         const catProjects = projects.filter((p) => p.category === cat);
         return catProjects.length > 0 ? (
-          <div class="mb-14">
-            <h2 class="text-2xl font-semibold text-app-text mb-6">{cat}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class={catIndex < categories.length - 1 ? "mb-10 lg:mb-[120px]" : "mb-10 lg:mb-14"}>
+            <SectionHeader title={cat} className="mb-8 lg:mb-10" />
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {catProjects.map((p) => (
                 <ProjectCard
                   title={p.title}
@@ -40,25 +42,27 @@ import { projects, ossContributions, categories } from "../../data/projects";
       })}
 
       <!-- OSS Contributions -->
-      <div class="mt-16 border-t border-app-border pt-12">
-        <h2 class="text-2xl font-semibold text-app-text mb-8">
-          Open Source Contributions
-        </h2>
-        <div class="space-y-8">
+      <div class="border-t border-app-gray-100 pt-10 lg:pt-14">
+        <SectionHeader 
+          title="Open Source Contributions" 
+          subtitle="Contributing to CNCF and open-source projects"
+          className="mb-8 lg:mb-10"
+        />
+        <div class="space-y-8 lg:space-y-10">
           {ossContributions.map((org) => (
             <div>
-              <h3 class="text-lg font-semibold text-app-text mb-3">
+              <h3 class="text-lg lg:text-xl font-display font-semibold text-app-text mb-4 lg:mb-6 tracking-[var(--tracking-tight)]">
                 {org.org}
               </h3>
-              <ul class="space-y-2">
+              <ul class="space-y-3 lg:space-y-4">
                 {org.prs.map((pr) => (
-                  <li class="flex items-start gap-2 text-sm">
-                    <span class="text-app-accent mt-0.5 flex-shrink-0">-</span>
+                  <li class="flex items-start gap-3 lg:gap-4">
+                    <span class="text-app-accent mt-1 flex-shrink-0 text-lg">-</span>
                     <a
                       href={pr.url}
                       target="_blank"
                       rel="noopener"
-                      class="text-app-gray hover:text-app-accent transition-colors"
+                      class="text-sm lg:text-base text-app-gray-400 hover:text-app-text transition-colors duration-300 tracking-[var(--tracking-tight)] leading-[1.4]"
                     >
                       {pr.title}
                     </a>

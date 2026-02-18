@@ -4,73 +4,70 @@ import { socialLinks, siteConfig } from "../data/site";
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-app-border bg-app-surface">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Brand -->
-      <div>
-        <p class="text-lg font-bold text-app-text">{siteConfig.name}</p>
-        <p class="mt-2 text-sm text-app-gray">
-          Platform Engineer & DevOps Consultant
-        </p>
-        <p class="mt-1 text-sm text-app-gray">
-          <a href={`mailto:${siteConfig.email}`} class="hover:text-app-accent transition-colors">
-            {siteConfig.email}
-          </a>
+<footer class="border-t border-app-gray-100">
+  <div class="container mx-auto py-8 lg:py-10">
+    <!-- Top Section -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between pb-8 lg:pb-10 border-b border-app-gray-100 gap-8">
+      <!-- CTA Text -->
+      <div class="max-w-[394px]">
+        <p class="text-lg lg:text-[40px] font-display font-semibold text-app-text leading-tight lg:leading-none tracking-[var(--tracking-tight)]">
+          Let's work together
         </p>
       </div>
-
-      <!-- Links -->
-      <div>
-        <p class="text-sm font-semibold text-app-text mb-3">Links</p>
-        <ul class="space-y-2 text-sm text-app-gray">
-          <li><a href="/blog/" class="hover:text-app-accent transition-colors">Blog</a></li>
-          <li><a href="/projects/" class="hover:text-app-accent transition-colors">Projects</a></li>
-          <li><a href="/services/" class="hover:text-app-accent transition-colors">Services</a></li>
-          <li><a href="/diary/" class="hover:text-app-accent transition-colors">Diary</a></li>
-          <li>
-            <a href={siteConfig.resumeUrl} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
-              Resume
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Social -->
-      <div>
-        <p class="text-sm font-semibold text-app-text mb-3">Connect</p>
-        <ul class="space-y-2 text-sm text-app-gray">
-          <li>
-            <a href={socialLinks.github} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
-              GitHub
-            </a>
-          </li>
-          <li>
-            <a href={socialLinks.linkedin} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
-              LinkedIn
-            </a>
-          </li>
-          <li>
-            <a href={socialLinks.twitter} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
-              Twitter / X
-            </a>
-          </li>
-          <li>
-            <a href={socialLinks.gitlab} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
-              GitLab
-            </a>
-          </li>
-          <li>
-            <a href={socialLinks.hashnode} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
-              Hashnode
-            </a>
-          </li>
-        </ul>
+      
+      <!-- Contact Links -->
+      <div class="flex flex-wrap gap-3 lg:gap-4">
+        <a
+          href={`mailto:${siteConfig.email}`}
+          class="px-4 py-[9px] lg:px-7 lg:py-3 border border-app-gray-200 rounded-[32px] text-sm lg:text-base font-medium text-app-gray-500 hover:border-app-text hover:bg-app-text hover:text-white transition-colors duration-300 tracking-[var(--tracking-tight)]"
+        >
+          {siteConfig.email}
+        </a>
+        <a
+          href={socialLinks.linkedin}
+          target="_blank"
+          rel="noopener"
+          class="px-4 py-[9px] lg:px-7 lg:py-3 bg-app-text text-white border border-app-text rounded-[32px] text-sm lg:text-base font-medium hover:bg-app-gray-600 transition-colors duration-300 tracking-[var(--tracking-tight)]"
+        >
+          LinkedIn
+        </a>
       </div>
     </div>
-
-    <div class="mt-10 pt-6 border-t border-app-border text-center text-sm text-app-gray">
-      &copy; {year} {siteConfig.name}. All rights reserved.
+    
+    <!-- Bottom Section -->
+    <div class="pt-8 lg:pt-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <!-- Social Links -->
+      <div class="flex flex-wrap gap-3 lg:gap-4">
+        <a
+          href={socialLinks.github}
+          target="_blank"
+          rel="noopener"
+          class="px-4 py-[9px] lg:py-3 border border-app-gray-200 rounded-[32px] text-sm lg:text-base font-medium text-app-gray-500 hover:border-app-text hover:text-app-text transition-colors duration-300 tracking-[var(--tracking-tight)]"
+        >
+          GitHub
+        </a>
+        <a
+          href={socialLinks.twitter}
+          target="_blank"
+          rel="noopener"
+          class="px-4 py-[9px] lg:py-3 border border-app-gray-200 rounded-[32px] text-sm lg:text-base font-medium text-app-gray-500 hover:border-app-text hover:text-app-text transition-colors duration-300 tracking-[var(--tracking-tight)]"
+        >
+          Twitter
+        </a>
+        <a
+          href={socialLinks.gitlab}
+          target="_blank"
+          rel="noopener"
+          class="px-4 py-[9px] lg:py-3 border border-app-gray-200 rounded-[32px] text-sm lg:text-base font-medium text-app-gray-500 hover:border-app-text hover:text-app-text transition-colors duration-300 tracking-[var(--tracking-tight)]"
+        >
+          GitLab
+        </a>
+      </div>
+      
+      <!-- Copyright -->
+      <div class="text-sm lg:text-base text-app-gray-500 tracking-[var(--tracking-tight)]">
+        &copy; {year} {siteConfig.name}
+      </div>
     </div>
   </div>
 </footer>
