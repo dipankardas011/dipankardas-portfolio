@@ -2,7 +2,7 @@
 import Header from "./Header.astro";
 import Footer from "./Footer.astro";
 import "../styles/global.css";
-import { siteConfig } from "../data/site";
+import { siteConfig, socialLinks } from "../data/site";
 
 interface Props {
   title?: string;
@@ -13,10 +13,11 @@ interface Props {
 const {
   title = siteConfig.title,
   description = siteConfig.description,
-  ogImage = "/img/cover.png",
+  ogImage = "/img/bg_9.jpg",
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(ogImage, Astro.site);
 ---
 
 <!doctype html>
@@ -26,20 +27,27 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="author" content={siteConfig.name} />
+    <meta name="theme-color" content="#171717" />
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="2220" />
+    <meta property="og:image:height" content="1510" />
     <meta property="og:url" content={canonicalUrl} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@DipanakarDas011" />
+    <meta name="twitter:creator" content="@DipanakarDas011" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -51,16 +59,17 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <title>{title}</title>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9PXLCZL052"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9PXLCZL052');
+    </script>
+    <script async src="https://platform.twitter.com/widgets.js"></script>
   </head>
-<!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9PXLCZL052"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-9PXLCZL052');
-  </script>
-  <defer script async src="https://platform.twitter.com/widgets.js"></script>
   <body class="bg-app-body text-app-text min-h-screen flex flex-col font-sans antialiased">
     <Header />
     <main class="flex-1">
