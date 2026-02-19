@@ -4,6 +4,7 @@ author: "Dipankar Das"
 date: 2024-10-28
 description: "Created a working project using the wasi's new composition feature"
 cover: "https://github.com/dipankardas011/wae/blob/main/cover.png?raw=true"
+category: "WebAssembly"
 ---
 ## Why I wanted to try WASI Preview 2?
 

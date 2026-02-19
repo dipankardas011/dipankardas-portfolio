@@ -5,6 +5,7 @@ date: 2026-01-25
 description: "Practical insights and best practices for managing PostgreSQL databases and implementing effective caching strategies."
 tags: ["postgres", "database", "caching", "performance"]
 cover: "/img/blogs/postgres-caching.png"
+category: "Database"
 ---
 Database management is a critical skill for any backend engineer. Recently, I've been diving deep into PostgreSQL and caching strategies to understand how to build more resilient and performant systems. Here are my key takeaways from this journey.
 

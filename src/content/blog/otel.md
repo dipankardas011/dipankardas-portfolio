@@ -5,6 +5,7 @@ date: 2025-11-07
 description: "A developer's practical guide to instrumenting applications with OpenTelemetry, sharing key learnings on spans, context propagation, and sampling."
 cover: "/img/blogs/otel-cover.png"
 tags: ["go", "otel", "troubleshooting", "debugging", "grafana", "prometheus"]
+category: "Observability"
 ---
 "Why is this request so slow?" "Where did the error originate?" "What's the actual path of a user request through our microservices?" If you've ever found yourself debugging a complex or distributed system, these questions are probably all too familiar. For the past two months, I've been diving deep into OpenTelemetry (OTEL), and it has fundamentally changed how I answer them.
 

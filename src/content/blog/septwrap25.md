@@ -5,6 +5,7 @@ date: 2025-10-06
 description: "A recap of my exciting tech journey in September 2025"
 cover: "/img/blogs/sept2025experience.png"
 tags: ["personal"]
+category: "Personal"
 ---
 What an incredible September it's been! This past month, I've been diving deep into some cutting-edge tech and exciting new projects. Here's a quick recap of my highlights:
 

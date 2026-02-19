@@ -5,6 +5,7 @@ date: 2025-10-19
 description: "How to resolve network connectivity issues between Docker and virt-manager VMs"
 cover: "/img/blogs/networkcoexistence.png"
 tags: ["docker", "virt-manager", "networking", "linux", "virtualization", "troubleshooting"]
+category: "Networking"
 ---
 ## **Resolving Network Forwarding Conflicts Between Libvirt and Docker**
 

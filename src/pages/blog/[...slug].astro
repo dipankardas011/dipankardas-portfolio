@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
-import RelatedPosts from "../../components/RelatedPosts.astro";
+import BlogPostCard from "../../components/BlogPostCard.astro";
+import TopGradient from "../../components/TopGradient";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -17,8 +18,9 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 
 const allPosts = (await getCollection("blog", ({ data }) => !data.draft))
-  .filter((p) => p.id !== "external-blogs")
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  .filter((p) => p.id !== "external-blogs" && p.id !== post.id)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
 
 const formattedDate = post.data.date.toLocaleDateString("en-US", {
   year: "numeric",
@@ -33,41 +35,96 @@ const formattedDate = post.data.date.toLocaleDateString("en-US", {
   ogImage={post.data.cover}
 >
   <article class="animate-fade-in">
-    <!-- Hero image -->
-    {post.data.cover && (
-      <div class="w-full max-h-96 overflow-hidden bg-app-surface">
-        <img
-          src={post.data.cover}
-          alt={post.data.title}
-          class="w-full h-full object-cover"
-          loading="eager"
-        />
+    <!-- Header -->
+    <div class="relative pt-10 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16">
+      <TopGradient client:load />
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 md:mb-14 lg:mb-20">
+          <div class="flex flex-col items-center text-center">
+            <time class="text-sm lg:text-xl text-app-gray-400 mb-2.5 lg:mb-5 tracking-[var(--tracking-tight)]">
+              {formattedDate}
+            </time>
+            <h1 class="text-2xl md:text-4xl lg:text-[56px] font-display font-semibold text-app-text leading-none tracking-[var(--tracking-tight)] max-w-4xl">
+              {post.data.title}
+            </h1>
+          </div>
+        </div>
+
+        <!-- Cover Image -->
+        {post.data.cover && (
+          <div class="aspect-[2.07] lg:aspect-[2.43] rounded-2xl overflow-hidden w-full bg-app-surface mb-6 md:mb-8 lg:mb-12">
+            <img
+              src={post.data.cover}
+              alt={post.data.title}
+              class="w-full h-full object-cover"
+              loading="eager"
+            />
+          </div>
+        )}
+
+        <!-- Tags -->
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mb-8 lg:mb-12 justify-center">
+            {post.data.tags.map((tag: string) => (
+              <span class="text-xs lg:text-sm font-medium px-3 py-1.5 lg:px-4 lg:py-2 bg-app-surface rounded-[32px] text-app-gray-500 border border-app-gray-200 tracking-[var(--tracking-tight)]">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <!-- Content -->
+        <div class="max-w-3xl mx-auto prose prose-lg max-w-none">
+          <Content />
+        </div>
+      </div>
+    </div>
+
+    <!-- Other Posts -->
+    {allPosts.length > 0 && (
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20 lg:pb-24">
+        <div class="border-t border-app-gray-200 pt-12 lg:pt-16">
+          <div class="flex items-center justify-between mb-8 lg:mb-12">
+            <h2 class="text-xl md:text-2xl lg:text-[32px] font-display font-semibold text-app-text tracking-[var(--tracking-tight)]">
+              Other posts
+            </h2>
+            <a
+              href="/blog"
+              class="hidden md:flex items-center px-4 py-2.5 lg:px-6 lg:py-3 bg-app-accent rounded-[32px] text-white text-sm lg:text-base tracking-[var(--tracking-tight)] hover:bg-opacity-90 transition-all duration-300"
+            >
+              <span class="mr-2">See all posts</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 lg:w-5 lg:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+          <div class="grid grid-cols-1 auto-rows-fr gap-6 p-4 border border-app-gray-200 rounded-2xl md:grid-cols-2 lg:grid-cols-3 lg:gap-8 lg:p-8">
+            {allPosts.map((otherPost) => (
+              <BlogPostCard
+                title={otherPost.data.title}
+                date={otherPost.data.date}
+                description={otherPost.data.description}
+                cover={otherPost.data.cover}
+                slug={otherPost.id}
+                showIcon={true}
+              />
+            ))}
+          </div>
+          <div class="mt-8 text-center md:hidden">
+            <a
+              href="/blog"
+              class="inline-flex items-center px-4 py-3 bg-app-accent rounded-[32px] text-white text-sm tracking-[var(--tracking-tight)] hover:bg-opacity-90 transition-all duration-300"
+            >
+              <span class="mr-2">See all posts</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
       </div>
     )}
-
-    <!-- Content -->
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <time class="text-sm font-medium text-app-gray uppercase tracking-wider">
-        {formattedDate}
-      </time>
-      <h1 class="mt-3 text-3xl md:text-[44px] font-bold text-app-text leading-tight">
-        {post.data.title}
-      </h1>
-      {post.data.tags && (
-        <div class="mt-4 flex flex-wrap gap-2">
-          {post.data.tags.map((tag: string) => (
-            <span class="text-xs font-medium px-2 py-1 bg-app-accent-light text-app-accent rounded">
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
-
-      <div class="mt-10 prose prose-lg max-w-none">
-        <Content />
-      </div>
-
-      <RelatedPosts posts={allPosts} currentSlug={post.id} />
-    </div>
   </article>
 </BaseLayout>

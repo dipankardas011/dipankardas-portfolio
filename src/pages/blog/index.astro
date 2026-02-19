@@ -1,79 +1,70 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
 import BlogPostCard from "../../components/BlogPostCard.astro";
+import BlogList from "../../components/BlogList";
+import AnimatedTitle from "../../components/AnimatedTitle";
+import TopGradient from "../../components/TopGradient";
 import { getCollection } from "astro:content";
 import { externalBlogs } from "../../data/external-blogs";
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
-// Filter out the external-blogs index file
+// Filter out the external-blogs index file and sort by date
 const blogPosts = allPosts
   .filter((p) => p.id !== "external-blogs")
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const [featured, ...rest] = blogPosts;
+// Extract unique categories
+const categories = blogPosts.reduce((acc, post) => {
+  if (post.data.category && !acc.includes(post.data.category)) {
+    acc.push(post.data.category);
+  }
+  return acc;
+}, [] as string[]).sort();
+
+// Serialize posts for client-side
+const serializedPosts = blogPosts.map(post => ({
+  id: post.id,
+  title: post.data.title,
+  date: post.data.date.toISOString(),
+  description: post.data.description,
+  cover: post.data.cover,
+  category: post.data.category,
+}));
 ---
 
 <BaseLayout
   title="Blog - Dipankar Das"
   description="Technical articles on DevOps, Kubernetes, Go, and cloud-native development."
 >
-  <section class="py-16 md:py-20 animate-fade-in">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-12">
-        <h1 class="text-4xl md:text-[56px] font-bold text-app-text">Blog</h1>
-        <p class="mt-4 text-lg text-app-gray">
-          Technical articles, guides, and learnings from the field
-        </p>
-      </div>
+  <div class="relative">
+    <TopGradient client:load />
+    <AnimatedTitle title="Blog" client:load />
+  </div>
 
-      <!-- Featured + Recent -->
-      {featured && (
-        <div class="mb-12">
+  <!-- Blog List with Search & Filters -->
+  <BlogList client:load posts={serializedPosts} categories={categories} />
+
+  <!-- External blogs -->
+  <section class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20 lg:pb-24">
+    <div class="border-t border-app-gray-200 pt-12 lg:pt-16">
+      <h2 class="text-xl md:text-2xl lg:text-[32px] font-display font-semibold text-app-text mb-2 lg:mb-3 tracking-[var(--tracking-tight)]">
+        External articles
+      </h2>
+      <p class="text-sm lg:text-base text-app-gray-400 mb-8 lg:mb-10 tracking-[var(--tracking-tight)]">
+        Posts published on Hashnode, WordPress, and Kubesimplify
+      </p>
+      <div class="grid grid-cols-1 auto-rows-fr gap-6 p-4 border border-app-gray-200 rounded-2xl md:grid-cols-2 lg:grid-cols-3 lg:gap-8 lg:p-8">
+        {externalBlogs.map((blog) => (
           <BlogPostCard
-            title={featured.data.title}
-            date={featured.data.date}
-            description={featured.data.description}
-            cover={featured.data.cover}
-            slug={featured.id}
-            featured={true}
+            title={blog.title}
+            date={new Date("2024-01-01")}
+            description={blog.description}
+            cover={blog.image}
+            href={blog.url}
+            showIcon={true}
           />
-        </div>
-      )}
-
-      {rest.length > 0 && (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {rest.map((post) => (
-            <BlogPostCard
-              title={post.data.title}
-              date={post.data.date}
-              description={post.data.description}
-              cover={post.data.cover}
-              slug={post.id}
-            />
-          ))}
-        </div>
-      )}
-
-      <!-- External blogs -->
-      <div class="border-t border-app-border pt-12">
-        <h2 class="text-2xl font-semibold text-app-text mb-2">
-          External articles
-        </h2>
-        <p class="text-app-gray mb-8">
-          Posts published on Hashnode, WordPress, and Kubesimplify
-        </p>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {externalBlogs.map((blog) => (
-            <BlogPostCard
-              title={blog.title}
-              date={new Date("2024-01-01")}
-              description={blog.description}
-              cover={blog.image}
-              href={blog.url}
-            />
-          ))}
-        </div>
+        ))}
       </div>
     </div>
   </section>
