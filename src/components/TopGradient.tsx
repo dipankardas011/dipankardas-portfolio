@@ -5,7 +5,7 @@ interface Props {
 export default function TopGradient({ className = "" }: Props) {
   return (
     <div
-      className={`absolute -top-9 left-1/2 -translate-x-1/2 -translate-y-full blur-[110px] w-[428px] h-[428px] rounded-full ${className}`}
+      className={`absolute -top-9 left-1/2 -translate-x-1/2 -translate-y-full blur-[110px] w-[200px] h-[200px] md:w-[428px] md:h-[428px] rounded-full ${className}`}
       style={{ backgroundColor: '#D9FAA1' }}
     />
   );

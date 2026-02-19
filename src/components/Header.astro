@@ -53,7 +53,7 @@ const currentPath = Astro.url.pathname;
     </nav>
 
     <!-- Mobile nav (full screen overlay) -->
-    <div id="mobile-menu" class="hidden fixed inset-0 bg-app-text text-white pt-20 px-6">
+    <div id="mobile-menu" class="hidden fixed inset-0 z-50 bg-app-text text-white pt-20 px-6">
       <ul class="space-y-6">
         {navItems.map((item) => (
           <li>
