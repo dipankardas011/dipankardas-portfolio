@@ -3,6 +3,7 @@ import BaseLayout from "../../components/BaseLayout.astro";
 import AnimatedTitle from "../../components/AnimatedTitle";
 import ProjectCard from "../../components/ProjectCard.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
+import OSSCard from "../../components/OSSCard.astro";
 import { projects, ossContributions, categories } from "../../data/projects";
 ---
 
@@ -48,28 +49,12 @@ import { projects, ossContributions, categories } from "../../data/projects";
           subtitle="Contributing to CNCF and open-source projects"
           className="mb-8 lg:mb-10"
         />
-        <div class="space-y-8 lg:space-y-10">
-          {ossContributions.map((org) => (
-            <div>
-              <h3 class="text-lg lg:text-xl font-display font-semibold text-app-text mb-4 lg:mb-6 tracking-[var(--tracking-tight)]">
-                {org.org}
-              </h3>
-              <ul class="space-y-3 lg:space-y-4">
-                {org.prs.map((pr) => (
-                  <li class="flex items-start gap-3 lg:gap-4">
-                    <span class="text-app-accent mt-1 flex-shrink-0 text-lg">-</span>
-                    <a
-                      href={pr.url}
-                      target="_blank"
-                      rel="noopener"
-                      class="text-sm lg:text-base text-app-gray-400 hover:text-app-text transition-colors duration-300 tracking-[var(--tracking-tight)] leading-[1.4]"
-                    >
-                      {pr.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          {ossContributions.map((contribution) => (
+            <OSSCard
+              org={contribution.org}
+              prs={contribution.prs}
+            />
           ))}
         </div>
       </div>
