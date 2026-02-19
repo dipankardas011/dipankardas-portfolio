@@ -5,14 +5,14 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header class="relative z-50">
-  <div class="container mx-auto pt-6">
+  <div class="relative z-10 container mx-auto pt-6">
     <nav class="relative flex items-center justify-between">
-      <!-- Logo (Left - takes 1/3 width on desktop) -->
-      <a href="/" class="flex md:flex-1 text-lg md:text-xl font-display text-app-text hover:text-app-accent transition-colors tracking-tight">
+      <!-- Logo -->
+      <a id="header-logo" href="/" class="flex md:flex-1 text-lg md:text-xl font-display text-app-text hover:text-app-accent transition-colors tracking-tight">
         {siteConfig.name}
       </a>
 
-      <!-- Desktop nav (Center - takes 1/3 width and centers content) -->
+      <!-- Desktop nav -->
       <ul class="hidden md:flex md:flex-1 md:justify-center items-center gap-6 lg:gap-10">
         {navItems.map((item) => (
           <li>
@@ -32,61 +32,81 @@ const currentPath = Astro.url.pathname;
         ))}
       </ul>
 
-      <!-- Right section (takes 1/3 width on desktop) - Empty for now, can add location/time later -->
+      <!-- Right section (desktop) -->
       <div class="hidden md:flex md:flex-1 md:justify-end">
-        <!-- Placeholder for future content like location/time -->
       </div>
 
       <!-- Mobile menu button -->
       <button
         id="mobile-menu-btn"
-        class="flex md:hidden p-2 text-app-gray-500 hover:text-app-text transition-colors"
+        class="flex md:hidden p-2 transition-colors"
         aria-label="Toggle menu"
       >
-        <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        <!-- 2-line hamburger (reference style) -->
+        <svg id="menu-icon" class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 16H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        <!-- X icon -->
+        <svg id="close-icon" class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
     </nav>
 
-    <!-- Mobile nav (full screen overlay) -->
-    <div id="mobile-menu" class="hidden fixed inset-0 z-50 bg-app-text text-white pt-20 px-6">
-      <ul class="space-y-6">
-        {navItems.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              class:list={[
-                "block text-base font-medium py-2 tracking-[var(--tracking-tight)] transition-colors duration-300",
-                currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href))
-                  ? "text-white"
-                  : "text-white/70 hover:text-white",
-              ]}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <!-- Mobile nav links (sits above the backdrop, inside the z-10 container) -->
+    <ul id="mobile-nav-links" class="hidden flex-col gap-8 pt-12 md:hidden">
+      {navItems.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class:list={[
+              "block text-base font-medium py-2 tracking-[var(--tracking-tight)] transition-colors duration-300",
+              currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href))
+                ? "text-white"
+                : "text-white/70 hover:text-white",
+            ]}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
   </div>
+
+  <!-- Full-screen dark backdrop (behind the nav via z-0) -->
+  <div id="mobile-backdrop" class="hidden fixed top-0 left-0 w-screen h-screen bg-app-text md:hidden" />
 </header>
 
 <script>
   const btn = document.getElementById("mobile-menu-btn");
-  const menu = document.getElementById("mobile-menu");
   const menuIcon = document.getElementById("menu-icon");
   const closeIcon = document.getElementById("close-icon");
+  const navLinks = document.getElementById("mobile-nav-links");
+  const backdrop = document.getElementById("mobile-backdrop");
+  const logo = document.getElementById("header-logo");
 
   btn?.addEventListener("click", () => {
-    menu?.classList.toggle("hidden");
+    const isOpening = navLinks?.classList.contains("hidden");
+
+    navLinks?.classList.toggle("hidden");
+    navLinks?.classList.toggle("flex");
+    backdrop?.classList.toggle("hidden");
     menuIcon?.classList.toggle("hidden");
     closeIcon?.classList.toggle("hidden");
-    
-    // Prevent scrolling when menu is open
-    document.body.style.overflow = menu?.classList.contains("hidden") ? "auto" : "hidden";
+
+    // Switch colors for open state
+    if (isOpening) {
+      btn?.classList.add("text-white");
+      logo?.classList.add("text-white");
+      logo?.classList.remove("text-app-text");
+    } else {
+      btn?.classList.remove("text-white");
+      logo?.classList.remove("text-white");
+      logo?.classList.add("text-app-text");
+    }
+
+    document.body.style.overflow = isOpening ? "hidden" : "auto";
   });
 </script>
