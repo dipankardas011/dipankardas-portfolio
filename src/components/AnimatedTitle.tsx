@@ -39,7 +39,7 @@ const AnimatedTitle: React.FC<TitleProps> = ({
       <h1
         ref={titleRef}
         className={classNames(
-          'whitespace-nowrap font-display text-[114px] sm:text-[190px] md:text-[220px] lg:text-[300px] xl:text-[464px] font-bold leading-none tracking-[1.59px] lg:tracking-[5.59px]',
+          'whitespace-nowrap font-display text-[114px] sm:text-[190px] md:text-[220px] lg:text-[300px] xl:text-[464px]leading-none tracking-[1.59px] lg:tracking-[5.59px]',
           titleClassName
         )}
       >

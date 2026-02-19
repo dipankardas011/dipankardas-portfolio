@@ -42,7 +42,7 @@ const years = Object.keys(entriesByYear).sort((a, b) => Number(b) - Number(a));
               <!-- Year Header -->
               <div class="flex items-center mb-6 lg:mb-8">
                 <div class="flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-app-accent flex items-center justify-center">
-                  <span class="text-white font-display font-semibold text-lg lg:text-xl tracking-[var(--tracking-tight)]">
+                  <span class="text-white font-display text-lg lg:text-xl tracking-[var(--tracking-tight)]">
                     {year}
                   </span>
                 </div>
@@ -80,7 +80,7 @@ const years = Object.keys(entriesByYear).sort((a, b) => Number(b) - Number(a));
                               <path d="m12 5 7 7-7 7"></path>
                             </svg>
                           </div>
-                          <h2 class="text-base lg:text-lg font-display font-semibold text-app-text tracking-[var(--tracking-tight)] mb-1 group-hover:text-app-accent transition-colors">
+                          <h2 class="text-base lg:text-lg font-display text-app-text tracking-[var(--tracking-tight)] mb-1 group-hover:text-app-accent transition-colors">
                             {entry.data.title}
                           </h2>
                           {entry.data.description && (

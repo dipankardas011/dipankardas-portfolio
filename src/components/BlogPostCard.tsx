@@ -61,7 +61,7 @@ export default function BlogPostCard({
           </time>
           <div className="flex items-start gap-2 mb-2.5 lg:mb-4">
             <h3
-              className={`font-display font-semibold text-app-text leading-none tracking-[var(--tracking-tight)] flex-1 ${
+              className={`font-display text-app-text leading-none tracking-[var(--tracking-tight)] flex-1 ${
                 featured ? "text-xl lg:text-[32px]" : "text-sm lg:text-2xl"
               }`}
             >

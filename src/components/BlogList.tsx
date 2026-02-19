@@ -88,7 +88,7 @@ export default function BlogList({ posts, categories }: Props) {
         <div className="mb-12 lg:mb-16">
           {filteredPosts.length > 0 ? (
             <>
-              <h2 className="text-xl md:text-2xl font-display font-semibold text-app-text mb-6 lg:mb-8 tracking-[var(--tracking-tight)]">
+              <h2 className="text-xl md:text-2xl font-display text-app-text mb-6 lg:mb-8 tracking-[var(--tracking-tight)]">
                 Search results for "{searchVal}"
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -117,7 +117,7 @@ export default function BlogList({ posts, categories }: Props) {
 
       {/* All Posts */}
       <div>
-        <h2 className="text-xl md:text-2xl lg:text-[32px] font-display font-semibold text-app-text mb-6 lg:mb-10 tracking-[var(--tracking-tight)]">
+        <h2 className="text-xl md:text-2xl lg:text-[32px] font-display text-app-text mb-6 lg:mb-10 tracking-[var(--tracking-tight)]">
           {selectedCategory ? `${selectedCategory} posts` : "All posts"}
         </h2>
         <div className="grid grid-cols-1 auto-rows-fr gap-6 p-4 border border-app-gray-200 rounded-2xl md:grid-cols-2 lg:grid-cols-3 lg:gap-8 lg:p-8">
