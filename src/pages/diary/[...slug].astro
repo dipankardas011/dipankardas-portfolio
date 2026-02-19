@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
+import TopGradient from "../../components/TopGradient";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -17,6 +18,15 @@ const formattedDate = entry.data.date.toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
 });
+
+// Get all entries sorted by date for navigation
+const allEntries = (await getCollection("diary")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+const currentIndex = allEntries.findIndex(e => e.id === entry.id);
+const nextEntry = currentIndex > 0 ? allEntries[currentIndex - 1] : null;
+const prevEntry = currentIndex < allEntries.length - 1 ? allEntries[currentIndex + 1] : null;
 ---
 
 <BaseLayout
@@ -24,31 +34,128 @@ const formattedDate = entry.data.date.toLocaleDateString("en-US", {
   description={entry.data.description}
 >
   <article class="animate-fade-in">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <a
-        href="/diary/"
-        class="text-sm text-app-accent hover:text-app-accent-hover transition-colors"
-      >
-        &larr; Back to diary
-      </a>
-      <time class="block mt-6 text-sm font-medium text-app-gray uppercase tracking-wider">
-        {formattedDate}
-      </time>
-      <h1 class="mt-3 text-3xl md:text-[44px] font-bold text-app-text leading-tight">
-        {entry.data.title}
-      </h1>
+    <div class="relative pt-10 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16">
+      <TopGradient client:load />
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto">
+          <!-- Back Link -->
+          <a
+            href="/diary/"
+            class="inline-flex items-center text-sm lg:text-base text-app-accent hover:text-app-accent transition-colors tracking-[var(--tracking-tight)] group"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              class="w-4 h-4 lg:w-5 lg:h-5 mr-2 transition-transform group-hover:-translate-x-1" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"
+            >
+              <path d="M19 12H5"></path>
+              <path d="m12 19-7-7 7-7"></path>
+            </svg>
+            Back to diary
+          </a>
 
-      <div class="mt-10 prose prose-lg max-w-none">
-        <Content />
-      </div>
+          <!-- Header -->
+          <div class="mt-8 lg:mt-12 mb-8 lg:mb-12">
+            <time class="block text-sm lg:text-xl text-app-gray-400 mb-2.5 lg:mb-5 tracking-[var(--tracking-tight)] uppercase">
+              {formattedDate}
+            </time>
+            <h1 class="text-2xl md:text-4xl lg:text-[56px] font-display font-semibold text-app-text leading-none tracking-[var(--tracking-tight)]">
+              {entry.data.title}
+            </h1>
+            {entry.data.description && (
+              <p class="mt-4 lg:mt-6 text-base lg:text-lg text-app-gray-500 tracking-[var(--tracking-tight)]">
+                {entry.data.description}
+              </p>
+            )}
+          </div>
 
-      <div class="mt-12 pt-6 border-t border-app-border">
-        <a
-          href="/diary/"
-          class="text-sm text-app-accent hover:text-app-accent-hover transition-colors"
-        >
-          &larr; Back to diary
-        </a>
+          <!-- Content -->
+          <div class="prose prose-lg max-w-none">
+            <Content />
+          </div>
+
+          <!-- Navigation -->
+          <div class="mt-12 lg:mt-16 pt-8 lg:pt-12 border-t border-app-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+              <!-- Previous Entry -->
+              {prevEntry ? (
+                <a
+                  href={`/diary/${prevEntry.id}/`}
+                  class="group flex items-start gap-3 p-4 lg:p-5 bg-app-surface border border-app-gray-200 rounded-2xl transition-all duration-300 hover:border-app-accent hover:shadow-md"
+                >
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    class="w-5 h-5 lg:w-6 lg:h-6 text-app-gray-400 flex-shrink-0 mt-0.5 transition-all group-hover:text-app-accent group-hover:-translate-x-1" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
+                  >
+                    <path d="M19 12H5"></path>
+                    <path d="m12 19-7-7 7-7"></path>
+                  </svg>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-xs lg:text-sm text-app-gray-400 mb-1 tracking-[var(--tracking-tight)] uppercase">
+                      Previous
+                    </div>
+                    <div class="text-sm lg:text-base font-display font-semibold text-app-text tracking-[var(--tracking-tight)] group-hover:text-app-accent transition-colors line-clamp-2">
+                      {prevEntry.data.title}
+                    </div>
+                  </div>
+                </a>
+              ) : (
+                <div></div>
+              )}
+
+              <!-- Next Entry -->
+              {nextEntry && (
+                <a
+                  href={`/diary/${nextEntry.id}/`}
+                  class="group flex items-start gap-3 p-4 lg:p-5 bg-app-surface border border-app-gray-200 rounded-2xl transition-all duration-300 hover:border-app-accent hover:shadow-md md:ml-auto md:text-right"
+                >
+                  <div class="flex-1 min-w-0 md:order-1">
+                    <div class="text-xs lg:text-sm text-app-gray-400 mb-1 tracking-[var(--tracking-tight)] uppercase">
+                      Next
+                    </div>
+                    <div class="text-sm lg:text-base font-display font-semibold text-app-text tracking-[var(--tracking-tight)] group-hover:text-app-accent transition-colors line-clamp-2">
+                      {nextEntry.data.title}
+                    </div>
+                  </div>
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    class="w-5 h-5 lg:w-6 lg:h-6 text-app-gray-400 flex-shrink-0 mt-0.5 transition-all group-hover:text-app-accent group-hover:translate-x-1 md:order-2" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </a>
+              )}
+            </div>
+
+            <!-- Back to Diary Link -->
+            <div class="mt-6 lg:mt-8 text-center">
+              <a
+                href="/diary/"
+                class="inline-flex items-center px-4 py-2.5 lg:px-6 lg:py-3 bg-app-accent rounded-[32px] text-white text-sm lg:text-base tracking-[var(--tracking-tight)] hover:bg-opacity-90 transition-all duration-300"
+              >
+                View all entries
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </article>
