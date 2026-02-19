@@ -6,9 +6,6 @@ import CertBadge from "../components/CertBadge.astro";
 import ContactSection from "../components/ContactSection.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import { services, certifications } from "../data/services";
-
-// Service colors for visual variety
-const serviceColors = ["#06b6d4", "#8B5CF6", "#10B981", "#F59E0B"];
 ---
 
 <BaseLayout
@@ -29,13 +26,13 @@ const serviceColors = ["#06b6d4", "#8B5CF6", "#10B981", "#F59E0B"];
 
       <!-- Services Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-10 lg:mb-[120px]">
-        {services.map((s, index) => (
+        {services.map((s) => (
           <ServiceCard
             title={s.title}
             icon={s.icon}
             description={s.description}
             skills={s.skills}
-            color={serviceColors[index % serviceColors.length]}
+            color={s.color}
           />
         ))}
       </div>

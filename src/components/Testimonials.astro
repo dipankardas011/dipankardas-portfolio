@@ -1,0 +1,57 @@
+---
+import SectionHeader from "./SectionHeader.astro";
+import BlurDecoration from "./BlurDecoration.astro";
+import type { Testimonial } from "../data/testimonials";
+
+interface Props {
+  testimonials: Testimonial[];
+}
+
+const { testimonials } = Astro.props;
+---
+
+<section class="pb-10 lg:pb-14">
+  <div class="relative container mx-auto">
+    <div class="relative z-10 mb-8 md:flex md:items-start md:justify-between md:gap-16 lg:gap-20 lg:mb-10">
+      <SectionHeader 
+        title="Testimonials" 
+        subtitle=""
+        className="mb-0 md:mt-4"
+      />
+      <div class="md:max-w-[761px]">
+        <p class="text-sm leading-[1.4] tracking-[var(--tracking-tight)] text-app-gray-400 pb-6 border-b border-app-gray-100 mb-6 lg:text-base lg:leading-[1.4] lg:pb-8 lg:mb-8">
+          What people I've worked with have to say about my work and contributions to their projects.
+        </p>
+        <div class="grid grid-cols-1 gap-6 lg:gap-8">
+          {testimonials.map((item) => (
+            <div class="pb-6 border-b border-app-gray-100 lg:pb-8">
+              <div class="flex items-center mb-[14px] lg:mb-6">
+                <img
+                  src={item.photo}
+                  alt={item.name}
+                  class="w-8 h-8 rounded-full overflow-hidden object-cover mr-2.5 lg:w-12 lg:h-12 lg:mr-4"
+                  loading="lazy"
+                />
+                <div class="text-sm leading-none tracking-[var(--tracking-tight)] font-display lg:text-lg lg:leading-none">
+                  {item.name}
+                  {item.role && item.company && (
+                    <span class="text-app-gray-400 font-sans text-xs lg:text-sm ml-2">
+                      {item.role} at {item.company}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <p class="text-sm leading-[1.4] tracking-[var(--tracking-tight)] text-app-gray-400 lg:text-[15px] lg:leading-[1.4]">
+                {item.content}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Blur Decorations -->
+    <div class="absolute top-[50%] -left-[10%] w-[296px] h-[296px] rounded-full opacity-20 blur-[120px] bg-blend-overlay bg-blur-yellow pointer-events-none max-md:hidden" />
+    <div class="absolute top-[30%] left-0 w-[296px] h-[296px] rounded-full opacity-20 blur-[120px] bg-blend-overlay bg-blur-purple pointer-events-none max-md:hidden" />
+  </div>
+</section>

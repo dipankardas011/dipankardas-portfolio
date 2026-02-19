@@ -5,39 +5,50 @@ import ServiceCard from "../components/ServiceCard.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import ContactSection from "../components/ContactSection.astro";
 import SectionHeader from "../components/SectionHeader.astro";
+import Testimonials from "../components/Testimonials.astro";
 import { services } from "../data/services";
 import { projects } from "../data/projects";
+import { testimonials } from "../data/testimonials";
 import { Tweet } from '@astro-community/astro-embed-twitter';
 
 const featuredProjects = projects.filter((p) => p.featured);
-
-// Service colors for visual variety
-const serviceColors = ["#06b6d4", "#8B5CF6", "#10B981", "#F59E0B"];
 ---
 
 <BaseLayout>
   <Hero />
 
   <!-- Services -->
-  <section class="py-10 lg:pb-14 bg-app-surface-alt">
+  <section class="py-10 lg:pb-14">
     <div class="container mx-auto">
-      <SectionHeader 
-        title="What I do" 
-        subtitle="Consulting and engineering services for modern infrastructure"
-      />
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        {services.map((s, index) => (
-          <ServiceCard
-            title={s.title}
-            icon={s.icon}
-            description={s.description}
-            skills={s.skills}
-            color={serviceColors[index % serviceColors.length]}
-          />
-        ))}
+      <div class="mb-5 md:flex md:items-start md:justify-between md:gap-16 md:mb-10 lg:gap-20">
+        <SectionHeader 
+          title="What I do" 
+          subtitle=""
+          className="mb-0 md:mt-4"
+        />
+        <p class="text-sm leading-[1.4] tracking-[var(--tracking-tight)] text-app-gray-400 md:max-w-[761px] lg:text-base lg:leading-[1.4]">
+          Consulting and engineering services for modern infrastructure, covering DevOps, cloud-native systems, and sustainable computing.
+        </p>
       </div>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        {services.map((s) => (
+          <li>
+            <ServiceCard
+              title={s.title}
+              abbreviation={s.abbreviation}
+              icon={s.icon}
+              description={s.description}
+              skills={s.skills}
+              color={s.color}
+            />
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
+
+  <!-- Testimonials -->
+  <Testimonials testimonials={testimonials} />
 
   <!-- Featured Projects -->
   <section class="py-10 lg:pb-14">

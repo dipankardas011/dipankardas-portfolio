@@ -17,7 +17,7 @@ export const projects: Project[] = [
     links: [
       { label: "Website", url: "https://ksctl.com/product/kubmin" },
     ],
-    category: "Infra Tools",
+    category: "Products",
     tags: ["Go", "Kubernetes", "Multi-Cloud", "Sustainability"],
     featured: true,
   },
@@ -30,7 +30,7 @@ export const projects: Project[] = [
       { label: "GitHub", url: "https://github.com/ksctl/kli" },
       { label: "Website", url: "https://ksctl.com/product/kli" },
     ],
-    category: "Infra Tools",
+    category: "Products",
     tags: ["Go", "Kubernetes", "Multi-Cloud", "Sustainability"],
     featured: true,
   },
@@ -44,7 +44,7 @@ export const projects: Project[] = [
       { label: "GitHub", url: "https://github.com/dipankardas011/wae" },
       { label: "Tweet", url: "https://twitter.com/DipankarDas011/status/1809538678835847218" },
     ],
-    category: "Distributed Systems",
+    category: "Experiments",
     tags: ["Rust", "WASI", "WebAssembly", "Green Software"],
     featured: true,
   },
@@ -75,7 +75,7 @@ export const projects: Project[] = [
       },
       { label: "Tweet", url: "https://twitter.com/DipankarDas011/status/1740682428396527678" },
     ],
-    category: "Distributed Systems",
+    category: "Experiments",
     tags: ["Go", "Actor Model", "Concurrency"],
   },
   {
@@ -94,7 +94,7 @@ export const projects: Project[] = [
         url: "https://twitter.com/DipankarDas011/status/1709901427731038677",
       },
     ],
-    category: "Infra Tools",
+    category: "Experiments",
     tags: ["Go", "CI/CD", "Automation"],
   },
   {
@@ -150,38 +150,8 @@ export const projects: Project[] = [
         url: "https://github.com/dipankardas011/PDF-Editor",
       },
     ],
-    category: "Web Apps",
+    category: "Products",
     tags: ["JavaScript", "PDF", "Web App"],
-  },
-  {
-    title: "Weather App",
-    description:
-      "Web application providing weather reports for a given location.",
-    image:
-      "https://github.com/dipankardas011/Weather-App/raw/main/CoverPage.jpeg",
-    links: [
-      {
-        label: "GitHub",
-        url: "https://github.com/dipankardas011/Weather-App",
-      },
-    ],
-    category: "Web Apps",
-    tags: ["JavaScript", "API", "Web App"],
-  },
-  {
-    title: "Flight Booking System",
-    description:
-      "Application for booking aeroplane tickets with visualization of seating arrangement via generated pictures.",
-    image:
-      "https://github.com/dipankardas011/AirportBooking/raw/main/CoverPage.jpg",
-    links: [
-      {
-        label: "GitHub",
-        url: "https://github.com/dipankardas011/AirportBooking",
-      },
-    ],
-    category: "Web Apps",
-    tags: ["Java", "Visualization", "Booking System"],
   },
 ];
 
@@ -323,8 +293,8 @@ export const ossContributions = [
 ];
 
 export const categories = [
-  "Infra Tools",
+  "Products",
+  "Experiments",
   "Distributed Systems",
   "AI/ML",
-  "Web Apps",
 ];

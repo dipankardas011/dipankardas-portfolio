@@ -1,0 +1,62 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  org: string;
+  icon?: string;
+  prs: { title: string; url: string }[];
+  className?: string;
+}
+
+const { org, icon, prs, className = "" } = Astro.props;
+
+// Simple org name to icon mapping
+const orgIcons: Record<string, string> = {
+  "CNCF TAG Green": "mdi:leaf",
+  "Kubernetes": "mdi:kubernetes",
+  "Bytecode Alliance (WASI)": "mdi:code-braces",
+  "Fermyon (WASM)": "mdi:cube-outline",
+  "Kubeshop Monokle": "mdi:kubernetes",
+  "Other CNCF Projects": "mdi:cloud-outline",
+};
+
+const displayIcon = icon || orgIcons[org] || "mdi:github";
+---
+
+<div class={`bg-app-surface rounded-3xl p-6 lg:p-8 border border-app-gray-200 transition-all duration-300 hover:shadow-lg ${className}`}>
+  <!-- Header -->
+  <div class="flex items-start justify-between gap-4 mb-6">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl bg-app-surface-alt flex items-center justify-center flex-shrink-0">
+        <Icon name={displayIcon} class="w-5 h-5 lg:w-6 lg:h-6 text-app-accent" />
+      </div>
+      <h3 class="text-lg lg:text-xl font-display font-semibold text-app-text tracking-[var(--tracking-tight)]">
+        {org}
+      </h3>
+    </div>
+    <span class="text-xs lg:text-sm font-medium text-app-gray-400 bg-app-surface-alt px-3 py-1 rounded-full flex-shrink-0">
+      {prs.length} PR{prs.length !== 1 ? 's' : ''}
+    </span>
+  </div>
+
+  <!-- PR List -->
+  <div class="max-h-[240px] overflow-y-auto pr-2 scrollbar-thin">
+    <ul class="space-y-3">
+      {prs.map((pr) => (
+        <li class="flex items-start gap-2.5">
+          <span class="text-app-accent mt-0.5 flex-shrink-0">
+            <Icon name="mdi:source-pull" class="w-4 h-4" />
+          </span>
+          <a
+            href={pr.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm text-app-gray-400 hover:text-app-text transition-colors duration-300 tracking-[var(--tracking-tight)] leading-[1.5]"
+          >
+            {pr.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>

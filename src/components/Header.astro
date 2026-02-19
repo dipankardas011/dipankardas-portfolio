@@ -6,14 +6,14 @@ const currentPath = Astro.url.pathname;
 
 <header class="relative z-50">
   <div class="container mx-auto pt-6">
-    <nav class="flex items-center justify-between">
-      <!-- Logo -->
-      <a href="/" class="text-lg md:text-xl font-display font-bold text-app-text hover:text-app-accent transition-colors tracking-tight">
+    <nav class="relative flex items-center justify-between">
+      <!-- Logo (Left - takes 1/3 width on desktop) -->
+      <a href="/" class="flex md:flex-1 text-lg md:text-xl font-display font-bold text-app-text hover:text-app-accent transition-colors tracking-tight">
         {siteConfig.name}
       </a>
 
-      <!-- Desktop nav -->
-      <ul class="hidden md:flex items-center gap-6 lg:gap-8">
+      <!-- Desktop nav (Center - takes 1/3 width and centers content) -->
+      <ul class="hidden md:flex md:flex-1 md:justify-center items-center gap-6 lg:gap-10">
         {navItems.map((item) => (
           <li>
             <a
@@ -32,10 +32,15 @@ const currentPath = Astro.url.pathname;
         ))}
       </ul>
 
+      <!-- Right section (takes 1/3 width on desktop) - Empty for now, can add location/time later -->
+      <div class="hidden md:flex md:flex-1 md:justify-end">
+        <!-- Placeholder for future content like location/time -->
+      </div>
+
       <!-- Mobile menu button -->
       <button
         id="mobile-menu-btn"
-        class="md:hidden p-2 text-app-gray-500 hover:text-app-text transition-colors"
+        class="flex md:hidden p-2 text-app-gray-500 hover:text-app-text transition-colors"
         aria-label="Toggle menu"
       >
         <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -11,12 +11,13 @@ import { siteConfig } from "../data/site";
   title="About - Dipankar Das"
   description="Platform engineer passionate about DevOps, Kubernetes, and sustainable computing."
 >
-  <div class="pt-8 pb-10 overflow-hidden md:pb-20 lg:pt-[72px] lg:pb-[120px]">
+  <AnimatedTitle 
+    title="About" 
+    client:load 
+  />
+
+  <section class="py-10 lg:pb-14 animate-fade-in">
     <div class="container mx-auto mb-10 lg:mb-[128px] xl:pr-[220px]">
-      <AnimatedTitle 
-        title="About" 
-        client:load 
-      />
       
       <!-- Education Section -->
       <div class="mb-8 lg:flex lg:items-start lg:gap-[98px] lg:mb-14">
@@ -55,7 +56,7 @@ import { siteConfig } from "../data/site";
     
     <!-- Cover Image -->
     <img
-      src={siteConfig.profileImage}
+      src="/img/bg_9.jpg"
       alt="Workspace"
       class="w-full object-cover aspect-[1.84] mb-10 lg:aspect-[2.59] lg:mb-20"
       loading="lazy"
@@ -86,7 +87,7 @@ import { siteConfig } from "../data/site";
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <ContactSection />
 </BaseLayout>
