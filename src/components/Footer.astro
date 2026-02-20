@@ -19,9 +19,13 @@ const year = new Date().getFullYear();
       <div class="flex flex-wrap gap-3 lg:gap-4">
         <a
           href={`mailto:${siteConfig.email}`}
-          class="px-4 py-[9px] lg:px-7 lg:py-3 border border-app-gray-200 rounded-[32px] text-sm lg:text-base font-medium text-app-gray-500 hover:border-app-text hover:bg-app-text hover:text-white transition-colors duration-300 tracking-[var(--tracking-tight)]"
+          class="px-4 py-[9px] lg:px-7 lg:py-3 border border-app-gray-200 rounded-[32px] text-sm lg:text-base font-medium text-app-gray-500 hover:border-app-text hover:bg-app-text hover:text-white transition-colors duration-300 tracking-[var(--tracking-tight)] flex items-center gap-1.5"
         >
-          {siteConfig.email}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 flex-shrink-0">
+            <rect width="20" height="16" x="2" y="4" rx="2"/>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          </svg>
+          Get in touch
         </a>
         <a
           href={socialLinks.linkedin}

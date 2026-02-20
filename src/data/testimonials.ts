@@ -4,6 +4,7 @@ export interface Testimonial {
   content: string;
   role?: string;
   company?: string;
+  linkedinUrl?: string;
 }
 
 export const testimonials: Testimonial[] = [
@@ -12,6 +13,7 @@ export const testimonials: Testimonial[] = [
     photo: "https://avatars.githubusercontent.com/u/8190114",
     role: "Head of Developer Relations",
     company: "vCluster",
+    linkedinUrl: "https://www.linkedin.com/in/dipankar-das-1324b6206/#recommendations",
     content: `I am pleased to write this recommendation for Dipankar, who I've worked alongside on the "ksctl" project initiated at Kubesimplify. Dipankar has demonstrated exceptional expertise within the cloud-native ecosystem, showcasing not only his deep understanding but also his ability to drive and expand projects with significant impact.
 
 From the onset of the ksctl project, Dipankar assumed a pivotal role, single-handedly steering it towards success with his dedication and technical skills. His ability to handle complex challenges and transform them into strategic opportunities is truly commendable.
@@ -25,6 +27,7 @@ In conclusion, Dipankar's contributions to our project have been invaluable. His
     photo: "https://avatars.githubusercontent.com/u/311527",
     role: "Lead Platform Engineer",
     company: "FlatPeak",
+    linkedinUrl: "https://www.linkedin.com/in/dipankar-das-1324b6206/#recommendations",
     content: `I've had the pleasure of working alongside Dipankar at CNCF, where we both contribute to the Green Reviews working group, measuring the environmental impact of CNCF projects by building a CI/CD pipeline to measure their energy consumption and collect related metrics.
 
 Dipankar was one of our first and most active contributors. His knowledge of the cloud-native ecosystem and passion for green software practices make him an asset to the team. In addition to contributing code and implementing complex features, he is an active participant in code reviews and community meetings, bringing valuable feedback.
@@ -36,6 +39,7 @@ With his technical expertise and collaborative approach, Dipankar would be an as
     photo: "https://avatars.githubusercontent.com/u/43536425",
     role: "Manager",
     company: "Data Reply DE",
+    linkedinUrl: "https://www.linkedin.com/in/dipankar-das-1324b6206/#recommendations",
     content: `I've had the pleasure of working with Dipankar at CNCF, where we both contribute to the Green Reviews working group. The goal of the group is to set a vision for CNCF sustainability and energy measurements of different projects across releases.
 
 Dipankar was able to join the technical discussion and deliver some important milestones for the project like the development of a Prometheus client to query the sre and sustainability metrics produced by our infrastructure set up in k8s.
