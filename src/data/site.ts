@@ -17,6 +17,7 @@ export const socialLinks = {
   linkedin: "https://linkedin.com/in/dipankar-das-1324b6206",
   twitter: "https://twitter.com/DipanakarDas011",
   hashnode: "https://dipankardas011.hashnode.dev/",
+  fiverr: "https://www.fiverr.com/s/38WVy79",
 };
 
 export const navItems = [
