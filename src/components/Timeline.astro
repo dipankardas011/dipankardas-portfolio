@@ -19,7 +19,9 @@ const { experiences } = Astro.props;
         <div class="absolute left-[19px] top-1 w-3 h-3 rounded-full bg-app-accent border-[3px] border-app-bg hidden md:block"></div>
 
         <div class="bg-app-surface border border-app-gray-200 rounded-2xl p-5 lg:p-6 transition-all duration-300 hover:shadow-lg">
-          <div class="flex items-start gap-4 mb-4">
+
+          <!-- Header -->
+          <div class="flex items-start gap-4 mb-5 lg:mb-6">
             {exp.logo && (
               <img
                 src={exp.logo}
@@ -28,7 +30,7 @@ const { experiences } = Astro.props;
                 loading="lazy"
               />
             )}
-            <div class="flex-1">
+            <div class="flex-1 min-w-0">
               <h3 class="text-base lg:text-lg font-display tracking-[var(--tracking-tight)] text-app-text mb-1">
                 {exp.link ? (
                   <a href={exp.link} target="_blank" rel="noopener" class="hover:text-app-accent transition-colors">
@@ -42,14 +44,30 @@ const { experiences } = Astro.props;
               <p class="text-xs lg:text-sm tracking-[var(--tracking-tight)] text-app-gray-400">{exp.tenure}</p>
             </div>
           </div>
-          <ul class="space-y-2.5 lg:space-y-3">
+
+          <!-- Contributions -->
+          <div class="border-t border-app-gray-100 pt-4 lg:pt-5 space-y-5 lg:space-y-6">
             {exp.contributions.map((c) => (
-              <li class="text-sm lg:text-base tracking-[var(--tracking-tight)] text-app-gray-500 leading-[1.5] flex gap-2.5">
-                <span class="text-app-accent mt-[2px] flex-shrink-0 font-medium">•</span>
-                <span>{c}</span>
-              </li>
+              <div>
+                <p class="text-sm lg:text-base font-medium text-app-text tracking-[var(--tracking-tight)] mb-2.5">{c.title}</p>
+                <div class="space-y-1.5">
+                  <div class="flex gap-3">
+                    <span class="text-[10px] font-semibold uppercase tracking-widest text-app-gray-300 shrink-0 min-w-[2.75rem] mt-[3px]">Why</span>
+                    <span class="text-sm text-app-gray-400 leading-[1.5] tracking-[var(--tracking-tight)]">{c.why}</span>
+                  </div>
+                  <div class="flex gap-3">
+                    <span class="text-[10px] font-semibold uppercase tracking-widest text-app-gray-300 shrink-0 min-w-[2.75rem] mt-[3px]">What</span>
+                    <span class="text-sm text-app-gray-400 leading-[1.5] tracking-[var(--tracking-tight)]">{c.what}</span>
+                  </div>
+                  <div class="flex gap-3">
+                    <span class="text-[10px] font-semibold uppercase tracking-widest text-app-gray-300 shrink-0 min-w-[2.75rem] mt-[3px]">How</span>
+                    <span class="text-sm text-app-gray-400 leading-[1.5] tracking-[var(--tracking-tight)]">{c.how}</span>
+                  </div>
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
+
         </div>
       </div>
     ))}
