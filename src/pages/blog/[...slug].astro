@@ -48,43 +48,56 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
       <TopGradient client:load />
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8 md:mb-14 lg:mb-20">
-          <div class="flex flex-col items-center text-center">
-            <!-- Date + reading time -->
-            <div class="blog-meta mb-3 lg:mb-5">
-              <time>{formattedDate}</time>
-              <span class="blog-meta-divider"></span>
-              <span>{readingTime} min read</span>
-              <span class="blog-meta-divider"></span>
-              <span>{wordCount.toLocaleString()} words</span>
+          <div class="flex flex-col lg:flex-row lg:items-center lg:gap-14">
+
+            <!-- Left: title, lede, tags, meta -->
+            <div class="flex-1 flex flex-col items-center text-center lg:items-start lg:text-left">
+              <!-- Title -->
+              <h1 class="text-2xl md:text-4xl lg:text-5xl font-display text-app-text leading-tight tracking-[var(--tracking-tight)] mb-4 lg:mb-6">
+                {post.data.title}
+              </h1>
+
+              <!-- Description lede -->
+              {post.data.description && (
+                <p class="blog-lede mb-5 lg:mb-6">
+                  {post.data.description}
+                </p>
+              )}
+
+              <!-- Tags below lede -->
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="flex flex-wrap gap-2 mb-5 lg:mb-6 justify-center lg:justify-start">
+                  {post.data.tags.map((tag: string) => (
+                    <span class="text-xs font-medium px-3 py-1 bg-app-surface rounded-[32px] text-app-gray-500 border border-app-gray-200 tracking-[var(--tracking-tight)]">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <!-- Date + reading time -->
+              <div class="blog-meta lg:justify-start">
+                <time>{formattedDate}</time>
+                <span class="blog-meta-divider"></span>
+                <span>{readingTime} min read</span>
+                <span class="blog-meta-divider"></span>
+                <span>{wordCount.toLocaleString()} words</span>
+              </div>
             </div>
-            <h1 class="text-2xl md:text-4xl lg:text-[56px] font-display text-app-text leading-none tracking-[var(--tracking-tight)] max-w-4xl">
-              {post.data.title}
-            </h1>
+
+            <!-- Right: cover image -->
+            {post.data.cover && (
+              <div class="mt-8 lg:mt-0 lg:w-[44%] shrink-0 aspect-[4/3] rounded-2xl overflow-hidden bg-app-surface">
+                <img
+                  src={post.data.cover}
+                  alt={post.data.title}
+                  class="w-full h-full object-cover"
+                  loading="eager"
+                />
+              </div>
+            )}
           </div>
         </div>
-
-        <!-- Cover Image -->
-        {post.data.cover && (
-          <div class="aspect-[2.07] lg:aspect-[2.43] rounded-2xl overflow-hidden w-full bg-app-surface mb-6 md:mb-8 lg:mb-12">
-            <img
-              src={post.data.cover}
-              alt={post.data.title}
-              class="w-full h-full object-cover"
-              loading="eager"
-            />
-          </div>
-        )}
-
-        <!-- Tags -->
-        {post.data.tags && post.data.tags.length > 0 && (
-          <div class="flex flex-wrap gap-2 mb-8 lg:mb-12 justify-center">
-            {post.data.tags.map((tag: string) => (
-              <span class="text-xs lg:text-sm font-medium px-3 py-1.5 lg:px-4 lg:py-2 bg-app-surface rounded-[32px] text-app-gray-500 border border-app-gray-200 tracking-[var(--tracking-tight)]">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
 
         <!-- Content + ToC grid -->
         <div class="grid grid-cols-1 xl:grid-cols-[220px_minmax(0,1fr)] gap-12 max-w-5xl mx-auto">
@@ -101,6 +114,15 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
           <!-- Main prose -->
           <div>
+            <!-- Visual entry divider -->
+            <div class="blog-entry-divider" aria-hidden="true">
+              <span></span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L9.09 8.26L2 9.27L7 14.14L5.82 21.02L12 17.77L18.18 21.02L17 14.14L22 9.27L14.91 8.26L12 2Z"/>
+              </svg>
+              <span></span>
+            </div>
+
             <div class="prose prose-lg">
               <Content />
             </div>
