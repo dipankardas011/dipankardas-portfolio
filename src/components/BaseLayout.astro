@@ -8,12 +8,14 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  blogPost?: boolean;
 }
 
 const {
   title = siteConfig.title,
   description = siteConfig.description,
   ogImage = "/img/bg_9.jpg",
+  blogPost = false,
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
@@ -21,7 +23,7 @@ const ogImageUrl = new URL(ogImage, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-blog={blogPost ? "true" : null}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -56,6 +58,12 @@ const ogImageUrl = new URL(ogImage, Astro.site);
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
       rel="stylesheet"
     />
+    {blogPost && (
+      <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    )}
 
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <title>{title}</title>

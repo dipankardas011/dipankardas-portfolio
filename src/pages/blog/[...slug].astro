@@ -3,6 +3,7 @@ import BaseLayout from "../../components/BaseLayout.astro";
 import BlogPostCard from "../../components/BlogPostCard.astro";
 import TopGradient from "../../components/TopGradient";
 import { getCollection, render } from "astro:content";
+import { siteConfig, socialLinks } from "../../data/site";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -27,13 +28,20 @@ const formattedDate = post.data.date.toLocaleDateString("en-US", {
   month: "long",
   day: "numeric",
 });
+
+const wordCount = post.body.trim().split(/\s+/).length;
+const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 ---
 
 <BaseLayout
   title={`${post.data.title} - Dipankar Das`}
   description={post.data.description}
   ogImage={post.data.cover}
+  blogPost={true}
 >
+  <!-- Reading progress bar -->
+  <div id="reading-progress"></div>
+
   <article class="animate-fade-in">
     <!-- Header -->
     <div class="relative pt-10 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16">
@@ -41,9 +49,14 @@ const formattedDate = post.data.date.toLocaleDateString("en-US", {
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8 md:mb-14 lg:mb-20">
           <div class="flex flex-col items-center text-center">
-            <time class="text-sm lg:text-xl text-app-gray-400 mb-2.5 lg:mb-5 tracking-[var(--tracking-tight)]">
-              {formattedDate}
-            </time>
+            <!-- Date + reading time -->
+            <div class="blog-meta mb-3 lg:mb-5">
+              <time>{formattedDate}</time>
+              <span class="blog-meta-divider"></span>
+              <span>{readingTime} min read</span>
+              <span class="blog-meta-divider"></span>
+              <span>{wordCount.toLocaleString()} words</span>
+            </div>
             <h1 class="text-2xl md:text-4xl lg:text-[56px] font-display text-app-text leading-none tracking-[var(--tracking-tight)] max-w-4xl">
               {post.data.title}
             </h1>
@@ -73,9 +86,41 @@ const formattedDate = post.data.date.toLocaleDateString("en-US", {
           </div>
         )}
 
-        <!-- Content -->
-        <div class="max-w-3xl mx-auto prose prose-lg">
-          <Content />
+        <!-- Content + ToC grid -->
+        <div class="grid grid-cols-1 xl:grid-cols-[220px_minmax(0,1fr)] gap-12 max-w-5xl mx-auto">
+
+          <!-- Sticky ToC (xl+ only) -->
+          <aside class="hidden xl:block">
+            <div class="sticky top-24 pt-1">
+              <p class="text-xs font-semibold uppercase tracking-widest mb-4" style="color: var(--color-app-gray-400); letter-spacing: 0.1em;">
+                On this page
+              </p>
+              <nav id="toc-nav" class="space-y-0.5"></nav>
+            </div>
+          </aside>
+
+          <!-- Main prose -->
+          <div>
+            <div class="prose prose-lg">
+              <Content />
+            </div>
+
+            <!-- Author card -->
+            <div class="author-card">
+              <img src={siteConfig.profileImage} alt={siteConfig.name} />
+              <div class="author-card-info">
+                <p class="author-card-name">{siteConfig.name}</p>
+                <p class="author-card-bio">{siteConfig.tagline}</p>
+                <div class="author-card-links">
+                  <a href={socialLinks.github} target="_blank" rel="noopener" class="author-card-link">GitHub</a>
+                  <span style="color: var(--color-app-gray-300)">·</span>
+                  <a href={socialLinks.twitter} target="_blank" rel="noopener" class="author-card-link">Twitter</a>
+                  <span style="color: var(--color-app-gray-300)">·</span>
+                  <a href={socialLinks.linkedin} target="_blank" rel="noopener" class="author-card-link">LinkedIn</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -128,3 +173,71 @@ const formattedDate = post.data.date.toLocaleDateString("en-US", {
     )}
   </article>
 </BaseLayout>
+
+<script>
+  // ---- Reading progress bar ----
+  const progressBar = document.getElementById("reading-progress");
+  if (progressBar) {
+    const update = () => {
+      const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+      const pct = (scrollTop / (scrollHeight - clientHeight)) * 100;
+      progressBar.style.width = Math.min(pct, 100) + "%";
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+
+  // ---- Table of Contents ----
+  const headings = document.querySelectorAll(".prose h2, .prose h3");
+  const tocNav = document.getElementById("toc-nav");
+
+  if (headings.length > 0 && tocNav) {
+    headings.forEach((heading, i) => {
+      // Ensure heading has an id
+      if (!heading.id) {
+        const slug = (heading.textContent ?? "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "");
+        heading.id = slug || `heading-${i}`;
+      }
+
+      const a = document.createElement("a");
+      a.href = `#${heading.id}`;
+      a.textContent = heading.textContent ?? "";
+      a.className = `toc-link${heading.tagName === "H3" ? " toc-h3" : ""}`;
+      a.dataset.headingId = heading.id;
+      tocNav.appendChild(a);
+    });
+
+    // Highlight active section on scroll
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            document.querySelectorAll(".toc-link").forEach((l) =>
+              l.classList.remove("toc-active")
+            );
+            document
+              .querySelector(`.toc-link[data-heading-id="${entry.target.id}"]`)
+              ?.classList.add("toc-active");
+          }
+        }
+      },
+      { rootMargin: "-80px 0px -65% 0px" }
+    );
+
+    headings.forEach((h) => observer.observe(h));
+  }
+
+  // ---- Code block language labels ----
+  document.querySelectorAll(".prose pre").forEach((pre) => {
+    // Shiki sets data-language on pre; fallback to reading the code class
+    const lang =
+      (pre as HTMLElement).dataset.language ??
+      pre.querySelector("code")?.className.match(/language-(\w+)/)?.[1];
+    if (lang && lang !== "plaintext" && lang !== "text") {
+      (pre as HTMLElement).dataset.lang = lang;
+    }
+  });
+</script>

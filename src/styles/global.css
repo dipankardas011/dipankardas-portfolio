@@ -535,7 +535,242 @@ body {
   border-bottom: 1px solid var(--color-app-gray-200);
 }
 
-/* Responsive Typography Adjustments */
+/* ============================================
+   BLOG POST DARK THEME
+   Scoped to html[data-blog="true"] so other
+   pages remain unchanged.
+   ============================================ */
+
+html[data-blog="true"] {
+  --color-app-accent: #D9FAA1;
+  --color-app-body: #0D1117;
+  --color-app-bg: #0D1117;
+  --color-app-text: #E6EDF3;
+  --color-app-gray-100: #21262D;
+  --color-app-gray-200: #30363D;
+  --color-app-gray-300: #8B949E;
+  --color-app-gray-400: #8B949E;
+  --color-app-gray-500: #C9D1D9;
+  --color-app-gray-600: #E6EDF3;
+  --color-app-surface: #161B22;
+  --color-app-surface-alt: #1C2128;
+  --color-app-border: #30363D;
+  --color-blur-purple: #6E40C9;
+  --color-blur-yellow: #D9FAA1;
+  /* Space Grotesk for all display/headings */
+  --font-display: "Space Grotesk", -apple-system, "Arial", sans-serif;
+}
+
+html[data-blog="true"] body {
+  background-color: var(--color-app-body);
+  color: var(--color-app-text);
+}
+
+/* ---- Button contrast fixes for dark blog theme ----
+   These fix cases where color vars flip (text becomes near-white,
+   accent becomes light lime) making white text invisible. */
+
+/* "See all posts" and any accent-bg button: accent is light #D9FAA1
+   so white text is unreadable — force near-black text */
+html[data-blog="true"] .bg-app-accent {
+  color: #0D1117;
+}
+
+/* Footer LinkedIn button uses bg-app-text which is now near-white (#E6EDF3).
+   Restyle as an accent outline button instead. */
+html[data-blog="true"] footer .bg-app-text {
+  background-color: rgba(217, 250, 161, 0.08);
+  border-color: rgba(217, 250, 161, 0.35);
+  color: #D9FAA1;
+}
+html[data-blog="true"] footer .bg-app-text:hover {
+  background-color: rgba(217, 250, 161, 0.15);
+  border-color: #D9FAA1;
+}
+
+/* Footer outline buttons: their hover:bg-app-text / hover:text-white would
+   produce white-on-white in dark mode — override to a subtle surface tint */
+html[data-blog="true"] footer a.text-app-gray-500:hover {
+  background-color: var(--color-app-surface) !important;
+  color: var(--color-app-text) !important;
+  border-color: var(--color-app-gray-300) !important;
+}
+
+/* ---- Reading Progress Bar ---- */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(to right, #D9FAA1, #D9FAA1);
+  z-index: 9999;
+  transition: width 0.08s linear;
+  pointer-events: none;
+}
+
+/* ---- Table of Contents ---- */
+.toc-link {
+  display: block;
+  color: var(--color-app-gray-400);
+  border-left: 2px solid transparent;
+  padding: 0.25rem 0 0.25rem 0.75rem;
+  text-decoration: none;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.toc-link:hover {
+  color: var(--color-app-text);
+  border-left-color: var(--color-app-gray-300);
+}
+
+.toc-link.toc-active {
+  color: #D9FAA1;
+  border-left-color: #D9FAA1;
+  font-weight: 500;
+}
+
+.toc-link.toc-h3 {
+  padding-left: 1.5rem;
+  font-size: 0.75rem;
+}
+
+/* ---- Blog Reading Meta (time + date row) ---- */
+.blog-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  font-size: 0.875rem;
+  color: var(--color-app-gray-400);
+  letter-spacing: -0.41px;
+}
+
+.blog-meta-divider {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-app-gray-300);
+  flex-shrink: 0;
+}
+
+/* ---- Section numbering for h2 in dark blog ---- */
+html[data-blog="true"] .prose {
+  counter-reset: blog-section;
+}
+
+html[data-blog="true"] .prose h2 {
+  counter-increment: blog-section;
+}
+
+html[data-blog="true"] .prose h2::before {
+  content: counter(blog-section, decimal-leading-zero) " ";
+  color: #D9FAA1;
+  opacity: 0.5;
+  font-size: 0.8em;
+  font-weight: 400;
+  font-family: var(--font-mono);
+  margin-right: 0.35em;
+  letter-spacing: 0.05em;
+}
+
+/* ---- Force dark Shiki theme on blog pages ---- */
+html[data-blog="true"] .astro-code,
+html[data-blog="true"] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+/* ---- Code block language label ---- */
+html[data-blog="true"] .prose pre {
+  position: relative;
+  padding-top: 2.75rem;
+  background-color: #161B22;
+  border-color: #30363D;
+}
+
+html[data-blog="true"] .prose pre[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0.4rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #D9FAA1;
+  background: rgba(217, 250, 161, 0.08);
+  border-bottom: 1px solid rgba(217, 250, 161, 0.2);
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* ---- Author Card ---- */
+.author-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-app-border);
+  border-radius: 0.75rem;
+  background: var(--color-app-surface);
+  margin: 3rem 0 2rem;
+}
+
+.author-card img {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid #D9FAA1;
+}
+
+.author-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.author-card-name {
+  font-weight: 600;
+  font-family: var(--font-display);
+  color: var(--color-app-text);
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+}
+
+.author-card-bio {
+  font-size: 0.8125rem;
+  color: var(--color-app-gray-400);
+  line-height: 1.4;
+}
+
+.author-card-links {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.author-card-link {
+  font-size: 0.75rem;
+  color: #D9FAA1;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.15s ease;
+}
+
+.author-card-link:hover {
+  opacity: 0.75;
+}
+
+/* ---- Responsive Typography Adjustments ---- */
 @media (max-width: 768px) {
   .prose {
     font-size: 1rem;
