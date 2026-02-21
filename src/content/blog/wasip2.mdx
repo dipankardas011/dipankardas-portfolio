@@ -6,6 +6,8 @@ description: "Created a working project using the wasi's new composition feature
 cover: "https://github.com/dipankardas011/wae/blob/main/cover.png?raw=true"
 category: "WebAssembly"
 ---
+import Callout from '../../components/Callout.astro';
+
 ## Why I wanted to try WASI Preview 2?
 
 I have been following the development of WebAssembly for quite some time now. I have been fascinated by the idea of running code in a sandboxed environment and single executable format but runnable on any architecture.
@@ -24,6 +26,10 @@ It is has properites like
 - `improved performance`
 - and `streamlined development`
 
+<Callout type="important">
+  WASI's security model is **deny by default** — a module has zero access to the filesystem, network, or environment variables unless the host runtime explicitly grants it. This is fundamentally different from native executables and is one of WASI's biggest strengths.
+</Callout>
+
 Some interesting new feature of WASI preview 2 are :-
 1. `Composition`: which allows you to compose multiple WASI modules into a single module. This is useful when you want to combine multiple modules into a single module for better performance or to reduce the size of the module and keeping local developer knowledge of specific components to a minimum and also increasing the changes of code reusability by just importing wasm module which implement the WIT (you can think of it as a contract).
 2. `Socket`: which allows you to create TCP and UDP sockets and perform DNS lookups from within a WebAssembly module. This is useful when you want to build networking software that runs on WebAssembly.
@@ -31,14 +37,20 @@ Some interesting new feature of WASI preview 2 are :-
 
 Lets assume your team has expertise in building a specific component like a payment gateway or a video processing module. You can build a WASI module for that component and then compose it with other modules to build a complete application. This way you can keep the knowledge of the specific component within the team that built it and reuse it in multiple applications.
 
-> We first have repos for individiual components like this
-![](/img/blogs/initial_wasi.svg)
+<figure>
+  <img src="/img/blogs/initial_wasi.svg" alt="Individual component repos" />
+  <figcaption>We first have repos for individual components like this</figcaption>
+</figure>
 
-> Then here comes the interesting part of composition
-![](/img/blogs/composition_wasi.svg)
+<figure>
+  <img src="/img/blogs/composition_wasi.svg" alt="WASI composition" />
+  <figcaption>Then here comes the interesting part of composition</figcaption>
+</figure>
 
-> And here comes the complete picture of these
-![](/img/blogs/final_wasi.svg)
+<figure>
+  <img src="/img/blogs/final_wasi.svg" alt="Complete WASI picture" />
+  <figcaption>And here comes the complete picture</figcaption>
+</figure>
 
 
 With this you will have a SaaS product :) 🚀
@@ -61,21 +73,33 @@ I created a simple project to learn about composition feature [Source Code](http
 
 **Challanges**: Didn't have a wasi http module for openai (for text-to-image, text-to-text) or for wasmtime (CO<sub>2</sub> moer for a given region) and also async support for wasi modules is not there so had to use a hacky way to make it work. like made the custom implementation of the `wasi-http` module for openai and `wasi-cli` for wasmtime. and later switched to already available crate `waki`.
 
+<Callout type="caution">
+  Async support in WASI modules is still immature as of v0.2.0. If your use case requires async I/O (e.g., concurrent HTTP requests), you'll need to work around this with synchronous patterns or wait for the async proposal to stabilise in a future preview.
+</Callout>
+
 By this tried out the http functionality of wasi, composition, filesystem, random.
 
 Here is a sample of run ;)
 
-> Random Password generation
-![](/img/blogs/wae-pass.png)
+<figure>
+  <img src="/img/blogs/wae-pass.png" alt="Random password generation demo" />
+  <figcaption>Random password generation</figcaption>
+</figure>
 
-> Talk with github api to get repo details
-![](/img/blogs/wae-release.png)
+<figure>
+  <img src="/img/blogs/wae-release.png" alt="GitHub API repo details" />
+  <figcaption>Talking with the GitHub API to get repo details</figcaption>
+</figure>
 
-> Talk with openai api to get image from text
-![](/img/blogs/wae-openai.png)
+<figure>
+  <img src="/img/blogs/wae-openai.png" alt="OpenAI text to image" />
+  <figcaption>Talking with the OpenAI API to generate an image from text</figcaption>
+</figure>
 
-> Talk with wasmtime api to get CO<sub>2</sub> moer emission for a given region
-![](/img/blogs/wae-green.png)
+<figure>
+  <img src="/img/blogs/wae-green.png" alt="CO2 emission data from Wasmtime" />
+  <figcaption>Talking with the Wasmtime API to get CO₂ emission for a given region</figcaption>
+</figure>
 
 
 ## Conclusion

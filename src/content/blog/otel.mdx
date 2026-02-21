@@ -7,6 +7,8 @@ cover: "/img/blogs/otel-cover.png"
 tags: ["go", "otel", "troubleshooting", "debugging", "grafana", "prometheus"]
 category: "Observability"
 ---
+import Callout from '../../components/Callout.astro';
+
 "Why is this request so slow?" "Where did the error originate?" "What's the actual path of a user request through our microservices?" If you've ever found yourself debugging a complex or distributed system, these questions are probably all too familiar. For the past two months, I've been diving deep into OpenTelemetry (OTEL), and it has fundamentally changed how I answer them.
 
 This post isn't just a theoretical overview; it's a collection of my practical learnings and takeaways from instrumenting a real-world application. I'll cover the why, what, and how of using OpenTelemetry, so you can avoid some of the hurdles I encountered.
@@ -102,7 +104,9 @@ service:
       exporters: [debug, prometheusremotewrite]
 ```
 
-> Where the core pipelining happens under `service.pipelines.(traces|logs|metrics)`
+<Callout type="note">
+  The core pipelining happens under `service.pipelines.(traces|logs|metrics)`. Each pipeline declares its own receivers, processors, and exporters — so traces, logs, and metrics can flow to completely different backends independently.
+</Callout>
 
 This architecture provides a unified layer for instrumentation. You only need to add the OTEL SDK to your application and point it to a collector. The collector then handles the complexity of sending data to your chosen storage backends.
 
@@ -110,7 +114,9 @@ This architecture provides a unified layer for instrumentation. You only need to
 
 Spans are the building blocks of a trace. A single span represents one unit of work, like an API call, a database query, or a function execution. It has a start time, an end time, and associated metadata like attributes and events.
 
-> **Note**: Spans are not free. Creating too many of them can add performance overhead and make traces noisy and difficult to read.
+<Callout type="warning">
+  Spans are not free. Creating too many adds performance overhead and makes traces noisy and hard to read. Only instrument what has meaningful duration or crosses a system boundary.
+</Callout>
 
 My rule of thumb: **create spans for operations that have a meaningful duration or cross a system boundary.** Good candidates for spans include:
 -   External API calls (e.g., to a third-party service).
@@ -135,6 +141,10 @@ The goal is to create **meaningful** and **manageable** traces.
 **DON'T:**
 -   **Trace Trivial Functions**: Avoid creating spans for simple getters, setters, or helper functions inside a tight loop. This adds noise, not clarity.
 -   **Use Dynamic Span Names**: A span name like `GET /users/123` creates a new "class" of span for every user, which can overwhelm your observability backend.
+
+<Callout type="caution">
+  Dynamic span names like `GET /users/123` cause **cardinality explosion** in your observability backend — it creates a unique metric series for every user ID. Always use low-cardinality names like `GET /users/{id}` and store the actual ID as a span attribute.
+</Callout>
 
 ### When to Use Events Instead of Spans
 
@@ -181,6 +191,10 @@ Instrumenting every single request can generate a massive amount of data and bec
 There are two main strategies:
 1.  **Head-based Sampling**: The decision to sample a trace is made at the very beginning (the "head"). For example, you might decide to keep only 10% of all traces. It's simple and efficient but means you might discard traces that later turn out to be interesting (e.g., ones that contain an error).
 2.  **Tail-based Sampling**: The decision is made after the trace has been completed (at the "tail"). This allows you to make more intelligent decisions, such as keeping all traces that contain an error or are longer than a certain duration. This is more powerful but requires a collector setup capable of buffering and analyzing traces.
+
+<Callout type="tip">
+  Start with head-based sampling at 10–20% for production traffic. Switch to tail-based only once you have a clear need — it requires the collector to buffer full traces in memory before making a decision, which increases collector resource usage significantly.
+</Callout>
 
 For more details, check the [Official Sampling Documentation](https://opentelemetry.io/docs/concepts/sampling/).
 

@@ -253,6 +253,12 @@ body {
   background-position: 0%;
 }
 
+/* Remove decorative " " quote marks injected by @tailwindcss/typography */
+.prose blockquote p::before,
+.prose blockquote p::after {
+  content: none;
+}
+
 /* Blockquotes */
 .prose blockquote {
   font-style: normal;
@@ -482,6 +488,69 @@ html[data-blog="true"] .prose :not(pre) > code {
   content: '💡 ';
   font-size: 1.25rem;
   margin-right: 0.5rem;
+}
+
+/* ---- Callout blocks (used via MDX <Callout> component) ---- */
+.callout-block {
+  border: 1px solid var(--cc);
+  background: var(--cb);
+  border-radius: 0.6rem;
+  padding: 1rem 1.25rem;
+  margin: 1.75rem 0;
+}
+
+.callout-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.callout-icon {
+  display: flex;
+  align-items: center;
+  color: var(--ca);
+  flex-shrink: 0;
+}
+
+.callout-title {
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ca);
+}
+
+.callout-body {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--color-app-gray-500);
+}
+
+.callout-body > *:first-child { margin-top: 0; }
+.callout-body > *:last-child  { margin-bottom: 0; }
+
+/* ---- Blockquote used as image caption (> text \n ![img]) ---- */
+/* Strips the blockquote styling and turns it into a proper caption */
+.prose blockquote:has(+ p > img) {
+  background: transparent;
+  border-left-color: transparent;
+  padding: 0;
+  margin-bottom: 0.4rem;
+  font-size: 0.875rem;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-app-gray-400);
+  text-align: center;
+}
+
+.prose blockquote:has(+ p > img) p {
+  margin: 0;
+}
+
+.prose blockquote + p:has(> img) {
+  margin-top: 0;
 }
 
 /* Pull Quotes */

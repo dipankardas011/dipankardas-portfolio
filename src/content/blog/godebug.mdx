@@ -7,6 +7,8 @@ cover: "https://raw.githubusercontent.com/go-delve/delve/master/assets/delve_hor
 tags: ["go", "debugging", "troubleshooting"]
 category: "Debugging"
 ---
+import Callout from '../../components/Callout.astro';
+
 ## Introduction
 
 Delve is a debugger for the Go programming language. It allows you to inspect the state of your program while it is running, set breakpoints, and step through your code. It is a powerful tool for debugging Go applications and can help you find and fix bugs quickly.
@@ -26,8 +28,9 @@ it has mainly 2 modes interms of neovim with dap
 - `attach`: attach to a running process via some port
 - `launch`: start a new process and debug it
 
-> **Note**
-> when you want to have stdin and stdout capabilities you need to use `attach` mode. Where a server running in headless mode is first created and the debugging client calls it, thus you can perform normal program execution in the terminal where the server is running. This is useful for debugging programs that require user input or output to the terminal.
+<Callout type="note">
+  When you want stdin and stdout capabilities, use `attach` mode. A server running in headless mode is first created and the debugging client calls it — this lets you perform normal program execution in the terminal where the server is running. Essential for programs that require user input or terminal output.
+</Callout>
 
 ### Neovim
 
@@ -91,6 +94,10 @@ then comes the dap configuration
   },
 ```
 
+<Callout type="tip">
+  Update the `delve.path` in the config to match your actual `dlv` binary location. Run `which dlv` to find it.
+</Callout>
+
 then add these keymaps for better and easier navigations
 ```lua
 vim.keymap.set('n', '<F5>', function() require('dap').continue() end, { desc = 'Go debug CONTINUE' })
@@ -147,9 +154,9 @@ now open your neovim
 ![](/img/blogs/dap-2.png)
 
 
-> **Tip**
-> You can be in same neovim session and still be able to run terminal there itself
-> for that just do `:tabnew +term` and then run the dap server there
+<Callout type="tip" title="Pro tip">
+  You can stay in the same Neovim session and run the DAP server there too. Just open a new terminal tab with `:tabnew +term` and start the `dlv` server from there — no need to switch windows.
+</Callout>
 
 
 ## Conclusion

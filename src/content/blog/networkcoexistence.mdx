@@ -7,6 +7,8 @@ cover: "/img/blogs/networkcoexistence.png"
 tags: ["docker", "virt-manager", "networking", "linux", "virtualization", "troubleshooting"]
 category: "Networking"
 ---
+import Callout from '../../components/Callout.astro';
+
 ## **Resolving Network Forwarding Conflicts Between Libvirt and Docker**
 
 ### **1. Introduction**
@@ -22,6 +24,10 @@ The issue stems from the interaction between how Docker and `libvirt` manage the
 *   **Libvirt's Networking Model:** By default, `libvirt` creates a virtual bridge (`virbr0`) and uses a NAT-based network (`192.168.122.0/24`). For a VM to access the internet, the host's kernel must be configured to forward packets from the `virbr0` interface to the primary network interface. This process also requires a corresponding `iptables` `POSTROUTING` rule to apply Source Network Address Translation (SNAT), typically via the `MASQUERADE` target.
 
 *   **Docker's Network Configuration:** For security and container isolation, the Docker daemon aggressively manages the host's firewall. Upon startup, it inserts a number of rules into `iptables`. Critically, **it sets the default policy of the `FORWARD` chain to `DROP`**. It then inserts rules to selectively accept traffic related to its own managed networks (e.g., `DOCKER-USER`, `DOCKER-FORWARD` chains).
+
+<Callout type="important" title="Docker silently drops VM traffic">
+  Docker sets the default policy of the `FORWARD` chain to `DROP` on startup. This is evaluated before libvirt's rules, silently dropping all VM traffic to external networks — even when DNS resolution works fine.
+</Callout>
 
 **The Conflict:** Docker's `DROP` policy on the `FORWARD` chain is evaluated before `libvirt`'s less-specific rules. Consequently, packets originating from the `virbr0` interface, which are not explicitly matched by a higher-priority `ACCEPT` rule, are dropped by the default policy. Standard `firewalld` zone-based rules or policies can fail to take precedence over the rules Docker injects directly into the top of the chain.
 
@@ -45,10 +51,11 @@ sudo firewall-cmd --permanent --direct --add-rule ipv4 filter FORWARD 0 -i virbr
 # for established or related connections.
 sudo firewall-cmd --permanent --direct --add-rule ipv4 filter FORWARD 0 -o virbr0 -m state --state RELATED,ESTABLISHED -j ACCEPT
 ```
-*   `-i virbr0`: Specifies the input interface.
-*   `-o virbr0`: Specifies the output interface.
-*   `-m state --state RELATED,ESTABLISHED`: This is a stateful rule that only matches packets that are part of an existing connection, which is essential for return traffic.
-*   `-j ACCEPT`: Specifies the target; in this case, to accept the packet.
+
+* `-i virbr0`: Specifies the input interface.
+* `-o virbr0`: Specifies the output interface.
+* `-m state --state RELATED,ESTABLISHED`: This is a stateful rule that only matches packets that are part of an existing connection, which is essential for return traffic.
+* `-j ACCEPT`: Specifies the target; in this case, to accept the packet.
 
 #### **Step 3.2: Enable Network Address Translation (NAT)**
 
@@ -58,6 +65,10 @@ The `libvirt` zone in `firewalld` must be configured to masquerade outgoing traf
 # Enable masquerading on the libvirt zone permanently.
 sudo firewall-cmd --permanent --zone=libvirt --add-masquerade
 ```
+
+<Callout type="caution">
+  Using `--permanent` without `--reload` means rules are saved but **not yet active**. Always follow up with `sudo firewall-cmd --reload` or your changes won't take effect until the next reboot.
+</Callout>
 
 ##### **Step 3.3: Apply Configuration**
 
@@ -79,7 +90,7 @@ Confirm that the new rules are at the top of the chain.
 sudo iptables -L FORWARD -n --line-numbers
 ```
 *Expected Output:*
-```
+```text
 Chain FORWARD (policy DROP)
 num  target     prot opt source               destination
 1    ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
@@ -95,7 +106,7 @@ Confirm that masquerading is enabled for the `libvirt` zone.
 sudo firewall-cmd --zone=libvirt --query-masquerade
 ```
 *Expected Output:*
-```
+```text
 yes
 ```
 
@@ -107,6 +118,10 @@ Restart the virtual machine to ensure it obtains a fresh network lease, then tes
 ping 8.8.8.8
 ```
 The ping should now succeed, confirming that the network conflict has been resolved. This configuration is persistent across reboots and service restarts.
+
+<Callout type="note">
+  If you restart Docker after applying these rules, Docker may re-insert its `DROP` policy and override your setup. If VMs lose connectivity again after a Docker restart, re-run `sudo firewall-cmd --reload` to restore priority.
+</Callout>
 
 ## Conclusion
 
