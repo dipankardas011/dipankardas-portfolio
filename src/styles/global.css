@@ -281,10 +281,34 @@ body {
   margin-bottom: 0;
 }
 
-/* Code styling */
+/* Code styling — font applies to all code (inline + blocks) */
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.875em;
+}
+
+/* Remove backtick pseudo-elements added by @tailwindcss/typography */
+.prose code::before,
+.prose code::after {
+  content: none;
+}
+
+/* Inline code only (not inside <pre> blocks) — light mode */
+.prose :not(pre) > code {
+  background-color: rgba(0, 0, 0, 0.06);
+  color: var(--color-app-gray-600);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 0.3em;
+  padding: 0.15em 0.45em;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+/* Inline code — dark blog override */
+html[data-blog="true"] .prose :not(pre) > code {
+  background-color: rgba(217, 250, 161, 0.1);
+  color: #D9FAA1;
+  border: 1px solid rgba(217, 250, 161, 0.2);
 }
 
 .prose pre {
@@ -710,6 +734,11 @@ html[data-blog="true"] .prose h2::before {
   font-family: var(--font-mono);
   margin-right: 0.35em;
   letter-spacing: 0.05em;
+}
+
+/* ---- Mobile menu backdrop fix for dark blog theme ---- */
+html[data-blog="true"] #mobile-backdrop {
+  background-color: #0D1117;
 }
 
 /* ---- Force dark Shiki theme on blog pages ---- */
