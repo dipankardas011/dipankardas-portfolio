@@ -1,11 +1,11 @@
 export const siteConfig = {
   name: "Dipankar Das",
-  title: "Dipankar Das — Platform Engineer & DevOps Consultant",
+  title: "Dipankar Das — Platform Engineer & Systems Thinker",
   description:
-    "Platform engineer building reliable, scalable, and sustainable systems. Specializing in DevOps, Kubernetes, Golang, and System Design.",
+    "Bridging the gap between application code and infrastructure. Building sustainable platforms and sharing technical deep-dives on DevOps, Kubernetes, and System Design.",
   url: "https://dipankar-das.com",
   email: "dipankar@dipankar-das.com",
-  tagline: "Building sustainability + cost observability for Kubernetes",
+  tagline: "Bridging the gap between application code and infrastructure",
   profileImage: "/img/profile_v2.jpeg",
   resumeUrl:
     "https://raw.githubusercontent.com/dipankardas011/dipankardas011/main/Resume.pdf",
