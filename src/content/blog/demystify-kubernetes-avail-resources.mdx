@@ -1,0 +1,297 @@
+---
+title: "Demystifying Kubernetes Available Resources: A Comprehensive Guide"
+author: "Dipankar Das"
+date: 2026-03-01
+description: "In this comprehensive guide, we delve into the world of Kubernetes available resources. We explore what they are, how to check them, and why they are crucial for efficient cluster management. Whether you're a beginner or an experienced Kubernetes user, this article will provide valuable insights to help you optimize your cluster's performance and resource utilization."
+cover: "/img/blogs/k8s-sched-framework.png"
+tags: ["kubernetes", "AKS", "GKE", "EKS", "available resources", "cluster management", "resource optimization"]
+category: "Kubernetes"
+---
+import Callout from '../../components/Callout.astro';
+
+## Introduction
+
+Kubernetes is a powerful container orchestration platform that allows you to manage and deploy applications at scale. One of the key aspects of Kubernetes is understanding the available resources in your cluster. This knowledge is crucial for efficient cluster management, resource optimization, and ensuring that your applications run smoothly. In this comprehensive guide, we will explore what Kubernetes available resources are, how to check them, and why they are important for your cluster.
+
+why I came across all these rabit hole? when I was working on the instanceType fit for kubmin workload. And some work on the ksctl core as well. I wanted to understand how to check the available resources in a Kubernetes cluster and how to optimize them for better cost to fit for the workload. This led me down the rabbit hole of understanding Kubernetes available resources and how they work.
+
+## Before all these lets work ourselves through some of the core concepts.
+
+### What are Kubernetes Available Resources?
+
+All Cloud providers (Azure, AWS, GCP) make use of fundamental Compute unit which is Virtual Machinee (VM) and its the place where your cluster runs. Each VM has `capacity` which is the total amount of resources (CPU, memory, etc.) that the VM can provide. When you deploy applications on Kubernetes, they consume these resources. The `available resources` in Kubernetes refer to the amount of resources that are currently available for use in the cluster after accounting for the resources consumed by running applications and system components. All these become important when we go to the scheduling of the pods to a node (which is a VM) and the scheduler needs to know how much resources are available on each node to make informed decisions about where to place the pods along side the filters we have like `nodeSelector`, `affinity` and `taints and tolerations` to make sure the pods are scheduled on the right nodes.
+
+![Entire process the Scheduler has to go through to schedule a pod](/img/blogs/k8s-sched-framework.png)
+
+### The Allocatable Formula
+
+Not all of a node's capacity is available for your pods. The kubelet carves out resources for itself and the OS before the scheduler ever sees them. The formula is:
+
+```
+Allocatable = Capacity - kubeReserved - systemReserved - evictionThreshold
+```
+
+The kubelet exposes three reservation knobs:
+
+- **`kubeReserved`** — Resources reserved for Kubernetes system daemons: kubelet, container runtime, and node-level agents. This scales with node size because more pods means more kubelet overhead (more cgroups, more API watches, more container runtime bookkeeping).
+
+- **`systemReserved`** — Resources reserved for OS-level daemons: sshd, journald, systemd, udev. Mostly fixed regardless of node size since these services don't scale with pod count.
+
+- **`evictionHard`** — Thresholds that trigger pod eviction when available resources fall below a limit. For example, `memory.available: "100Mi"` means the kubelet starts evicting pods when free memory drops below 100 MiB.
+
+<Callout type="important" title="Why this matters">
+  If `Allocatable` is too high (under-reserved), the scheduler packs more pods than the node can safely handle — risking OOM kills and node instability. If `Allocatable` is too low (over-reserved), you waste money on idle capacity. Getting these numbers right is the difference between a stable cluster and a 3am pager alert.
+</Callout>
+
+You can check this on any node:
+
+```bash
+kubectl describe node <node-name> | grep -A 10 "Allocatable"
+```
+
+Compare `Allocatable` against `Capacity`. The difference should roughly equal `kubeReserved + systemReserved + evictionThreshold`.
+
+## The Heterogeneous Node Problem
+
+When you run `kubeadm init`, kubeadm creates a `kubelet-config` ConfigMap in the `kube-system` namespace. This ConfigMap holds the cluster-wide `KubeletConfiguration` and is the source of truth for every node that joins via `kubeadm join`. The joining kubelet downloads this ConfigMap and writes it to `/var/lib/kubelet/config.yaml`.
+
+This works well when every node has the same hardware profile. But in practice, clusters are heterogeneous. You might have:
+
+- A 2-vCPU / 4 GiB control plane node
+- 8-vCPU / 32 GiB general-purpose workers
+- 16-vCPU / 64 GiB memory-optimized workers for databases
+
+If the control plane node sets `kubeReserved` and `systemReserved` during `kubeadm init`, those values propagate to every worker node via the ConfigMap. A reservation tuned for a 2-vCPU node is wrong for a 16-vCPU worker, and vice versa.
+
+<Callout type="caution">
+  A single set of reservation values applied to all nodes means either under-reservation on large nodes (instability) or over-reservation on small nodes (waste). There's no winning with a one-size-fits-all approach on heterogeneous clusters.
+</Callout>
+
+### K3s vs Kubeadm: Different Propagation Models
+
+**K3s** takes a local-first approach. Each node gets its own `--kubelet-arg` flags passed directly on the command line or in its local config file. There is no centralized ConfigMap. Each node independently controls its kubelet settings.
+
+```bash
+# K3s agent on a 4-vCPU / 16 GiB worker
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="agent \
+  --kubelet-arg=kube-reserved=cpu=60m,memory=1024Mi \
+  --kubelet-arg=system-reserved=cpu=100m,memory=200Mi \
+  --kubelet-arg=eviction-hard=memory.available<100Mi" \
+  sh -
+```
+
+This naturally handles heterogeneous nodes: each node computes and sets its own values.
+
+**Kubeadm** takes a centralized approach. The `kubelet-config` ConfigMap is the single source of truth. All joining nodes inherit the same `KubeletConfiguration`. This simplifies management for homogeneous clusters but breaks down for mixed-instance pools.
+
+## GKE-Style Tiered Reservation Formula
+
+Managed Kubernetes providers like GKE, EKS, and AKS don't have this problem. They use tiered formulas that scale reservations with node capacity. GKE's formula is well-documented and serves as a good baseline for self-managed clusters too.
+
+### CPU reservation (millicores)
+
+| CPU range | Reservation rate |
+|-----------|-----------------|
+| First 1 core | 6% |
+| Next 1 core | 1% |
+| Next 2 cores | 0.5% |
+| Remaining | 0.25% |
+
+For an 8-core node: `(1000 * 0.06) + (1000 * 0.01) + (2000 * 0.005) + (4000 * 0.0025)` = **60 + 10 + 10 + 10 = 90m**
+
+### Memory reservation (MiB)
+
+| Memory range | Reservation rate |
+|-------------|-----------------|
+| First 4 GiB | 25% |
+| Next 4 GiB | 20% |
+| Next 8 GiB | 10% |
+| Next 112 GiB | 6% |
+| Remaining | 2% |
+
+For a 32 GiB node: `(4096 * 0.25) + (4096 * 0.20) + (8192 * 0.10) + (16384 * 0.06)` = **1024 + 819 + 819 + 983 = 3645 MiB**
+
+### Provider comparison
+
+| Feature | GKE | EKS | AKS |
+|---------|-----|-----|-----|
+| CPU formula | Tiered (6/1/0.5/0.25%) | Tiered (similar) | Tiered |
+| Memory formula | Tiered (25/20/10/6/2%) | Tiered (similar) | Tiered |
+| User configurable | Partial | Via launch template userdata | Via node pool config |
+| Handles heterogeneous pools | Yes (per-node) | Yes (per-node) | Yes (per-node) |
+
+When you're self-managed (kubeadm), you own the formula entirely. Which brings us to the solution.
+
+## The Solution: Kubelet Drop-in Config Directory
+
+Starting in Kubernetes v1.30 (beta) and GA in v1.35, the kubelet supports a **drop-in configuration directory**. You pass `--config-dir=/etc/kubernetes/kubelet.conf.d` and the kubelet merges all `*.conf` files in that directory (sorted by filename) on top of the base `KubeletConfiguration`.
+
+This is the missing piece for kubeadm clusters: the base ConfigMap stays generic (no reservation values), and each node writes its own drop-in file with locally-computed reservations.
+
+### The pattern
+
+1. Keep the `kubeadm-config.yml` / `kubelet-config` ConfigMap clean — no `kubeReserved`, `systemReserved`, or `evictionHard` fields.
+2. On every node (control plane and workers), **before** `kubeadm init` or `kubeadm join`:
+   - Compute CPU/memory reservations from local hardware
+   - Write a drop-in file with the computed values
+   - Create a systemd drop-in to pass `--config-dir` to the kubelet
+   - Run `systemctl daemon-reload`
+
+## Implementation Walk-through
+
+### Step 1: Compute reservations from local hardware
+
+This script implements the GKE-style tiered formula using nothing but shell arithmetic:
+
+```bash
+# CPU reservation using GKE-style tiers
+TOTAL_CPU_MILLICORES=$(($(nproc) * 1000))
+KUBE_CPU=0
+remaining=$TOTAL_CPU_MILLICORES
+
+if [ $remaining -gt 0 ]; then
+  slice=$remaining; [ $slice -gt 1000 ] && slice=1000
+  KUBE_CPU=$((KUBE_CPU + slice * 6 / 100))
+  remaining=$((remaining - slice))
+fi
+if [ $remaining -gt 0 ]; then
+  slice=$remaining; [ $slice -gt 1000 ] && slice=1000
+  KUBE_CPU=$((KUBE_CPU + slice * 1 / 100))
+  remaining=$((remaining - slice))
+fi
+if [ $remaining -gt 0 ]; then
+  slice=$remaining; [ $slice -gt 2000 ] && slice=2000
+  KUBE_CPU=$((KUBE_CPU + slice * 5 / 1000))
+  remaining=$((remaining - slice))
+fi
+if [ $remaining -gt 0 ]; then
+  KUBE_CPU=$((KUBE_CPU + remaining * 25 / 10000))
+fi
+[ $KUBE_CPU -lt 10 ] && KUBE_CPU=10
+
+# Memory reservation using GKE-style tiers
+TOTAL_MEM_MIB=$(awk '/MemTotal/ {printf "%d", $2/1024}' /proc/meminfo)
+KUBE_MEM=0
+remaining=$TOTAL_MEM_MIB
+
+if [ $remaining -gt 0 ]; then
+  slice=$remaining; [ $slice -gt 4096 ] && slice=4096
+  KUBE_MEM=$((KUBE_MEM + slice * 25 / 100))
+  remaining=$((remaining - slice))
+fi
+if [ $remaining -gt 0 ]; then
+  slice=$remaining; [ $slice -gt 4096 ] && slice=4096
+  KUBE_MEM=$((KUBE_MEM + slice * 20 / 100))
+  remaining=$((remaining - slice))
+fi
+if [ $remaining -gt 0 ]; then
+  slice=$remaining; [ $slice -gt 8192 ] && slice=8192
+  KUBE_MEM=$((KUBE_MEM + slice * 10 / 100))
+  remaining=$((remaining - slice))
+fi
+if [ $remaining -gt 0 ]; then
+  slice=$remaining; [ $slice -gt 114688 ] && slice=114688
+  KUBE_MEM=$((KUBE_MEM + slice * 6 / 100))
+  remaining=$((remaining - slice))
+fi
+if [ $remaining -gt 0 ]; then
+  KUBE_MEM=$((KUBE_MEM + remaining * 2 / 100))
+fi
+[ $KUBE_MEM -lt 100 ] && KUBE_MEM=100
+
+export KUBE_CPU KUBE_MEM
+```
+
+### Step 2: Write the drop-in configuration file
+
+```bash
+sudo mkdir -p /etc/kubernetes/kubelet.conf.d
+
+sudo tee /etc/kubernetes/kubelet.conf.d/99-reserved.conf > /dev/null <<DROPIN
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+kubeReserved:
+  cpu: "${KUBE_CPU}m"
+  memory: "${KUBE_MEM}Mi"
+systemReserved:
+  cpu: "100m"
+  memory: "200Mi"
+evictionHard:
+  memory.available: "100Mi"
+  nodefs.available: "10%"
+  nodefs.inodesFree: "5%"
+  imagefs.available: "15%"
+DROPIN
+```
+
+The file naming convention matters: files are merged in lexicographic order by filename. Use numeric prefixes to control priority:
+
+- `10-base.conf` — Low-priority base settings
+- `50-custom.conf` — Mid-priority custom settings
+- `99-reserved.conf` — High-priority per-node reservation overrides
+
+### Step 3: Enable `--config-dir` via `KUBELET_EXTRA_ARGS`
+
+Kubeadm's kubelet service unit uses `$KUBELET_EXTRA_ARGS` at the end of the `ExecStart` line, sourced from `/etc/default/kubelet` (Debian/Ubuntu) or `/etc/sysconfig/kubelet` (RHEL). This is the correct place to add `--config-dir`:
+
+```bash
+echo 'KUBELET_EXTRA_ARGS=--config-dir=/etc/kubernetes/kubelet.conf.d' | sudo tee /etc/default/kubelet > /dev/null
+```
+
+**Important:** Don't use a separate systemd drop-in with `Environment="KUBELET_EXTRA_ARGS=..."` — that would override any existing `KUBELET_EXTRA_ARGS` from `/etc/default/kubelet`.
+
+After this, `kubeadm init` or `kubeadm join` runs as normal. Kubeadm creates the base kubelet config at `/var/lib/kubelet/config.yaml` (via `--config`), and the kubelet merges the drop-in directory on top using **replace** semantics — fields in drop-in files completely replace the same fields from the base config.
+
+<Callout type="tip" title="Gradual rollout">
+  Start with a single test node using a high-numbered prefix (e.g., `90-reserved.conf`). Verify with `kubectl describe node` and the `/configz` endpoint. Once validated, roll out to all nodes with your standard prefix. The drop-in pattern makes this naturally safe.
+</Callout>
+
+## What About Managed Kubernetes?
+
+If you're running EKS, GKE, or AKS, the provider handles kubelet reservations internally with their own formulas. You don't need drop-in configs.
+
+| Provider | Reservation handling | User control |
+|----------|---------------------|--------------|
+| **GKE** | Automatic tiered formula per node type | Can override via node pool config |
+| **EKS** | `bootstrap.sh` computes reservations at AMI boot | Customizable via launch template userdata |
+| **AKS** | Automatic tiered formula | Configurable via `kubeletConfig` in node pool spec |
+
+Drop-in configs are for **self-managed clusters** — kubeadm, kubespray, or any setup where you control the kubelet configuration directly.
+
+## Verification and Debugging
+
+### Inspect merged kubelet config via /configz
+
+```bash
+# Start a kubectl proxy
+kubectl proxy &
+
+# Fetch the merged kubelet config for a specific node
+curl -s http://localhost:8001/api/v1/nodes/<node-name>/proxy/configz | jq .
+```
+
+Look for `kubeReserved`, `systemReserved`, and `evictionHard` in the output. These should reflect the drop-in values, not the base ConfigMap values.
+
+### Common pitfalls
+
+1. **Editor temp files in the drop-in directory** — Files like `.99-reserved.conf.swp` or `99-reserved.conf~` can cause the kubelet to fail parsing. Keep the drop-in directory clean; only `*.conf` files should be present.
+
+2. **Missing systemd daemon-reload** — If you write the systemd drop-in but forget `systemctl daemon-reload`, the kubelet won't pick up `--config-dir`. The base config still works, but without drop-in merging.
+
+3. **Wrong file permissions** — The kubelet reads the drop-in files as root, so permissions are rarely an issue. But if you're mounting them via a ConfigMap in a static pod, check that they're readable.
+
+4. **Conflicting fields** — If the base `KubeletConfiguration` already has `kubeReserved` set and the drop-in also sets it, the drop-in wins (last-writer-wins merging). This is by design, but can be confusing if you forget to clean the base config.
+
+## Conclusion
+
+Understanding how Kubernetes carves up node resources is fundamental if you're running self-managed clusters. The `Allocatable` formula (`Capacity - kubeReserved - systemReserved - evictionThreshold`) directly impacts scheduling decisions, cluster stability, and cost efficiency.
+
+For homogeneous clusters, a single `KubeletConfiguration` works fine. But the moment you have mixed instance types — which is most real-world clusters — you need per-node reservations. The kubelet drop-in config directory (GA in v1.35) is the clean solution for kubeadm clusters: keep the base config generic, compute reservations locally on each node, and let the kubelet merge them at startup.
+
+This is exactly the kind of thing I ran into while working on the instanceType fitting logic in ksctl — figuring out how much of a VM's capacity is actually available for workloads. Turns out, the answer is "it depends on how well you've tuned your kubelet reservations." We're actively working on standardizing kubelet resource reservations and eviction configs across both K3s and kubeadm bootstrapping in ksctl — you can follow the progress in [ksctl/ksctl#627](https://github.com/ksctl/ksctl/pull/627).
+
+## References
+- [LearnKube's blog post on this](https://learnkube.com/allocatable-resources)
+- [Kubelet Config Drop-in Directory GA](https://kubernetes.io/blog/2025/12/22/kubernetes-v1-35-kubelet-config-drop-in-directory-ga/)
+- [GKE Node Allocatable Resources](https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture#node_allocatable)
+- [Kubernetes Reserve Compute Resources](https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/)
