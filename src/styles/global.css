@@ -948,6 +948,22 @@ html[data-blog="true"] .prose pre[data-lang]::before {
   animation: fade-in 0.5s ease both;
 }
 
+/* Heartbeat animation for sponsor button */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.3); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.3); }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 0.8s ease-in-out;
+}
+
+.group:hover .group-hover\:animate-heartbeat {
+  animation: heartbeat 0.8s ease-in-out;
+}
+
 /* Card hover effect */
 .card-hover {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
