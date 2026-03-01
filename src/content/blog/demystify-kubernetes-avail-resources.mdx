@@ -260,6 +260,32 @@ Drop-in configs are for **self-managed clusters** — kubeadm, kubespray, or any
 
 ## Verification and Debugging
 
+We tested this on self-managed clusters provisioned via [ksctl](https://github.com/ksctl/ksctl) — both kubeadm and K3s bootstrapped clusters on AWS. Here's what it looks like in practice.
+
+### Kubeadm cluster
+
+The `/configz` endpoint on both the control plane and worker nodes shows the drop-in values merged correctly — `kubeReserved`, `systemReserved`, and `evictionHard` all reflect the per-node computed values.
+
+![Kubeadm cluster — kubectl proxy configz output for control plane and worker nodes](/img/blogs/k8s-avail-res-kubeadm-example.png)
+
+And the kubmin dashboard confirms the cluster is running with kubeadm v1.35 on AWS:
+
+![Kubeadm cluster on kubmin dashboard](/img/blogs/k8s-avail-res-kubeadm-example-kubmin.png)
+
+### K3s cluster
+
+Same story with K3s — the `--kubelet-arg` flags are passed per-node, and the configz output confirms the reservations are applied independently on each node.
+
+![K3s cluster — kubectl proxy configz output for control plane and worker nodes](/img/blogs/k8s-avail-res-k3s-example.png)
+
+The kubmin dashboard for the K3s cluster:
+
+![K3s cluster on kubmin dashboard](/img/blogs/k8s-avail-res-k3s-example-kubmin.png)
+
+<Callout type="note">
+  Yes, the K3s cluster is named `test-kubeadm` on the dashboard. I messed up the name while testing — don't judge.
+</Callout>
+
 ### Inspect merged kubelet config via /configz
 
 ```bash
