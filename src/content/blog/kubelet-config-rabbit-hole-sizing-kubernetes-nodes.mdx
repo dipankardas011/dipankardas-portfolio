@@ -1,27 +1,35 @@
 ---
-title: "Demystifying Kubernetes Available Resources: A Comprehensive Guide"
+title: "The Kubelet Config Rabbit Hole That Changed How I Size Kubernetes Nodes"
 author: "Dipankar Das"
 date: 2026-03-01
-description: "In this comprehensive guide, we delve into the world of Kubernetes available resources. We explore what they are, how to check them, and why they are crucial for efficient cluster management. Whether you're a beginner or an experienced Kubernetes user, this article will provide valuable insights to help you optimize your cluster's performance and resource utilization."
+description: "I went down a rabbit hole figuring out why my nodes had less resources than expected. Here's everything I learned about kubelet reservations, the allocatable formula, and drop-in configs."
 cover: "/img/blogs/k8s-sched-framework.png"
-tags: ["kubernetes", "AKS", "GKE", "EKS", "available resources", "cluster management", "resource optimization"]
+tags: ["kubernetes", "kubelet", "kubeadm", "k3s", "node allocatable", "kube-reserved", "system-reserved", "eviction threshold", "kubelet drop-in config", "GKE", "EKS", "AKS", "cluster management", "resource optimization"]
 category: "Kubernetes"
 ---
 import Callout from '../../components/Callout.astro';
 
-## Introduction
+## How I Fell Into This Rabbit Hole
 
-Kubernetes is a powerful container orchestration platform that allows you to manage and deploy applications at scale. One of the key aspects of Kubernetes is understanding the available resources in your cluster. This knowledge is crucial for efficient cluster management, resource optimization, and ensuring that your applications run smoothly. In this comprehensive guide, we will explore what Kubernetes available resources are, how to check them, and why they are important for your cluster.
+I was working on a [kubmin](https://ksctl.com/product/kubmin) feature that analyses your cluster workloads and suggests a better-fitting instanceType based on cost and resource fit. The core idea: compute a **fitScore** for each candidate VM — how well does its allocatable capacity match what your pods actually need, at the lowest cost?
 
-why I came across all these rabit hole? when I was working on the instanceType fit for kubmin workload. And some work on the ksctl core as well. I wanted to understand how to check the available resources in a Kubernetes cluster and how to optimize them for better cost to fit for the workload. This led me down the rabbit hole of understanding Kubernetes available resources and how they work.
+Sounds straightforward until you realize "allocatable capacity" isn't just the VM's raw CPU and memory. The kubelet silently carves out a chunk for itself, the OS, and eviction safety margins before the scheduler ever sees it. If you don't account for these reservations when computing the fitScore, you end up recommending instance types that look perfect on paper but can't actually run the workload. One rabbit hole later, and here we are.
 
-## Before all these lets work ourselves through some of the core concepts.
+![kubmin workload analysis showing Node Instance Recommendation with fitScore, cost savings, and alternative instance types](/img/blogs/kubmin-workload-instance-type-recomend.png)
+
+<Callout type="tip" title="TL;DR">
+  Not all of a node's CPU and memory is available for your pods. The kubelet reserves a chunk for itself and the OS. On self-managed clusters (kubeadm), these reservations propagate uniformly to all nodes, which breaks down when you have mixed instance types. The fix: kubelet drop-in config directory (GA in Kubernetes v1.35) for per-node tuning.
+</Callout>
+
+## Core Concepts
 
 ### What are Kubernetes Available Resources?
 
-All Cloud providers (Azure, AWS, GCP) make use of fundamental Compute unit which is Virtual Machinee (VM) and its the place where your cluster runs. Each VM has `capacity` which is the total amount of resources (CPU, memory, etc.) that the VM can provide. When you deploy applications on Kubernetes, they consume these resources. The `available resources` in Kubernetes refer to the amount of resources that are currently available for use in the cluster after accounting for the resources consumed by running applications and system components. All these become important when we go to the scheduling of the pods to a node (which is a VM) and the scheduler needs to know how much resources are available on each node to make informed decisions about where to place the pods along side the filters we have like `nodeSelector`, `affinity` and `taints and tolerations` to make sure the pods are scheduled on the right nodes.
+Every cloud provider (Azure, AWS, GCP) runs your Kubernetes cluster on Virtual Machines. Each VM has a `Capacity` — the total CPU, memory, and other resources it provides. But not all of that capacity is available for your pods.
 
-![Entire process the Scheduler has to go through to schedule a pod](/img/blogs/k8s-sched-framework.png)
+The **available resources** (what Kubernetes calls `Allocatable`) are what's left after the kubelet reserves resources for itself, the OS, and eviction safety margins. This number is what the scheduler actually uses when deciding where to place pods — alongside filters like `nodeSelector`, `affinity`, and `taints and tolerations`.
+
+![Kubernetes scheduler framework — the filtering and scoring pipeline a pod goes through before being assigned to a node](/img/blogs/k8s-sched-framework.png)
 
 ### The Allocatable Formula
 
@@ -51,7 +59,7 @@ kubectl describe node <node-name> | grep -A 10 "Allocatable"
 
 Compare `Allocatable` against `Capacity`. The difference should roughly equal `kubeReserved + systemReserved + evictionThreshold`.
 
-## The Heterogeneous Node Problem
+## Why One-Size-Fits-All Kubelet Config Breaks on Mixed Clusters
 
 When you run `kubeadm init`, kubeadm creates a `kubelet-config` ConfigMap in the `kube-system` namespace. This ConfigMap holds the cluster-wide `KubeletConfiguration` and is the source of truth for every node that joins via `kubeadm join`. The joining kubelet downloads this ConfigMap and writes it to `/var/lib/kubelet/config.yaml`.
 
@@ -84,7 +92,7 @@ This naturally handles heterogeneous nodes: each node computes and sets its own 
 
 **Kubeadm** takes a centralized approach. The `kubelet-config` ConfigMap is the single source of truth. All joining nodes inherit the same `KubeletConfiguration`. This simplifies management for homogeneous clusters but breaks down for mixed-instance pools.
 
-## GKE-Style Tiered Reservation Formula
+## How GKE, EKS, and AKS Calculate Kubelet Reservations
 
 Managed Kubernetes providers like GKE, EKS, and AKS don't have this problem. They use tiered formulas that scale reservations with node capacity. GKE's formula is well-documented and serves as a good baseline for self-managed clusters too.
 
@@ -122,7 +130,7 @@ For a 32 GiB node: `(4096 * 0.25) + (4096 * 0.20) + (8192 * 0.10) + (16384 * 0.0
 
 When you're self-managed (kubeadm), you own the formula entirely. Which brings us to the solution.
 
-## The Solution: Kubelet Drop-in Config Directory
+## The Fix: Kubelet Drop-in Config Directory (GA in v1.35)
 
 Starting in Kubernetes v1.30 (beta) and GA in v1.35, the kubelet supports a **drop-in configuration directory**. You pass `--config-dir=/etc/kubernetes/kubelet.conf.d` and the kubelet merges all `*.conf` files in that directory (sorted by filename) on top of the base `KubeletConfiguration`.
 
@@ -137,7 +145,7 @@ This is the missing piece for kubeadm clusters: the base ConfigMap stays generic
    - Create a systemd drop-in to pass `--config-dir` to the kubelet
    - Run `systemctl daemon-reload`
 
-## Implementation Walk-through
+## Step-by-Step: Per-Node Kubelet Reservations with Drop-in Files
 
 ### Step 1: Compute reservations from local hardware
 
@@ -246,7 +254,7 @@ After this, `kubeadm init` or `kubeadm join` runs as normal. Kubeadm creates the
   Start with a single test node using a high-numbered prefix (e.g., `90-reserved.conf`). Verify with `kubectl describe node` and the `/configz` endpoint. Once validated, roll out to all nodes with your standard prefix. The drop-in pattern makes this naturally safe.
 </Callout>
 
-## What About Managed Kubernetes?
+## Do You Need This on EKS, GKE, or AKS?
 
 If you're running EKS, GKE, or AKS, the provider handles kubelet reservations internally with their own formulas. You don't need drop-in configs.
 
@@ -258,7 +266,7 @@ If you're running EKS, GKE, or AKS, the provider handles kubelet reservations in
 
 Drop-in configs are for **self-managed clusters** — kubeadm, kubespray, or any setup where you control the kubelet configuration directly.
 
-## Verification and Debugging
+## Testing It: Real Results from Kubeadm and K3s Clusters
 
 We tested this on self-managed clusters provisioned via [ksctl](https://github.com/ksctl/ksctl) — both kubeadm and K3s bootstrapped clusters on AWS. Here's what it looks like in practice.
 
@@ -266,21 +274,21 @@ We tested this on self-managed clusters provisioned via [ksctl](https://github.c
 
 The `/configz` endpoint on both the control plane and worker nodes shows the drop-in values merged correctly — `kubeReserved`, `systemReserved`, and `evictionHard` all reflect the per-node computed values.
 
-![Kubeadm cluster — kubectl proxy configz output for control plane and worker nodes](/img/blogs/k8s-avail-res-kubeadm-example.png)
+![kubectl proxy configz output showing kubeReserved, systemReserved, and evictionHard on kubeadm control plane and worker nodes](/img/blogs/k8s-avail-res-kubeadm-example.png)
 
 And the kubmin dashboard confirms the cluster is running with kubeadm v1.35 on AWS:
 
-![Kubeadm cluster on kubmin dashboard](/img/blogs/k8s-avail-res-kubeadm-example-kubmin.png)
+![kubmin dashboard showing a self-managed kubeadm v1.35 cluster running on AWS](/img/blogs/k8s-avail-res-kubeadm-example-kubmin.png)
 
 ### K3s cluster
 
 Same story with K3s — the `--kubelet-arg` flags are passed per-node, and the configz output confirms the reservations are applied independently on each node.
 
-![K3s cluster — kubectl proxy configz output for control plane and worker nodes](/img/blogs/k8s-avail-res-k3s-example.png)
+![kubectl proxy configz output showing kubelet reservations applied per-node on a K3s cluster](/img/blogs/k8s-avail-res-k3s-example.png)
 
 The kubmin dashboard for the K3s cluster:
 
-![K3s cluster on kubmin dashboard](/img/blogs/k8s-avail-res-k3s-example-kubmin.png)
+![kubmin dashboard showing a self-managed K3s v1.35 cluster running on AWS](/img/blogs/k8s-avail-res-k3s-example-kubmin.png)
 
 <Callout type="note">
   Yes, the K3s cluster is named `test-kubeadm` on the dashboard. I messed up the name while testing — don't judge.
