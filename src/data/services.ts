@@ -9,6 +9,22 @@ export interface Service {
 
 export const services: Service[] = [
   {
+    title: "Golang & System Design",
+    abbreviation: "SD",
+    icon: "mdi:language-go",
+    color: "#88C63A33",
+    description:
+      "High-performance Go services, distributed systems (Raft consensus, actor model), gRPC APIs, and event-driven architectures with NATS messaging.",
+    skills: [
+      "Go",
+      "gRPC",
+      "Distributed Systems",
+      "NATS",
+      "REST APIs",
+      "PostgreSQL",
+    ],
+  },
+  {
     title: "DevOps & Platform Engineering",
     abbreviation: "DE",
     icon: "mdi:cloud-cog",
@@ -38,22 +54,6 @@ export const services: Service[] = [
       "AWS",
       "GCP",
       "Azure",
-    ],
-  },
-  {
-    title: "Golang & System Design",
-    abbreviation: "SD",
-    icon: "mdi:language-go",
-    color: "#88C63A33",
-    description:
-      "High-performance Go services, distributed systems (Raft consensus, actor model), gRPC APIs, and event-driven architectures with NATS messaging.",
-    skills: [
-      "Go",
-      "gRPC",
-      "Distributed Systems",
-      "NATS",
-      "REST APIs",
-      "PostgreSQL",
     ],
   },
   {
