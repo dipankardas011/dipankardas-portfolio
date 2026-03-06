@@ -7,6 +7,7 @@ import ContactSection from "../components/ContactSection.astro";
 import FreelanceBanner from "../components/FreelanceBanner.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import { services, certifications } from "../data/services";
+import { siteConfig, socialLinks } from "../data/site";
 ---
 
 <BaseLayout
@@ -20,8 +21,7 @@ import { services, certifications } from "../data/services";
       <!-- Intro -->
       <div class="mb-10 lg:mb-[120px]">
         <p class="text-base lg:text-lg text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] max-w-3xl">
-          I help teams build reliable, scalable, and cost-efficient infrastructure.
-          From CI/CD pipelines to Kubernetes deployments, I bring hands-on experience to every engagement.
+          I Help Teams <b>{siteConfig.tagline}</b>. Ranging from Software Development, System Design to DevOps and Cloud-Native Systems, I offer a comprehensive suite of services to elevate your infrastructure and development practices.
         </p>
       </div>
 
