@@ -1,0 +1,346 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import AnimatedTitle from "../../components/AnimatedTitle";
+import TopGradient from "../../components/TopGradient";
+import { Code } from "astro:components";
+import { getCollection } from "astro:content";
+
+const allSkills = await getCollection("agent-skills");
+const sortedSkills = allSkills.sort((a, b) => a.data.title.localeCompare(b.data.title));
+---
+
+<BaseLayout
+  title="Agent Library - Dipankar Das"
+  description="A collection of specialized AI Agent skill modules (SKILLS.md) for automated engineering workflows."
+  blogPost={true}
+>
+  <div class="relative">
+    <TopGradient client:load />
+    <AnimatedTitle title="Agent Library" client:load />
+  </div>
+
+  <section class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20 lg:pb-24">
+    <div class="mb-12">
+      <p class="text-lg text-app-gray-400 max-w-2xl leading-relaxed">
+        I build high-context "skills" to teach AI agents how to think like platform engineers.
+        Explore my collection of <code class="px-1.5 py-0.5 rounded text-app-accent bg-app-surface border border-app-gray-200 font-mono text-sm">SKILLS.md</code> modules,
+        their inspiration, and the logic behind them.
+      </p>
+    </div>
+
+    <!-- Setup guide -->
+    <div class="mb-16 max-w-2xl">
+      <p class="text-[10px] font-mono font-bold uppercase tracking-widest text-app-accent mb-4">Platform-agnostic setup</p>
+
+      <ol class="flex flex-col gap-6">
+        <!-- Step 1 -->
+        <li class="flex gap-4">
+          <span class="flex-shrink-0 w-5 h-5 rounded-full border border-app-gray-200 flex items-center justify-center text-[10px] font-mono text-app-accent mt-0.5">1</span>
+          <div class="flex flex-col gap-2 min-w-0">
+            <p class="text-sm text-app-gray-400">Store skills in one canonical location in your project:</p>
+            <code class="block text-xs font-mono text-app-accent bg-app-surface border border-app-gray-200 rounded-lg px-4 py-3 break-all">
+              .agents/skills/&lt;skill-name&gt;/SKILLS.md
+            </code>
+          </div>
+        </li>
+
+        <!-- Step 2 -->
+        <li class="flex gap-4">
+          <span class="flex-shrink-0 w-5 h-5 rounded-full border border-app-gray-200 flex items-center justify-center text-[10px] font-mono text-app-accent mt-0.5">2</span>
+          <div class="flex flex-col gap-2 min-w-0 w-full">
+            <p class="text-sm text-app-gray-400">Symlink into each tool's expected path — no duplication:</p>
+
+            <!-- Tool toggle -->
+            <div class="flex flex-wrap gap-2">
+              {[
+                { id: "claude",   label: "Claude Code", cmd: "ln -s .agents/skills .claude/skills"    },
+                { id: "opencode", label: "OpenCode",     cmd: "ln -s .agents/skills .opencode/skills"  },
+                { id: "cursor",   label: "Cursor",       cmd: "ln -s .agents/skills .cursor/rules"     },
+                { id: "windsurf", label: "Windsurf",     cmd: "ln -s .agents/skills .windsurf/rules"   },
+                { id: "gemini",   label: "Gemini CLI",   cmd: "ln -s .agents/skills .gemini/skills"    },
+              ].map((tool, i) => (
+                <button
+                  class="tool-tab text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded border transition-colors"
+                  class:list={[
+                    i === 0
+                      ? "bg-app-surface border-app-accent text-app-accent"
+                      : "bg-app-surface-alt border-app-gray-200 text-app-gray-400 hover:text-app-accent hover:border-app-accent/50"
+                  ]}
+                  data-cmd={tool.cmd}
+                >
+                  {tool.label}
+                </button>
+              ))}
+            </div>
+
+            <!-- Single code block -->
+            <div class="rounded-lg overflow-hidden border border-app-gray-200">
+              <code id="tool-cmd" class="block text-xs font-mono text-app-accent bg-app-surface px-4 py-3 break-all">
+                ln -s .agents/skills .claude/skills
+              </code>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-12">
+      {sortedSkills.map((skill) => (
+        <button
+          class="skill-card text-left group flex flex-col p-6 rounded-2xl border border-app-gray-200 bg-app-surface transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-app-accent/30"
+          data-skill-id={skill.id}
+          data-skill-title={skill.data.title}
+          data-skill-description={skill.data.description}
+          data-skill-category={skill.data.category}
+          data-skill-version={skill.data.version ?? ""}
+          data-skill-inspiration={skill.data.inspiration ?? ""}
+          data-skill-why={skill.data.why ?? ""}
+          data-skill-body={skill.body}
+        >
+          <div class="flex items-center justify-between mb-4 w-full">
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-1 bg-app-surface-alt rounded text-app-gray-400 border border-app-gray-200">
+              {skill.data.category}
+            </span>
+            {skill.data.version && (
+              <span class="text-[10px] font-mono text-app-gray-400">v{skill.data.version}</span>
+            )}
+          </div>
+
+          <div class="flex-1">
+            <h3 class="font-display text-xl text-app-text mb-3 tracking-tight group-hover:text-app-accent transition-colors">
+              {skill.data.title}
+            </h3>
+            <p class="text-sm text-app-gray-400 leading-relaxed line-clamp-3">
+              {skill.data.description}
+            </p>
+          </div>
+
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-app-gray-200 w-full">
+            <span class="text-xs font-semibold text-app-accent group-hover:tracking-wider transition-all">
+              VIEW SKILL
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-app-gray-400 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </div>
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <!-- Dialog -->
+  <dialog
+    id="skill-dialog"
+    class="fixed inset-0 m-auto w-[calc(100%-2rem)] max-w-5xl max-h-[calc(100svh-2rem)] rounded-3xl border border-app-gray-200 bg-app-body shadow-2xl backdrop:bg-black/70 backdrop:backdrop-blur-sm overflow-hidden p-0"
+  >
+    <!-- Single top bar -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-app-gray-200">
+      <div class="flex items-center gap-2">
+        <span id="dialog-category" class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-app-surface border border-app-gray-200 text-app-accent"></span>
+        <span id="dialog-version" class="text-[10px] font-mono text-app-gray-400"></span>
+      </div>
+      <button
+        id="dialog-close"
+        class="p-1.5 rounded-lg text-app-gray-400 hover:text-app-text hover:bg-app-surface transition-colors"
+        aria-label="Close"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Body: CSS grid, single scroll container -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 overflow-y-auto max-h-[calc(100svh-2rem-57px)]">
+
+      <!-- LEFT: description -->
+      <div class="flex flex-col gap-6 p-6 lg:p-10 lg:border-r border-app-gray-200 min-w-0 overflow-hidden">
+        <div class="min-w-0">
+          <h2 id="dialog-title" class="font-display text-2xl lg:text-3xl text-app-text tracking-tight mb-3 break-words"></h2>
+          <p id="dialog-description" class="text-app-gray-400 leading-relaxed text-sm lg:text-base break-words"></p>
+        </div>
+
+        <div id="dialog-inspiration-wrap" class="hidden border-l-2 border-app-accent/50 pl-4 min-w-0">
+          <p class="text-[10px] font-mono text-app-gray-400 uppercase tracking-widest mb-1.5">Inspiration</p>
+          <p id="dialog-inspiration" class="text-app-gray-500 italic text-sm leading-relaxed break-words"></p>
+        </div>
+
+        <div id="dialog-why-wrap" class="hidden border-l-2 border-app-gray-200 pl-4 min-w-0">
+          <p class="text-[10px] font-mono text-app-gray-400 uppercase tracking-widest mb-1.5">The Logic</p>
+          <p id="dialog-why" class="text-app-gray-500 text-sm leading-relaxed break-words"></p>
+        </div>
+      </div>
+
+      <!-- Mobile-only star divider -->
+      <div class="flex items-center gap-3 px-6 text-app-accent opacity-40 lg:hidden" aria-hidden="true">
+        <span class="flex-1 h-px" style="background: linear-gradient(to right, transparent, var(--color-app-accent))"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2L9.09 8.26L2 9.27L7 14.14L5.82 21.02L12 17.77L18.18 21.02L17 14.14L22 9.27L14.91 8.26L12 2Z"/>
+        </svg>
+        <span class="flex-1 h-px" style="background: linear-gradient(to left, transparent, var(--color-app-accent))"></span>
+      </div>
+
+      <!-- RIGHT: raw markdown -->
+      <div class="flex flex-col p-6 lg:p-10 gap-4">
+        <!-- Label + actions -->
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-mono text-app-gray-400 tracking-widest">SKILLS.md</span>
+          <div class="flex items-center gap-1">
+            <button
+              id="btn-copy"
+              class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-app-gray-400 hover:text-app-accent hover:bg-app-surface transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span id="copy-label">Copy</span>
+            </button>
+            <button
+              id="btn-download"
+              class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-app-gray-400 hover:text-app-accent hover:bg-app-surface transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+              Download
+            </button>
+          </div>
+        </div>
+
+        <!-- Shiki-highlighted code block, scrollable with fade hint -->
+        <div class="relative rounded-xl overflow-hidden">
+          <div
+            id="dialog-code"
+            class="max-h-[320px] overflow-hidden [&_pre]:!rounded-none [&_pre]:!text-xs [&_pre]:!m-0 [&_pre]:!p-4 [&_pre]:!whitespace-pre-wrap [&_pre]:!break-words [&_code]:!whitespace-pre-wrap [&_code]:!break-words"
+          ></div>
+
+          <!-- Gradient fade + line count hint -->
+          <div id="code-fade" class="absolute bottom-0 left-0 right-0 h-14 flex items-end justify-center pb-2 pointer-events-none" style="background: linear-gradient(to bottom, transparent, var(--color-app-body) 90%);">
+            <span id="more-lines-label" class="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-app-surface border border-app-gray-200 text-app-accent">↓ scroll for more</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </dialog>
+
+  <!-- Hidden Shiki-rendered skill code blocks -->
+  <div class="hidden" aria-hidden="true">
+    {sortedSkills.map((skill) => (
+      <div id={`code-${skill.id}`}>
+        <Code code={skill.body} lang="markdown" themes={{ light: "github-light", dark: "everforest-dark" }} />
+      </div>
+    ))}
+  </div>
+</BaseLayout>
+
+<script>
+  const dialog = document.getElementById('skill-dialog') as HTMLDialogElement | null;
+
+  const titleEl   = document.getElementById('dialog-title');
+  const descEl    = document.getElementById('dialog-description');
+  const catEl     = document.getElementById('dialog-category');
+  const verEl     = document.getElementById('dialog-version');
+  const inspWrap  = document.getElementById('dialog-inspiration-wrap');
+  const inspEl    = document.getElementById('dialog-inspiration');
+  const whyWrap   = document.getElementById('dialog-why-wrap');
+  const whyEl     = document.getElementById('dialog-why');
+  const codeEl         = document.getElementById('dialog-code');
+  const codeFade       = document.getElementById('code-fade');
+  const moreLinesLabel = document.getElementById('more-lines-label');
+  const btnCopy        = document.getElementById('btn-copy');
+  const btnDl          = document.getElementById('btn-download');
+  const copyLabel      = document.getElementById('copy-label');
+
+  let currentBody = '';
+  let currentId   = '';
+
+  function resetCodeFade() {
+    if (!codeEl || !codeFade) return;
+    if (codeEl) codeEl.scrollTop = 0;
+    requestAnimationFrame(() => {
+      if (!codeEl || !codeFade) return;
+      const overflows = codeEl.scrollHeight > codeEl.clientHeight + 4;
+      codeFade.style.display = overflows ? '' : 'none';
+      if (overflows && moreLinesLabel) {
+        const lineHeight = 19; // ~text-xs leading-relaxed
+        const hiddenPx   = codeEl.scrollHeight - codeEl.clientHeight;
+        const hiddenLines = Math.round(hiddenPx / lineHeight);
+        moreLinesLabel.textContent = `↓ ${hiddenLines} more line${hiddenLines !== 1 ? 's' : ''}`;
+      }
+    });
+  }
+
+
+  function open(btn: HTMLElement) {
+    if (!dialog) return;
+    currentBody = btn.dataset.skillBody ?? '';
+    currentId   = btn.dataset.skillId   ?? '';
+
+    if (titleEl)  titleEl.textContent  = btn.dataset.skillTitle ?? '';
+    if (descEl)   descEl.textContent   = btn.dataset.skillDescription ?? '';
+    if (catEl)    catEl.textContent    = btn.dataset.skillCategory ?? '';
+    if (verEl)    verEl.textContent    = btn.dataset.skillVersion ? `v${btn.dataset.skillVersion}` : '';
+
+    if (codeEl) {
+      const source = document.getElementById(`code-${currentId}`);
+      codeEl.innerHTML = source ? source.innerHTML : `<pre class="p-4 text-xs font-mono text-app-gray-400">${currentBody}</pre>`;
+      resetCodeFade();
+    }
+
+    const insp = btn.dataset.skillInspiration ?? '';
+    if (inspEl && inspWrap) {
+      inspWrap.classList.toggle('hidden', !insp);
+      if (insp) inspEl.textContent = `"${insp}"`;
+    }
+
+    const why = btn.dataset.skillWhy ?? '';
+    if (whyEl && whyWrap) {
+      whyWrap.classList.toggle('hidden', !why);
+      if (why) whyEl.textContent = why;
+    }
+
+    if (copyLabel) copyLabel.textContent = 'Copy';
+    dialog.showModal();
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    dialog?.close();
+    document.body.style.overflow = '';
+  }
+
+  // Tool tab toggle
+  const toolCmd  = document.getElementById('tool-cmd');
+  const toolTabs = document.querySelectorAll<HTMLElement>('.tool-tab');
+  toolTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      toolTabs.forEach(t => {
+        t.classList.remove('bg-app-surface', 'border-app-accent', 'text-app-accent');
+        t.classList.add('bg-app-surface-alt', 'border-app-gray-200', 'text-app-gray-400');
+      });
+      tab.classList.remove('bg-app-surface-alt', 'border-app-gray-200', 'text-app-gray-400');
+      tab.classList.add('bg-app-surface', 'border-app-accent', 'text-app-accent');
+      if (toolCmd) toolCmd.textContent = tab.dataset.cmd ?? '';
+    });
+  });
+
+  document.querySelectorAll<HTMLElement>('.skill-card').forEach(c => c.addEventListener('click', () => open(c)));
+  document.getElementById('dialog-close')?.addEventListener('click', close);
+  dialog?.addEventListener('click', e => { if (e.target === dialog) close(); });
+  window.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+  btnCopy?.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(currentBody);
+    if (copyLabel) copyLabel.textContent = 'Copied!';
+    setTimeout(() => { if (copyLabel) copyLabel.textContent = 'Copy'; }, 2000);
+  });
+
+  btnDl?.addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([currentBody], { type: 'text/markdown' }));
+    a.download = `${currentId}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+</script>

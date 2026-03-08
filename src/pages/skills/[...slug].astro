@@ -1,0 +1,153 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import TopGradient from "../../components/TopGradient";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const skills = await getCollection("agent-skills");
+  return skills.map((skill) => ({
+    params: { slug: skill.id },
+    props: { skill },
+  }));
+}
+
+const { skill } = Astro.props;
+const { Content } = await render(skill);
+---
+
+<BaseLayout
+  title={`${skill.data.title} - Agent Library`}
+  description={skill.data.description}
+  blogPost={true}
+>
+  <!-- Reading progress bar -->
+  <div id="reading-progress"></div>
+
+  <article class="animate-fade-in">
+    <div class="relative pt-10 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16">
+      <TopGradient client:load />
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Back link -->
+        <a
+          href="/skills"
+          class="inline-flex items-center gap-2 text-sm text-app-gray-400 hover:text-app-accent transition-colors mb-8 group"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5"></path>
+            <path d="m12 19-7-7 7-7"></path>
+          </svg>
+          Agent Library
+        </a>
+
+        <div class="mb-10 md:mb-14">
+          <!-- Category + version badges -->
+          <div class="flex flex-wrap items-center gap-3 mb-5">
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-app-surface rounded text-app-accent border border-app-gray-200">
+              {skill.data.category}
+            </span>
+            {skill.data.version && (
+              <span class="text-[10px] font-mono text-app-gray-400 bg-app-surface px-2.5 py-1 rounded border border-app-gray-200">
+                v{skill.data.version}
+              </span>
+            )}
+          </div>
+
+          <h1 class="text-3xl md:text-5xl font-display text-app-text leading-tight tracking-tight mb-4">
+            {skill.data.title}
+          </h1>
+
+          <p class="blog-lede mb-6">
+            {skill.data.description}
+          </p>
+
+          <!-- Inspiration + Why -->
+          {(skill.data.inspiration || skill.data.why) && (
+            <div class="flex flex-col gap-4 max-w-2xl">
+              {skill.data.inspiration && (
+                <div class="border-l-2 border-app-accent/50 pl-4">
+                  <p class="text-xs font-mono text-app-gray-400 uppercase tracking-widest mb-1">Inspiration</p>
+                  <p class="text-app-gray-500 italic text-sm leading-relaxed">"{skill.data.inspiration}"</p>
+                </div>
+              )}
+              {skill.data.why && (
+                <div class="border-l-2 border-app-gray-200 pl-4">
+                  <p class="text-xs font-mono text-app-gray-400 uppercase tracking-widest mb-1">The Logic</p>
+                  <p class="text-app-gray-500 text-sm leading-relaxed">{skill.data.why}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <!-- Content -->
+        <div class="max-w-4xl">
+          <div class="blog-entry-divider" aria-hidden="true">
+            <span></span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L9.09 8.26L2 9.27L7 14.14L5.82 21.02L12 17.77L18.18 21.02L17 14.14L22 9.27L14.91 8.26L12 2Z"/>
+            </svg>
+            <span></span>
+          </div>
+
+          <div class="prose prose-lg">
+            <Content />
+          </div>
+
+          <!-- Copy / Download raw SKILLS.md -->
+          <div class="mt-10 flex flex-wrap gap-3">
+            <button
+              id="btn-copy"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-app-gray-200 bg-app-surface text-sm text-app-gray-400 hover:text-app-accent hover:border-app-accent/50 transition-all"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span id="copy-label">Copy SKILLS.md</span>
+            </button>
+            <button
+              id="btn-download"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-app-gray-200 bg-app-surface text-sm text-app-gray-400 hover:text-app-accent hover:border-app-accent/50 transition-all"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+              Download
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<script define:vars={{ body: skill.body, id: skill.id }}>
+  const btnCopy = document.getElementById('btn-copy');
+  const btnDownload = document.getElementById('btn-download');
+  const copyLabel = document.getElementById('copy-label');
+
+  btnCopy?.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(body);
+    if (copyLabel) copyLabel.textContent = 'Copied!';
+    setTimeout(() => {
+      if (copyLabel) copyLabel.textContent = 'Copy SKILLS.md';
+    }, 2000);
+  });
+
+  btnDownload?.addEventListener('click', () => {
+    const el = document.createElement('a');
+    el.href = URL.createObjectURL(new Blob([body], { type: 'text/markdown' }));
+    el.download = `${id}.md`;
+    document.body.appendChild(el);
+    el.click();
+    document.body.removeChild(el);
+  });
+
+  // Reading progress
+  const progressBar = document.getElementById('reading-progress');
+  if (progressBar) {
+    const update = () => {
+      const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+      progressBar.style.width = Math.min((scrollTop / (scrollHeight - clientHeight)) * 100, 100) + '%';
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+</script>

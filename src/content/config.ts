@@ -25,4 +25,17 @@ const diary = defineCollection({
   }),
 });
 
-export const collections = { blog, diary };
+const agentSkills = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/agent-skills" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    category: z.string(),
+    inspiration: z.string().optional(),
+    why: z.string().optional(),
+    version: z.string().optional(),
+    icon: z.string().optional(),
+  }),
+});
+
+export const collections = { blog, diary, "agent-skills": agentSkills };

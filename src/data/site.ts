@@ -23,6 +23,7 @@ export const socialLinks = {
 export const navItems = [
   { label: "Home", href: "/" },
   { label: "Blog", href: "/blog/" },
+  { label: "Skills", href: "/skills/" },
   { label: "Projects", href: "/projects/" },
   { label: "Services", href: "/services/" },
   { label: "About", href: "/about/" },
