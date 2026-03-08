@@ -4,6 +4,7 @@ import AnimatedTitle from "../components/AnimatedTitle";
 import ServiceCard from "../components/ServiceCard.astro";
 import CertBadge from "../components/CertBadge.astro";
 import ContactSection from "../components/ContactSection.astro";
+import DirectBooking from "../components/DirectBooking.astro";
 import FreelanceBanner from "../components/FreelanceBanner.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import { services, certifications } from "../data/services";
@@ -58,6 +59,7 @@ import { siteConfig, socialLinks } from "../data/site";
     </div>
   </section>
 
+  <DirectBooking />
   <FreelanceBanner />
   <ContactSection />
 </BaseLayout>

@@ -1,0 +1,91 @@
+---
+const checkoutUrl = import.meta.env.PUBLIC_POLAR_CHECKOUT_URL;
+---
+
+<section class="py-10 lg:py-14">
+  <div class="container mx-auto">
+    <div class="relative group">
+      {/* Background glowing effect for active state */}
+      {checkoutUrl && (
+        <div class="absolute -inset-[1px] bg-gradient-to-r from-[#1DBF73]/50 to-[#29b6f6]/50 rounded-[17px] blur-sm opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+      )}
+      
+      <div class={`relative bg-app-surface-alt border rounded-2xl px-8 py-10 lg:px-14 lg:py-12 overflow-hidden ${checkoutUrl ? 'border-[#1DBF73]/30' : 'border-app-gray-100'}`}>
+        
+        {/* Decorative background element */}
+        {checkoutUrl && (
+          <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-[#1DBF73]/5 blur-[80px] pointer-events-none"></div>
+        )}
+
+        <div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 z-10">
+
+          <!-- Left: Headline -->
+          <div class="flex-1">
+            {checkoutUrl ? (
+              <>
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1DBF73] opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-[#1DBF73]"></span>
+                  </span>
+                  <span class="text-sm font-medium text-[#1DBF73] tracking-[var(--tracking-tight)]">Available Now</span>
+                </div>
+                <p class="text-3xl lg:text-[40px] font-display text-app-text leading-tight lg:leading-none tracking-[var(--tracking-tight)]">
+                  Need expert engineering<br class="hidden lg:block" /> & system design?
+                </p>
+              </>
+            ) : (
+              <>
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#EAB308]"></span>
+                  <span class="text-sm text-app-gray-400 tracking-[var(--tracking-tight)]">Coming Soon</span>
+                </div>
+                <p class="text-3xl lg:text-[40px] font-display text-app-text leading-tight lg:leading-none tracking-[var(--tracking-tight)]">
+                  Direct service<br class="hidden lg:block" /> bookings are launching soon.
+                </p>
+              </>
+            )}
+          </div>
+
+          <!-- Right: Description + CTA -->
+          <div class="flex flex-col items-start lg:items-end gap-5 lg:max-w-sm">
+            {checkoutUrl ? (
+              <>
+                <p class="text-base text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] lg:text-right">
+                  Book a consultation or project directly. From system design to implementation, let's discuss your needs.
+                </p>
+                <a
+                  href={checkoutUrl}
+                  target="_blank"
+                  rel="noopener"
+                  class="group/btn relative inline-flex items-center gap-2 px-7 py-3.5 bg-app-text text-white rounded-[32px] text-sm font-medium transition-all duration-300 tracking-[var(--tracking-tight)] overflow-hidden"
+                >
+                  <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                  <span class="relative flex items-center gap-2">
+                    Book Service
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform duration-300">
+                      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                    </svg>
+                  </span>
+                </a>
+              </>
+            ) : (
+              <>
+                <p class="text-base text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] lg:text-right">
+                  I am currently setting up direct service bookings. Check back later to book directly here!
+                </p>
+                <button
+                  disabled
+                  class="inline-flex items-center gap-2 px-6 py-3 bg-app-surface border border-app-gray-100 text-app-gray-400 rounded-[32px] text-sm font-medium cursor-not-allowed tracking-[var(--tracking-tight)]"
+                >
+                  Coming Soon
+                </button>
+              </>
+            )}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
