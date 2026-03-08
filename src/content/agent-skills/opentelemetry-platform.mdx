@@ -2,7 +2,7 @@
 title: "OpenTelemetry Platform Skill"
 description: "A platform engineering skill for designing and operating production-grade OpenTelemetry collector pipelines — covering cardinality control, OOM prevention, topology sizing, trace-log-metric correlation, and the resource attribute contract that makes Grafana actually useful."
 category: "Observability"
-version: "0.1.0"
+version: "0.2.0"
 icon: "opentelemetry"
 inspiration: "Teams get telemetry flowing in a day and spend the next six months fighting cardinality explosions, collector OOM kills, and dashboards full of data that can't be filtered by service or environment."
 why: "The OTel collector config looks deceptively simple. The sharp edges — memory_limiter placement, tail sampling statefulness, Prometheus metric allowlisting, the resource attribute contract — only appear under production load. An agent with this mental model catches those traps before they become incidents."
@@ -189,25 +189,101 @@ Use a gRPC-aware L7 load balancer in front of gateway replicas for OTLP ingestio
 
 ---
 
-## Kubernetes Deployment Specifics
+## Output Format by Infrastructure Target
 
-**The official OpenTelemetry Collector Helm chart** (`open-telemetry/opentelemetry-collector`) supports three deployment modes set via `mode:` in `values.yaml`: `deployment`, `daemonset`, and `statefulset`. The default and most common starting point is `deployment` — a single Deployment with a configurable replica count. Ask the user which mode they are using before suggesting configuration, because the right settings for a single Deployment differ from a DaemonSet.
+When the user confirms their infrastructure target, produce the appropriate output — do not mix the two:
 
-**Single Deployment (most common)**
-A single collector Deployment via Helm is the right default for most teams. All signals flow through one place, it is simple to reason about, and the Helm chart handles the Service, ConfigMap, and RBAC automatically. Set `replicaCount` to more than one only if queue pressure metrics indicate a single replica cannot keep up — and only if the pipeline is stateless (no tail sampling). Set resource `requests` and `limits` explicitly in `values.yaml`; do not leave them unset and rely on namespace defaults.
+**Kubernetes → produce a `values.yaml`**
+Output a complete, ready-to-apply Helm values file for the official chart. Do not output a raw collector config and tell them to put it in a ConfigMap manually — the Helm chart manages that via the `config:` key in `values.yaml` and the user should not be hand-editing ConfigMaps.
+
+**Bare-metal / Docker Compose → produce a raw `collector-config.yaml`**
+Output a standalone collector configuration file. No Helm, no Kubernetes abstractions. The user runs the collector directly or mounts the file into a Docker container.
+
+---
+
+## Kubernetes Deployment via Helm
+
+Add the repo once:
+
+```
+helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+helm repo update open-telemetry
+```
+
+To inspect current defaults before producing a values file, run:
+
+```
+helm show values open-telemetry/opentelemetry-collector
+```
+
+To validate what Kubernetes manifests the values will generate before applying:
+
+```
+helm template my-collector open-telemetry/opentelemetry-collector -f values.yaml
+```
+
+This is the equivalent of `otelcol validate` for the Helm path — always run it before `helm install` or `helm upgrade`.
+
+**`image.repository` is required — there is no default**
+The chart will refuse to render without it. The two valid options are `otel/opentelemetry-collector-k8s` (minimal, stable components only) and `otel/opentelemetry-collector-contrib` (full contrib receiver/processor set). Use `contrib` unless there is a specific reason to minimize the image — most production pipelines need contrib components.
+
+Always set `image.tag` explicitly — never rely on `latest`. Before suggesting a tag, fetch the current latest release tag from the official releases page so you are not hardcoding a stale version:
+
+https://github.com/open-telemetry/opentelemetry-collector-releases/releases
+
+The image block in `values.yaml` should look like:
+
+```yaml
+image:
+  repository: "otel/opentelemetry-collector-contrib"
+  pullPolicy: IfNotPresent
+  tag: "<latest-stable-tag-from-releases-page>"
+```
+
+Pin `pullPolicy` to `IfNotPresent` in production — `Always` re-pulls on every pod start which adds latency to restarts and creates a hard dependency on registry availability during incidents.
+
+**`mode:` determines the entire deployment shape**
+The chart supports `deployment`, `daemonset`, and `statefulset`. This must be set explicitly. A single `deployment` is the right default for most teams.
+
+**`memory_limiter` uses percentages, not absolute values**
+The chart configures `memory_limiter` via `limit_percentage` (default 80%) and `spike_limit_percentage` (default 25%) rather than `limit_mib`. It automatically calculates the actual byte limits from `resources.limits.memory`. This means you must set `resources.limits.memory` on the pod — if it is unset, the memory limiter has nothing to calculate from and will not protect against OOM. Always set both `requests` and `limits` explicitly.
+
+**The default pipeline order is already correct**
+The chart templates `memory_limiter` before `batch` in all pipelines out of the box. Do not reorder it.
+
+**Use `presets:` before writing manual receiver/processor config**
+The chart ships built-in presets that handle the Kubernetes-specific wiring — RBAC, volume mounts, processor config — automatically. Use them instead of configuring components manually:
+
+`presets.kubernetesAttributes.enabled: true` — adds the `k8sattributes` processor to all pipelines and creates the required ClusterRole. Best used with `daemonset` mode. This replaces manual RBAC and processor config entirely.
+
+`presets.logsCollection.enabled: true` — adds the `filelog` receiver and mounts `/var/log` from the host. Requires `daemonset` mode. Enable `storeCheckpoints: true` to persist read positions across pod restarts.
+
+`presets.hostMetrics.enabled: true` — adds the `hostmetrics` receiver for node-level CPU, memory, disk, and network metrics. Requires `daemonset` mode.
+
+`presets.clusterMetrics.enabled: true` — adds the `k8s_cluster` receiver for cluster-level metrics (node count, pod phases, resource quotas). Works with `deployment` or `statefulset` mode. In `daemonset` mode, it automatically enables leader election to prevent duplicate metrics.
+
+`presets.kubernetesEvents.enabled: true` — collects Kubernetes events as log records. Best used with `deployment` or `statefulset` mode.
+
+**`serviceMonitor` and `podMonitor` are built-in**
+If the cluster has the Prometheus Operator installed, enable `serviceMonitor.enabled: true` instead of manually configuring a scrape job. Add the labels your Prometheus Operator is watching under `serviceMonitor.extraLabels`.
+
+**`prometheusRule` is built-in**
+Enable `prometheusRule.enabled: true` and `prometheusRule.defaultRules.enabled: true` to get pre-built alerting rules for queue saturation, export failures, and receiver errors — without writing them from scratch.
+
+**`autoscaling` targets CPU by default — change it**
+The built-in HPA targets CPU utilization. For the collector, queue pressure is a better signal than CPU. Use `autoscaling.additionalMetrics` to add a custom metric based on `otelcol_exporter_queue_size` and disable `targetCPUUtilizationPercentage`.
+
+**`priorityClassName` is not set by default**
+Set it. A collector evicted during node memory pressure causes a telemetry blackout during an active incident. Use a priority class that places the collector above standard application workloads but below system-critical pods.
+
+**`networkPolicy.enabled: true` is available but off by default**
+Enable it in environments with strict network isolation. Configure `allowIngressFrom` to permit traffic from application namespaces, and `egressRules` to allow traffic to your backend endpoints (Tempo, Loki, Prometheus remote write).
 
 **DaemonSet mode**
-Use `mode: daemonset` when you need per-node collection — host metrics, node-level log scraping via `filelog` receiver from `/var/log`, or when you want to keep OTLP ingress on localhost to avoid cross-node network hops. Add `tolerations` to cover control plane nodes if infrastructure telemetry is needed. DaemonSet agents should be kept lightweight — no tail sampling, minimal processing, forward to a gateway Deployment.
+Use `mode: daemonset` for per-node collection — host metrics, log scraping, or when keeping OTLP ingress on localhost. DaemonSet agents should stay lightweight: no tail sampling, forward via OTLP to a gateway Deployment.
 
 **StatefulSet mode**
-Use `mode: statefulset` when the collector needs stable network identity or persistent storage — primarily for persistent queue (`file_storage` extension) so data survives pod restarts during backend outages. This is not the default and most teams do not need it unless data loss during outages is explicitly unacceptable.
-
-**HPA for gateway Deployments**
-Scale gateway replicas on `otelcol_exporter_queue_size` pressure, not CPU. CPU scaling reacts too slowly to telemetry bursts. When running multiple replicas with tail sampling, use the `loadbalancing` exporter in front of them to hash by `trace_id` — without it, spans from the same trace land on different replicas and get sampled inconsistently.
-
-Set `priorityClassName` on all collector pods. A collector being evicted during node memory pressure causes a telemetry blackout at exactly the moment an incident is in progress. Use a priority class that prevents eviction before standard application pods.
-
-Use the `k8sattributes` processor to enrich telemetry with pod name, namespace, deployment name, and node name from the Kubernetes API. The Helm chart can configure the required ClusterRole automatically via `clusterRole.create: true`. Confirm the service account has `get` and `list` on pods and nodes — missing RBAC causes silent enrichment failures, not errors.
+Use `mode: statefulset` when the collector needs persistent queue storage (`file_storage` extension) so data survives pod restarts during backend outages. Not the default — only use it when data loss during outages is explicitly unacceptable and the operational overhead is justified.
 
 ---
 
