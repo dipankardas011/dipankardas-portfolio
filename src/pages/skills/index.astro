@@ -84,6 +84,24 @@ const sortedSkills = allSkills.sort((a, b) => a.data.title.localeCompare(b.data.
       </ol>
     </div>
 
+    <!-- Sponsor callout -->
+    <div class="mb-16 max-w-2xl flex items-start gap-4 p-5 rounded-2xl border border-app-gray-200 bg-app-surface">
+      <svg class="w-5 h-5 text-app-accent shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm text-app-gray-400 leading-relaxed">
+          These skills are free to use. If they save you time or spark ideas,
+          <a
+            href="https://github.com/sponsors/dipankardas011"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-app-accent hover:underline font-medium"
+          >sponsoring</a> helps me keep building more.
+        </p>
+      </div>
+    </div>
+
     <!-- Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-12">
       {sortedSkills.map((skill) => (

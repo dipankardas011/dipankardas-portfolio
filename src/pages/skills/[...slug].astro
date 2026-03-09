@@ -94,8 +94,24 @@ const { Content } = await render(skill);
             <Content />
           </div>
 
+          <!-- Sponsor callout -->
+          <div class="mt-10 flex items-start gap-4 p-5 rounded-2xl border border-app-gray-200 bg-app-surface max-w-xl">
+            <svg class="w-5 h-5 text-app-accent shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <p class="text-sm text-app-gray-400 leading-relaxed">
+              Found this skill useful?
+              <a
+                href="https://github.com/sponsors/dipankardas011"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-app-accent hover:underline font-medium"
+              >Sponsor me on GitHub</a> to support more skills like this.
+            </p>
+          </div>
+
           <!-- Copy / Download raw SKILLS.md -->
-          <div class="mt-10 flex flex-wrap gap-3">
+          <div class="mt-6 flex flex-wrap gap-3">
             <button
               id="btn-copy"
               class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-app-gray-200 bg-app-surface text-sm text-app-gray-400 hover:text-app-accent hover:border-app-accent/50 transition-all"
