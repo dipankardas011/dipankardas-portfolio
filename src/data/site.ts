@@ -17,6 +17,7 @@ export const socialLinks = {
   linkedin: "https://linkedin.com/in/dipankar-das-1324b6206",
   twitter: "https://twitter.com/DipanakarDas011",
   hashnode: "https://dipankardas011.hashnode.dev/",
+  upwork: "https://www.upwork.com/freelancers/~0171342e36ce285d8c?mp_source=share",
   fiverr: "https://www.fiverr.com/s/38WVy79",
 };
 
