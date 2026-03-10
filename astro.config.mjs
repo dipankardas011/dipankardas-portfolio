@@ -8,7 +8,7 @@ import icon from "astro-icon";
 
 export default defineConfig({
   site: "https://dipankar-das.com",
-  integrations: [mdx(), sitemap(), react(), icon()],
+  integrations: [mdx(), sitemap({ lastmod: new Date() }), react(), icon()],
   vite: {
     plugins: [tailwindcss()],
   },
