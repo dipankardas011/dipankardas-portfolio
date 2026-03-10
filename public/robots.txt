@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dipankar-das.com/sitemap-index.xml
