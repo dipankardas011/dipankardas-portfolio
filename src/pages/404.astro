@@ -1,0 +1,118 @@
+---
+import BaseLayout from "../components/BaseLayout.astro";
+import BlurDecoration from "../components/BlurDecoration.astro";
+---
+
+<BaseLayout title="404 — Page Not Found">
+  <section class="py-10 lg:py-20 animate-fade-in">
+    <div class="container mx-auto">
+      <div class="relative bg-app-surface rounded-3xl overflow-hidden px-6 py-16 md:px-12 md:py-24 lg:px-20 lg:py-32 text-center">
+        <BlurDecoration variant="purple" position="top-right" />
+        <BlurDecoration variant="yellow" position="bottom-left" />
+
+        <div class="relative z-10">
+          <div class="glitch-wrapper" aria-hidden="true">
+            <p class="glitch font-display text-[120px] md:text-[180px] lg:text-[220px] leading-none font-bold tracking-tight select-none" data-text="404">
+              404
+            </p>
+          </div>
+          <h1 class="text-2xl md:text-3xl lg:text-4xl font-semibold tracking-[var(--tracking-tight)] mt-4">
+            Page not found
+          </h1>
+          <p class="text-sm md:text-base text-app-gray-400 tracking-[var(--tracking-tight)] mt-3 max-w-md mx-auto leading-relaxed">
+            The page you're looking for doesn't exist or has been moved.
+          </p>
+          <a
+            href="/"
+            class="inline-flex items-center px-7 py-3 mt-8 border border-app-gray-200 rounded-[32px] text-sm lg:text-base font-medium text-app-gray-500 hover:border-app-text hover:bg-app-text hover:text-white transition-colors duration-300 tracking-[var(--tracking-tight)] uppercase"
+          >
+            Back to Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+<style>
+  .glitch-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .glitch {
+    position: relative;
+    background: linear-gradient(135deg, var(--color-blur-purple) 0%, #d4d0e8 55%, var(--color-blur-yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--color-blur-purple) 0%, #d4d0e8 55%, var(--color-blur-yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glitch::before {
+    opacity: 0.6;
+    clip-path: inset(0 0 65% 0);
+    animation: glitch-top 3s infinite linear alternate-reverse;
+  }
+
+  .glitch::after {
+    opacity: 0.4;
+    clip-path: inset(60% 0 0 0);
+    animation: glitch-bottom 2.5s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-top {
+    0%, 90% {
+      transform: translate(0);
+    }
+    92% {
+      transform: translate(-8px, -2px);
+    }
+    94% {
+      transform: translate(8px, 2px);
+    }
+    96% {
+      transform: translate(-4px, 1px);
+    }
+    98% {
+      transform: translate(3px, -1px);
+    }
+    100% {
+      transform: translate(0);
+    }
+  }
+
+  @keyframes glitch-bottom {
+    0%, 88% {
+      transform: translate(0);
+    }
+    90% {
+      transform: translate(6px, 2px);
+    }
+    93% {
+      transform: translate(-6px, -1px);
+    }
+    95% {
+      transform: translate(4px, 1px);
+    }
+    97% {
+      transform: translate(-3px, -2px);
+    }
+    100% {
+      transform: translate(0);
+    }
+  }
+</style>
+</BaseLayout>
