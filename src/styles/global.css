@@ -65,7 +65,7 @@
 /* BCMS Reference Design Tokens */
 @theme {
   /* Primary Colors */
-  --color-app-accent: #06b6d4;
+  --color-app-accent: #3A437E;
   --color-app-body: #ffffff;
   --color-app-bg: #ffffff;
   --color-app-text: #171717;
@@ -99,6 +99,11 @@
   --font-family-display: var(--font-display);
   --font-family-sans: var(--font-sans);
   --font-family-mono: var(--font-mono);
+}
+
+/* Gradient accent for background uses (light mode only) */
+.bg-app-accent {
+  background: linear-gradient(135deg, #c1c3d4 0%, #f9f9f9 45%, #fbebd0 100%) !important;
 }
 
 /* Global base styles */
@@ -666,6 +671,7 @@ html[data-blog="true"] body {
 /* "See all posts" and any accent-bg button: accent is light #D9FAA1
    so white text is unreadable — force near-black text */
 html[data-blog="true"] .bg-app-accent {
+  background: var(--color-app-accent) !important;
   color: #0D1117;
 }
 
