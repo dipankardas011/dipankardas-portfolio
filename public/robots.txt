@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /diary/
+Disallow: /skills/
+Allow: /skills/$
 
 Sitemap: https://dipankar-das.com/sitemap-index.xml
