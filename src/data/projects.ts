@@ -12,13 +12,14 @@ export const projects: Project[] = [
   {
     title: "kubmin",
     description:
-      "Workload Intelligence. Brings workload intelligence provisioned on runners. Monitor, analyze, and optimize your workloads with energy-powered intelligence.",
+      "Per-workload cost and efficiency tracking for Kubernetes. Detects idle resources, compares deployments across versions, and surfaces SCI/SEE sustainability scores — the missing layer between your workloads and your bill. Powered by Kepler (CNCF) and aligned with the Green Software Foundation.",
     image: "https://ksctl.com/kubmin-logo.svg",
     links: [
       { label: "Website", url: "https://ksctl.com/product/kubmin" },
+      { label: "Try It", url: "https://kubmin.ksctl.com" },
     ],
     category: "Products",
-    tags: ["Go", "Kubernetes", "Multi-Cloud", "Sustainability"],
+    tags: ["Go", "Kubernetes", "FinOps", "Sustainability", "Kepler", "CNCF"],
     featured: true,
   },
   {

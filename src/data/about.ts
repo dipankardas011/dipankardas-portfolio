@@ -80,10 +80,10 @@ export const experiences: Experience[] = [
         how: "Designed a hierarchical model spanning Org, Cluster, and Workload levels, enabling fine-grained permission enforcement and quota management across distributed engineering teams.",
       },
       {
-        title: "Developer Efficiency Analytics",
-        why: "Teams had no visibility into whether container image changes improved or degraded performance and energy consumption across versions.",
-        what: "Designed an engine to track container image behavior across versions.",
-        how: "Delivered data-driven insights into performance and energy regressions, enabling teams to baseline and optimize software efficiency within the Kubernetes deployment pipeline.",
+        title: "Workload Intelligence & Cost Tracking",
+        why: "Teams had no per-workload visibility into what each deploy actually costs in money, energy, and compute — waste compounded silently with every release.",
+        what: "Built a per-workload cost and efficiency tracking engine powered by Kepler (CNCF) with SCI/SEE sustainability scoring aligned to the Green Software Foundation.",
+        how: "Surfaces idle workloads, overprovisioned containers, and efficiency regressions between deployment versions — with dollar amounts and ready-to-use kubectl commands to fix them. Compares workload costs across regions and instance types.",
       },
       {
         title: "AI-Agents Orchestration",
@@ -94,8 +94,8 @@ export const experiences: Experience[] = [
       {
         title: "Workload Recommendation Engine",
         why: "Teams had no structured way to understand the true profile of their running workloads — efficiency waste, energy consumption, and resource behaviour were all invisible.",
-        what: "Developed a recommendation system that analyses workload image insights across versions.",
-        how: "Built profiling pipelines that surface each workload's resource profile, waste analysis, and energy footprint — giving teams the data to make informed decisions on right-sizing, scheduling, and sustainability.",
+        what: "Developed a recommendation system that detects idle workloads, overprovisioned containers, and temporal waste patterns — each with dollar amounts attached.",
+        how: "Built profiling pipelines that compare workload efficiency across deployment versions (cost, energy, CPU, memory, SCI score), surface regional cost optimization opportunities, and generate ready-to-use kubectl commands for immediate savings.",
       },
     ],
   },
