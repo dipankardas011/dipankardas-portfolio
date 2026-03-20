@@ -46,4 +46,12 @@ Dipankar was able to join the technical discussion and deliver some important mi
 
 With his cuoriosity and proactivity, alongside the technical expertise I would highly recommend Dipankar as a team member.`,
   },
+  {
+    name: "Mitesh Shah",
+    photo: "https://avatars.githubusercontent.com/u/1223371",
+    role: "Senior System Administrator",
+    company: "rtCamp",
+    linkedinUrl: "https://www.linkedin.com/in/dipankar-das-1324b6206/#recommendations",
+    content: `As Dipankar’s manager, I’ve seen his strong research-driven approach to Kubernetes and observability tools like Grafana and Prometheus. He brings solid Terraform skills and contributes effectively to infrastructure automation. A dependable engineer who approaches problems thoughtfully and delivers practical solutions.`,
+  },
 ];
