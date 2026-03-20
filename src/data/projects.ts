@@ -117,6 +117,21 @@ export const projects: Project[] = [
     tags: ["AWS", "CloudFormation", "Visualization"],
   },
   {
+    title: "AI Agents Skill Library",
+    description:
+      "A curated skill library for AI agents, enabling modular capability composition and reuse across agent architectures.",
+    image: "/img/projects/agent-library.jpeg",
+    links: [
+      {
+        label: "Website",
+        url: "https://dipankar-das.com/skills",
+      },
+    ],
+    category: "AI/ML",
+    tags: ["AI Agents", "Skills", "LLM"],
+    featured: true,
+  },
+  {
     title: "Chat Bot using GPT-2",
     description:
       "HTTP server using Rust with a text-to-text generator bot via HuggingFace. Multiple implementations: WasmEdge, Spin by Fermyon, and Tokio/Async.",
