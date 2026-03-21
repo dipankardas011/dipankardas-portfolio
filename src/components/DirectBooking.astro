@@ -1,91 +1,144 @@
 ---
+import { siteConfig } from "../data/site";
+
 const checkoutUrl = import.meta.env.PUBLIC_POLAR_CHECKOUT_URL;
+
+const quickServices = [
+  {
+    name: "CI/CD Pipeline Setup",
+    price: "$50",
+    description: "GitHub Actions, ArgoCD, or Jenkins pipeline for your project",
+    icon: "rocket",
+  },
+  {
+    name: "Dockerfile & K8s Manifests",
+    price: "$50",
+    description: "Production-ready containerization with Kubernetes deployment configs",
+    icon: "container",
+  },
+  {
+    name: "Infrastructure Review",
+    price: "$100",
+    description: "Audit your cloud infra, Terraform, or Helm charts with actionable fixes",
+    icon: "search",
+  },
+  {
+    name: "System Design Session",
+    price: "$150",
+    description: "1-on-1 session to architect your distributed system or platform",
+    icon: "design",
+  },
+];
+
+function buildMailtoLink(serviceName: string, price: string) {
+  const subject = encodeURIComponent(`Service Inquiry: ${serviceName}`);
+  const body = encodeURIComponent(
+    `Hi Dipankar,\n\nI'm interested in the "${serviceName}" service (${price}).\n\nHere's what I need:\n- Project/Repo: \n- Current setup: \n- Desired outcome: \n- Timeline: \n\nLooking forward to discussing this.\n\nThanks!`
+  );
+  return `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
+}
+
+const customMailto = (() => {
+  const subject = encodeURIComponent("Custom Project Inquiry");
+  const body = encodeURIComponent(
+    `Hi Dipankar,\n\nI'd like to discuss a custom project.\n\nProject overview:\n- What I need: \n- Tech stack: \n- Budget range: \n- Timeline: \n\nLooking forward to your response.\n\nThanks!`
+  );
+  return `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
+})();
+
+const iconPaths: Record<string, string> = {
+  rocket: "M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09zM12 15l-3-3 M22 2l-7.5 7.5 M9.22 9.05 6.32 12.15a1 1 0 0 0-.3.71V16l-2 2 M14.95 14.78l3.1-2.9a1 1 0 0 0 .29-.71V8l2-2 M22 2l-4.35 4.35 M15.5 8.5 12 12",
+  container: "M22 8.5V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2.5 M2 12h20 M22 15.5V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2.5 M2 8.5h20 M6 16h.01 M10 16h.01",
+  search: "M11 3a8 8 0 1 0 0 16 8 8 0 0 0 0-16z M21 21l-4.35-4.35 M11 8v6 M8 11h6",
+  design: "M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z",
+};
 ---
 
 <section class="py-10 lg:py-14">
   <div class="container mx-auto">
-    <div class="relative group">
-      {/* Background glowing effect for active state */}
-      {checkoutUrl && (
-        <div class="absolute -inset-[1px] bg-gradient-to-r from-[#1DBF73]/50 to-[#29b6f6]/50 rounded-[17px] blur-sm opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-      )}
-      
-      <div class={`relative bg-app-surface-alt border rounded-2xl px-8 py-10 lg:px-14 lg:py-12 overflow-hidden ${checkoutUrl ? 'border-[#1DBF73]/30' : 'border-app-gray-100'}`}>
-        
-        {/* Decorative background element */}
-        {checkoutUrl && (
-          <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-[#1DBF73]/5 blur-[80px] pointer-events-none"></div>
-        )}
 
-        <div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 z-10">
+    {/* Section Header */}
+    <div class="mb-8 lg:mb-10">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1DBF73] opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-[#1DBF73]"></span>
+        </span>
+        <span class="text-sm font-medium text-[#1DBF73] tracking-[var(--tracking-tight)]">Available Now</span>
+      </div>
+      <p class="text-3xl lg:text-[40px] font-display text-app-text leading-tight lg:leading-none tracking-[var(--tracking-tight)]">
+        Quick-start services
+      </p>
+      <p class="text-base text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] mt-3 max-w-2xl">
+        Fixed-scope tasks to get you unblocked fast. Send an inquiry and I'll respond with a detailed proposal and checkout link.
+      </p>
+    </div>
 
-          <!-- Left: Headline -->
+    {/* Quick Services Grid */}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-5 mb-8 lg:mb-10">
+      {quickServices.map((service) => (
+        <a
+          href={checkoutUrl || buildMailtoLink(service.name, service.price)}
+          target={checkoutUrl ? "_blank" : undefined}
+          rel={checkoutUrl ? "noopener" : undefined}
+          class="group relative bg-app-surface-alt border border-app-gray-100 rounded-2xl px-6 py-6 lg:px-8 lg:py-7 hover:border-[#1DBF73]/40 transition-all duration-300 block"
+        >
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg bg-[#1DBF73]/10 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1DBF73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4.5 h-4.5">
+                  <path d={iconPaths[service.icon]} />
+                </svg>
+              </div>
+              <h3 class="text-base font-medium text-app-text tracking-[var(--tracking-tight)]">{service.name}</h3>
+            </div>
+            <span class="text-sm font-semibold text-[#1DBF73] tracking-[var(--tracking-tight)] whitespace-nowrap ml-3">
+              from {service.price}
+            </span>
+          </div>
+          <p class="text-sm text-app-gray-400 leading-[1.5] tracking-[var(--tracking-tight)] pl-12">
+            {service.description}
+          </p>
+          <div class="flex items-center gap-1.5 mt-4 pl-12">
+            <span class="text-xs font-medium text-[#1DBF73] tracking-[var(--tracking-tight)] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {checkoutUrl ? "Book now" : "Send inquiry"}
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1DBF73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 transform translate-x-0 group-hover:translate-x-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    {/* Custom Project CTA */}
+    <div class="relative group/custom">
+      <div class="absolute -inset-[1px] bg-gradient-to-r from-[#1DBF73]/30 to-[#29b6f6]/30 rounded-[17px] blur-sm opacity-0 group-hover/custom:opacity-30 transition-opacity duration-500"></div>
+      <div class="relative bg-app-surface-alt border border-app-gray-100 rounded-2xl px-8 py-8 lg:px-14 lg:py-10">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div class="flex-1">
-            {checkoutUrl ? (
-              <>
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1DBF73] opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-[#1DBF73]"></span>
-                  </span>
-                  <span class="text-sm font-medium text-[#1DBF73] tracking-[var(--tracking-tight)]">Available Now</span>
-                </div>
-                <p class="text-3xl lg:text-[40px] font-display text-app-text leading-tight lg:leading-none tracking-[var(--tracking-tight)]">
-                  Need expert engineering<br class="hidden lg:block" /> & system design?
-                </p>
-              </>
-            ) : (
-              <>
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[#EAB308]"></span>
-                  <span class="text-sm text-app-gray-400 tracking-[var(--tracking-tight)]">Coming Soon</span>
-                </div>
-                <p class="text-3xl lg:text-[40px] font-display text-app-text leading-tight lg:leading-none tracking-[var(--tracking-tight)]">
-                  Direct service<br class="hidden lg:block" /> bookings are launching soon.
-                </p>
-              </>
-            )}
+            <p class="text-xl lg:text-2xl font-display text-app-text leading-tight tracking-[var(--tracking-tight)]">
+              Need something custom?
+            </p>
+            <p class="text-base text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] mt-2 max-w-lg">
+              Larger projects, ongoing consulting, or specialized DevOps & cloud work. Describe your needs and I'll send a tailored proposal with pricing.
+            </p>
           </div>
-
-          <!-- Right: Description + CTA -->
-          <div class="flex flex-col items-start lg:items-end gap-5 lg:max-w-sm">
-            {checkoutUrl ? (
-              <>
-                <p class="text-base text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] lg:text-right">
-                  Book a consultation or project directly. From system design to implementation, let's discuss your needs.
-                </p>
-                <a
-                  href={checkoutUrl}
-                  target="_blank"
-                  rel="noopener"
-                  class="group/btn relative inline-flex items-center gap-2 px-7 py-3.5 bg-app-text text-white rounded-[32px] text-sm font-medium transition-all duration-300 tracking-[var(--tracking-tight)] overflow-hidden"
-                >
-                  <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
-                  <span class="relative flex items-center gap-2">
-                    Book Service
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform duration-300">
-                      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                    </svg>
-                  </span>
-                </a>
-              </>
-            ) : (
-              <>
-                <p class="text-base text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] lg:text-right">
-                  I am currently setting up direct service bookings. Check back later to book directly here!
-                </p>
-                <button
-                  disabled
-                  class="inline-flex items-center gap-2 px-6 py-3 bg-app-surface border border-app-gray-100 text-app-gray-400 rounded-[32px] text-sm font-medium cursor-not-allowed tracking-[var(--tracking-tight)]"
-                >
-                  Coming Soon
-                </button>
-              </>
-            )}
-          </div>
-
+          <a
+            href={customMailto}
+            class="group/btn relative inline-flex items-center gap-2 px-7 py-3.5 bg-app-text text-white rounded-[32px] text-sm font-medium transition-all duration-300 tracking-[var(--tracking-tight)] overflow-hidden flex-shrink-0"
+          >
+            <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+            <span class="relative flex items-center gap-2">
+              Discuss Your Project
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform duration-300">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
+            </span>
+          </a>
         </div>
       </div>
     </div>
+
   </div>
 </section>
