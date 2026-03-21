@@ -1,5 +1,5 @@
 ---
-import { siteConfig } from "../data/site";
+import { siteConfig, socialLinks } from "../data/site";
 
 const checkoutUrl = import.meta.env.PUBLIC_POLAR_CHECKOUT_URL;
 
@@ -30,22 +30,6 @@ const quickServices = [
   },
 ];
 
-function buildMailtoLink(serviceName: string, price: string) {
-  const subject = encodeURIComponent(`Service Inquiry: ${serviceName}`);
-  const body = encodeURIComponent(
-    `Hi Dipankar,\n\nI'm interested in the "${serviceName}" service (${price}).\n\nHere's what I need:\n- Project/Repo: \n- Current setup: \n- Desired outcome: \n- Timeline: \n\nLooking forward to discussing this.\n\nThanks!`
-  );
-  return `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
-}
-
-const customMailto = (() => {
-  const subject = encodeURIComponent("Custom Project Inquiry");
-  const body = encodeURIComponent(
-    `Hi Dipankar,\n\nI'd like to discuss a custom project.\n\nProject overview:\n- What I need: \n- Tech stack: \n- Budget range: \n- Timeline: \n\nLooking forward to your response.\n\nThanks!`
-  );
-  return `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
-})();
-
 const iconPaths: Record<string, string> = {
   rocket: "M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5 M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09 M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05",
   container: "M22 8.5V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2.5 M2 12h20 M22 15.5V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2.5 M2 8.5h20 M6 16h.01 M10 16h.01",
@@ -57,63 +41,105 @@ const iconPaths: Record<string, string> = {
 <section class="py-10 lg:py-14">
   <div class="container mx-auto">
 
-    {/* Section Header */}
-    <div class="mb-8 lg:mb-10">
-      <div class="flex items-center gap-2 mb-3">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1DBF73] opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-[#1DBF73]"></span>
-        </span>
-        <span class="text-sm font-medium text-[#1DBF73] tracking-[var(--tracking-tight)]">Available Now</span>
+    {/* Section Header with Decision Tree */}
+    <div class="mb-8 lg:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-app-accent opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-app-accent"></span>
+          </span>
+          <span class="text-sm font-medium text-app-accent tracking-[var(--tracking-tight)]">Available Now</span>
+        </div>
+        <p class="text-3xl lg:text-[40px] font-display text-app-text leading-tight lg:leading-none tracking-[var(--tracking-tight)]">
+          Work with me directly
+        </p>
+        <p class="text-base text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] mt-3 max-w-xl">
+          Skip the platform fees. Choose a fixed-scope service below or request a custom project.
+        </p>
       </div>
-      <p class="text-3xl lg:text-[40px] font-display text-app-text leading-tight lg:leading-none tracking-[var(--tracking-tight)]">
-        Quick-start services
-      </p>
-      <p class="text-base text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] mt-3 max-w-2xl">
-        Fixed-scope tasks to get you unblocked fast. Send an inquiry and I'll respond with a detailed proposal and checkout link.
-      </p>
+
+      <div class="bg-app-surface border border-app-gray-100 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 shrink-0">
+        <p class="text-sm text-app-gray-500 font-medium tracking-[var(--tracking-tight)]">Prefer platforms?</p>
+        <div class="flex items-center gap-2">
+          <a
+            href={socialLinks.upwork}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 px-3 py-2 bg-app-surface-alt border border-app-gray-200 rounded-xl text-sm font-medium text-app-gray-500 hover:border-[#14A800] hover:text-[#14A800] hover:bg-white transition-colors duration-300 tracking-[var(--tracking-tight)]"
+          >
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0">
+              <path d="M345.516 181.708c-42.168 0-65.774 27.481-72.532 55.773-7.658-14.416-13.335-33.698-17.75-51.628H196.94v72.531c0 26.31-11.984 45.772-35.41 45.772-23.427 0-36.852-19.462-36.852-45.772l.27-72.531H91.34v72.531c0 21.174 6.848 40.366 19.372 54.061 12.884 14.146 30.454 21.534 50.817 21.534 40.545 0 68.837-31.085 68.837-75.595V209.64c4.235 16.038 14.326 46.853 33.608 73.884l-18.02 102.625h34.148l11.893-72.712c3.875 3.244 8.02 6.127 12.434 8.74 11.443 7.208 24.508 11.263 38.023 11.713 0 0 2.073.09 3.154.09 41.807 0 75.054-32.346 75.054-76.045 0-43.7-33.337-76.226-75.144-76.226m0 122.358c-25.86 0-42.979-20.003-47.754-27.752 6.127-49.015 24.057-64.512 47.754-64.512 23.426 0 41.626 18.741 41.626 46.132 0 27.39-18.2 46.132-41.626 46.132" fill="currentColor" fill-rule="nonzero"/>
+            </svg>
+            Upwork
+          </a>
+          <a
+            href={socialLinks.fiverr}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 px-3 py-2 bg-app-surface-alt border border-app-gray-200 rounded-xl text-sm font-medium text-app-gray-500 hover:border-app-accent hover:text-app-accent hover:bg-white transition-colors duration-300 tracking-[var(--tracking-tight)]"
+          >
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0">
+              <path d="M13.95 8.024h-5.9V6.612c0-.718.582-1.3 1.3-1.3h.65V3.6h-.65a3.016 3.016 0 0 0-3.012 3.012v1.412H4.05v1.712h2.288V13.4H8.05V9.736h5.9V8.024Z" fill="currentColor"/>
+              <circle cx="12.4" cy="4.25" r="1.05" fill="currentColor"/>
+            </svg>
+            Fiverr
+          </a>
+        </div>
+      </div>
     </div>
 
     {/* Quick Services Grid */}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-5 mb-8 lg:mb-10">
-      {quickServices.map((service) => (
-        <a
-          href={checkoutUrl || buildMailtoLink(service.name, service.price)}
-          target={checkoutUrl ? "_blank" : undefined}
-          rel={checkoutUrl ? "noopener" : undefined}
-          class="group relative bg-app-surface-alt border border-app-gray-100 rounded-2xl px-6 py-6 lg:px-8 lg:py-7 hover:border-[#1DBF73]/40 transition-all duration-300 block"
-        >
-          <div class="flex items-start justify-between mb-3">
-            <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-lg bg-[#1DBF73]/10 flex items-center justify-center flex-shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1DBF73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4.5 h-4.5">
-                  <path d={iconPaths[service.icon]} />
-                </svg>
+      {quickServices.map((service) => {
+        const isDirectCheckout = !!checkoutUrl;
+        const Tag = isDirectCheckout ? "a" : "button";
+        const props = isDirectCheckout ? {
+          href: checkoutUrl,
+          target: "_blank",
+          rel: "noopener"
+        } : {
+          "data-service": service.name,
+          class: "open-contact-modal text-left w-full",
+        };
+
+        return (
+          <Tag
+            {...props}
+            class={`${props.class || ""} group relative bg-app-surface-alt border border-app-gray-100 rounded-2xl px-6 py-6 lg:px-8 lg:py-7 hover:border-app-accent/40 transition-all duration-300 block focus:outline-none`}
+          >
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-app-accent/10 flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--color-app-accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4.5 h-4.5">
+                    <path d={iconPaths[service.icon]} />
+                  </svg>
+                </div>
+                <h3 class="text-base font-medium text-app-text tracking-[var(--tracking-tight)]">{service.name}</h3>
               </div>
-              <h3 class="text-base font-medium text-app-text tracking-[var(--tracking-tight)]">{service.name}</h3>
+              <span class="text-sm font-semibold text-app-accent tracking-[var(--tracking-tight)] whitespace-nowrap ml-3">
+                from {service.price}
+              </span>
             </div>
-            <span class="text-sm font-semibold text-[#1DBF73] tracking-[var(--tracking-tight)] whitespace-nowrap ml-3">
-              from {service.price}
-            </span>
-          </div>
-          <p class="text-sm text-app-gray-400 leading-[1.5] tracking-[var(--tracking-tight)] pl-12">
-            {service.description}
-          </p>
-          <div class="flex items-center gap-1.5 mt-4 pl-12">
-            <span class="text-xs font-medium text-[#1DBF73] tracking-[var(--tracking-tight)] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              {checkoutUrl ? "Book now" : "Send inquiry"}
-            </span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1DBF73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 transform translate-x-0 group-hover:translate-x-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-            </svg>
-          </div>
-        </a>
-      ))}
+            <p class="text-sm text-app-gray-400 leading-[1.5] tracking-[var(--tracking-tight)] pl-12">
+              {service.description}
+            </p>
+            <div class="flex items-center gap-1.5 mt-4 pl-12">
+              <span class="text-xs font-medium text-app-accent tracking-[var(--tracking-tight)] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {checkoutUrl ? "Book now" : "Send inquiry"}
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--color-app-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 transform translate-x-0 group-hover:translate-x-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
+            </div>
+          </Tag>
+        );
+      })}
     </div>
 
     {/* Custom Project CTA */}
     <div class="relative group/custom">
-      <div class="absolute -inset-[1px] bg-gradient-to-r from-[#1DBF73]/30 to-[#29b6f6]/30 rounded-[17px] blur-sm opacity-0 group-hover/custom:opacity-30 transition-opacity duration-500"></div>
+      <div class="absolute -inset-[1px] bg-gradient-to-r from-app-accent/30 to-[#29b6f6]/30 rounded-[17px] blur-sm opacity-0 group-hover/custom:opacity-30 transition-opacity duration-500"></div>
       <div class="relative bg-app-surface-alt border border-app-gray-100 rounded-2xl px-8 py-8 lg:px-14 lg:py-10">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div class="flex-1">
@@ -124,9 +150,9 @@ const iconPaths: Record<string, string> = {
               Larger projects, ongoing consulting, or specialized DevOps & cloud work. Describe your needs and I'll send a tailored proposal with pricing.
             </p>
           </div>
-          <a
-            href={customMailto}
-            class="group/btn relative inline-flex items-center gap-2 px-7 py-3.5 bg-app-text text-white rounded-[32px] text-sm font-medium transition-all duration-300 tracking-[var(--tracking-tight)] overflow-hidden flex-shrink-0"
+          <button
+            data-service="Custom Project"
+            class="open-contact-modal group/btn relative inline-flex items-center gap-2 px-8 py-4 bg-app-text text-white rounded-[32px] text-sm font-medium transition-all duration-300 tracking-[var(--tracking-tight)] overflow-hidden flex-shrink-0 focus:outline-none cursor-pointer"
           >
             <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
             <span class="relative flex items-center gap-2">
@@ -135,10 +161,226 @@ const iconPaths: Record<string, string> = {
                 <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
               </svg>
             </span>
-          </a>
+          </button>
         </div>
       </div>
     </div>
 
   </div>
+
+  <!-- Inquiry Modal -->
+  <dialog id="contactModal" class="bg-transparent p-0 m-auto backdrop:bg-black/60 backdrop:backdrop-blur-sm w-[90vw] max-w-lg" data-email={siteConfig.email}>
+    <div class="bg-app-surface border border-app-gray-100 rounded-2xl w-full p-6 md:p-8 shadow-2xl relative text-left">
+      <button id="closeModal" class="absolute top-4 right-4 text-app-gray-400 hover:text-app-text transition-colors p-2 rounded-full hover:bg-app-surface-alt">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      
+      <h3 class="text-2xl font-display text-app-text mb-2">Discuss a Project</h3>
+      <p class="text-sm text-app-gray-400 mb-6 leading-relaxed" id="modalDescription">Fill out the details below, and it will format an email for you to send directly to my inbox.</p>
+      
+      <div class="flex flex-col gap-3 mb-6">
+        <div class="bg-app-accent/10 border border-app-accent/20 rounded-xl p-3 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-app-accent flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          <span class="text-sm text-app-text font-medium tracking-[var(--tracking-tight)]">You will hear from me within 2 days.</span>
+        </div>
+        <div class="bg-[#29b6f6]/10 border border-[#29b6f6]/20 rounded-xl p-3 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#29b6f6] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span class="text-sm text-app-text font-medium tracking-[var(--tracking-tight)]">Once we agree on the project plan, I'll share a checkout link for payment.</span>
+        </div>
+      </div>
+
+      <form id="contactForm" class="space-y-4">
+        <input type="hidden" id="serviceName" name="serviceName" value="" />
+        
+        <div>
+          <label for="projectName" class="block text-sm font-medium text-app-text mb-1.5">Project / Repo Name <span class="text-app-accent">*</span></label>
+          <input type="text" id="projectName" required class="w-full bg-app-surface-alt border border-app-gray-100 rounded-xl px-4 py-3 text-app-text focus:outline-none focus:border-app-accent focus:ring-1 focus:ring-app-accent/50 transition-all text-sm placeholder:text-app-gray-500" placeholder="e.g., Acme Corp Infra" />
+        </div>
+        
+        <div>
+          <label for="category" class="block text-sm font-medium text-app-text mb-1.5">Category <span class="text-app-accent">*</span></label>
+          <div class="relative">
+            <select id="category" required class="w-full bg-app-surface-alt border border-app-gray-100 rounded-xl px-4 py-3 text-app-text focus:outline-none focus:border-app-accent focus:ring-1 focus:ring-app-accent/50 transition-all text-sm appearance-none cursor-pointer invalid:text-app-gray-500 disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-app-surface/50">
+              <option value="" disabled selected hidden>Select a category</option>
+              <option value="CI/CD & Automation" class="text-app-text">CI/CD & Automation</option>
+              <option value="Kubernetes & Containers" class="text-app-text">Kubernetes & Containers</option>
+              <option value="Cloud Infrastructure" class="text-app-text">Cloud Infrastructure</option>
+              <option value="Backend / Go Development" class="text-app-text">Backend / Go Development</option>
+              <option value="System Design" class="text-app-text">System Design</option>
+              <option value="Other" class="text-app-text">Other</option>
+            </select>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-app-gray-400"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <div>
+          <label for="projectDetails" class="block text-sm font-medium text-app-text mb-1.5">What do you need? <span class="text-app-accent">*</span></label>
+          <textarea id="projectDetails" required rows="4" class="w-full bg-app-surface-alt border border-app-gray-100 rounded-xl px-4 py-3 text-app-text focus:outline-none focus:border-app-accent focus:ring-1 focus:ring-app-accent/50 transition-all text-sm resize-none placeholder:text-app-gray-500" placeholder="Describe your current setup and desired outcome..."></textarea>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="timeline" class="block text-sm font-medium text-app-text mb-1.5">Timeline <span class="text-app-accent">*</span></label>
+            <div class="relative">
+              <select id="timeline" required class="w-full bg-app-surface-alt border border-app-gray-100 rounded-xl px-4 py-3 text-app-text focus:outline-none focus:border-app-accent focus:ring-1 focus:ring-app-accent/50 transition-all text-sm appearance-none cursor-pointer invalid:text-app-gray-500">
+                <option value="" disabled selected hidden>Select</option>
+                <option value="ASAP" class="text-app-text">ASAP</option>
+                <option value="Within 2 weeks" class="text-app-text">Within 2 weeks</option>
+                <option value="Within a month" class="text-app-text">Within a month</option>
+                <option value="Flexible" class="text-app-text">Flexible</option>
+              </select>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-app-gray-400"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </div>
+          <div>
+            <label for="budget" class="block text-sm font-medium text-app-text mb-1.5">Budget Range <span class="text-app-accent">*</span></label>
+            <div class="relative">
+              <select id="budget" required class="w-full bg-app-surface-alt border border-app-gray-100 rounded-xl px-4 py-3 text-app-text focus:outline-none focus:border-app-accent focus:ring-1 focus:ring-app-accent/50 transition-all text-sm appearance-none cursor-pointer invalid:text-app-gray-500">
+                <option value="" disabled selected hidden>Select</option>
+                <option value="Small Task (< $100)" class="text-app-text">Small Task (< $100)</option>
+                <option value="$100 - $500" class="text-app-text">$100 - $500</option>
+                <option value="$500 - $1k" class="text-app-text">$500 - $1,000</option>
+                <option value="$1k - $5k" class="text-app-text">$1,000 - $5,000</option>
+                <option value="$5k+" class="text-app-text">$5,000+</option>
+              </select>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-app-gray-400"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </div>
+        </div>
+        
+        <div class="pt-6 mt-6 flex flex-col gap-3">
+          <button type="submit" class="w-full bg-app-text hover:bg-opacity-90 text-white rounded-[32px] px-4 py-3.5 text-sm font-medium transition-all flex justify-center items-center gap-2 group border border-transparent">
+            <span>Send</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
+              <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/>
+              <path d="m21.854 2.147-10.94 10.939"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </dialog>
 </section>
+
+<script>
+  function setupModal() {
+    const modal = document.getElementById('contactModal') as HTMLDialogElement;
+    if (!modal) return;
+    
+    const closeBtn = document.getElementById('closeModal');
+    const form = document.getElementById('contactForm') as HTMLFormElement;
+    const serviceInput = document.getElementById('serviceName') as HTMLInputElement;
+    const modalDesc = document.getElementById('modalDescription');
+    const contactButtons = document.querySelectorAll('.open-contact-modal');
+    const categorySelect = document.getElementById('category') as HTMLSelectElement;
+    
+    const emailAddress = modal.dataset.email || 'hello@example.com';
+    
+    const serviceCategoryMap: Record<string, string> = {
+      "CI/CD Pipeline Setup": "CI/CD & Automation",
+      "Dockerfile & K8s Manifests": "Kubernetes & Containers",
+      "Infrastructure Review": "Cloud Infrastructure",
+      "System Design Session": "System Design"
+    };
+    
+    contactButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const service = btn.getAttribute('data-service') || 'Custom Project';
+        serviceInput.value = service;
+        
+        if (modalDesc) {
+          if (service === 'Custom Project') {
+             modalDesc.textContent = "Tell me about your project, goals, and what you need help with. I'll get back to you with a tailored proposal.";
+             if (categorySelect) {
+               categorySelect.value = "";
+               categorySelect.disabled = false;
+             }
+          } else {
+             modalDesc.textContent = `You are inquiring about the "${service}" service. Fill out the details below so I can get back to you quickly!`;
+             if (categorySelect && serviceCategoryMap[service]) {
+               categorySelect.value = serviceCategoryMap[service];
+               categorySelect.disabled = true;
+             }
+          }
+        }
+        
+        document.body.style.overflow = 'hidden';
+        modal.showModal();
+      });
+    });
+    
+    const closeModal = () => {
+      document.body.style.overflow = '';
+      modal.close();
+    }
+    
+    closeBtn?.addEventListener('click', closeModal);
+    
+    modal.addEventListener('click', (e) => {
+      const dialogDimensions = modal.getBoundingClientRect()
+      if (
+        e.clientX < dialogDimensions.left ||
+        e.clientX > dialogDimensions.right ||
+        e.clientY < dialogDimensions.top ||
+        e.clientY > dialogDimensions.bottom
+      ) {
+        closeModal();
+      }
+    });
+    
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const service = serviceInput.value;
+      const project = (document.getElementById('projectName') as HTMLInputElement).value;
+      const category = (document.getElementById('category') as HTMLSelectElement).value;
+      const details = (document.getElementById('projectDetails') as HTMLTextAreaElement).value;
+      const timeline = (document.getElementById('timeline') as HTMLSelectElement).value;
+      const budget = (document.getElementById('budget') as HTMLSelectElement).value;
+      
+      const subject = encodeURIComponent(`Inquiry: ${service} - ${project}`);
+      const body = encodeURIComponent(
+        `Hi Dipankar,\n\nI'd like to discuss the following project with you.\n\n` +
+        `--- Project Details ---\n` +
+        `Service: ${service}\n` +
+        `Project Name: ${project}\n` +
+        `Category: ${category}\n\n` +
+        `What I need:\n${details}\n\n` +
+        `Timeline: ${timeline}\n` +
+        `Budget Range: ${budget}\n\n` +
+        `-----------------------\n\n` +
+        `Looking forward to hearing from you.\n\nThanks!`
+      );
+      
+      window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
+      
+      form.reset();
+      closeModal();
+    });
+  }
+
+  setupModal();
+  document.addEventListener('astro:page-load', setupModal);
+</script>
+
+<style>
+  dialog[open] {
+    animation: zoom-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  dialog::backdrop {
+    animation: fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+  }
+
+  @keyframes zoom-in {
+    from { opacity: 0; transform: scale(0.96) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
