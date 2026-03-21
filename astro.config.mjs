@@ -1,14 +1,16 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
+
 import sitemap from "@astrojs/sitemap";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 import icon from "astro-icon";
+import mermaid from "astro-mermaid";
 
 export default defineConfig({
   site: "https://dipankar-das.com",
-  integrations: [mdx(), sitemap({ lastmod: new Date() }), react(), icon()],
+  integrations: [mermaid({ theme: "dark", autoTheme: true }), mdx(), sitemap({ lastmod: new Date() }), react(), icon()],
   vite: {
     plugins: [tailwindcss()],
   },
