@@ -1,7 +1,7 @@
 ---
 title: "Quantum Computing for the Curious Developer: Building Your First Circuits with Qiskit"
 author: "Dipankar Das"
-date: 2026-03-23
+date: 2026-03-24
 description: "A developer's hands-on guide to quantum computing fundamentals — from qubits and gates to building a quantum teleportation circuit, no physics degree required."
 tags: ["quantum-computing", "qiskit", "python", "ibm-quantum", "tutorial"]
 category: "Quantum Computing"
@@ -13,11 +13,11 @@ You've read the headlines. Quantum computers will break encryption, revolutioniz
 
 I did too. Two years ago, I started a [quantum computing project](https://github.com/dipankardas011/quantum) with Qiskit purely out of curiosity. The textbooks lost me. The IBM documentation felt like it was written for physicists. But somewhere between "what even is a qubit?" and building a working teleportation circuit, something clicked: **quantum computing makes a lot more sense when you think like a developer, not a physicist.**
 
-This is Part 1 of a three-part series. By the end of this post, you'll have built real quantum circuits — including one that teleports quantum state from one qubit to another. No physics degree required. Just Python.
+This is Part 1 of a three-part series. By the end of this post, you'll have built real quantum circuits — including one that teleports a quantum state from one qubit to another. No physics degree required. Just Python.
 
 ## Qubits: Bits That Haven't Made Up Their Mind
 
-A classical bit is either 0 or 1. Simple. A **qubit** is... also 0 or 1 when you look at it. The difference is what happens *before* you look.
+A classical bit is either 0 or 1. A **qubit** is... also 0 or 1 when you look at it. The difference is what happens *before* you look.
 
 Think of it like a coin. A classical bit is a coin lying on a table — heads or tails, always decided. A qubit is a coin mid-spin. It's not heads *and* tails simultaneously — it exists in a **superposition** of both states, with probabilities for each outcome. The moment you "measure" the coin (catch it), it collapses to one definite result.
 
@@ -35,7 +35,7 @@ Now, let's put a single qubit into superposition and measure it:
 from qiskit import QuantumCircuit
 from qiskit.primitives import StatevectorSampler
 
-# Create a circuit with 1 qubit and 1 classical bit
+# 1 qubit, 1 classical bit to store the measurement
 qc = QuantumCircuit(1, 1)
 qc.h(0)            # Hadamard gate — puts qubit in superposition
 qc.measure(0, 0)   # Measure the qubit
@@ -56,67 +56,6 @@ print(counts)
 
 That `H` in the circuit is the **Hadamard gate** — the most important gate in quantum computing. It takes a definite `|0⟩` state and puts it into an equal superposition. When we measure, we get 0 or 1 with roughly equal probability. Run it again and you'll get slightly different numbers. That's not a bug — that's quantum mechanics.
 
-## Sampler vs Estimator: Two Ways to Read a Quantum Circuit
-
-You just used `StatevectorSampler` to run your circuit. But Qiskit actually gives you **two primitives** for extracting results, and understanding the difference early will save you confusion later.
-
-**Sampler** runs a circuit with measurements and gives you a histogram — "I ran this 1024 times, and got `0` 489 times and `1` 535 times." It's the intuitive one. You build a circuit, measure, count outcomes.
-
-**Estimator** does something different. Instead of counting measurement outcomes, it calculates the **expectation value** of an *observable* — a single number that summarizes a specific physical property of your qubits. You don't even put `measure()` gates in the circuit; the Estimator handles that internally.
-
-### What's an Observable?
-
-Think of it this way: a qubit doesn't have just one property you can check. You have to choose *what to measure*, like choosing between a ruler and a thermometer. In quantum computing, these "measurement tools" are called **Pauli operators**: `Z`, `X`, `Y`, and `I`.
-
-- **Z** asks "are you `|0⟩` or `|1⟩`?" — the standard measurement. Returns +1 for `|0⟩`, -1 for `|1⟩`.
-- **X** asks "are you in the `|+⟩` or `|-⟩` superposition?" — measuring along a different axis.
-- **I** means "ignore this qubit."
-
-For multiple qubits, you write strings of these. Qiskit reads them **right to left**, so `"ZI"` means "measure Z on qubit 1, ignore qubit 0."
-
-### Why This Matters: Proving Entanglement
-
-Here's where it gets practical. Remember our Bell state that only produced `00` and `11`? The Sampler shows you that histogram. But the Estimator can tell you *how* correlated those qubits really are — and reveal something a histogram can't.
-
-Let's measure three observables on our Bell state at once:
-
-```python
-from qiskit import QuantumCircuit
-from qiskit.quantum_info import SparsePauliOp
-from qiskit.primitives import StatevectorEstimator
-
-# Build a Bell state circuit (no measurements needed for Estimator)
-qc = QuantumCircuit(2)
-qc.h(0)
-qc.cx(0, 1)
-
-# Three questions about our qubits:
-obs_ZZ = SparsePauliOp("ZZ")  # "Do both qubits always agree?"
-obs_ZI = SparsePauliOp("ZI")  # "Is qubit 1 biased towards 0 or 1?"
-obs_IZ = SparsePauliOp("IZ")  # "Is qubit 0 biased towards 0 or 1?"
-
-estimator = StatevectorEstimator()
-result = estimator.run([(qc, [obs_ZZ, obs_ZI, obs_IZ])]).result()
-print(result[0].data.evs)
-# [1.0, 0.0, 0.0]
-```
-
-| Observable | Ideal Value | Meaning |
-|---|---|---|
-| `ZZ` | **+1.0** | Qubits always agree — perfectly correlated |
-| `ZI` | **0.0** | Qubit 1 alone is completely random |
-| `IZ` | **0.0** | Qubit 0 alone is completely random |
-
-That's the beautiful paradox of entanglement: **each qubit individually is perfectly random** (ZI and IZ are zero — no bias whatsoever), but **together they're perfectly correlated** (ZZ is 1.0 — they always agree). Neither qubit "knows" whether it'll be 0 or 1, yet they always match.
-
-<Callout type="tip">
-**When to use which?** Use the **Sampler** when you care about the distribution of outcomes (histograms, probabilities). Use the **Estimator** when you care about a specific physical property (correlation, energy, magnetization). Most tutorials only show the Sampler — but the Estimator is what real quantum algorithms like VQE use under the hood to solve chemistry and optimization problems.
-</Callout>
-
-<Callout type="note">
-On a **real IBM quantum computer**, these values won't be as clean. I ran this exact circuit on IBM hardware and got `[0.951, -0.018, 0.002]` — close to ideal, but noise from gate errors and decoherence degrades the results. IBM's Runtime Estimator applies error mitigation that can even push values slightly outside the theoretical [-1, +1] range. We'll dig into noise models and error mitigation in Part 3 of this series.
-</Callout>
-
 ## The Quantum Toolbox: Gates That Actually Matter
 
 Classical computers have AND, OR, NOT gates. Quantum computers have their own set. You don't need to memorize all of them, but three gates will get you surprisingly far:
@@ -132,7 +71,7 @@ qc.x(0)  # Flip from |0⟩ to |1⟩
 
 ### H Gate (Hadamard)
 
-You've seen this one. Takes a definite state and creates a superposition. Apply it again and it *undoes* the superposition — back to the original state. This reversibility is key to how quantum algorithms work.
+You've already seen this one. Takes a definite state and creates a superposition. Apply it again and it *undoes* the superposition — back to the original state. This reversibility is key to how quantum algorithms work.
 
 ### CNOT Gate (Controlled-NOT)
 
@@ -192,6 +131,69 @@ This isn't the qubits communicating. It's that the CNOT gate created a shared qu
 
 The difference with quantum entanglement? The "card" was in superposition *until* one person opened their envelope. Einstein argued there must be hidden variables predetermining the outcomes — like the card halves already being decided. In 1964, physicist John Bell proved him wrong: no hidden variable theory can reproduce what quantum mechanics predicts. Experiments have since confirmed it. If you want the full story, Veritasium's [video on Bell's theorem](https://youtu.be/NIk_0AW5hFU) is the best explanation I've found.
 
+## Sampler vs Estimator: Two Ways to Read a Quantum Circuit
+
+We've been using `StatevectorSampler` to run circuits and get histograms. But histograms aren't the only way to extract information from a quantum circuit — and for understanding entanglement quantitatively, there's something more powerful.
+
+Qiskit gives you **two primitives**:
+
+**Sampler** runs a circuit with measurements and gives you a histogram — "I ran this 1024 times, and got `00` 510 times and `11` 514 times." It's the intuitive one. You build a circuit, measure, count outcomes.
+
+**Estimator** does something different. Instead of counting measurement outcomes, it calculates the **expectation value** of an *observable* — a single number that summarizes a specific physical property of your qubits. You don't even put `measure()` gates in the circuit; the Estimator handles that internally.
+
+### What's an Observable?
+
+A qubit doesn't have just one property you can check. You have to choose *what to measure*, like choosing between a ruler and a thermometer. In quantum computing, these "measurement tools" are called **Pauli operators**: `Z`, `X`, `Y`, and `I`.
+
+- **Z** asks "are you `|0⟩` or `|1⟩`?" — the standard measurement. Returns +1 for `|0⟩`, -1 for `|1⟩`.
+- **X** asks "are you in the `|+⟩` or `|-⟩` superposition?" — measuring along a different axis.
+- **I** means "ignore this qubit."
+
+For multiple qubits, you write strings of these. Qiskit reads them **right to left**, so `"ZI"` means "measure Z on qubit 1, ignore qubit 0."
+
+### Proving Entanglement with Numbers
+
+Remember the Bell state we just built — the one that only produced `00` and `11`? The Sampler showed us that histogram. But the Estimator can tell us *how* correlated those qubits really are — and reveal something a histogram can't.
+
+Let's measure three observables on our Bell state at once:
+
+```python
+from qiskit import QuantumCircuit
+from qiskit.quantum_info import SparsePauliOp
+from qiskit.primitives import StatevectorEstimator
+
+# The same Bell state circuit (no measurements needed for Estimator)
+qc = QuantumCircuit(2)
+qc.h(0)
+qc.cx(0, 1)
+
+# Three questions about our qubits:
+obs_ZZ = SparsePauliOp("ZZ")  # "Do both qubits always agree?"
+obs_ZI = SparsePauliOp("ZI")  # "Is qubit 1 biased towards 0 or 1?"
+obs_IZ = SparsePauliOp("IZ")  # "Is qubit 0 biased towards 0 or 1?"
+
+estimator = StatevectorEstimator()
+result = estimator.run([(qc, [obs_ZZ, obs_ZI, obs_IZ])]).result()
+print(result[0].data.evs)
+# [1.0, 0.0, 0.0]
+```
+
+| Observable | Ideal Value | Meaning |
+|---|---|---|
+| `ZZ` | **+1.0** | Qubits always agree — perfectly correlated |
+| `ZI` | **0.0** | Qubit 1 alone is completely random |
+| `IZ` | **0.0** | Qubit 0 alone is completely random |
+
+That's the beautiful paradox of entanglement: **each qubit individually is perfectly random** (ZI and IZ are zero — no bias whatsoever), but **together they're perfectly correlated** (ZZ is 1.0 — they always agree). Neither qubit "knows" whether it'll be 0 or 1, yet they always match.
+
+<Callout type="tip">
+**When to use which?** Use the **Sampler** when you care about the distribution of outcomes (histograms, probabilities). Use the **Estimator** when you care about a specific physical property (correlation, energy, magnetization). Most tutorials only show the Sampler — but the Estimator is what real quantum algorithms like VQE use under the hood to solve chemistry and optimization problems.
+</Callout>
+
+<Callout type="note">
+On a **real IBM quantum computer**, these values won't be as clean. I ran this exact circuit on IBM hardware and got `[0.951, -0.018, 0.002]` — close to ideal, but noise from gate errors and decoherence degrades the results. IBM's Runtime Estimator applies error mitigation that can even push values slightly outside the theoretical [-1, +1] range. We'll dig into noise models and error mitigation in Part 3 of this series.
+</Callout>
+
 ## The Payoff: Quantum Teleportation in 20 Lines
 
 Now for the part that made quantum computing click for me. We're going to teleport a quantum state from one qubit to another. Not science fiction — a real protocol that IBM quantum computers execute every day.
@@ -243,7 +245,7 @@ qc.measure(0, 0)
 qc.measure(1, 1)
 ```
 
-**Why does this work?** The CNOT + H combination effectively "encodes" Alice's secret state into the correlations of the entangled pair. Alice's measurement collapses her qubits into one of four random outcomes (00, 01, 10, or 11) — but each outcome leaves Bob's qubit in a *specific* state that's related to the original secret. Alice's measurement result tells Bob exactly which corrections to apply.
+**Why does this work?** The CNOT + H combination "encodes" Alice's secret state into the correlations of the entangled pair. Alice's measurement collapses her qubits into one of four random outcomes (00, 01, 10, or 11) — but each outcome leaves Bob's qubit in a *specific* state that's related to the original. Alice's measurement result tells Bob exactly which corrections to apply.
 
 ```python
 # Bob applies corrections based on Alice's measurement results
@@ -258,7 +260,7 @@ In a real-world scenario, Alice would phone Bob and say "I got 01" or "I got 10"
 
 ### Verifying It Worked
 
-How do we prove the teleportation actually happened? We **reverse** the original preparation on Bob's qubit. If his qubit truly received Alice's state (`-|1⟩`), then applying Z then X (the reverse of X then Z) should return it cleanly to `|0⟩`.
+How do we prove the teleportation happened? We **reverse** the original preparation on Bob's qubit. If his qubit truly received Alice's state (`-|1⟩`), then applying Z then X (the reverse of X then Z) should return it cleanly to `|0⟩`.
 
 ```python
 # Undo Alice's original preparation on Bob's qubit
@@ -276,7 +278,7 @@ print(result.get_counts())
 # {'001': 253, '010': 254, '000': 253, '011': 264}
 ```
 
-Look at qubit 2 (the **leftmost** bit in Qiskit's little-endian convention). It's **always `0`**. The outcomes are `000`, `001`, `010`, `011` — Bob's bit never flips to 1. That means after reversing the preparation, Bob's qubit returned to `|0⟩`. The teleportation worked.
+Look at qubit 2 (the **leftmost** bit in Qiskit's little-endian convention). It's **always `0`**. The outcomes are `000`, `001`, `010`, `011` — Bob's bit never flips to 1. After reversing the preparation, Bob's qubit returned to `|0⟩`. The teleportation worked.
 
 Alice's two bits (positions 0 and 1) are random — that's expected. She gets one of four equally likely outcomes each run. But regardless of *which* outcome she gets, Bob's qubit always ends up with her original state.
 
@@ -385,16 +387,17 @@ The gap between simulator and real hardware is small here, but it grows with cir
 
 ## Where to Go From Here
 
-Two years ago, I started with a `QuantumCircuit(2, 2)` and a vague understanding of superposition. The moment I saw teleportation actually work — Bob's qubit consistently returning the right state — was when quantum computing stopped being abstract physics and started being *engineering*.
+Two years ago, I started with a `QuantumCircuit(2, 2)` and a vague understanding of superposition. The moment I saw teleportation actually work — Bob's qubit consistently returning the right state, verified against real IBM hardware — was when quantum computing stopped being abstract physics and started being *engineering*.
 
 Here's what we covered:
-- **Qubits** live in superposition until measured
-- **Hadamard gate** creates superposition, **CNOT** creates entanglement
-- **Entangled qubits** are correlated — measuring one determines the other
-- **Teleportation** uses entanglement to transfer quantum state, proven by code
+- **Qubits** live in superposition until measured — then they collapse
+- **Three gates** get you surprisingly far: H (superposition), X (NOT), CNOT (entanglement)
+- **Entanglement** makes qubits individually random but collectively correlated
+- **Sampler** gives you histograms; **Estimator** gives you physical properties — both are essential
+- **Teleportation** transfers a complete quantum state using entanglement, proven on both simulator and real hardware
 
 The circuits we built today are the foundation for everything that comes next. In **Part 2**, we'll see why quantum computing actually matters: algorithms that provably outperform classical computers. Deutsch's algorithm, Grover's search, and the one that keeps cryptographers up at night — Shor's factoring algorithm.
 
 The secret I wish someone had told me at the start: you don't need to understand the math to build the intuition. Write the circuit. Run it. Look at the histogram. *Then* the math starts making sense.
 
-All code from this series is available in my [quantum computing repository](https://github.com/dipankardas011/quantum).
+All code from this series is available in my [quantum computing repository](https://github.com/dipankardas011/quantum). The companion notebook for this post is [here](https://github.com/dipankardas011/Quantum-Coding/blob/main/blog-post-qiskit01.ipynb).
