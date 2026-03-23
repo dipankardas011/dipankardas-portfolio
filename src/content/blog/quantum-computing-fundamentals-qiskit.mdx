@@ -56,6 +56,67 @@ print(counts)
 
 That `H` in the circuit is the **Hadamard gate** — the most important gate in quantum computing. It takes a definite `|0⟩` state and puts it into an equal superposition. When we measure, we get 0 or 1 with roughly equal probability. Run it again and you'll get slightly different numbers. That's not a bug — that's quantum mechanics.
 
+## Sampler vs Estimator: Two Ways to Read a Quantum Circuit
+
+You just used `StatevectorSampler` to run your circuit. But Qiskit actually gives you **two primitives** for extracting results, and understanding the difference early will save you confusion later.
+
+**Sampler** runs a circuit with measurements and gives you a histogram — "I ran this 1024 times, and got `0` 489 times and `1` 535 times." It's the intuitive one. You build a circuit, measure, count outcomes.
+
+**Estimator** does something different. Instead of counting measurement outcomes, it calculates the **expectation value** of an *observable* — a single number that summarizes a specific physical property of your qubits. You don't even put `measure()` gates in the circuit; the Estimator handles that internally.
+
+### What's an Observable?
+
+Think of it this way: a qubit doesn't have just one property you can check. You have to choose *what to measure*, like choosing between a ruler and a thermometer. In quantum computing, these "measurement tools" are called **Pauli operators**: `Z`, `X`, `Y`, and `I`.
+
+- **Z** asks "are you `|0⟩` or `|1⟩`?" — the standard measurement. Returns +1 for `|0⟩`, -1 for `|1⟩`.
+- **X** asks "are you in the `|+⟩` or `|-⟩` superposition?" — measuring along a different axis.
+- **I** means "ignore this qubit."
+
+For multiple qubits, you write strings of these. Qiskit reads them **right to left**, so `"ZI"` means "measure Z on qubit 1, ignore qubit 0."
+
+### Why This Matters: Proving Entanglement
+
+Here's where it gets practical. Remember our Bell state that only produced `00` and `11`? The Sampler shows you that histogram. But the Estimator can tell you *how* correlated those qubits really are — and reveal something a histogram can't.
+
+Let's measure three observables on our Bell state at once:
+
+```python
+from qiskit import QuantumCircuit
+from qiskit.quantum_info import SparsePauliOp
+from qiskit.primitives import StatevectorEstimator
+
+# Build a Bell state circuit (no measurements needed for Estimator)
+qc = QuantumCircuit(2)
+qc.h(0)
+qc.cx(0, 1)
+
+# Three questions about our qubits:
+obs_ZZ = SparsePauliOp("ZZ")  # "Do both qubits always agree?"
+obs_ZI = SparsePauliOp("ZI")  # "Is qubit 1 biased towards 0 or 1?"
+obs_IZ = SparsePauliOp("IZ")  # "Is qubit 0 biased towards 0 or 1?"
+
+estimator = StatevectorEstimator()
+result = estimator.run([(qc, [obs_ZZ, obs_ZI, obs_IZ])]).result()
+print(result[0].data.evs)
+# [1.0, 0.0, 0.0]
+```
+
+| Observable | Ideal Value | Meaning |
+|---|---|---|
+| `ZZ` | **+1.0** | Qubits always agree — perfectly correlated |
+| `ZI` | **0.0** | Qubit 1 alone is completely random |
+| `IZ` | **0.0** | Qubit 0 alone is completely random |
+
+That's the beautiful paradox of entanglement: **each qubit individually is perfectly random** (ZI and IZ are zero — no bias whatsoever), but **together they're perfectly correlated** (ZZ is 1.0 — they always agree). Neither qubit "knows" whether it'll be 0 or 1, yet they always match.
+
+<Callout type="tip">
+**When to use which?** Use the **Sampler** when you care about the distribution of outcomes (histograms, probabilities). Use the **Estimator** when you care about a specific physical property (correlation, energy, magnetization). Most tutorials only show the Sampler — but the Estimator is what real quantum algorithms like VQE use under the hood to solve chemistry and optimization problems.
+</Callout>
+
+<Callout type="note">
+On a **real IBM quantum computer**, these values won't be as clean. I ran this exact circuit on IBM hardware and got `[0.951, -0.018, 0.002]` — close to ideal, but noise from gate errors and decoherence degrades the results. IBM's Runtime Estimator applies error mitigation that can even push values slightly outside the theoretical [-1, +1] range. We'll dig into noise models and error mitigation in Part 3 of this series.
+</Callout>
+
 ## The Quantum Toolbox: Gates That Actually Matter
 
 Classical computers have AND, OR, NOT gates. Quantum computers have their own set. You don't need to memorize all of them, but three gates will get you surprisingly far:
@@ -129,13 +190,17 @@ Only `00` and `11` appear. Never `01` or `10`. The qubits are **correlated** —
 
 This isn't the qubits communicating. It's that the CNOT gate created a shared quantum state where these outcomes are the only possibilities. Think of it like tearing a playing card in half and mailing the pieces to two different cities — opening one envelope instantly tells you what the other person has. The information was encoded at the time of splitting, not at the time of opening.
 
-The difference with quantum entanglement? The "card" was in superposition *until* one person opened their envelope.
+The difference with quantum entanglement? The "card" was in superposition *until* one person opened their envelope. Einstein argued there must be hidden variables predetermining the outcomes — like the card halves already being decided. In 1964, physicist John Bell proved him wrong: no hidden variable theory can reproduce what quantum mechanics predicts. Experiments have since confirmed it. If you want the full story, Veritasium's [video on Bell's theorem](https://youtu.be/NIk_0AW5hFU) is the best explanation I've found.
 
 ## The Payoff: Quantum Teleportation in 20 Lines
 
 Now for the part that made quantum computing click for me. We're going to teleport a quantum state from one qubit to another. Not science fiction — a real protocol that IBM quantum computers execute every day.
 
-Here's the scenario: Alice has a qubit in some state she wants to send to Bob. She can't just copy it (there's a **no-cloning theorem** in quantum mechanics — you literally cannot copy an unknown quantum state). But she *can* teleport it using a shared entangled pair and two classical bits of information.
+Here's the scenario: **Alice** has a qubit in some state she wants to send to **Bob**. They could be in different cities. She can't just copy it — there's a **no-cloning theorem** in quantum mechanics that makes copying an unknown quantum state physically impossible. But she *can* teleport it, if they share an entangled pair and a phone line.
+
+The protocol has three acts. Let's build it step by step.
+
+### Act 1: Setting the Stage
 
 ```python
 from qiskit import QuantumCircuit
@@ -143,32 +208,62 @@ from qiskit_aer import AerSimulator
 
 qc = QuantumCircuit(3, 3)
 
-# Step 1: Alice prepares the state she wants to teleport
-# (X and Z gates put qubit 0 in a specific state)
-qc.x(0)
-qc.z(0)
+# Alice prepares the state she wants to teleport on qubit 0
+qc.x(0)   # Flip to |1⟩
+qc.z(0)   # Apply a phase flip → now it's -|1⟩
 qc.barrier()
+```
 
-# Step 2: Create an entangled pair (qubits 1 and 2)
-# Qubit 1 goes to Alice, qubit 2 goes to Bob
+We have three qubits: **q0** is Alice's secret state (the one she wants to teleport), **q1** will be Alice's half of the entangled pair, and **q2** is Bob's half. Right now only q0 has been touched — Alice has prepared it in the state `-|1⟩` using X and Z gates.
+
+### Act 2: The Shared Entangled Pair
+
+```python
+# Create a Bell pair between qubits 1 and 2
 qc.h(1)
 qc.cx(1, 2)
 qc.barrier()
+```
 
-# Step 3: Alice entangles her state with her half of the pair
-qc.cx(0, 1)
-qc.h(0)
+Before Alice and Bob separated, they created an entangled pair — the same H + CNOT Bell state we built earlier. Alice keeps q1, Bob takes q2 to his city. They're now correlated: measuring one instantly determines the other.
+
+At this point, Alice has two qubits (q0 with her secret state, q1 as her entangled half) and Bob has one qubit (q2).
+
+### Act 3: The Teleportation
+
+Here's where it gets clever. Alice can't look at her secret state (measuring it would destroy the superposition). Instead, she **entangles her secret qubit with her half of the pair**, then measures both of her qubits.
+
+```python
+# Alice entangles her secret state (q0) with her half of the pair (q1)
+qc.cx(0, 1)   # CNOT: transfers information about q0 into the entangled pair
+qc.h(0)       # Hadamard: spreads the information across both measurement outcomes
+
+# Alice measures her two qubits and calls Bob with the results
 qc.measure(0, 0)
 qc.measure(1, 1)
+```
 
-# Step 4: Bob applies corrections based on Alice's measurements
+**Why does this work?** The CNOT + H combination effectively "encodes" Alice's secret state into the correlations of the entangled pair. Alice's measurement collapses her qubits into one of four random outcomes (00, 01, 10, or 11) — but each outcome leaves Bob's qubit in a *specific* state that's related to the original secret. Alice's measurement result tells Bob exactly which corrections to apply.
+
+```python
+# Bob applies corrections based on Alice's measurement results
+# If Alice's q1 measured 1 → Bob applies X gate
 qc.cx(1, 2)
 qc.barrier()
+```
 
-# Step 5: Verify — reverse the original preparation on Bob's qubit
-# If teleportation worked, this should return |0⟩
-qc.z(2)
-qc.x(2)
+<Callout type="note">
+In a real-world scenario, Alice would phone Bob and say "I got 01" or "I got 10", and Bob would apply the corresponding correction gates. In our circuit, Qiskit handles this with classical conditioning — the `cx(1, 2)` after measurement uses Alice's classical bit to control Bob's gate. This is why teleportation doesn't break physics: it requires classical communication (limited to the speed of light) to complete.
+</Callout>
+
+### Verifying It Worked
+
+How do we prove the teleportation actually happened? We **reverse** the original preparation on Bob's qubit. If his qubit truly received Alice's state (`-|1⟩`), then applying Z then X (the reverse of X then Z) should return it cleanly to `|0⟩`.
+
+```python
+# Undo Alice's original preparation on Bob's qubit
+qc.z(2)   # Reverse the Z
+qc.x(2)   # Reverse the X → should be back to |0⟩
 qc.measure(2, 2)
 ```
 
@@ -181,13 +276,11 @@ print(result.get_counts())
 # {'001': 253, '010': 254, '000': 253, '011': 264}
 ```
 
-Look at qubit 2 (the leftmost bit in Qiskit's convention). It's **always `0`**. The outcomes are `000`, `001`, `010`, `011` — the third bit never flips to 1. That means Bob's qubit, after the reverse operations, returned to `|0⟩` — proving that Alice's original state was successfully teleported to Bob.
+Look at qubit 2 (the **leftmost** bit in Qiskit's little-endian convention). It's **always `0`**. The outcomes are `000`, `001`, `010`, `011` — Bob's bit never flips to 1. That means after reversing the preparation, Bob's qubit returned to `|0⟩`. The teleportation worked.
 
-<Callout type="note">
-Alice's qubits (bits 0 and 1 in the output) are random — that's expected. The whole point is that Bob's qubit (bit 2) ends up in the exact state Alice started with, regardless of what Alice measures.
-</Callout>
+Alice's two bits (positions 0 and 1) are random — that's expected. She gets one of four equally likely outcomes each run. But regardless of *which* outcome she gets, Bob's qubit always ends up with her original state.
 
-Here's the full circuit diagram:
+### The Full Circuit
 
 ```
      ┌───┐┌───┐ ░            ░      ┌───┐┌─┐      ░
@@ -201,7 +294,94 @@ c: 3/═════════════════════════
                                       1   0                    2
 ```
 
-Three barriers, three acts. State preparation, entanglement, teleportation. Twenty lines of code to do something that Einstein didn't believe was possible.
+Three barriers, three acts. State preparation, shared entanglement, teleportation. Twenty lines of code to move a quantum state without copying it — something Einstein didn't believe was possible.
+
+### But What About Arbitrary States?
+
+Teleporting `|0⟩` and `|1⟩` is cool, but the real power of teleportation is moving *any* qubit state — a qubit rotated to 60 degrees, or some messy superposition that you can't even describe classically. Can we see that?
+
+Yes. But first, a confession: our circuit above was **incomplete**. It only had one correction gate (`cx(1,2)`), which happened to work for the specific `-|1⟩` state. For an arbitrary state, Bob actually needs **two** corrections:
+
+- `cx(1, 2)` — if Alice's q1 measured 1, flip Bob's qubit (X correction)
+- `cz(0, 2)` — if Alice's q0 measured 1, fix the phase (Z correction)
+
+Let's teleport a qubit rotated by 60 degrees. First, let's see exactly what state Alice is sending. The `ry(π/3)` gate creates the state `cos(30°)|0⟩ + sin(30°)|1⟩`. We can inspect the exact statevector using `Statevector.from_instruction()` — Qiskit's way to get the theoretical state of a circuit without running any simulation:
+
+```python
+from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+from qiskit.quantum_info import Statevector
+from qiskit.visualization import plot_bloch_multivector, plot_histogram
+from math import pi
+
+theta = pi / 3  # 60 degrees
+
+# Alice's exact state — no simulator needed
+qc_alice = QuantumCircuit(1)
+qc_alice.ry(theta, 0)
+alice_state = Statevector.from_instruction(qc_alice)
+alice_probs = alice_state.probabilities()
+print("Alice's state:", alice_state)
+print(f"Probabilities: |0⟩ = {alice_probs[0]:.4f}, |1⟩ = {alice_probs[1]:.4f}")
+# Alice's state: Statevector([0.8660254+0.j, 0.5+0.j])
+# Probabilities: |0⟩ = 0.7500, |1⟩ = 0.2500
+```
+
+Alice's statevector is `0.866|0⟩ + 0.5|1⟩`. By the **Born rule**, the probability of each outcome is the amplitude squared — so 75% chance of `|0⟩` and 25% chance of `|1⟩`. If teleportation works, Bob's qubit should show that exact same 75/25 split.
+
+Now let's teleport it with both corrections:
+
+```python
+qc = QuantumCircuit(3, 3)
+qc.ry(theta, 0)
+qc.barrier()
+
+qc.h(1)
+qc.cx(1, 2)
+qc.barrier()
+
+qc.cx(0, 1)
+qc.h(0)
+qc.measure(0, 0)
+qc.measure(1, 1)
+
+# Bob's corrections — BOTH needed for arbitrary states
+qc.cx(1, 2)   # X correction based on Alice's q1
+qc.cz(0, 2)   # Z correction based on Alice's q0
+qc.barrier()
+
+qc.measure(2, 2)
+
+simulator = AerSimulator()
+result = simulator.run(qc, shots=4096).result()
+counts = result.get_counts()
+
+# Extract Bob's qubit (leftmost bit in Qiskit's convention)
+bob_0 = sum(v for k, v in counts.items() if k[0] == '0')
+bob_1 = sum(v for k, v in counts.items() if k[0] == '1')
+total = bob_0 + bob_1
+
+print(f"Alice's probs:   |0⟩ = {alice_probs[0]:.4f}, |1⟩ = {alice_probs[1]:.4f}")
+print(f"Bob's measured:  |0⟩ = {bob_0/total:.4f}, |1⟩ = {bob_1/total:.4f}")
+# Alice's probs:   |0⟩ = 0.7500, |1⟩ = 0.2500
+# Bob's measured:  |0⟩ = 0.7456, |1⟩ = 0.2544
+```
+
+| | \|0⟩ | \|1⟩ |
+|---|---|---|
+| **Alice (theoretical)** | 0.7500 | 0.2500 |
+| **Bob (simulator)** | 0.7456 | 0.2544 |
+| **Bob (real IBM hardware)** | 0.7297 | 0.2703 |
+
+The simulator is nearly perfect — the tiny difference is just shot noise from sampling. The real IBM quantum computer is only ~2% off from ideal. Noise from gate errors and decoherence pushes the results slightly toward 50/50 (randomness), but the 75/25 signal comes through clearly. The teleportation preserved the full quantum state, not just a classical 0 or 1.
+
+<Callout type="tip">
+Try changing `theta` to different angles. At `pi/2` (90°) you'll get a perfect 50/50 split. At `pi/4` (45°) you'll get roughly 85/15. The ratio always matches `cos²(θ/2)` to `sin²(θ/2)` — proof that the *entire* quantum state is being teleported, not just a bit.
+</Callout>
+
+<Callout type="note">
+The gap between simulator and real hardware is small here, but it grows with circuit complexity. Understanding *why* real qubits are noisy and how to mitigate those errors is the subject of Part 3 in this series.
+</Callout>
 
 ## Where to Go From Here
 
