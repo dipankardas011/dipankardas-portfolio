@@ -1,0 +1,220 @@
+---
+title: "Quantum Computing for the Curious Developer: Building Your First Circuits with Qiskit"
+author: "Dipankar Das"
+date: 2026-03-23
+description: "A developer's hands-on guide to quantum computing fundamentals — from qubits and gates to building a quantum teleportation circuit, no physics degree required."
+tags: ["quantum-computing", "qiskit", "python", "ibm-quantum", "tutorial"]
+category: "Quantum Computing"
+cover: "/img/blogs/qiskit_1.jpg"
+---
+import Callout from '../../components/Callout.astro';
+
+You've read the headlines. Quantum computers will break encryption, revolutionize drug discovery, solve problems classical computers can't touch. You've also tried to learn about them — and bounced off a wall of Dirac notation, Hilbert spaces, and physics jargon that assumes you already have a PhD.
+
+I did too. Two years ago, I started a [quantum computing project](https://github.com/dipankardas011/quantum) with Qiskit purely out of curiosity. The textbooks lost me. The IBM documentation felt like it was written for physicists. But somewhere between "what even is a qubit?" and building a working teleportation circuit, something clicked: **quantum computing makes a lot more sense when you think like a developer, not a physicist.**
+
+This is Part 1 of a three-part series. By the end of this post, you'll have built real quantum circuits — including one that teleports quantum state from one qubit to another. No physics degree required. Just Python.
+
+## Qubits: Bits That Haven't Made Up Their Mind
+
+A classical bit is either 0 or 1. Simple. A **qubit** is... also 0 or 1 when you look at it. The difference is what happens *before* you look.
+
+Think of it like a coin. A classical bit is a coin lying on a table — heads or tails, always decided. A qubit is a coin mid-spin. It's not heads *and* tails simultaneously — it exists in a **superposition** of both states, with probabilities for each outcome. The moment you "measure" the coin (catch it), it collapses to one definite result.
+
+That's the entire core concept. Everything else builds from here.
+
+Let's see it in code. First, install Qiskit:
+
+```bash
+pip install qiskit qiskit-aer
+```
+
+Now, let's put a single qubit into superposition and measure it:
+
+```python
+from qiskit import QuantumCircuit
+from qiskit.primitives import StatevectorSampler
+
+# Create a circuit with 1 qubit and 1 classical bit
+qc = QuantumCircuit(1, 1)
+qc.h(0)            # Hadamard gate — puts qubit in superposition
+qc.measure(0, 0)   # Measure the qubit
+
+print(qc.draw())
+#      ┌───┐┌─┐
+#   q: ┤ H ├┤M├
+#      └───┘└╥┘
+# c: 1/═════╩═
+#             0
+
+sampler = StatevectorSampler()
+result = sampler.run([qc], shots=1024).result()
+counts = result[0].data['c'].get_counts()
+print(counts)
+# {'0': 489, '1': 535}  — roughly 50/50, as expected
+```
+
+That `H` in the circuit is the **Hadamard gate** — the most important gate in quantum computing. It takes a definite `|0⟩` state and puts it into an equal superposition. When we measure, we get 0 or 1 with roughly equal probability. Run it again and you'll get slightly different numbers. That's not a bug — that's quantum mechanics.
+
+## The Quantum Toolbox: Gates That Actually Matter
+
+Classical computers have AND, OR, NOT gates. Quantum computers have their own set. You don't need to memorize all of them, but three gates will get you surprisingly far:
+
+### X Gate (the NOT gate)
+
+Flips `|0⟩` to `|1⟩` and vice versa. The quantum equivalent of a classical NOT.
+
+```python
+qc = QuantumCircuit(1)
+qc.x(0)  # Flip from |0⟩ to |1⟩
+```
+
+### H Gate (Hadamard)
+
+You've seen this one. Takes a definite state and creates a superposition. Apply it again and it *undoes* the superposition — back to the original state. This reversibility is key to how quantum algorithms work.
+
+### CNOT Gate (Controlled-NOT)
+
+This is where things get interesting. CNOT takes **two** qubits: a control and a target. If the control qubit is `|1⟩`, it flips the target. If the control is `|0⟩`, it does nothing. Sounds simple, but when the control qubit is in superposition, the CNOT gate creates **entanglement**.
+
+```python
+qc = QuantumCircuit(2, 2)
+qc.h(0)                              # Put qubit 0 in superposition
+qc.cx(control_qubit=0, target_qubit=1)  # CNOT: entangle qubits
+qc.measure([0, 1], [0, 1])
+
+print(qc.draw())
+#      ┌───┐     ┌─┐
+# q_0: ┤ H ├──■──┤M├───
+#      └───┘┌─┴─┐└╥┘┌─┐
+# q_1: ─────┤ X ├─╫─┤M├
+#           └───┘ ║ └╥┘
+# c: 2/══════════╩══╩═
+#                 0  1
+```
+
+This two-gate combo — Hadamard followed by CNOT — creates what's called a **Bell state**. It's the simplest entangled state and the building block for almost everything in quantum computing.
+
+## Entanglement: The "Spooky" Part That's Actually Simple
+
+Entanglement has an intimidating reputation. Einstein called it "spooky action at a distance." But from a developer's perspective, it's straightforward.
+
+Let's contrast two circuits. First, two independent qubits in superposition:
+
+```python
+qc = QuantumCircuit(2, 2)
+qc.h(0)  # Qubit 0 in superposition
+qc.h(1)  # Qubit 1 in superposition (independently)
+qc.measure([0, 1], [0, 1])
+
+# Result: {'00': 244, '11': 265, '10': 248, '01': 243}
+# All four outcomes — qubits are independent
+```
+
+Each qubit decides independently. You get all four combinations: 00, 01, 10, 11 — roughly 25% each.
+
+Now, entangled qubits:
+
+```python
+qc = QuantumCircuit(2, 2)
+qc.h(0)
+qc.cx(0, 1)  # CNOT creates entanglement
+qc.measure([0, 1], [0, 1])
+
+# Result: {'00': 510, '11': 514}
+# ONLY 00 and 11 — qubits are correlated
+```
+
+Only `00` and `11` appear. Never `01` or `10`. The qubits are **correlated** — measuring one instantly tells you the other's value. If qubit 0 is `0`, qubit 1 is guaranteed to be `0`. If qubit 0 is `1`, qubit 1 is `1`.
+
+This isn't the qubits communicating. It's that the CNOT gate created a shared quantum state where these outcomes are the only possibilities. Think of it like tearing a playing card in half and mailing the pieces to two different cities — opening one envelope instantly tells you what the other person has. The information was encoded at the time of splitting, not at the time of opening.
+
+The difference with quantum entanglement? The "card" was in superposition *until* one person opened their envelope.
+
+## The Payoff: Quantum Teleportation in 20 Lines
+
+Now for the part that made quantum computing click for me. We're going to teleport a quantum state from one qubit to another. Not science fiction — a real protocol that IBM quantum computers execute every day.
+
+Here's the scenario: Alice has a qubit in some state she wants to send to Bob. She can't just copy it (there's a **no-cloning theorem** in quantum mechanics — you literally cannot copy an unknown quantum state). But she *can* teleport it using a shared entangled pair and two classical bits of information.
+
+```python
+from qiskit import QuantumCircuit
+from qiskit_aer import AerSimulator
+
+qc = QuantumCircuit(3, 3)
+
+# Step 1: Alice prepares the state she wants to teleport
+# (X and Z gates put qubit 0 in a specific state)
+qc.x(0)
+qc.z(0)
+qc.barrier()
+
+# Step 2: Create an entangled pair (qubits 1 and 2)
+# Qubit 1 goes to Alice, qubit 2 goes to Bob
+qc.h(1)
+qc.cx(1, 2)
+qc.barrier()
+
+# Step 3: Alice entangles her state with her half of the pair
+qc.cx(0, 1)
+qc.h(0)
+qc.measure(0, 0)
+qc.measure(1, 1)
+
+# Step 4: Bob applies corrections based on Alice's measurements
+qc.cx(1, 2)
+qc.barrier()
+
+# Step 5: Verify — reverse the original preparation on Bob's qubit
+# If teleportation worked, this should return |0⟩
+qc.z(2)
+qc.x(2)
+qc.measure(2, 2)
+```
+
+Let's run it:
+
+```python
+simulator = AerSimulator()
+result = simulator.run(qc, shots=1024).result()
+print(result.get_counts())
+# {'001': 253, '010': 254, '000': 253, '011': 264}
+```
+
+Look at qubit 2 (the leftmost bit in Qiskit's convention). It's **always `0`**. The outcomes are `000`, `001`, `010`, `011` — the third bit never flips to 1. That means Bob's qubit, after the reverse operations, returned to `|0⟩` — proving that Alice's original state was successfully teleported to Bob.
+
+<Callout type="note">
+Alice's qubits (bits 0 and 1 in the output) are random — that's expected. The whole point is that Bob's qubit (bit 2) ends up in the exact state Alice started with, regardless of what Alice measures.
+</Callout>
+
+Here's the full circuit diagram:
+
+```
+     ┌───┐┌───┐ ░            ░      ┌───┐┌─┐      ░
+q_0: ┤ X ├┤ Z ├─░────────────░───■──┤ H ├┤M├──────░──────────────
+     └───┘└───┘ ░ ┌───┐      ░ ┌─┴─┐└┬─┬┘└╥┘      ░
+q_1: ───────────░─┤ H ├──■───░─┤ X ├─┤M├──╫───■───░──────────────
+                ░ └───┘┌─┴─┐ ░ └───┘ └╥┘  ║ ┌─┴─┐ ░ ┌───┐┌───┐┌─┐
+q_2: ───────────░──────┤ X ├─░────────╫───╫─┤ X ├─░─┤ Z ├┤ X ├┤M├
+                ░      └───┘ ░        ║   ║ └───┘ ░ └───┘└───┘└╥┘
+c: 3/═════════════════════════════════╩═══╩════════════════════╩═
+                                      1   0                    2
+```
+
+Three barriers, three acts. State preparation, entanglement, teleportation. Twenty lines of code to do something that Einstein didn't believe was possible.
+
+## Where to Go From Here
+
+Two years ago, I started with a `QuantumCircuit(2, 2)` and a vague understanding of superposition. The moment I saw teleportation actually work — Bob's qubit consistently returning the right state — was when quantum computing stopped being abstract physics and started being *engineering*.
+
+Here's what we covered:
+- **Qubits** live in superposition until measured
+- **Hadamard gate** creates superposition, **CNOT** creates entanglement
+- **Entangled qubits** are correlated — measuring one determines the other
+- **Teleportation** uses entanglement to transfer quantum state, proven by code
+
+The circuits we built today are the foundation for everything that comes next. In **Part 2**, we'll see why quantum computing actually matters: algorithms that provably outperform classical computers. Deutsch's algorithm, Grover's search, and the one that keeps cryptographers up at night — Shor's factoring algorithm.
+
+The secret I wish someone had told me at the start: you don't need to understand the math to build the intuition. Write the circuit. Run it. Look at the histogram. *Then* the math starts making sense.
+
+All code from this series is available in my [quantum computing repository](https://github.com/dipankardas011/quantum).

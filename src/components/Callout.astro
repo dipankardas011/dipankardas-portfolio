@@ -51,7 +51,7 @@ const config = {
   },
 };
 
-const c = config[type];
+const c = config[type] || config.note;
 const displayTitle = title ?? c.label;
 ---
 
