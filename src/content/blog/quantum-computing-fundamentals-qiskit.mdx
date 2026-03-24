@@ -15,35 +15,37 @@ I did too. Two years ago, I started a [quantum computing project](https://github
 
 This is Part 1 of a three-part series. By the end of this post, you'll have built real quantum circuits — including one that teleports a quantum state from one qubit to another. No physics degree required. Just Python.
 
+All code from this series is available in my [quantum computing repository](https://github.com/dipankardas011/Quantum-Coding). The companion notebook for this post is [here](https://github.com/dipankardas011/Quantum-Coding/blob/main/blog-post-qiskit01.ipynb) — you can follow along or run it directly.
+
 ## Qubits: Bits That Haven't Made Up Their Mind
 
 A classical bit is either 0 or 1. A **qubit** is... also 0 or 1 when you look at it. The difference is what happens *before* you look.
 
 Think of it like a coin. A classical bit is a coin lying on a table — heads or tails, always decided. A qubit is a coin mid-spin. It's not heads *and* tails simultaneously — it exists in a **superposition** of both states, with probabilities for each outcome. The moment you "measure" the coin (catch it), it collapses to one definite result. And that collapse is irreversible — you can't un-catch a coin to see how it was spinning.
 
-Now let's make that precise. Physicists write quantum states with bracket notation: `|0⟩` means "the zero state" and `|1⟩` means "the one state." A qubit in superposition is written as:
+Now let's make that precise. Physicists write quantum states with bracket notation: $|0\rangle$ means "the zero state" and $|1\rangle$ means "the one state." A qubit in superposition is written as:
 
-`|ψ⟩ = α|0⟩ + β|1⟩`
+$$
+|\psi\rangle = \alpha|0\rangle + \beta|1\rangle
+$$
 
-Where `α` and `β` are numbers called **amplitudes**. They aren't probabilities themselves, but they determine probabilities: when you measure, you get `|0⟩` with probability `|α|²` and `|1⟩` with probability `|β|²`. This is the **Born rule** — the bridge between the quantum world and the classical results we observe. Going back to the coin: the amplitudes describe *how* it's spinning, and measurement forces it to land.
+Where $\alpha$ and $\beta$ are numbers called **amplitudes**. They aren't probabilities themselves, but they determine probabilities: when you measure, you get $|0\rangle$ with probability $|\alpha|^2$ and $|1\rangle$ with probability $|\beta|^2$. This is the **Born rule** — the bridge between the quantum world and the classical results we observe. Going back to the coin: the amplitudes describe *how* it's spinning, and measurement forces it to land.
 
 ### What's Under the Hood
 
-That `|0⟩` and `|1⟩` notation (called **ket** notation) is really just shorthand for column vectors:
+That $|0\rangle$ and $|1\rangle$ notation (called **ket** notation) is really just shorthand for column vectors:
 
-```
-|0⟩ = [1]    |1⟩ = [0]
-      [0]          [1]
-```
+$$
+|0\rangle = \begin{pmatrix} 1 \\ 0 \end{pmatrix} \qquad |1\rangle = \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+$$
 
-A qubit in superposition `α|0⟩ + β|1⟩` is simply:
+A qubit in superposition $\alpha|0\rangle + \beta|1\rangle$ is simply:
 
-```
-[α]
-[β]
-```
+$$
+|\psi\rangle = \begin{pmatrix} \alpha \\ \beta \end{pmatrix}
+$$
 
-And here's the part most tutorials skip: `α` and `β` can be **complex numbers** — they have both a real and an imaginary part (like `0.5 + 0.3i`). The real part affects the *magnitude*, the imaginary part encodes the **phase** — a kind of hidden angle that doesn't show up in measurement probabilities but matters when qubits interact through gates. Two states with the same `|α|²` and `|β|²` but different phases will behave differently when you apply gates to them. Phase is what makes quantum interference possible, and interference is what makes quantum algorithms work.
+And here's the part most tutorials skip: $\alpha$ and $\beta$ can be **complex numbers** — they have both a real and an imaginary part (like $0.5 + 0.3i$). The real part affects the *magnitude*, the imaginary part encodes the **phase** — a kind of hidden angle that doesn't show up in measurement probabilities but matters when qubits interact through gates. Two states with the same $|\alpha|^2$ and $|\beta|^2$ but different phases will behave differently when you apply gates to them. Phase is what makes quantum interference possible, and interference is what makes quantum algorithms work.
 
 For this post, you won't need to think about complex numbers — all our examples use real amplitudes. But when you see Qiskit output like `Statevector([0.707+0.j, 0.707+0.j])`, now you know: the `+0.j` is the imaginary part, and it's zero.
 
@@ -79,7 +81,7 @@ print(counts)
 # {'0': 489, '1': 535}  — roughly 50/50, as expected
 ```
 
-That `H` in the circuit is the **Hadamard gate** — the most important gate in quantum computing. It takes a definite `|0⟩` state and puts it into an equal superposition. When we measure, we get 0 or 1 with roughly equal probability. Run it again and you'll get slightly different numbers. That's not a bug — that's quantum mechanics.
+That `H` in the circuit is the **Hadamard gate** — the most important gate in quantum computing. It takes a definite $|0\rangle$ state and puts it into an equal superposition. When we measure, we get 0 or 1 with roughly equal probability. Run it again and you'll get slightly different numbers. That's not a bug — that's quantum mechanics.
 
 You can also build and visualize these circuits directly in [IBM's Quantum Composer](https://quantum.cloud.ibm.com/composer). The Composer shows three visualization panels at the bottom of every circuit:
 
@@ -100,7 +102,7 @@ Classical computers have AND, OR, NOT gates. Quantum computers have their own se
 
 ### X Gate (the NOT gate)
 
-Flips `|0⟩` to `|1⟩` and vice versa. The quantum equivalent of a classical NOT.
+Flips $|0\rangle$ to $|1\rangle$ and vice versa. The quantum equivalent of a classical NOT.
 
 ```python
 qc = QuantumCircuit(1)
@@ -112,7 +114,7 @@ qc.x(0)  # Flip from |0⟩ to |1⟩
   <figcaption>X gate flips the qubit — Q-sphere dot moves from |0⟩ (top) to |1⟩ (bottom)</figcaption>
 </figure>
 
-In the Composer, the Q-sphere dot moved from the top (`|0⟩`) to the bottom (`|1⟩`). The statevector flipped from `[1, 0]` to `[0, 1]`. The probability bar is now 100% on `|1⟩`.
+In the Composer, the Q-sphere dot moved from the top ( $|0\rangle$ ) to the bottom ( $|1\rangle$ ). The statevector flipped from $[1, 0]$ to $[0, 1]$. The probability bar is now 100% on $|1\rangle$.
 
 ### H Gate (Hadamard)
 
@@ -120,7 +122,7 @@ You've already seen this one. Takes a definite state and creates a superposition
 
 ### CNOT Gate (Controlled-NOT)
 
-This is where things get interesting. CNOT takes **two** qubits: a control and a target. If the control qubit is `|1⟩`, it flips the target. If the control is `|0⟩`, it does nothing. Sounds simple, but when the control qubit is in superposition, the CNOT gate creates **entanglement**.
+This is where things get interesting. CNOT takes **two** qubits: a control and a target. If the control qubit is $|1\rangle$, it flips the target. If the control is $|0\rangle$, it does nothing. Sounds simple, but when the control qubit is in superposition, the CNOT gate creates **entanglement**.
 
 ```python
 qc = QuantumCircuit(2, 2)
@@ -194,8 +196,8 @@ Qiskit gives you **two primitives**:
 
 A qubit doesn't have just one property you can check. You have to choose *what to measure*, like choosing between a ruler and a thermometer. In quantum computing, these "measurement tools" are called **Pauli operators**: `Z`, `X`, `Y`, and `I`.
 
-- **Z** asks "are you `|0⟩` or `|1⟩`?" — the standard measurement. Returns +1 for `|0⟩`, -1 for `|1⟩`.
-- **X** asks "are you in the `|+⟩` or `|-⟩` superposition?" — measuring along a different axis.
+- **Z** asks "are you $|0\rangle$ or $|1\rangle$?" — the standard measurement. Returns $+1$ for $|0\rangle$, $-1$ for $|1\rangle$.
+- **X** asks "are you in the $|+\rangle$ or $|-\rangle$ superposition?" — measuring along a different axis.
 - **I** means "ignore this qubit."
 
 For multiple qubits, you write strings of these. Qiskit reads them **right to left**, so `"ZI"` means "measure Z on qubit 1, ignore qubit 0."
@@ -272,7 +274,7 @@ qc.z(0)   # Apply a phase flip → now it's -|1⟩
 qc.barrier()
 ```
 
-We have three qubits: **q0** is Alice's secret state (the one she wants to teleport), **q1** will be Alice's half of the entangled pair, and **q2** is Bob's half. Right now only q0 has been touched — Alice has prepared it in the state `-|1⟩` using X and Z gates.
+We have three qubits: **q0** is Alice's secret state (the one she wants to teleport), **q1** will be Alice's half of the entangled pair, and **q2** is Bob's half. Right now only q0 has been touched — Alice has prepared it in the state $-|1\rangle$ using X and Z gates.
 
 ### Act 2: The Shared Entangled Pair
 
@@ -316,7 +318,7 @@ In a real-world scenario, Alice would phone Bob and say "I got 01" or "I got 10"
 
 ### Verifying It Worked
 
-How do we prove the teleportation happened? We **reverse** the original preparation on Bob's qubit. If his qubit truly received Alice's state (`-|1⟩`), then applying Z then X (the reverse of X then Z) should return it cleanly to `|0⟩`.
+How do we prove the teleportation happened? We **reverse** the original preparation on Bob's qubit. If his qubit truly received Alice's state ($-|1\rangle$), then applying Z then X (the reverse of X then Z) should return it cleanly to $|0\rangle$.
 
 ```python
 # Undo Alice's original preparation on Bob's qubit
@@ -334,7 +336,7 @@ print(result.get_counts())
 # {'001': 253, '010': 254, '000': 253, '011': 264}
 ```
 
-Look at qubit 2 (the **leftmost** bit in Qiskit's little-endian convention). It's **always `0`**. The outcomes are `000`, `001`, `010`, `011` — Bob's bit never flips to 1. After reversing the preparation, Bob's qubit returned to `|0⟩`. The teleportation worked.
+Look at qubit 2 (the **leftmost** bit in Qiskit's little-endian convention). It's **always `0`**. The outcomes are `000`, `001`, `010`, `011` — Bob's bit never flips to 1. After reversing the preparation, Bob's qubit returned to $|0\rangle$. The teleportation worked.
 
 Alice's two bits (positions 0 and 1) are random — that's expected. She gets one of four equally likely outcomes each run. But regardless of *which* outcome she gets, Bob's qubit always ends up with her original state.
 
@@ -351,9 +353,9 @@ Here's the full circuit in IBM's Quantum Composer — the Q-sphere and probabili
 
 ### But What About Arbitrary States?
 
-Teleporting `|0⟩` and `|1⟩` is cool, but the real power of teleportation is moving *any* qubit state — a qubit rotated to 60 degrees, or some messy superposition that you can't even describe classically. Can we see that?
+Teleporting $|0\rangle$ and $|1\rangle$ is cool, but the real power of teleportation is moving *any* qubit state — a qubit rotated to 60 degrees, or some messy superposition that you can't even describe classically. Can we see that?
 
-Yes. But first, a confession: our circuit above was **incomplete**. It only had one correction gate (`cx(1,2)`), which happened to work for the specific `-|1⟩` state. For an arbitrary state, Bob actually needs **two** corrections:
+Yes. But first, a confession: our circuit above was **incomplete**. It only had one correction gate (`cx(1,2)`), which happened to work for the specific $-|1\rangle$ state. For an arbitrary state, Bob actually needs **two** corrections:
 
 - `cx(1, 2)` — if Alice's q1 measured 1, flip Bob's qubit (X correction)
 - `cz(0, 2)` — if Alice's q0 measured 1, fix the phase (Z correction)
@@ -362,14 +364,14 @@ Why specifically X and Z? After Alice measures, the math shows Bob's qubit lands
 
 | Alice measures | Bob's qubit | Correction |
 |---|---|---|
-| **00** | `α\|0⟩ + β\|1⟩` | None — already correct |
-| **01** | `β\|0⟩ + α\|1⟩` | **X** — amplitudes are swapped, flip them back |
-| **10** | `α\|0⟩ - β\|1⟩` | **Z** — sign is wrong, fix the phase |
-| **11** | `-β\|0⟩ + α\|1⟩` | **XZ** — both errors, apply both corrections |
+| **00** | $\alpha\|0\rangle + \beta\|1\rangle$ | None — already correct |
+| **01** | $\beta\|0\rangle + \alpha\|1\rangle$ | **X** — amplitudes are swapped, flip them back |
+| **10** | $\alpha\|0\rangle - \beta\|1\rangle$ | **Z** — sign is wrong, fix the phase |
+| **11** | $-\beta\|0\rangle + \alpha\|1\rangle$ | **XZ** — both errors, apply both corrections |
 
-Two types of errors, two independent corrections. Alice's q1 bit controls X (bit flip), Alice's q0 bit controls Z (phase flip). That's why `cx` and `cz` — each conditioned on a different classical bit. No Y gate needed: `Y = iXZ`, and that global phase `i` doesn't affect measurements.
+Two types of errors, two independent corrections. Alice's q1 bit controls X (bit flip), Alice's q0 bit controls Z (phase flip). That's why `cx` and `cz` — each conditioned on a different classical bit. No Y gate needed: $Y = iXZ$, and that global phase $i$ doesn't affect measurements.
 
-Let's teleport a qubit rotated by 60 degrees. First, let's see exactly what state Alice is sending. The `ry(π/3)` gate creates the state `cos(30°)|0⟩ + sin(30°)|1⟩`. We can inspect the exact statevector using `Statevector.from_instruction()` — Qiskit's way to get the theoretical state of a circuit without running any simulation:
+Let's teleport a qubit rotated by 60 degrees. First, let's see exactly what state Alice is sending. The `ry(π/3)` gate creates the state $\cos(30°)|0\rangle + \sin(30°)|1\rangle$. We can inspect the exact statevector using `Statevector.from_instruction()` — Qiskit's way to get the theoretical state of a circuit without running any simulation:
 
 ```python
 from qiskit import QuantumCircuit
@@ -391,7 +393,7 @@ print(f"Probabilities: |0⟩ = {alice_probs[0]:.4f}, |1⟩ = {alice_probs[1]:.4f
 # Probabilities: |0⟩ = 0.7500, |1⟩ = 0.2500
 ```
 
-Alice's statevector is `0.866|0⟩ + 0.5|1⟩`. By the **Born rule**, the probability of each outcome is the amplitude squared — so 75% chance of `|0⟩` and 25% chance of `|1⟩`. If teleportation works, Bob's qubit should show that exact same 75/25 split.
+Alice's statevector is $0.866|0\rangle + 0.5|1\rangle$. By the **Born rule**, the probability of each outcome is the amplitude squared — so 75% chance of $|0\rangle$ and 25% chance of $|1\rangle$. If teleportation works, Bob's qubit should show that exact same 75/25 split.
 
 Now let's teleport it with both corrections:
 
@@ -431,7 +433,7 @@ print(f"Bob's measured:  |0⟩ = {bob_0/total:.4f}, |1⟩ = {bob_1/total:.4f}")
 # Bob's measured:  |0⟩ = 0.7456, |1⟩ = 0.2544
 ```
 
-| | \|0⟩ | \|1⟩ |
+| | $\|0\rangle$ | $\|1\rangle$ |
 |---|---|---|
 | **Alice (theoretical)** | 0.7500 | 0.2500 |
 | **Bob (simulator)** | 0.7456 | 0.2544 |
@@ -440,7 +442,7 @@ print(f"Bob's measured:  |0⟩ = {bob_0/total:.4f}, |1⟩ = {bob_1/total:.4f}")
 The simulator is nearly perfect — the tiny difference is just shot noise from sampling. The real IBM quantum computer is only ~2% off from ideal. Noise from gate errors and decoherence pushes the results slightly toward 50/50 (randomness), but the 75/25 signal comes through clearly. The teleportation preserved the full quantum state, not just a classical 0 or 1.
 
 <Callout type="tip">
-Try changing `theta` to different angles. At `pi/2` (90°) you'll get a perfect 50/50 split. At `pi/4` (45°) you'll get roughly 85/15. The ratio always matches `cos²(θ/2)` to `sin²(θ/2)` — proof that the *entire* quantum state is being teleported, not just a bit.
+Try changing `theta` to different angles. At $\pi/2$ (90°) you'll get a perfect 50/50 split. At $\pi/4$ (45°) you'll get roughly 85/15. The ratio always matches $\cos^2(\theta/2)$ to $\sin^2(\theta/2)$ — proof that the *entire* quantum state is being teleported, not just a bit.
 </Callout>
 
 <Callout type="note">
@@ -462,4 +464,3 @@ The circuits we built today are the foundation for everything that comes next. I
 
 The secret I wish someone had told me at the start: you don't need to understand the math to build the intuition. Write the circuit. Run it. Look at the histogram. *Then* the math starts making sense.
 
-All code from this series is available in my [quantum computing repository](https://github.com/dipankardas011/quantum). The companion notebook for this post is [here](https://github.com/dipankardas011/Quantum-Coding/blob/main/blog-post-qiskit01.ipynb).
