@@ -19,9 +19,35 @@ This is Part 1 of a three-part series. By the end of this post, you'll have buil
 
 A classical bit is either 0 or 1. A **qubit** is... also 0 or 1 when you look at it. The difference is what happens *before* you look.
 
-Think of it like a coin. A classical bit is a coin lying on a table — heads or tails, always decided. A qubit is a coin mid-spin. It's not heads *and* tails simultaneously — it exists in a **superposition** of both states, with probabilities for each outcome. The moment you "measure" the coin (catch it), it collapses to one definite result.
+Think of it like a coin. A classical bit is a coin lying on a table — heads or tails, always decided. A qubit is a coin mid-spin. It's not heads *and* tails simultaneously — it exists in a **superposition** of both states, with probabilities for each outcome. The moment you "measure" the coin (catch it), it collapses to one definite result. And that collapse is irreversible — you can't un-catch a coin to see how it was spinning.
 
-That's the entire core concept. Everything else builds from here.
+Now let's make that precise. Physicists write quantum states with bracket notation: `|0⟩` means "the zero state" and `|1⟩` means "the one state." A qubit in superposition is written as:
+
+`|ψ⟩ = α|0⟩ + β|1⟩`
+
+Where `α` and `β` are numbers called **amplitudes**. They aren't probabilities themselves, but they determine probabilities: when you measure, you get `|0⟩` with probability `|α|²` and `|1⟩` with probability `|β|²`. This is the **Born rule** — the bridge between the quantum world and the classical results we observe. Going back to the coin: the amplitudes describe *how* it's spinning, and measurement forces it to land.
+
+### What's Under the Hood
+
+That `|0⟩` and `|1⟩` notation (called **ket** notation) is really just shorthand for column vectors:
+
+```
+|0⟩ = [1]    |1⟩ = [0]
+      [0]          [1]
+```
+
+A qubit in superposition `α|0⟩ + β|1⟩` is simply:
+
+```
+[α]
+[β]
+```
+
+And here's the part most tutorials skip: `α` and `β` can be **complex numbers** — they have both a real and an imaginary part (like `0.5 + 0.3i`). The real part affects the *magnitude*, the imaginary part encodes the **phase** — a kind of hidden angle that doesn't show up in measurement probabilities but matters when qubits interact through gates. Two states with the same `|α|²` and `|β|²` but different phases will behave differently when you apply gates to them. Phase is what makes quantum interference possible, and interference is what makes quantum algorithms work.
+
+For this post, you won't need to think about complex numbers — all our examples use real amplitudes. But when you see Qiskit output like `Statevector([0.707+0.j, 0.707+0.j])`, now you know: the `+0.j` is the imaginary part, and it's zero.
+
+Physically, a qubit is any quantum system with two distinguishable states — the spin of an electron (up or down), the polarization of a photon (horizontal or vertical), or in IBM's quantum computers, a tiny superconducting circuit cooled to near absolute zero. We don't need to worry about the physics. What matters for us as developers: you can't peek at the amplitudes without destroying them, so you have to design circuits that manipulate them *before* measurement to get useful results out.
 
 ## Getting Started
 
