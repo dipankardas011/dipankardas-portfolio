@@ -11,7 +11,7 @@ import Callout from '../../components/Callout.astro';
 
 You've read the headlines. Quantum computers will break encryption, revolutionize drug discovery, solve problems classical computers can't touch. You've also tried to learn about them — and bounced off a wall of Dirac notation, Hilbert spaces, and physics jargon that assumes you already have a PhD.
 
-I did too. Two years ago, I started a [quantum computing project](https://github.com/dipankardas011/quantum) with Qiskit purely out of curiosity. The textbooks lost me. The IBM documentation felt like it was written for physicists. But somewhere between "what even is a qubit?" and building a working teleportation circuit, something clicked: **quantum computing makes a lot more sense when you think like a developer, not a physicist.**
+I did too. Two years ago, I started a [quantum computing project](https://github.com/dipankardas011/Quantum-Coding) with Qiskit purely out of curiosity. The textbooks lost me. The IBM documentation felt like it was written for physicists. But somewhere between "what even is a qubit?" and building a working teleportation circuit, something clicked: **quantum computing makes a lot more sense when you think like a developer, not a physicist.**
 
 This is Part 1 of a three-part series. By the end of this post, you'll have built real quantum circuits — including one that teleports a quantum state from one qubit to another. No physics degree required. Just Python.
 
@@ -23,11 +23,15 @@ Think of it like a coin. A classical bit is a coin lying on a table — heads or
 
 That's the entire core concept. Everything else builds from here.
 
-Let's see it in code. First, install Qiskit:
+## Getting Started
 
-```bash
-pip install qiskit qiskit-aer
-```
+You'll need Python and Qiskit v2. I have made a containerized setup, I have a Docker-based environment in the [companion repository](https://github.com/dipankardas011/Quantum-Coding) — just run `make oci-build && make oci-run` and you'll have a Jupyter notebook ready to go. for which you just need to `make oci-run`
+
+For running circuits on **real quantum hardware**, head to [IBM Quantum Platform](https://quantum.cloud.ibm.com/), sign up for a free account, and grab your API token. The free tier gives you 10 minutes of quantum compute time per month — more than enough to run everything in this post.
+
+<Callout type="note">
+This post uses **Qiskit v2.x**. If you're following along with older tutorials that use `execute()` or `Aer.get_backend()`, those are v1 patterns. The v2 API uses **primitives** (`Sampler` and `Estimator`) which we'll cover below.
+</Callout>
 
 Now, let's put a single qubit into superposition and measure it:
 
@@ -41,11 +45,6 @@ qc.h(0)            # Hadamard gate — puts qubit in superposition
 qc.measure(0, 0)   # Measure the qubit
 
 print(qc.draw())
-#      ┌───┐┌─┐
-#   q: ┤ H ├┤M├
-#      └───┘└╥┘
-# c: 1/═════╩═
-#             0
 
 sampler = StatevectorSampler()
 result = sampler.run([qc], shots=1024).result()
@@ -55,6 +54,19 @@ print(counts)
 ```
 
 That `H` in the circuit is the **Hadamard gate** — the most important gate in quantum computing. It takes a definite `|0⟩` state and puts it into an equal superposition. When we measure, we get 0 or 1 with roughly equal probability. Run it again and you'll get slightly different numbers. That's not a bug — that's quantum mechanics.
+
+You can also build and visualize these circuits directly in [IBM's Quantum Composer](https://quantum.cloud.ibm.com/composer). The Composer shows three visualization panels at the bottom of every circuit:
+
+- **Q-sphere** (left): A 3D view of the multi-qubit quantum state in the computational basis (up to 5 qubits). Node size is proportional to the state's probability, and color reflects the phase of each basis state.
+- **Statevector** (center): The exact amplitudes of the quantum state across all computational basis states (up to 6 qubits). This completely characterizes the final output — it's the theoretical "truth" before measurement noise.
+- **Probabilities** (right): The likelihood of each measurement outcome across the computational basis states (up to 8 qubits). This is what you'd see if you ran the circuit on real hardware many times.
+
+Here's our Hadamard circuit in the Composer:
+
+<figure>
+  <img src="/img/blogs/qiskit_1_h_gate.png" alt="Hadamard gate in IBM Quantum Composer showing Q-sphere, Statevector, and Probabilities" />
+  <figcaption>Hadamard gate — Q-sphere shows equal weight at |0⟩ and |1⟩, probabilities confirm the 50/50 split</figcaption>
+</figure>
 
 ## The Quantum Toolbox: Gates That Actually Matter
 
@@ -68,6 +80,13 @@ Flips `|0⟩` to `|1⟩` and vice versa. The quantum equivalent of a classical N
 qc = QuantumCircuit(1)
 qc.x(0)  # Flip from |0⟩ to |1⟩
 ```
+
+<figure>
+  <img src="/img/blogs/qiskit_1_x_gate.png" alt="X gate in IBM Quantum Composer — Q-sphere shows the state flipped to |1⟩" />
+  <figcaption>X gate flips the qubit — Q-sphere dot moves from |0⟩ (top) to |1⟩ (bottom)</figcaption>
+</figure>
+
+In the Composer, the Q-sphere dot moved from the top (`|0⟩`) to the bottom (`|1⟩`). The statevector flipped from `[1, 0]` to `[0, 1]`. The probability bar is now 100% on `|1⟩`.
 
 ### H Gate (Hadamard)
 
@@ -84,16 +103,16 @@ qc.cx(control_qubit=0, target_qubit=1)  # CNOT: entangle qubits
 qc.measure([0, 1], [0, 1])
 
 print(qc.draw())
-#      ┌───┐     ┌─┐
-# q_0: ┤ H ├──■──┤M├───
-#      └───┘┌─┴─┐└╥┘┌─┐
-# q_1: ─────┤ X ├─╫─┤M├
-#           └───┘ ║ └╥┘
-# c: 2/══════════╩══╩═
-#                 0  1
 ```
 
 This two-gate combo — Hadamard followed by CNOT — creates what's called a **Bell state**. It's the simplest entangled state and the building block for almost everything in quantum computing.
+
+<figure>
+  <img src="/img/blogs/qiskit_1_cnot_h_gate.png" alt="H + CNOT Bell state in IBM Quantum Composer — only 00 and 11 in the probability panel" />
+  <figcaption>Bell state (H + CNOT) — probabilities show only 00 and 11, never 01 or 10</figcaption>
+</figure>
+
+The Composer confirms it: the statevector is `[1, 0, 0, 0]` (before measurement normalization), and the probability panel shows only `00` and `11` — never `01` or `10`.
 
 ## Entanglement: The "Spooky" Part That's Actually Simple
 
@@ -124,6 +143,10 @@ qc.measure([0, 1], [0, 1])
 # Result: {'00': 510, '11': 514}
 # ONLY 00 and 11 — qubits are correlated
 ```
+<figure>
+  <img src="/img/blogs/qiskit_1_cnot_h_gate.png" alt="H + CNOT Bell state in IBM Quantum Composer — only 00 and 11 in the probability panel" />
+  <figcaption>Bell state (H + CNOT) — probabilities show only 00 and 11, never 01 or 10</figcaption>
+</figure>
 
 Only `00` and `11` appear. Never `01` or `10`. The qubits are **correlated** — measuring one instantly tells you the other's value. If qubit 0 is `0`, qubit 1 is guaranteed to be `0`. If qubit 0 is `1`, qubit 1 is `1`.
 
@@ -189,6 +212,13 @@ That's the beautiful paradox of entanglement: **each qubit individually is perfe
 <Callout type="tip">
 **When to use which?** Use the **Sampler** when you care about the distribution of outcomes (histograms, probabilities). Use the **Estimator** when you care about a specific physical property (correlation, energy, magnetization). Most tutorials only show the Sampler — but the Estimator is what real quantum algorithms like VQE use under the hood to solve chemistry and optimization problems.
 </Callout>
+
+Here's the same Estimator code running on real IBM hardware — the result `[0.951, -0.018, 0.002]` is close to the ideal `[1.0, 0.0, 0.0]`:
+
+<figure>
+  <img src="/img/blogs/qiskit_1_estimator_h_x_gate.png" alt="Estimator running on real IBM quantum hardware showing ZZ, ZI, IZ expectation values" />
+  <figcaption>Estimator on real IBM hardware — ZZ = 0.951, ZI = -0.018, IZ = 0.002</figcaption>
+</figure>
 
 <Callout type="note">
 On a **real IBM quantum computer**, these values won't be as clean. I ran this exact circuit on IBM hardware and got `[0.951, -0.018, 0.002]` — close to ideal, but noise from gate errors and decoherence degrades the results. IBM's Runtime Estimator applies error mitigation that can even push values slightly outside the theoretical [-1, +1] range. We'll dig into noise models and error mitigation in Part 3 of this series.
@@ -284,19 +314,14 @@ Alice's two bits (positions 0 and 1) are random — that's expected. She gets on
 
 ### The Full Circuit
 
-```
-     ┌───┐┌───┐ ░            ░      ┌───┐┌─┐      ░
-q_0: ┤ X ├┤ Z ├─░────────────░───■──┤ H ├┤M├──────░──────────────
-     └───┘└───┘ ░ ┌───┐      ░ ┌─┴─┐└┬─┬┘└╥┘      ░
-q_1: ───────────░─┤ H ├──■───░─┤ X ├─┤M├──╫───■───░──────────────
-                ░ └───┘┌─┴─┐ ░ └───┘ └╥┘  ║ ┌─┴─┐ ░ ┌───┐┌───┐┌─┐
-q_2: ───────────░──────┤ X ├─░────────╫───╫─┤ X ├─░─┤ Z ├┤ X ├┤M├
-                ░      └───┘ ░        ║   ║ └───┘ ░ └───┘└───┘└╥┘
-c: 3/═════════════════════════════════╩═══╩════════════════════╩═
-                                      1   0                    2
-```
-
 Three barriers, three acts. State preparation, shared entanglement, teleportation. Twenty lines of code to move a quantum state without copying it — something Einstein didn't believe was possible.
+
+Here's the full circuit in IBM's Quantum Composer — the Q-sphere and probability panels confirm the teleportation:
+
+<figure>
+  <img src="/img/blogs/qiskit_1_teleport_gate.png" alt="Full teleportation circuit in IBM Quantum Composer" />
+  <figcaption>Full teleportation circuit in IBM Quantum Composer — three acts visible across the wire diagram</figcaption>
+</figure>
 
 ### But What About Arbitrary States?
 
@@ -306,6 +331,17 @@ Yes. But first, a confession: our circuit above was **incomplete**. It only had 
 
 - `cx(1, 2)` — if Alice's q1 measured 1, flip Bob's qubit (X correction)
 - `cz(0, 2)` — if Alice's q0 measured 1, fix the phase (Z correction)
+
+Why specifically X and Z? After Alice measures, the math shows Bob's qubit lands in one of four states depending on Alice's outcome:
+
+| Alice measures | Bob's qubit | Correction |
+|---|---|---|
+| **00** | `α\|0⟩ + β\|1⟩` | None — already correct |
+| **01** | `β\|0⟩ + α\|1⟩` | **X** — amplitudes are swapped, flip them back |
+| **10** | `α\|0⟩ - β\|1⟩` | **Z** — sign is wrong, fix the phase |
+| **11** | `-β\|0⟩ + α\|1⟩` | **XZ** — both errors, apply both corrections |
+
+Two types of errors, two independent corrections. Alice's q1 bit controls X (bit flip), Alice's q0 bit controls Z (phase flip). That's why `cx` and `cz` — each conditioned on a different classical bit. No Y gate needed: `Y = iXZ`, and that global phase `i` doesn't affect measurements.
 
 Let's teleport a qubit rotated by 60 degrees. First, let's see exactly what state Alice is sending. The `ry(π/3)` gate creates the state `cos(30°)|0⟩ + sin(30°)|1⟩`. We can inspect the exact statevector using `Statevector.from_instruction()` — Qiskit's way to get the theoretical state of a circuit without running any simulation:
 
