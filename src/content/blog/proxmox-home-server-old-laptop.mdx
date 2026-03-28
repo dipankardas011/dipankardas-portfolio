@@ -408,15 +408,15 @@ Understanding this makes cloud networking far less abstract. The next time you c
 
 ## Checklist: What to Verify After Setup
 
-- [ ] `apt update` runs without 401 errors
-- [ ] Proxmox web UI is reachable at `https://<host-ip>:8006`
-- [ ] `ip route` shows a default route via `wlp0s20f3`, not `vmbr0`
-- [ ] `ping 8.8.8.8` works from the Proxmox host shell
-- [ ] A VM on `vmbr0` receives an IP in `192.168.100.50–200`
-- [ ] `ping 8.8.8.8` works from inside the VM
-- [ ] `apt update` works from inside the VM
-- [ ] Docker image pulls complete without hanging (if using Docker)
-- [ ] SSH jump host access works from an external machine
+1. `apt update` runs without 401 errors
+2. Proxmox web UI is reachable at `https://<host-ip>:8006`
+3. `ip route` shows a default route via `wlp0s20f3`, not `vmbr0`
+4. `ping 8.8.8.8` works from the Proxmox host shell
+5. A VM on `vmbr0` receives an IP in `192.168.100.50–200`
+6. `ping 8.8.8.8` works from inside the VM
+7. `apt update` works from inside the VM
+8. Docker image pulls complete without hanging (if using Docker)
+9. SSH jump host access works from an external machine
 
 ---
 

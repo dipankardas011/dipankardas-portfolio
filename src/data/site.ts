@@ -19,6 +19,7 @@ export const socialLinks = {
   hashnode: "https://dipankardas011.hashnode.dev/",
   upwork: "https://www.upwork.com/freelancers/~0171342e36ce285d8c?mp_source=share",
   fiverr: "https://www.fiverr.com/s/38WVy79",
+  sponsor: "https://github.com/sponsors/dipankardas011",
 };
 
 export const navItems = [

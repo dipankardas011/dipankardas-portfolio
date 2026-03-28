@@ -352,6 +352,7 @@ html[data-blog="true"] .prose :not(pre) > code {
   border-radius: 50%;
 }
 
+
 .prose ol {
   padding-left: 2rem;
   margin: 1.5rem 0;
@@ -894,6 +895,7 @@ html[data-blog="true"] .prose pre[data-lang]::before {
 
 .author-card-links {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
   margin-top: 0.5rem;
 }
@@ -908,6 +910,26 @@ html[data-blog="true"] .prose pre[data-lang]::before {
 
 .author-card-link:hover {
   opacity: 0.75;
+}
+
+.author-card-sponsor {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--color-app-accent);
+  border-radius: 9999px;
+  color: var(--color-app-accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 1;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.author-card-sponsor:hover {
+  background: var(--color-app-accent);
+  color: var(--color-app-body);
+  opacity: 1;
 }
 
 /* ---- Responsive Typography Adjustments ---- */
