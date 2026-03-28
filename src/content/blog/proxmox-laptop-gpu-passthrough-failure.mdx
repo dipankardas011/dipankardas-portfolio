@@ -89,13 +89,22 @@ The driver loads. The GPU is visible. But initialization fails every time, at ex
 
 ### Attempt 1–5: Everything the Forums Suggest
 
-Every attempt below produced the same error at the same line:
+Every attempt below produced the same output from `dmesg | grep NVRM` — the driver loading, trying, and failing three times without moving a single line further:
 
 ```
-NVRM: GPU 0000:01:00.0: Failed to copy vbios to system memory.
-NVRM: GPU 0000:01:00.0: RmInitAdapter failed! (0x30:0xffff:988)
-NVRM: GPU 0000:01:00.0: rm_init_adapter failed, device minor number 0
+[    6.586721] NVRM: loading NVIDIA UNIX x86_64 Kernel Module  470.256.02  Thu May  2 14:37:44 UTC 2024
+[    6.682795] NVRM: GPU 0000:01:00.0: Failed to copy vbios to system memory.
+[    6.683274] NVRM: GPU 0000:01:00.0: RmInitAdapter failed! (0x30:0xffff:874)
+[    6.684286] NVRM: GPU 0000:01:00.0: rm_init_adapter failed, device minor number 0
+[   20.165393] NVRM: GPU 0000:01:00.0: Failed to copy vbios to system memory.
+[   20.165734] NVRM: GPU 0000:01:00.0: RmInitAdapter failed! (0x30:0xffff:874)
+[   20.166039] NVRM: GPU 0000:01:00.0: rm_init_adapter failed, device minor number 0
+[   20.369707] NVRM: GPU 0000:01:00.0: Failed to copy vbios to system memory.
+[   20.369819] NVRM: GPU 0000:01:00.0: RmInitAdapter failed! (0x30:0xffff:874)
+[   20.369971] NVRM: GPU 0000:01:00.0: rm_init_adapter failed, device minor number 0
 ```
+
+Three retries. Same failure. The driver is not confused about what went wrong — it knows exactly where it is stuck.
 
 | Fix | What it does | Result |
 |---|---|---|
