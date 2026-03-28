@@ -59,7 +59,38 @@ During installation, set the IP to your laptop's LAN address (Proxmox will use e
 
 ---
 
-## Step 2: Fix the Package Manager (The First Thing That Will Break)
+## Step 2: Stop the Lid From Killing Your VMs
+
+This is the step every guide forgets. Close the laptop lid — the machine suspends. Every VM dies. You SSH in from across the room and get nothing.
+
+By default, `systemd-logind` treats a closed lid as a suspend signal. On a server you intend to run headless, you want it completely ignored.
+
+Edit `/etc/systemd/logind.conf`:
+
+```bash
+nano /etc/systemd/logind.conf
+```
+
+Find and set these three lines (they are commented out by default — uncomment and change the value):
+
+```ini
+HandleLidSwitch=ignore
+HandleLidSwitchExternalPower=ignore
+HandleLidSwitchDocked=ignore
+LidSwitchIgnoreInhibited=no
+```
+
+Apply the change without rebooting:
+
+```bash
+systemctl restart systemd-logind
+```
+
+Now you can close the lid and the machine keeps running. Your VMs stay up, your SSH sessions stay alive, and you can tuck the laptop away anywhere with power and Wi-Fi.
+
+---
+
+## Step 3: Fix the Package Manager (The First Thing That Will Break)
 
 After a fresh install, running `apt update` fails with:
 
@@ -102,7 +133,7 @@ No more 401 errors. You can now run `apt upgrade -y` safely.
 
 ---
 
-## Step 3: Connect Proxmox to Wi-Fi
+## Step 4: Connect Proxmox to Wi-Fi
 
 Proxmox does not include a GUI for Wi-Fi configuration. You connect using `wpa_supplicant` from the shell.
 
@@ -133,7 +164,7 @@ Find your Wi-Fi interface name with `ip link show` — it will look like `wlp0s2
 
 ---
 
-## Step 4: Configure NAT Networking (The Most Critical Step)
+## Step 5: Configure NAT Networking (The Most Critical Step)
 
 This is where the two Wi-Fi problems are solved together. Open `/etc/network/interfaces`:
 
@@ -189,7 +220,7 @@ After rebooting, Proxmox should be online via Wi-Fi, and `vmbr0` should be up at
 
 ---
 
-## Step 5: Add a DHCP Server for Your VMs
+## Step 6: Add a DHCP Server for Your VMs
 
 VMs on the `vmbr0` bridge need IP addresses. Your home router cannot reach them (they are on a private internal subnet), so you need to run a lightweight DHCP server on the Proxmox host itself.
 
@@ -231,7 +262,7 @@ cat /var/lib/misc/dnsmasq.leases
 
 ---
 
-## Step 6: The MTU Problem (What Will Break Docker and npm)
+## Step 7: The MTU Problem (What Will Break Docker and npm)
 
 This one is subtle and painful if you do not know about it.
 
