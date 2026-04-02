@@ -1,0 +1,327 @@
+---
+title: "The Hidden Math Behind Running LLMs on Your Own Machine"
+author: "Dipankar Das"
+date: 2026-04-02
+description: "From Ollama to vLLM, GGUF to safetensors, Q4 to Q8 — a developer's journal through the real tradeoffs of running local LLMs. What those HuggingFace acronyms actually mean for your hardware."
+tags: ["llm", "local-ai", "quantization", "distillation", "vllm", "ollama", "lmstudio", "gguf", "machine-learning"]
+category: "AI"
+draft: true
+---
+import Callout from '../../components/Callout.astro';
+
+You see it everywhere now. Someone on Twitter runs a local LLM, gets a surprisingly coherent response, and posts the screenshot with "no API key needed." It looks simple. Download a model, run `ollama run qwen3.5`, start chatting. Done.
+
+So you try it. And it works. For about fifteen minutes, you feel like you've unlocked something.
+
+Then you open HuggingFace to find a better model and hit a wall of acronyms. GGUF. Safetensors. Q4_K_M. Q5_K_M. FP16. BF16. Distilled. Base. Fine-tuned. Every model card reads like a spec sheet written for people who already know what they're looking at.
+
+I spent the last few weeks falling down this rabbit hole. Here's what I learned — and more importantly, what those acronyms actually mean for whether a model will run well on *your* machine.
+
+---
+
+## It Started with Qwen 3.5
+
+My first move was straightforward. I pulled Qwen 3.5 9B through Ollama, a tool that abstracts away almost everything. You pick a model, it downloads, you chat. No config files, no GPU memory math, no format decisions.
+
+```bash
+ollama run qwen3.5:9b
+```
+
+It worked. The responses were decent. But I wanted to understand what was happening underneath — and I wanted more control.
+
+So I moved to **LM Studio**. Same model, but now I could see the quantization options. I loaded the 9B model with Q4_K_M quantization, then Q5_K_M. The interface let me adjust parameters, see token generation speed, and compare outputs side by side.
+
+That's when I stumbled across something interesting on HuggingFace: [Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF](https://huggingface.co/Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF).
+
+A 9B parameter model. Distilled from Claude 4.6 Opus reasoning traces. Available in GGUF format. That sentence alone contains about four concepts I had to unpack before I could decide whether to even try it.
+
+It only worked in LM Studio — Ollama didn't support it at the time. And that's when I realized: the tooling you use determines which models you can run, and the model format determines which tools you can use.
+
+I needed to go deeper.
+
+---
+
+## The Tooling Ladder: Ollama, LM Studio, vLLM
+
+Think of these three as different levels of abstraction.
+
+**Ollama** is the Docker of local LLMs. It pulls pre-packaged models, handles quantization choices for you, and just works. If you want to run a model with minimal friction, start here. The tradeoff: you're limited to the models and formats Ollama supports, and you get minimal control over inference parameters.
+
+**LM Studio** gives you a GUI with more knobs. You can load GGUF files directly from HuggingFace, pick your quantization level, adjust context windows, and see real-time performance metrics. It's where I first understood that model files aren't just "big or small" — they come in different *precisions*.
+
+**vLLM** is the production-grade option. It's built for serving models at scale, and it's where you start doing real math about your GPU. More on this below.
+
+---
+
+## Why I Ended Up on vLLM
+
+I didn't choose vLLM because I needed production serving. I ended up there because the other tools ran out of road.
+
+The [Claude-distilled Qwen model](https://huggingface.co/Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF) worked in LM Studio but Ollama wouldn't load it. I could have stopped there — LM Studio was giving me outputs. But I wanted to understand *why* one tool choked on a model another handled fine. What's different about how they load GGUF files? What parameters are they setting under the hood?
+
+vLLM answered those questions by making me set everything myself.
+
+```bash
+vllm serve ./Qwen3.5-9B-Claude-Distilled-Q4_K_M.gguf \
+  --gpu-memory-utilization 0.85 \
+  --max-model-len 4096 \
+  --host 0.0.0.0 \
+  --port 8000
+```
+
+No magic. No "it just works." Every parameter is explicit, and when something fails, the error messages tell you exactly which resource limit you hit.
+
+### What vLLM taught me that the others didn't
+
+**PagedAttention** — Most inference engines pre-allocate a contiguous block of GPU memory for the KV cache. If you set a 16K context window, it reserves memory for 16K tokens *per request*, even if most requests only use 2K. vLLM manages KV cache like virtual memory pages — allocating and freeing blocks dynamically. This alone gives 2-4x better throughput when handling multiple requests.
+
+**Continuous batching** — Ollama and LM Studio process one request at a time. vLLM doesn't wait for a batch to complete before starting new requests. Finished sequences get swapped out, new ones get swapped in. If you're thinking "I'm just one person, why do I care about batching?" — fair. But the moment you connect a local model to an agent loop or a coding assistant, you're sending multiple requests and latency matters.
+
+**The OpenAI-compatible API** — vLLM exposes your local model as an API endpoint that speaks the same protocol as OpenAI's API. Any tool that works with `gpt-4` can point at `localhost:8000` instead. That's not a gimmick — it means your local model becomes a drop-in replacement in existing workflows.
+
+```python
+from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:8000/v1", api_key="unused")
+response = client.chat.completions.create(
+    model="Qwen3.5-9B-Claude-Distilled",
+    messages=[{"role": "user", "content": "Explain PagedAttention in one paragraph."}],
+)
+```
+
+### When vLLM hits its own wall
+
+And then vLLM ran out of road too.
+
+I tried loading the Qwen 3.5 35B-A3B MoE model — a Mixture of Experts architecture where only 3B parameters are active per token despite having 35B total. Sounded perfect for my hardware. I set everything up:
+
+```bash
+vllm serve "lmstudio-community/Qwen3.5-35B-A3B-GGUF:Q4_K_M" \
+  --port 8000 \
+  --tokenizer=Qwen/Qwen3.5-35B-A3B \
+  --hf-config-path=Qwen/Qwen3.5-35B-A3B \
+  --served-model-name=Qwen/Qwen3.5-35B-A3B \
+  --tensor-parallel-size 1 \
+  --max-model-len 65536 \
+  --gpu-memory-utilization 0.9
+```
+
+It resolved the architecture, parsed the config, initialized the parallel state... and then:
+
+```
+RuntimeError: Unknown gguf model_type: qwen3_5_moe
+```
+
+vLLM's GGUF loader simply didn't know about this model architecture yet. The model was too new. The config resolved as `Qwen3_5MoeForConditionalGeneration` — a valid HuggingFace architecture — but vLLM's GGUF weight mapper had no entry for it.
+
+This is the reality of local LLM tooling in 2026: **models ship faster than inference engines can support them.** A model can exist on HuggingFace for weeks before vLLM, Ollama, or any other engine adds support for its architecture.
+
+### The llama.cpp fallback
+
+At this point I was tired but stubborn. I just wanted to see the model *run*.
+
+So I went one layer deeper: **llama.cpp** — the C++ inference engine that most of these tools are built on top of. Ollama uses it under the hood. LM Studio uses it. Even parts of the GGUF ecosystem exist because of it.
+
+```bash
+nix profile install nixpkgs#llama-cpp
+
+llama-server \
+  -m ./Qwen3.5-9B.Q5_K_M.gguf \
+  --port 8000 \
+  -c 8192 \
+  -ngl 999 \
+  --host 0.0.0.0
+```
+
+It worked. The model loaded, the server started, I got responses. One problem: **it was running on CPU.** The `-ngl 999` flag tells llama.cpp to offload all layers to GPU, but without the right CUDA build, it falls back silently to CPU inference.
+
+Slow? Yes. But it ran. And after hours of format errors, architecture mismatches, and loader crashes, "it ran" felt like a win.
+
+<Callout type="note">
+**When to use what:** Ollama if you want to chat with a model in 30 seconds. LM Studio if you want to explore models with a GUI and compare outputs. vLLM if you want to serve a model as an API, understand the machinery, or push your hardware to its limits. And llama.cpp when everything else fails — it's the lowest common denominator that supports the widest range of GGUF models.
+</Callout>
+
+<Callout type="important">
+**The real tooling lesson:** Don't marry one inference engine. Models, formats, and architectures evolve faster than any single tool can keep up. The ability to drop down a layer — from Ollama to LM Studio to vLLM to llama.cpp — is what keeps you unblocked.
+</Callout>
+
+---
+
+## Two Ways to Store a Brain: Safetensors vs GGUF
+
+Before we talk about compression, we need to talk about containers. A model's weights need to live in a file, and the two dominant formats serve very different purposes.
+
+### Safetensors
+
+Safetensors stores model weights at full precision — typically FP16 (16-bit floating point) or BF16 (brain float 16). It's the format you'll see in most HuggingFace model repos. A 9B parameter model in FP16 safetensors weighs roughly **18 GB** (9 billion parameters × 2 bytes each).
+
+The format was designed by Hugging Face with two priorities: **security** (it prevents arbitrary code execution during loading, unlike older pickle-based formats) and **speed** (it supports memory-mapped loading, so you can start using the model before the entire file is in RAM).
+
+Think of safetensors as the raw, uncompressed source. It's what you use for training, fine-tuning, or when you have enough VRAM to burn.
+
+### GGUF
+
+GGUF is the format that made local LLMs practical on consumer hardware. Developed in the llama.cpp ecosystem, it bundles everything into a single file: the model weights, architecture configuration, tokenizer, and quantization metadata.
+
+The key difference: GGUF is designed to hold **quantized** weights. Instead of storing each parameter as a 16-bit float, it can compress them to 8-bit, 5-bit, even 4-bit representations. That same 9B model that takes 18 GB in safetensors? In GGUF with Q4_K_M quantization, it's **5.63 GB**.
+
+That's not a typo. Same model. Same 9 billion parameters. A third of the size.
+
+The catch is that you're trading precision for space. And understanding that tradeoff is the entire game.
+
+---
+
+## Quantization: The Precision-Size Spectrum
+
+Quantization is the process of reducing the numerical precision of model weights. The full-precision model uses 16-bit floating point numbers for each weight. Quantization maps those numbers to lower-bit representations.
+
+Here's what the naming convention means:
+
+| Format | Bits | Bytes/Weight | 9B Model Size | Quality Impact |
+|--------|------|-------------|---------------|----------------|
+| FP16 | 16 | 2.0 | ~18 GB | Baseline |
+| Q8_0 | 8 | ~1.06 | ~9.53 GB | Near-lossless |
+| Q5_K_M | 5 | ~0.72 | ~6.47 GB | Slight degradation |
+| Q4_K_M | 4 | ~0.63 | ~5.63 GB | Good balance |
+
+The naming breaks down like this: **Q** = quantized, the **number** = bits per weight, **K** = K-quant algorithm (a smarter quantization method that varies precision across layers), and **M** = medium (as opposed to S for small or L for large, referring to the group size used).
+
+<Callout type="note">
+**Q4_K_M is the sweet spot for most people.** It reduces model size by roughly 75% compared to FP16 while retaining over 95% of the model's capabilities. If you have the VRAM, Q5_K_M gives you a noticeable quality bump for only ~15% more space.
+</Callout>
+
+### Beyond the Basics: NF4 and NVFP4
+
+You might also encounter quantization formats tied to specific hardware. **NF4** (Normal Float 4-bit) is a quantization scheme from the QLoRA paper that maps weights to a normal distribution before quantizing — giving better quality than naive 4-bit rounding. **NVFP4** is NVIDIA's own 4-bit floating point format, optimized for their Tensor Cores.
+
+These aren't GGUF quant levels — they're precision formats used in different parts of the ecosystem (bitsandbytes, TensorRT-LLM). But they're solving the same problem: how do you cram more model into less memory without losing the plot?
+
+---
+
+## Distillation: Borrowing a Bigger Brain
+
+Quantization compresses weights after training. Distillation is a different kind of compression — it happens *during* training.
+
+The analogy is a teacher and student. You have a large, capable "teacher" model (like Claude 4.6 Opus) and a smaller "student" model (like Qwen 3.5 9B). The student doesn't learn from raw training data — it learns from the teacher's *behavior*. Specifically, it trains on the teacher's outputs: how it reasons through problems, what tokens it generates, what probability distributions it produces.
+
+The [Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2](https://huggingface.co/Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF) model I found does exactly this. It takes 14,000 reasoning samples generated by Claude 4.6 Opus — math problems, logical deductions, word problems, general knowledge — and fine-tunes Qwen 3.5 9B on them using LoRA (Low-Rank Adaptation). The result is a 9B model that reasons more like a much larger model than the base Qwen 3.5 does.
+
+Here's the mental model:
+
+```
+Base Model (Qwen 3.5 9B)
+  → Pre-trained on massive text corpus
+  → General capabilities, no specific "style"
+
+Fine-Tuned Model
+  → Base model + additional training on curated data
+  → Better at specific tasks
+
+Distilled Model
+  → Fine-tuned on a larger model's outputs
+  → Inherits reasoning patterns from the teacher
+  → Same parameter count, but "punches above its weight"
+```
+
+The v2 of this distilled model is interesting because it specifically optimized for efficiency — using 20% fewer tokens than v1 while achieving higher accuracy. The reasoning patterns it learned aren't just copied; they're compressed into a more efficient scaffold.
+
+<Callout type="important">
+**Distillation and quantization stack.** You can take a distilled model (which learned from a larger teacher) and then quantize it (reducing precision). The Qwen-Claude distilled model available as a Q4_K_M GGUF is both distilled *and* quantized — two layers of compression, each trading something different for efficiency.
+</Callout>
+
+---
+
+## The VRAM Math: Will It Actually Run?
+
+This is where most guides lose people. They say "you need X GB of VRAM" without showing the math. Here's how it actually works.
+
+Your GPU's VRAM needs to hold three things:
+
+### 1. Model Weights
+
+This is the straightforward part. Take the number of parameters, multiply by bytes per parameter at your quantization level.
+
+```
+9B params × 0.63 bytes/param (Q4_K_M) = ~5.63 GB
+9B params × 2.0 bytes/param (FP16)    = ~18 GB
+```
+
+### 2. KV Cache
+
+The Key-Value cache stores the attention state for your context window. It grows **linearly** with context length. For a model with:
+- `n_layers` transformer layers
+- `n_heads` attention heads
+- `head_dim` dimension per head
+- `seq_len` context window tokens
+
+```
+KV cache ≈ 2 × n_layers × n_heads × head_dim × seq_len × bytes_per_element
+```
+
+For a 9B model with a 4096 context window, the KV cache typically adds **0.5–2 GB** depending on the architecture and precision. Double your context window, and you roughly double this number.
+
+### 3. Overhead
+
+CUDA kernels, activation memory during inference, framework overhead. Typically 500 MB – 1 GB.
+
+### Putting It Together
+
+```
+Total VRAM ≈ Model Weights + KV Cache + Overhead
+```
+
+For Qwen 3.5 9B at Q4_K_M with 4096 context:
+```
+~5.63 GB + ~1 GB + ~0.5 GB ≈ 7.1 GB
+```
+
+That fits comfortably on an 8 GB GPU. The same model at FP16 with 8192 context?
+```
+~18 GB + ~2 GB + ~0.5 GB ≈ 20.5 GB
+```
+
+Now you need a 24 GB card.
+
+### The gpu_memory_utilization Knob
+
+In vLLM, the `gpu_memory_utilization` parameter controls what fraction of your GPU memory the engine is allowed to use. The default is 0.9 (90%). If you have other processes using the GPU — a display server, another model, monitoring tools — you'll want to lower this.
+
+```python
+from vllm import LLM
+
+llm = LLM(
+    model="your-model-path",
+    gpu_memory_utilization=0.85,  # leave headroom
+    max_model_len=4096,           # context window
+)
+```
+
+Setting this too high causes OOM crashes. Setting it too low wastes capacity. I found 0.85 to be a safe starting point.
+
+---
+
+## What I Actually Learned
+
+Before this rabbit hole, I treated model selection like picking a Docker image — find a name that sounds right, pull it, hope it works. Now I read model cards differently.
+
+When I see a model on HuggingFace, I check:
+
+1. **Parameter count** — determines the base VRAM requirement
+2. **Format** — GGUF means ready for local inference, safetensors means full precision (probably needs conversion or a beefy GPU)
+3. **Quantization level** — Q4_K_M for constrained hardware, Q5_K_M or Q8_0 if you've got room
+4. **Base vs distilled** — a distilled 9B can outperform a base 14B on reasoning tasks
+5. **Context window** — more context = more KV cache = more VRAM
+
+Those HuggingFace model cards full of acronyms? They're not gatekeeping. They're a spec sheet. Every abbreviation encodes a decision someone made about precision, size, speed, and capability.
+
+The real tradeoff isn't "good model vs bad model." It's a continuous spectrum:
+
+**Full precision → More accuracy → More VRAM → Slower on consumer hardware**
+
+**More quantization → Less VRAM → Faster inference → Some quality loss**
+
+**Distillation → Better reasoning per parameter → Free at inference time → Costs training compute**
+
+Once you understand these axes, you stop asking "which model should I download?" and start asking "what can I fit on my hardware, and what am I willing to trade?"
+
+That's a much better question.
