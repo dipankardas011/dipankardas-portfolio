@@ -1,8 +1,8 @@
 ---
-title: "The Hidden Math Behind Running LLMs on Your Own Machine"
+title: "Local LLMs: I Went Deep So You Don't Have To"
 author: "Dipankar Das"
 date: 2026-04-02
-description: "From Ollama to vLLM, GGUF to safetensors, Q4 to Q8 — a developer's journal through the real tradeoffs of running local LLMs. What those HuggingFace acronyms actually mean for your hardware."
+description: "Quantization, distillation, VRAM math, GGUF vs safetensors, Ollama vs vLLM vs llama.cpp — I spent weeks in the rabbit hole so you can skip straight to what matters."
 tags: ["llm", "local-ai", "quantization", "distillation", "vllm", "ollama", "lmstudio", "gguf", "machine-learning"]
 category: "AI"
 draft: true
@@ -114,7 +114,23 @@ RuntimeError: Unknown gguf model_type: qwen3_5_moe
 
 vLLM's GGUF loader simply didn't know about this model architecture yet. The model was too new. The config resolved as `Qwen3_5MoeForConditionalGeneration` — a valid HuggingFace architecture — but vLLM's GGUF weight mapper had no entry for it.
 
-This is the reality of local LLM tooling in 2026: **models ship faster than inference engines can support them.** A model can exist on HuggingFace for weeks before vLLM, Ollama, or any other engine adds support for its architecture.
+![vLLM crashing with Unknown gguf model_type: qwen3_5_moe](/img/blogs/vllm-error.png)
+
+And that wasn't even the first vLLM roadblock. Before the architecture error, I'd hit a CUDA version mismatch. Installing vLLM with the precompiled flag:
+
+```bash
+VLLM_USE_PRECOMPILED=1 uv pip install vllm
+```
+
+...gave me:
+
+```
+ImportError: libcudart.so.12: cannot open shared object file
+```
+
+The precompiled wheels are built against **CUDA 12.x**. My system runs **CUDA 13.0**. It couldn't find `libcudart.so.12` because it doesn't exist — I have `libcudart.so.13`. The fix is to build vLLM from source so it links against your local CUDA libraries, but that's its own multi-hour adventure.
+
+This is the reality of local LLM tooling in 2026: **models ship faster than inference engines can support them**, and the CUDA ecosystem adds another layer of version pinning on top. A model can exist on HuggingFace for weeks before vLLM, Ollama, or any other engine adds support for its architecture — and even when it does, your CUDA version might not match the prebuilt binaries.
 
 ### The llama.cpp fallback
 
@@ -122,23 +138,142 @@ At this point I was tired but stubborn. I just wanted to see the model *run*.
 
 So I went one layer deeper: **llama.cpp** — the C++ inference engine that most of these tools are built on top of. Ollama uses it under the hood. LM Studio uses it. Even parts of the GGUF ecosystem exist because of it.
 
+My first attempt was the Nix package:
+
 ```bash
 nix profile install nixpkgs#llama-cpp
 
 llama-server \
   -m ./Qwen3.5-9B.Q5_K_M.gguf \
   --port 8000 \
-  -c 8192 \
-  -ngl 999 \
+  -c 8192 -ngl 999 \
   --host 0.0.0.0
 ```
 
-It worked. The model loaded, the server started, I got responses. One problem: **it was running on CPU.** The `-ngl 999` flag tells llama.cpp to offload all layers to GPU, but without the right CUDA build, it falls back silently to CPU inference.
+It worked — the model loaded, the server started, I got responses. One problem: **it was running entirely on CPU.** The `-ngl 999` flag tells llama.cpp to offload all layers to GPU, but the Nix package wasn't compiled with CUDA support. It fell back silently. No error, no warning. Just slow inference.
 
-Slow? Yes. But it ran. And after hours of format errors, architecture mismatches, and loader crashes, "it ran" felt like a win.
+### Compiling llama.cpp from source (the Fedora 43 adventure)
+
+CPU inference on a 9B model is painful. I needed GPU offloading. That meant compiling llama.cpp from source with CUDA enabled.
+
+```bash
+git clone https://github.com/ggml-org/llama.cpp
+cd llama.cpp
+
+cmake -B build -DGGML_CUDA=ON
+cmake --build build --config Release -j20
+```
+
+Simple, right? Not on Fedora 43.
+
+Fedora 43 ships with GCC 15 and G++ 15. The official NVIDIA repo provides CUDA 13.x. And CUDA 13.x's header files weren't fully compatible with GCC 15's stricter C++ standards. The build failed with errors deep inside CUDA's own math headers.
+
+This is actually a [documented issue in the llama.cpp build guide](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#overriding-the-cuda-version) — when your CUDA toolkit's glibc expectations don't match your system's GCC version, math function declarations have mismatched exception specifications.
+
+<Callout type="warning">
+**Save yourself the headache:** If you're not on a bleeding-edge distro, use **CUDA 12.x with GCC 13 or 14**. That combination compiles llama.cpp (and vLLM) without any header patching. The issue I hit is specific to CUDA 13.x + GCC 15 — a combo you'll only encounter on Fedora 43+, Arch, or similar rolling-release distros.
+</Callout>
+
+If you *are* stuck with CUDA 13.x and GCC 15, the fix is surgical. In `/usr/local/cuda-13.1/targets/x86_64-linux/include/crt/math_functions.h`, functions like `rsqrtf` and `rsqrt` needed `noexcept(true)` annotations to satisfy GCC 15:
+
+```cpp
+// Before (CUDA 13.x shipped this):
+extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ float rsqrtf(float x);
+extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double rsqrt(double x);
+
+// After (what GCC 15 requires):
+extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ float rsqrtf(float x) noexcept(true);
+extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double rsqrt(double x) noexcept(true);
+```
+
+After patching the CUDA headers and rebuilding, it compiled cleanly. And then:
+
+```bash
+./build/bin/llama-server \
+  -m ./Qwen3.5-9B.Q5_K_M.gguf \
+  --port 8000 \
+  -c 45000 -ngl 999 \
+  --host 0.0.0.0
+```
+
+**It worked. On GPU.** But I could only push the context window to about 45,000 tokens before running out of VRAM. I wanted the model's full 262,144 token context. That meant learning what actually consumes GPU memory — and where to make tradeoffs.
+
+### Squeezing out the full 262K context
+
+Running `llama-server` with `--verbose` gave me the real VRAM breakdown on my RTX 4060 Laptop (8 GB):
+
+| Component | VRAM |
+|-----------|------|
+| Model weights | 5,491 MiB |
+| Context (KV + recurrent state) | 1,457 MiB |
+| Compute buffers | 493 MiB |
+| **Total** | **7,441 MiB** |
+| Free VRAM available | 7,360 MiB |
+
+At 40K context, I was already **81 MiB over budget**. The auto-fit system had to silently offload layers to CPU. Going to 262K on GPU alone? Not happening.
+
+The solution was a combination of three tricks:
+
+**1. KV cache quantization** — Instead of storing the attention cache in full precision, quantize it:
+- `--cache-type-k q4_0` reduces key cache memory by ~75%
+- `--cache-type-v q4_0` reduces value cache memory by ~75%
+
+**2. KV cache offloading** — `--no-kv-offload` moves the entire KV cache to system RAM. The GPU holds only model weights and compute buffers. This is the "GPU ratio" trick — you're trading PCIe bandwidth for VRAM space.
+
+**3. Flash attention** — `--flash-attn on` avoids materializing the full attention matrix, saving temporary VRAM during computation.
+
+The final command that gave me the full 262K context window:
+
+```bash
+./build/bin/llama-server \
+  -m ./Qwen3.5-9B.Q5_K_M.gguf \
+  --port 8000 \
+  -c 262144 -ngl 999 \
+  --host 0.0.0.0 \
+  --no-kv-offload \
+  --cache-type-k q4_0 --cache-type-v q4_0 \
+  --flash-attn on \
+  --jinja
+```
+
+The tradeoff: **prefill is slower.** Prefill is the phase where the model processes all your input tokens before generating the first output token. With `--no-kv-offload`, the KV cache writes go to system RAM over PCIe instead of staying on GPU. For short prompts (under 1K tokens), you barely notice. For massive prompts (50K+ tokens), you'll wait noticeably longer before the first token appears. But once generation starts, speed is fine — each new token only reads a small slice of the cache.
+
+Why 262K and not more? Because that's the model's **trained context length**. The RoPE positional encodings were trained up to 262,144 tokens. Push beyond that and the model extrapolates into positions it's never seen — quality degrades, coherence breaks down, and you get garbage. The context window isn't just a memory limit; it's a capability boundary.
+
+![Qwen 3.5 9B running on GPU via llama.cpp, with Claude Code connected as a client](/img/blogs/llama-worked.png)
+
+### Using it as a drop-in API
+
+Once `llama-server` is running, it exposes an OpenAI-compatible API. Any tool that speaks the OpenAI protocol can point at `localhost:8000` and use your local model. I configured it as a provider in my coding tools:
+
+```json
+{
+  "llamacpp-local": {
+    "name": "llama-server (Local)",
+    "npm": "@ai-sdk/openai-compatible",
+    "options": {
+      "baseURL": "http://0.0.0.0:8000/v1"
+    },
+    "models": {
+      "qwen3.5-9b-opus-4.6:Q5_K_M": {
+        "limit": {
+          "context": 262144,
+          "output": 262144
+        }
+      }
+    }
+  }
+}
+```
+
+A Claude-distilled, quantized, locally-hosted model — running on an 8 GB laptop GPU with 262K context — acting as a coding assistant through a standard API. That's the payoff of understanding all those acronyms.
+
+After Ollama's format limits, LM Studio's compatibility gaps, vLLM's architecture errors, and a Nix package that silently ignored my GPU — *compiling from source and patching CUDA headers* is what finally got me here.
+
+Nobody puts that in the "Getting Started" guide.
 
 <Callout type="note">
-**When to use what:** Ollama if you want to chat with a model in 30 seconds. LM Studio if you want to explore models with a GUI and compare outputs. vLLM if you want to serve a model as an API, understand the machinery, or push your hardware to its limits. And llama.cpp when everything else fails — it's the lowest common denominator that supports the widest range of GGUF models.
+**When to use what:** Ollama if you want to chat with a model in 30 seconds. LM Studio if you want to explore models with a GUI and compare outputs. vLLM if you want to serve a model as an API and understand inference machinery. And llama.cpp when everything else fails — it's the lowest common denominator that supports the widest range of GGUF models.
 </Callout>
 
 <Callout type="important">
@@ -233,7 +368,7 @@ The v2 of this distilled model is interesting because it specifically optimized 
 
 ## The VRAM Math: Will It Actually Run?
 
-This is where most guides lose people. They say "you need X GB of VRAM" without showing the math. Here's how it actually works.
+This is where most guides lose people. They say "you need X GB of VRAM" without showing the math. Here's how it actually works — with real numbers from my RTX 4060 Laptop GPU (8 GB VRAM, 7,360 MiB usable).
 
 Your GPU's VRAM needs to hold three things:
 
@@ -243,60 +378,52 @@ This is the straightforward part. Take the number of parameters, multiply by byt
 
 ```
 9B params × 0.63 bytes/param (Q4_K_M) = ~5.63 GB
+9B params × 0.72 bytes/param (Q5_K_M) = ~6.47 GB
 9B params × 2.0 bytes/param (FP16)    = ~18 GB
 ```
 
+On my GPU, the Q5_K_M model weights consumed **5,491 MiB** — already 70% of available VRAM before I'd processed a single token.
+
 ### 2. KV Cache
 
-The Key-Value cache stores the attention state for your context window. It grows **linearly** with context length. For a model with:
-- `n_layers` transformer layers
-- `n_heads` attention heads
-- `head_dim` dimension per head
-- `seq_len` context window tokens
+The Key-Value cache stores the attention state for your context window. It grows **linearly** with context length. Double your context window, double the KV cache memory.
 
-```
-KV cache ≈ 2 × n_layers × n_heads × head_dim × seq_len × bytes_per_element
-```
+At 40K context on my setup, the KV cache plus recurrent state took **1,457 MiB**. That's the real budget pressure — every token of context you add costs memory.
 
-For a 9B model with a 4096 context window, the KV cache typically adds **0.5–2 GB** depending on the architecture and precision. Double your context window, and you roughly double this number.
+### 3. Compute Overhead
 
-### 3. Overhead
-
-CUDA kernels, activation memory during inference, framework overhead. Typically 500 MB – 1 GB.
+CUDA kernels, activation memory during inference, framework buffers. On my setup: **493 MiB**. Not huge, but not nothing on a constrained GPU.
 
 ### Putting It Together
 
-```
-Total VRAM ≈ Model Weights + KV Cache + Overhead
-```
+Here's my actual breakdown at 40K context:
 
-For Qwen 3.5 9B at Q4_K_M with 4096 context:
 ```
-~5.63 GB + ~1 GB + ~0.5 GB ≈ 7.1 GB
-```
-
-That fits comfortably on an 8 GB GPU. The same model at FP16 with 8192 context?
-```
-~18 GB + ~2 GB + ~0.5 GB ≈ 20.5 GB
+Model weights:    5,491 MiB (74%)
+KV + state:       1,457 MiB (20%)
+Compute buffers:    493 MiB (6%)
+─────────────────────────────
+Total:            7,441 MiB
+Available:        7,360 MiB  ← 81 MiB short!
 ```
 
-Now you need a 24 GB card.
+At just 40K context, I was **already over budget.** The inference engine had to silently offload layers to CPU to make it fit. This is why understanding the math matters — "it runs" and "it runs on GPU" are very different statements.
 
-### The gpu_memory_utilization Knob
+### The Escape Hatches
 
-In vLLM, the `gpu_memory_utilization` parameter controls what fraction of your GPU memory the engine is allowed to use. The default is 0.9 (90%). If you have other processes using the GPU — a display server, another model, monitoring tools — you'll want to lower this.
+When VRAM runs out, you have three knobs to turn:
 
-```python
-from vllm import LLM
+**Reduce model precision** — Drop from Q5_K_M to Q4_K_M. Saves ~800 MiB, costs some quality.
 
-llm = LLM(
-    model="your-model-path",
-    gpu_memory_utilization=0.85,  # leave headroom
-    max_model_len=4096,           # context window
-)
-```
+**Quantize KV cache** — `--cache-type-k q4_0 --cache-type-v q4_0` in llama.cpp, reducing cache memory by ~75%. This is the highest-leverage move for increasing context length.
 
-Setting this too high causes OOM crashes. Setting it too low wastes capacity. I found 0.85 to be a safe starting point.
+**Offload to system RAM** — In llama.cpp, `-ngl` controls how many layers live on GPU (LM Studio's "GPU ratio" slider is this exact flag). In vLLM, `gpu_memory_utilization` controls what fraction of VRAM the engine can use. Both let you shift work to CPU/RAM at the cost of speed.
+
+The nuclear option: `--no-kv-offload` keeps model weights on GPU but moves the entire KV cache to system RAM. This is how I got from 40K to the model's full 262K context window on an 8 GB card — at the cost of slower prefill over PCIe.
+
+<Callout type="note">
+**The formula that actually matters:** Can you fit model weights + target KV cache + 500 MiB overhead into your VRAM? If yes, everything stays on GPU and you're fast. If no, you need to decide what to offload — and that decision determines your speed/capability tradeoff.
+</Callout>
 
 ---
 
