@@ -257,11 +257,11 @@ nix profile install nixpkgs#llama-cpp
 llama-server \
   -m ./Qwen3.5-9B.Q5_K_M.gguf \
   --port 8000 \
-  -c 8192 -ngl 999 \
+  -c 8192 -ngl full \
   --host 0.0.0.0
 ```
 
-It worked — the model loaded, the server started, I got responses. One problem: **it was running entirely on CPU.** The `-ngl 999` flag tells llama.cpp to offload all layers to GPU, but the Nix package wasn't compiled with CUDA support. It fell back silently. No error, no warning. Just slow inference.
+It worked — the model loaded, the server started, I got responses. One problem: **it was running entirely on CPU.** The `-ngl full` flag tells llama.cpp to offload all layers to GPU, but the Nix package wasn't compiled with CUDA support. It fell back silently. No error, no warning. Just slow inference.
 
 ### Compiling llama.cpp from source (the Fedora 43 adventure)
 
@@ -304,7 +304,7 @@ After patching the CUDA headers and rebuilding, it compiled cleanly. And then:
 ./build/bin/llama-server \
   -m ./Qwen3.5-9B.Q5_K_M.gguf \
   --port 8000 \
-  -c 45000 -ngl 999 \
+  -c 45000 -ngl full \
   --host 0.0.0.0
 ```
 
@@ -337,16 +337,30 @@ The solution was a combination of three tricks:
 The final command for **text-only inference** with the full 262K context window:
 
 ```bash
-./build/bin/llama-server \
-  -m ./Qwen3.5-9B.Q5_K_M.gguf \
+/home/dipankardas/llama.cpp/build/bin/llama-server \
+  -m /home/dipankardas/ws/vllm/Qwen3.5-9B-Q5_K_M.gguf \
   --port 8000 \
-  -c 262144 -ngl 999 \
+  -c 262144 \ # <~~ Honestly overkill and I soon realized 256k or even 128k not practical, but I wanted to test the limits
   --host 0.0.0.0 \
   --no-kv-offload \
-  --cache-type-k q4_0 --cache-type-v q4_0 \
+  -ngl auto \
+  -b 512 -ub 128 \
+  --cache-type-k q4_0 \
+  --cache-type-v q4_0 \
   --flash-attn on \
   --jinja
-```
+alias homeai_textonly="/home/dipankardas/llama.cpp/build/bin/llama-server -m /home/dipankardas/ws/vllm/Qwen3.5-9B-Q5_K_M.gguf --port 8000 -c 65536 --host 0.0.0.0 -ngl auto --cache-type-k q4_0 --cache-type-v q4_0 --flash-attn on --jinja"
+
+<Callout type="warning">
+**Text-only mode:** `-ngl auto` automatically tunes GPU layers to fit your VRAM.
+
+**Vision models:** `--fit` is more conservative — use it when you have multi-modal workloads.
+
+**Context window limits:** On 8 GB VRAM, **64K (65536) is the practical maximum**. I tested 262K and the Cuda OOM killer hit reliably after ~80K context. The GPU needs VRAM for calculation, not just storage.
+
+**Pro tip:** For batch sizes, `-b 512` and `-ub 128` prevent prefill spikes. For automatic tuning, `--fit` handles multi-modal workloads more safely.
+</Callout>
+
 
 The tradeoff: **prefill is slower.** Prefill is the phase where the model processes all your input tokens before generating the first output token. With `--no-kv-offload`, the KV cache writes go to system RAM over PCIe instead of staying on GPU. For short prompts (under 1K tokens), you barely notice. For massive prompts (50K+ tokens), you'll wait noticeably longer before the first token appears. But once generation starts, speed is fine — each new token only reads a small slice of the cache.
 
@@ -392,14 +406,14 @@ Qwen 3.5 is a multimodal model — it can process images, not just text. But vis
   -m ./Qwen3.5-9B-Q5_K_M.gguf \
   --mmproj ./mmproj-BF16.gguf \
   --port 8000 \
-  -c 262144 --host 0.0.0.0 \
-  --no-kv-offload -ngl 30 \
+  -c 131072 --host 0.0.0.0 \
+  --no-kv-offload -ngl auto \
   --cache-type-k q4_0 --cache-type-v q4_0 \
   --flash-attn on \
   --jinja
 ```
 
-Notice the change: `-ngl` went from `999` (all layers on GPU) down to `30`. The vision projection layers and their scratch space need VRAM too — on my 8 GB card, there simply wasn't room for the full model *and* vision. Dropping a few layers to CPU freed enough headroom for the multimodal pipeline. If you have more VRAM to spare, crank `-ngl` back up.
+Notice the change: `-ngl` went from `auto` (all layers on GPU) down to `auto or in my case 30` even there is `--fit on`. The vision projection layers and their scratch space need VRAM too — on my 8 GB card, there simply wasn't room for the full model *and* vision. Dropping a few layers to CPU freed enough headroom for the multimodal pipeline. If you have more VRAM to spare, crank `-ngl` back up.
 
 The API config also needs to declare the model's multimodal capabilities:
 
