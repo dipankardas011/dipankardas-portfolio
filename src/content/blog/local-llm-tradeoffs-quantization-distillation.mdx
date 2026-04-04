@@ -62,6 +62,11 @@ The CLI's `--gpu` flag controls GPU offload ratio, `--context-length` sets the w
 
 The **GUI** is a different story — it exposes a lot more: flash attention toggle, KV cache quantization (key and value separately), mmap/mlock settings, RoPE frequency tuning, eval batch size, and all the sampling parameters (temperature, top-p, top-k, repeat penalty). These are the knobs that matter for squeezing performance out of constrained hardware, and none of them are available via `lms load`.
 
+<figure>
+  <img src="/img/blogs/lmstudio-model-configs.png" alt="LM Studio GUI showing advanced model configuration options including GPU offload, context length, flash attention, KV cache quantization, and RoPE settings" />
+  <figcaption>LM Studio's GUI exposes the knobs that the CLI hides — flash attention, KV cache quantization, RoPE tuning, and more</figcaption>
+</figure>
+
 That gap is exactly why I eventually needed vLLM and llama.cpp — tools where *every* parameter is accessible from the command line. The `--identifier` gives the loaded model a short alias, so you can use LM Studio as a backend for any OpenAI-compatible client — including Claude Code:
 
 ```bash
@@ -81,6 +86,11 @@ claude --model gg
 Before I dive into the tools and tradeoffs, let me tell you what started this whole rabbit hole.
 
 I'd heard people say the [Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled](https://huggingface.co/Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF) model was incredible — "almost like Opus 4.6 for free" was the claim. A 9B parameter model, distilled from Claude 4.6 Opus reasoning traces, running locally on consumer hardware. No API key. No per-token cost. No data leaving your machine.
+
+<figure>
+  <img src="/img/blogs/huggingface.png" alt="HuggingFace model card for Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF showing model size, architecture, quantization options, and benchmark charts" />
+  <figcaption>The model card that started it all — 9B params, GGUF format, Q4/Q5/Q8 quantization options, benchmarks that looked too good to be true</figcaption>
+</figure>
 
 That's the kind of claim that makes you drop everything and try it. I had to find out if it was real — and that meant figuring out how to actually run it on my 8 GB GPU.
 
@@ -373,7 +383,7 @@ The solution was a combination of three tricks:
 
 **3. Flash attention** — `--flash-attn on` avoids materializing the full attention matrix, saving temporary VRAM during computation.
 
-The final command that gave me the full 262K context window:
+The final command for **text-only inference** with the full 262K context window:
 
 ```bash
 ./build/bin/llama-server \
@@ -392,8 +402,8 @@ The tradeoff: **prefill is slower.** Prefill is the phase where the model proces
 Why 262K and not more? Because that's the model's **trained context length**. The RoPE positional encodings were trained up to 262,144 tokens. Push beyond that and the model extrapolates into positions it's never seen — quality degrades, coherence breaks down, and you get garbage. The context window isn't just a memory limit; it's a capability boundary.
 
 <figure>
-  <img src="/img/blogs/llama-worked.png" alt="Terminal showing llama-server running Qwen 3.5 9B on GPU with Claude Code connected as a client" />
-  <figcaption>The payoff — Qwen 3.5 9B running on GPU via llama.cpp, with Claude Code talking to it as a local API</figcaption>
+  <img src="/img/blogs/llamacpp-server-duringload.png" alt="System monitor showing RTX 4060 GPU at full utilization while llama-server loads the model, with CPU, RAM, and disk activity visible" />
+  <figcaption>llama-server loading the model — GPU VRAM nearly full, system RAM handling the KV cache overflow</figcaption>
 </figure>
 
 ### Using it as a drop-in API
@@ -421,6 +431,57 @@ Once `llama-server` is running, it exposes an OpenAI-compatible API. Any tool th
 ```
 
 A Claude-distilled, quantized, locally-hosted model — running on an 8 GB laptop GPU with 262K context — acting as a coding assistant through a standard API. That's the payoff of understanding all those acronyms.
+
+### Enabling vision (multimodal)
+
+Qwen 3.5 is a multimodal model — it can process images, not just text. But vision doesn't come free. You need the **mmproj** (multimodal projection) file from the HuggingFace repo, and you need to sacrifice some GPU layers to make room for it.
+
+```bash
+./build/bin/llama-server \
+  -m ./Qwen3.5-9B-Q5_K_M.gguf \
+  --mmproj ./mmproj-BF16.gguf \
+  --port 8000 \
+  -c 262144 --host 0.0.0.0 \
+  --no-kv-offload -ngl 30 \
+  --cache-type-k q4_0 --cache-type-v q4_0 \
+  --flash-attn on \
+  --jinja
+```
+
+Notice the change: `-ngl` went from `999` (all layers on GPU) down to `30`. The vision projection layers and their scratch space need VRAM too — on my 8 GB card, there simply wasn't room for the full model *and* vision. Dropping a few layers to CPU freed enough headroom for the multimodal pipeline. If you have more VRAM to spare, crank `-ngl` back up.
+
+The API config also needs to declare the model's multimodal capabilities:
+
+```json
+{
+  "llamacpp-local": {
+    "name": "llama-server (Local)",
+    "npm": "@ai-sdk/openai-compatible",
+    "options": {
+      "baseURL": "http://0.0.0.0:8000/v1"
+    },
+    "models": {
+      "qwen3.5-9b-opus-4.6:Q5_K_M": {
+        "modalities": {
+          "input": ["image", "text"],
+          "output": ["text"]
+        },
+        "limit": {
+          "context": 262144,
+          "output": 262144
+        }
+      }
+    }
+  }
+}
+```
+
+Now the local model can read images. A 9B model on an 8 GB laptop GPU doing vision and text — not bad for "free Opus."
+
+<figure>
+  <img src="/img/blogs/llamacpp-image-input.png" alt="Split screen showing GPU utilization during inference on the left, and the model correctly describing a tropical beach image on the right" />
+  <figcaption>The multimodal model in action — processing an image input locally, with GPU and system metrics visible on the left</figcaption>
+</figure>
 
 After Ollama's format limits, LM Studio's compatibility gaps, vLLM's architecture errors, and a Nix package that silently ignored my GPU — *compiling from source and patching CUDA headers* is what finally got me here.
 
@@ -616,3 +677,39 @@ The real tradeoff isn't "good model vs bad model." It's a continuous spectrum:
 Once you understand these axes, you stop asking "which model should I download?" and start asking "what can I fit on my hardware, and what am I willing to trade?"
 
 That's a much better question.
+
+---
+
+## One Last Thing
+
+So I had a Claude-distilled model running locally. Naturally, I had to test it with the hard questions. Like asking what it thinks about Anthropic's claim that "coding is largely solved."
+
+<figure>
+  <img src="/img/blogs/coding-is-largely-solved.jpeg" alt="Boris Cherny, Head of Claude Code, with the quote 'Coding is largely solved'" />
+  <figcaption>The claim that launched a thousand quote-tweets</figcaption>
+</figure>
+
+<figure>
+  <img src="/img/blogs/local-llm-claudefun.png" alt="The local Qwen-Claude distilled model responding to the 'coding is largely solved' image with a detailed, sarcastic analysis" />
+  <figcaption>A Claude-distilled model, running locally for free, roasting Claude's parent company. The future is beautiful.</figcaption>
+</figure>
+
+The model's verdict? **"NOT TRUE."** It broke it down with a table:
+
+| Area | Status |
+|------|--------|
+| Basic syntax & patterns | Largely documented |
+| Boilerplate generation | AI can help |
+| **System architecture** | Far from solved |
+| **Complex problem solving** | Far from solved |
+| **Debugging complex systems** | Far from solved |
+| **Security & reliability** | Far from solved |
+| **Making good trade-offs** | Far from solved |
+
+And the charitable interpretation: *"The mechanical aspects of coding are becoming more automated — which is true but trivial."*
+
+Its conclusion: *"The fundamental challenges of building reliable, scalable, secure, maintainable systems remain unsolved, regardless of how good our coding tools become."*
+
+If that's not the spirit of open source, I don't know what is.
+
+But seriously — if a 9B model running on a patched-together local setup can reason this well about its own limitations, maybe the rabbit hole was worth it after all.
