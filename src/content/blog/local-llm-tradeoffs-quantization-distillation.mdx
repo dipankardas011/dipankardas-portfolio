@@ -2,10 +2,11 @@
 title: "Local LLMs: I Went Deep So You Don't Have To"
 author: "Dipankar Das"
 date: 2026-04-02
-description: "Quantization, distillation, VRAM math, GGUF vs safetensors, Ollama vs vLLM vs llama.cpp — I spent weeks in the rabbit hole so you can skip straight to what matters."
-tags: ["llm", "local-ai", "quantization", "distillation", "vllm", "ollama", "lmstudio", "gguf", "machine-learning"]
+description: "GGUF vs safetensors, quantization, distillation, VRAM math, and Ollama vs vLLM vs llama.cpp — one post to save you the weekend I lost."
+tags: ["llm", "local-ai", "quantization", "distillation", "vllm", "ollama", "lmstudio", "gguf", "llama-cpp", "cuda", "machine-learning"]
 category: "AI"
-draft: true
+cover: "/img/blogs/deepdrive-localllm-cover.png"
+draft: false
 ---
 import Callout from '../../components/Callout.astro';
 
@@ -41,32 +42,64 @@ I needed to go deeper.
 
 ---
 
-## The Tooling Ladder: Ollama, LM Studio, vLLM
+## The Tooling Ladder: Ollama, LM Studio, vLLM, llama.cpp
 
-Think of these three as different levels of abstraction.
+Think of these four as different levels of abstraction — each one trades convenience for control.
 
 **Ollama** is the Docker of local LLMs. It pulls pre-packaged models, handles quantization choices for you, and just works. If you want to run a model with minimal friction, start here. The tradeoff: you're limited to the models and formats Ollama supports, and you get minimal control over inference parameters.
 
-**LM Studio** gives you a GUI with more knobs. You can load GGUF files directly from HuggingFace, pick your quantization level, adjust context windows, and see real-time performance metrics. It's where I first understood that model files aren't just "big or small" — they come in different *precisions*.
+**LM Studio** gives you a GUI with more knobs. You can load GGUF files directly from HuggingFace, pick your quantization level, adjust context windows, and see real-time performance metrics. It's where I first understood that model files aren't just "big or small" — they come in different *precisions*. It also has a CLI (`lms`) that turns it into a headless server:
 
-**vLLM** is the production-grade option. It's built for serving models at scale, and it's where you start doing real math about your GPU. More on this below.
+```bash
+lms daemon up
+lms import -c ./Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-Q5_K_M.gguf
+lms load qwen3.5-9b-claude-4.6-opus-reasoning-distilled-v2@q5_k_m \
+  --context-length 131072 --gpu 0.65 --identifier gg
+lms server start  # starts the local API on port 1234
+```
+
+The CLI's `--gpu` flag controls GPU offload ratio, `--context-length` sets the window, `--ttl` for auto-unload, and `--estimate-only` to preview resource usage. That's about it for the CLI.
+
+The **GUI** is a different story — it exposes a lot more: flash attention toggle, KV cache quantization (key and value separately), mmap/mlock settings, RoPE frequency tuning, eval batch size, and all the sampling parameters (temperature, top-p, top-k, repeat penalty). These are the knobs that matter for squeezing performance out of constrained hardware, and none of them are available via `lms load`.
+
+That gap is exactly why I eventually needed vLLM and llama.cpp — tools where *every* parameter is accessible from the command line. The `--identifier` gives the loaded model a short alias, so you can use LM Studio as a backend for any OpenAI-compatible client — including Claude Code:
+
+```bash
+ANTHROPIC_BASE_URL=http://localhost:1234 \
+ANTHROPIC_AUTH_TOKEN=lmstudio \
+claude --model gg
+```
+
+**vLLM** is a completely separate beast. Unlike Ollama and LM Studio, it is **not** built on llama.cpp. It's an independent inference engine created by UC Berkeley researchers, built in Python/C++/CUDA around a custom memory architecture called **PagedAttention**. It's designed for data-center-grade GPUs, high-throughput serving, and continuous batching. It recently added the ability to *read* GGUF files, but it executes them with its own engine, not llama.cpp. More on this below.
+
+**llama.cpp** is the foundation that Ollama and LM Studio are built on. Created by Georgi Gerganov, it's the C++ inference engine that made local LLMs practical on consumer hardware — and the reason GGUF exists as a format. It's a raw engine — no GUI, no package manager, just a binary and flags. The lowest level of abstraction, but also the widest model support and the most control over memory, offloading, and quantization. When every other tool fails on a new architecture, llama.cpp usually works.
+
+---
+
+## The Motivation: Opus 4.6 For Free 😆
+
+Before I dive into the tools and tradeoffs, let me tell you what started this whole rabbit hole.
+
+I'd heard people say the [Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled](https://huggingface.co/Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF) model was incredible — "almost like Opus 4.6 for free" was the claim. A 9B parameter model, distilled from Claude 4.6 Opus reasoning traces, running locally on consumer hardware. No API key. No per-token cost. No data leaving your machine.
+
+That's the kind of claim that makes you drop everything and try it. I had to find out if it was real — and that meant figuring out how to actually run it on my 8 GB GPU.
+
+It loaded in LM Studio. I wanted to serve it as an API, understand the inference machinery, and push my hardware to its limits. That's what pulled me deeper into vLLM and eventually llama.cpp.
 
 ---
 
 ## Why I Ended Up on vLLM
 
-I didn't choose vLLM because I needed production serving. I ended up there because the other tools ran out of road.
-
-The [Claude-distilled Qwen model](https://huggingface.co/Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF) worked in LM Studio but Ollama wouldn't load it. I could have stopped there — LM Studio was giving me outputs. But I wanted to understand *why* one tool choked on a model another handled fine. What's different about how they load GGUF files? What parameters are they setting under the hood?
-
-vLLM answered those questions by making me set everything myself.
+I wanted vLLM specifically for **production exposure**. Ollama and LM Studio are great for tinkering, but vLLM is what real teams use to serve models behind APIs. I wanted to understand the inference stack that actually runs in production — PagedAttention, continuous batching, the memory management flags that determine whether your service stays up or OOMs at 3 AM.
 
 ```bash
-vllm serve ./Qwen3.5-9B-Claude-Distilled-Q4_K_M.gguf \
-  --gpu-memory-utilization 0.85 \
-  --max-model-len 4096 \
-  --host 0.0.0.0 \
-  --port 8000
+vllm serve "Qwen/Qwen3.5-0.8B" \
+  --port 8000 \
+  --tensor-parallel-size 1 \
+  --max-model-len 262144 \
+  --reasoning-parser qwen3 \
+  --enable-auto-tool-choice \
+  --tool-call-parser qwen3_coder
 ```
 
 No magic. No "it just works." Every parameter is explicit, and when something fails, the error messages tell you exactly which resource limit you hit.
@@ -79,24 +112,113 @@ No magic. No "it just works." Every parameter is explicit, and when something fa
 
 **The OpenAI-compatible API** — vLLM exposes your local model as an API endpoint that speaks the same protocol as OpenAI's API. Any tool that works with `gpt-4` can point at `localhost:8000` instead. That's not a gimmick — it means your local model becomes a drop-in replacement in existing workflows.
 
-```python
-from openai import OpenAI
+### vLLM's memory model: Static vs Dynamic
 
-client = OpenAI(base_url="http://localhost:8000/v1", api_key="unused")
-response = client.chat.completions.create(
-    model="Qwen3.5-9B-Claude-Distilled",
-    messages=[{"role": "user", "content": "Explain PagedAttention in one paragraph."}],
-)
+The thing that finally clicked for me about vLLM was how it splits GPU memory into two fundamentally different categories: **static loading** (the model itself) and **dynamic storage** (the KV cache for your conversation context).
+
+Understanding this split is the key to tuning — because each piece has different flags to move it between GPU, CPU RAM, and swap.
+
+**Moving model weights to CPU RAM:**
+
+`--cpu-offload-gb` specifies how many GiB of model weights to keep in system RAM instead of VRAM. The catch: those weights must stream to the GPU for *every* forward pass over PCIe. On a fast PCIe Gen4/5 bus it's tolerable. On anything slower, your tokens-per-second tanks.
+
+**Check your PCIe speed before offloading.** This matters more than people think. You can check your GPU's actual link speed on Linux:
+
+```bash
+# Check your GPU's active PCIe link speed and width
+sudo lspci -vv -s $(lspci | grep -i vga | awk '{print $1}') | grep -E "LnkSta:"
+# Example output: LnkSta: Speed 16GT/s, Width x8
 ```
+
+Here's the cheat sheet:
+
+| Speed | PCIe Gen | Approx Bandwidth (x16) |
+|-------|----------|------------------------|
+| 32.0 GT/s | Gen 5 | ~63 GB/s |
+| 16.0 GT/s | Gen 4 | ~32 GB/s |
+| 8.0 GT/s | Gen 3 | ~16 GB/s |
+| 5.0 GT/s | Gen 2 | ~8 GB/s |
+| 2.5 GT/s | Gen 1 | ~4 GB/s |
+
+If you're on PCIe Gen 3 or lower, CPU offloading will hurt *a lot*. On Gen 4+, it's workable — especially for the KV cache where you're only streaming small blocks per token, not the entire model.
+
+**Moving KV cache to CPU RAM (two mechanisms):**
+
+`--kv-offloading-size` reserves CPU RAM as an overflow area. When the GPU's KV pool fills up, older or inactive context blocks get moved to RAM. This is *proactive* — it happens before you hit a wall.
+
+`--swap-space` is the emergency valve. When a new request needs more GPU memory than is free, vLLM *preempts* a lower-priority request by swapping its KV cache to this CPU buffer. Set 4-10 GiB as a baseline for long-context stability.
+
+**Controlling total GPU budget:**
+
+`--gpu-memory-utilization` (0.0 to 1.0) caps the fraction of VRAM vLLM can touch. This budget must cover model weights + KV cache + activations. If you're using `--cpu-offload-gb`, lower this ratio so the remaining on-GPU weights and active KV cache fit comfortably.
+
+| Component | Flag | Where it moves | Performance hit |
+|-----------|------|----------------|-----------------|
+| Model Weights | `--cpu-offload-gb` | GPU → CPU RAM | High (every token) |
+| KV Cache (overflow) | `--kv-offloading-size` | GPU → CPU RAM | Medium (context swaps) |
+| KV Cache (emergency) | `--swap-space` | GPU → CPU RAM | Low (preemption only) |
+| Total GPU limit | `--gpu-memory-utilization` | Controls VRAM cap | N/A |
+
+**Squeezing more out of what's left:**
+
+- `--enforce-eager` disables CUDA graphs, freeing the pre-allocated buffers they require. Last resort for OOM errors.
+- `--kv-cache-dtype fp8` stores the KV cache in 8-bit precision — cuts KV VRAM usage by ~50% compared to fp16/bf16 (requires hardware support).
+- `--max-num-seqs` limits concurrent requests, reducing peak activation memory.
+
+<Callout type="note">
+**Why 262K context failed on vLLM with 8 GB VRAM:** Even with `--kv-offloading-size`, vLLM needs a minimum amount of VRAM to hold the *active* portion of that context — the pointers, initial activations, and working memory for PagedAttention. On an 8 GB card with a 9B model already taking ~5.5 GB, there simply isn't enough headroom. Start with `--max-model-len 32768`, check `nvidia-smi`, and increment from there.
+</Callout>
+
+For the full reference, see the [vLLM Engine Arguments](https://docs.vllm.ai/en/stable/configuration/engine_args/) and [Conserving Memory](https://docs.vllm.ai/en/latest/configuration/conserving_memory/) guides.
 
 ### When vLLM hits its own wall
 
-And then vLLM ran out of road too.
+My first vLLM experiment with a tiny 0.8B model worked fine — but it consumed nearly all 8 GB of VRAM in full precision. That's the whole point of quantization, right? Load a bigger model at lower precision. So I went for the Qwen 3.5 9B — the Claude-distilled model I actually wanted to run — as a GGUF.
 
-I tried loading the Qwen 3.5 35B-A3B MoE model — a Mixture of Experts architecture where only 3B parameters are active per token despite having 35B total. Sounded perfect for my hardware. I set everything up:
+**Attempt 1: Qwen 3.5 9B GGUF from Unsloth**
 
 ```bash
-vllm serve "lmstudio-community/Qwen3.5-35B-A3B-GGUF:Q4_K_M" \
+vllm serve unsloth/Qwen3.5-9B-GGUF:Q4_K_M \
+  --tokenizer Qwen/Qwen3.5-9B \
+  --hf-config-path Qwen/Qwen3.5-9B
+```
+
+It downloaded the entire 5.68 GB model file — 19 minutes on my connection — resolved the architecture as `Qwen3_5ForConditionalGeneration`, and then:
+
+```
+RuntimeError: Unknown gguf model_type: qwen3_5
+```
+
+Nineteen minutes of downloading. For an error on the last line.
+
+**Attempt 2: The Claude-distilled GGUF loaded locally**
+
+Maybe the remote repo was the issue? I already had the GGUF file on disk. So I pointed vLLM directly at it:
+
+```bash
+vllm serve ./Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-Q5_K_M.gguf \
+  --port 8000 \
+  --tokenizer=Qwen/Qwen3.5-9B \
+  --hf-config-path=Qwen/Qwen3.5-9B \
+  --max-model-len 16384 \
+  --tensor-parallel-size 1 \
+  --gpu-memory-utilization 0.9
+```
+
+Different error, same root cause:
+
+```
+ValueError: GGUF model with architecture qwen35 is not supported yet.
+```
+
+This time it failed even earlier — in HuggingFace's `transformers` library, before vLLM's own loader even got a chance.
+
+**Attempt 3: The 35B MoE model**
+
+I also tried the Qwen 3.5 35B-A3B — a Mixture of Experts architecture where only 3B parameters are active per token despite having 35B total. Same story:
+
+```bash
+vllm serve "Qwen/Qwen3.5-35B-A3B-GGUF:Q4_K_M" \
   --port 8000 \
   --tokenizer=Qwen/Qwen3.5-35B-A3B \
   --hf-config-path=Qwen/Qwen3.5-35B-A3B \
@@ -106,37 +228,65 @@ vllm serve "lmstudio-community/Qwen3.5-35B-A3B-GGUF:Q4_K_M" \
   --gpu-memory-utilization 0.9
 ```
 
-It resolved the architecture, parsed the config, initialized the parallel state... and then:
-
 ```
 RuntimeError: Unknown gguf model_type: qwen3_5_moe
 ```
 
-vLLM's GGUF loader simply didn't know about this model architecture yet. The model was too new. The config resolved as `Qwen3_5MoeForConditionalGeneration` — a valid HuggingFace architecture — but vLLM's GGUF weight mapper had no entry for it.
+<figure>
+  <img src="/img/blogs/vllm-error.png" alt="vLLM error output showing RuntimeError: Unknown gguf model_type: qwen3_5_moe" />
+  <figcaption>vLLM crashing on the Qwen 3.5 MoE architecture — the GGUF loader doesn't recognize it yet</figcaption>
+</figure>
 
-![vLLM crashing with Unknown gguf model_type: qwen3_5_moe](/img/blogs/vllm-error.png)
+**What's actually going on here?**
 
-And that wasn't even the first vLLM roadblock. Before the architecture error, I'd hit a CUDA version mismatch. Installing vLLM with the precompiled flag:
+To be clear: **vLLM does support GGUF** — experimentally, since around v0.5. The syntax uses a `repo:quant_type` format, you need to specify `--tokenizer` separately (GGUF tokenizers can cause issues), and it only works with single-file GGUFs. For many model architectures, it works fine.
 
-```bash
-VLLM_USE_PRECOMPILED=1 uv pip install vllm
-```
+But Qwen 3.5 specifically? Broken. There are open issues on GitHub ([#36456](https://github.com/vllm-project/vllm/issues/36456), [#38122](https://github.com/vllm-project/vllm/issues/38122)) — the `qwen35` architecture isn't supported yet in vLLM's GGUF loader. The fix requires changes in the HuggingFace `transformers` GGUF parser, not just vLLM itself.
 
-...gave me:
+And that wasn't even the only vLLM roadblock. Before the architecture errors, I'd hit a CUDA version mismatch. vLLM needs CUDA to use your NVIDIA GPU — and installing the default pip package gave me:
 
 ```
 ImportError: libcudart.so.12: cannot open shared object file
 ```
 
-The precompiled wheels are built against **CUDA 12.x**. My system runs **CUDA 13.0**. It couldn't find `libcudart.so.12` because it doesn't exist — I have `libcudart.so.13`. The fix is to build vLLM from source so it links against your local CUDA libraries, but that's its own multi-hour adventure.
+The default `pip install vllm` pulls a wheel built against **CUDA 12.x**. My Fedora 43 system ships with **CUDA 13.0**. It couldn't find `libcudart.so.12` because it doesn't exist — I have `libcudart.so.13`.
+
+The fix: vLLM v0.19+ now ships [pre-built wheels for specific CUDA versions](https://docs.vllm.ai/en/stable/getting_started/installation/gpu/#pre-built-wheels), including cu130:
+
+```bash
+uv venv .venv -p 3.12
+source .venv/bin/activate
+
+export VLLM_VERSION=$(curl -s https://api.github.com/repos/vllm-project/vllm/releases/latest \
+  | jq -r .tag_name | sed 's/^v//')
+export CUDA_VERSION=130
+export CPU_ARCH=$(uname -m)
+
+uv pip install \
+  "https://github.com/vllm-project/vllm/releases/download/v${VLLM_VERSION}/vllm-${VLLM_VERSION}+cu${CUDA_VERSION}-cp38-abi3-manylinux_2_35_${CPU_ARCH}.whl" \
+  --extra-index-url "https://download.pytorch.org/whl/cu${CUDA_VERSION}"
+```
+
+<Callout type="warning">
+**If you're on a bleeding-edge distro** (Fedora 43+, Arch, etc.) with GCC 14/15 and CUDA 13.x — things get messy fast. The CUDA/GCC compatibility matrix is tight, and many Python packages don't ship wheels for cu130 yet. If you can, stick with **CUDA 12.x and GCC 13** — that's the path of least resistance. The pre-built wheels from vLLM's releases page will save you hours of compiling from source.
+</Callout>
+
+<Callout type="important">
+**The vLLM + GGUF reality check:**
+- vLLM + GGUF = yes, experimentally supported
+- vLLM + Qwen 3.5 GGUF = no, broken right now ([open bugs](https://github.com/vllm-project/vllm/issues/36456))
+- For Qwen 3.5 GGUF, stick with **llama.cpp** — it's the only engine that handles this architecture reliably today
+
+Check the [vLLM GGUF docs](https://docs.vllm.ai/en/latest/features/quantization/gguf/) for the current list of supported architectures.
+</Callout>
 
 This is the reality of local LLM tooling in 2026: **models ship faster than inference engines can support them**, and the CUDA ecosystem adds another layer of version pinning on top. A model can exist on HuggingFace for weeks before vLLM, Ollama, or any other engine adds support for its architecture — and even when it does, your CUDA version might not match the prebuilt binaries.
 
-### The llama.cpp fallback
+## The llama.cpp alternative
 
-At this point I was tired but stubborn. I just wanted to see the model *run*.
+At this point I was tired but stubborn. Three vLLM failures, a CUDA mismatch, and an hour of debugging. I just wanted to see the model *run*.
 
-So I went one layer deeper: **llama.cpp** — the C++ inference engine that most of these tools are built on top of. Ollama uses it under the hood. LM Studio uses it. Even parts of the GGUF ecosystem exist because of it.
+vLLM wasn't going to work for Qwen 3.5 GGUF — so I went with the alternative: **llama.cpp**. It's a completely different engine from vLLM, and it's the one that Ollama and LM Studio are built on top of. It invented the GGUF format. If any tool was going to load this model, it would be llama.cpp.
 
 My first attempt was the Nix package:
 
@@ -160,8 +310,9 @@ CPU inference on a 9B model is painful. I needed GPU offloading. That meant comp
 git clone https://github.com/ggml-org/llama.cpp
 cd llama.cpp
 
+rm -rf build/  # clean slate — important if you're retrying after a failed build
 cmake -B build -DGGML_CUDA=ON
-cmake --build build --config Release -j20
+cmake --build build --config Release -j20  # -j20 = parallel compile, adjust to your core count (nproc)
 ```
 
 Simple, right? Not on Fedora 43.
@@ -240,7 +391,10 @@ The tradeoff: **prefill is slower.** Prefill is the phase where the model proces
 
 Why 262K and not more? Because that's the model's **trained context length**. The RoPE positional encodings were trained up to 262,144 tokens. Push beyond that and the model extrapolates into positions it's never seen — quality degrades, coherence breaks down, and you get garbage. The context window isn't just a memory limit; it's a capability boundary.
 
-![Qwen 3.5 9B running on GPU via llama.cpp, with Claude Code connected as a client](/img/blogs/llama-worked.png)
+<figure>
+  <img src="/img/blogs/llama-worked.png" alt="Terminal showing llama-server running Qwen 3.5 9B on GPU with Claude Code connected as a client" />
+  <figcaption>The payoff — Qwen 3.5 9B running on GPU via llama.cpp, with Claude Code talking to it as a local API</figcaption>
+</figure>
 
 ### Using it as a drop-in API
 
@@ -298,6 +452,11 @@ Think of safetensors as the raw, uncompressed source. It's what you use for trai
 
 GGUF is the format that made local LLMs practical on consumer hardware. Developed in the llama.cpp ecosystem, it bundles everything into a single file: the model weights, architecture configuration, tokenizer, and quantization metadata.
 
+<figure>
+  <img src="/img/blogs/gguf-spec.png" alt="GGUF file format diagram showing magic bytes, metadata key-value pairs, tensor info, and weight data" />
+  <figcaption>The GGUF file format — everything the model needs in a single file: magic bytes, metadata, tensor info, and quantized weights (source: <a href="https://huggingface.co/docs/hub/gguf">HuggingFace GGUF docs</a>)</figcaption>
+</figure>
+
 The key difference: GGUF is designed to hold **quantized** weights. Instead of storing each parameter as a 16-bit float, it can compress them to 8-bit, 5-bit, even 4-bit representations. That same 9B model that takes 18 GB in safetensors? In GGUF with Q4_K_M quantization, it's **5.63 GB**.
 
 That's not a typo. Same model. Same 9 billion parameters. A third of the size.
@@ -327,9 +486,19 @@ The naming breaks down like this: **Q** = quantized, the **number** = bits per w
 
 ### Beyond the Basics: NF4 and NVFP4
 
-You might also encounter quantization formats tied to specific hardware. **NF4** (Normal Float 4-bit) is a quantization scheme from the QLoRA paper that maps weights to a normal distribution before quantizing — giving better quality than naive 4-bit rounding. **NVFP4** is NVIDIA's own 4-bit floating point format, optimized for their Tensor Cores.
+You might also encounter these two 4-bit formats. They sound similar but work very differently:
 
-These aren't GGUF quant levels — they're precision formats used in different parts of the ecosystem (bitsandbytes, TensorRT-LLM). But they're solving the same problem: how do you cram more model into less memory without losing the plot?
+**NF4** (Normal Float 4-bit) comes from the [QLoRA paper](https://arxiv.org/abs/2305.14314) by Tim Dettmers et al. The insight: pretrained neural network weights tend to follow a normal distribution. NF4 spaces its quantization bins to match that distribution — equal probability mass per bin — making it information-theoretically optimal for these weights. It's a **storage format**: weights are stored in 4-bit but dequantized to FP16/BF16 on-the-fly for computation. It runs on **any CUDA GPU** via the `bitsandbytes` library. You'll see it mostly used for QLoRA fine-tuning and memory-constrained inference.
+
+**NVFP4** is NVIDIA's native 4-bit floating point format, introduced with the **Blackwell architecture** (B100/B200/GB200 GPUs). Unlike NF4, this is a **compute format**: the Blackwell Tensor Cores do arithmetic directly in FP4 without dequantizing first. That's the key difference — native hardware support means massive throughput gains. The catch: it **only runs on Blackwell GPUs**, which are currently data-center only. No consumer GPU supports it yet. You'll find it in TensorRT-LLM and NVIDIA's inference stack.
+
+| Format | Type | Runs on | Ecosystem |
+|--------|------|---------|-----------|
+| GGUF Q4_K_M | Storage + compute | Any CPU/GPU | llama.cpp, Ollama, LM Studio |
+| NF4 | Storage (dequant to FP16) | Any CUDA GPU | bitsandbytes, HuggingFace |
+| NVFP4 | Native hardware compute | Blackwell GPUs only | TensorRT-LLM, NeMo |
+
+For local inference on consumer hardware, GGUF quantization and NF4 are what matter. NVFP4 is the future — but it's a data-center future for now.
 
 ---
 
@@ -370,6 +539,11 @@ The v2 of this distilled model is interesting because it specifically optimized 
 
 This is where most guides lose people. They say "you need X GB of VRAM" without showing the math. Here's how it actually works — with real numbers from my RTX 4060 Laptop GPU (8 GB VRAM, 7,360 MiB usable).
 
+<figure>
+  <img src="/img/blogs/llm-deep-drive-normal-deviceload.png" alt="System monitor showing Ryzen AI 9 HX 370 CPU, RTX 4060 Laptop GPU with 8 GB VRAM, and 30 GB system RAM at idle" />
+  <figcaption>My hardware at idle — Ryzen AI 9 HX 370, RTX 4060 Laptop (8 GB VRAM), 30 GB system RAM. This is the budget we're working with.</figcaption>
+</figure>
+
 Your GPU's VRAM needs to hold three things:
 
 ### 1. Model Weights
@@ -409,17 +583,7 @@ Available:        7,360 MiB  ← 81 MiB short!
 
 At just 40K context, I was **already over budget.** The inference engine had to silently offload layers to CPU to make it fit. This is why understanding the math matters — "it runs" and "it runs on GPU" are very different statements.
 
-### The Escape Hatches
-
-When VRAM runs out, you have three knobs to turn:
-
-**Reduce model precision** — Drop from Q5_K_M to Q4_K_M. Saves ~800 MiB, costs some quality.
-
-**Quantize KV cache** — `--cache-type-k q4_0 --cache-type-v q4_0` in llama.cpp, reducing cache memory by ~75%. This is the highest-leverage move for increasing context length.
-
-**Offload to system RAM** — In llama.cpp, `-ngl` controls how many layers live on GPU (LM Studio's "GPU ratio" slider is this exact flag). In vLLM, `gpu_memory_utilization` controls what fraction of VRAM the engine can use. Both let you shift work to CPU/RAM at the cost of speed.
-
-The nuclear option: `--no-kv-offload` keeps model weights on GPU but moves the entire KV cache to system RAM. This is how I got from 40K to the model's full 262K context window on an 8 GB card — at the cost of slower prefill over PCIe.
+If you're over budget, you have options — drop from Q5_K_M to Q4_K_M to save ~800 MiB, quantize the KV cache, or offload to system RAM. I covered all of these in detail in the [llama.cpp section](#squeezing-out-the-full-262k-context) and the [vLLM memory model](#vllms-memory-model-static-vs-dynamic) above.
 
 <Callout type="note">
 **The formula that actually matters:** Can you fit model weights + target KV cache + 500 MiB overhead into your VRAM? If yes, everything stays on GPU and you're fast. If no, you need to decide what to offload — and that decision determines your speed/capability tradeoff.
