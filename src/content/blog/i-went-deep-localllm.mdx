@@ -322,7 +322,7 @@ Running `llama-server` with `--verbose` gave me the real VRAM breakdown on my RT
 | **Total** | **7,441 MiB** |
 | Free VRAM available | 7,360 MiB |
 
-At 40K context, I was already **81 MiB over budget**. The auto-fit system had to silently offload layers to CPU. Going to 262K on GPU alone? Not happening.
+At 40K context, I was already **81 MiB over budget**. The auto-fit system had to silently offload layers to CPU. Going to 262K on GPU alone? Not happening. (I'll break down the full VRAM math — and the formula for estimating whether a model will fit your GPU — [later in this post](#the-vram-math-will-it-actually-run).)
 
 The solution was a combination of three tricks:
 
