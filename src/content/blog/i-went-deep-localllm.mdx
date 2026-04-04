@@ -349,7 +349,7 @@ The final command for **text-only inference** with the full 262K context window:
   --cache-type-v q4_0 \
   --flash-attn on \
   --jinja
-alias homeai_textonly="/home/dipankardas/llama.cpp/build/bin/llama-server -m /home/dipankardas/ws/vllm/Qwen3.5-9B-Q5_K_M.gguf --port 8000 -c 65536 --host 0.0.0.0 -ngl auto --cache-type-k q4_0 --cache-type-v q4_0 --flash-attn on --jinja"
+```
 
 <Callout type="warning">
 **Text-only mode:** `-ngl auto` automatically tunes GPU layers to fit your VRAM.
@@ -426,14 +426,26 @@ The API config also needs to declare the model's multimodal capabilities:
       "baseURL": "http://0.0.0.0:8000/v1"
     },
     "models": {
-      "qwen3.5-9b-opus-4.6:Q5_K_M": {
+      "qwen3.5-9b-opus-4.6-text:q5_k_m": {
+        "name": "qwen3.5-9b-opus-4.6-T:Q5_K_M"
+        "modalities": {
+          "input": ["text"],
+          "output": ["text"]
+        },
+        "limit": {
+          "context": 131072,
+          "output": 131072
+        }
+      }
+      "qwen3.5-9b-opus-4.6-vl:Q5_K_M": {
+        "name": "qwen3.5-9b-opus-4.6-VL:Q5_K_M"
         "modalities": {
           "input": ["image", "text"],
           "output": ["text"]
         },
         "limit": {
-          "context": 262144,
-          "output": 262144
+          "context": 65536,
+          "output": 65536
         }
       }
     }
@@ -442,6 +454,25 @@ The API config also needs to declare the model's multimodal capabilities:
 ```
 
 Now the local model can read images. A 9B model on an 8 GB laptop GPU doing vision and text — not bad for "free Opus."
+
+### The Multimodal Memory Trap
+
+I learned the hard way that **Multimodal** is not just "Text + Image." It's "Text + Image + Massive VRAM Overhead."
+
+When I switched to a multimodal model, my OOM crashes became frequent. I realized that my batch size settings (`-b` and `-ub`) were too aggressive. Here's the reality:
+
+**The Vision Encoder Tax:** Multimodal models include a Vision Encoder (like CLIP or SigLIP). This component is loaded into VRAM *permanently*. That's ~1-2 GB of VRAM gone before I even type a prompt.
+
+**The Prefill Spike:** When I send an image, the model converts it into "visual tokens." Processing these happens during the "prefill" phase (governed by `-b`). If `-b` is too high, the GPU tries to process the entire image and text prompt in one massive calculation. On an 8 GB card, this causes an immediate memory spike that hits the ceiling.
+
+**The Solution:** I had to downsize my batch settings to survive the "Prefill Spike."
+
+**The "Stable" Multimodal Settings for 8 GB VRAM:**
+
+*   **`-b 128`**: I lowered this significantly. It makes the "prefill" (ingesting the image) slower, but it prevents the memory spike that triggers the OOM killer.
+*   **`-ub 64`**: I halved my generation buffer. It's safer for the "steady state" of generation.
+
+**The Golden Rule:** If you are running multimodal on limited VRAM, **Batch Size is your enemy**. Lowering it doesn't just save memory; it prevents the *spikes* that crash the system.
 
 <figure>
   <img src="/img/blogs/llamacpp-image-input.png" alt="Split screen showing GPU utilization during inference on the left, and the model correctly describing a tropical beach image on the right" />
@@ -459,6 +490,17 @@ Nobody puts that in the "Getting Started" guide.
 <Callout type="important">
 **The real tooling lesson:** Don't marry one inference engine. Models, formats, and architectures evolve faster than any single tool can keep up. The ability to drop down a layer — from Ollama to LM Studio to vLLM to llama.cpp — is what keeps you unblocked.
 </Callout>
+
+**Finally Here is my current configuration command for text based inferenceing**
+```bash
+./build/bin/llama-server -m ./Qwen3.5-9B-Q5_K_M.gguf --port 8000 -c 131072 --host 0.0.0.0  -ngl auto -b 512 -ub 128 --cache-type-k q4_0 --cache-type-v q4_0 --flash-attn on --jinja
+# not sure how much opencode works great.
+```
+
+**And for multimodal inference:**
+```bash
+./build/bin/llama-server -m ./Qwen3.5-9B-Q5_K_M.gguf --mmproj ./mmproj-BF16.gguf --port 8000 -c 65536 --host 0.0.0.0 --no-kv-offload -ngl auto -b 128 -ub 64 --cache-type-k q4_0 --cache-type-v q4_0 --flash-attn on --jinja
+```
 
 ---
 
