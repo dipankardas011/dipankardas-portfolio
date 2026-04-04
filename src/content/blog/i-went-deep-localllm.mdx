@@ -419,33 +419,38 @@ The API config also needs to declare the model's multimodal capabilities:
 
 ```json
 {
-  "llamacpp-local": {
-    "name": "llama-server (Local)",
-    "npm": "@ai-sdk/openai-compatible",
-    "options": {
-      "baseURL": "http://0.0.0.0:8000/v1"
-    },
-    "models": {
-      "qwen3.5-9b-opus-4.6-text:q5_k_m": {
-        "name": "qwen3.5-9b-opus-4.6-T:Q5_K_M"
-        "modalities": {
-          "input": ["text"],
-          "output": ["text"]
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "llamacpp-local": {
+      "name": "llama-server (Local)",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://0.0.0.0:8000/v1"
+      },
+      "models": {
+        "qwen3.5-9b-opus-4.6-text:q5_k_m": {
+          "_launch": true,
+          "name": "qwen3.5-9b-opus-4.6-T:Q5_K_M",
+          "modalities": {
+            "input": ["text"],
+            "output": ["text"]
+          },
+          "limit": {
+            "context": 131072,
+            "output": 131072
+          }
         },
-        "limit": {
-          "context": 131072,
-          "output": 131072
-        }
-      }
-      "qwen3.5-9b-opus-4.6-vl:Q5_K_M": {
-        "name": "qwen3.5-9b-opus-4.6-VL:Q5_K_M"
-        "modalities": {
-          "input": ["image", "text"],
-          "output": ["text"]
-        },
-        "limit": {
-          "context": 65536,
-          "output": 65536
+        "qwen3.5-9b-opus-4.6-vl:Q5_K_M": {
+          "_launch": true,
+          "name": "qwen3.5-9b-opus-4.6-VL:Q5_K_M",
+          "modalities": {
+            "input": ["image", "text"],
+            "output": ["text"]
+          },
+          "limit": {
+            "context": 65536,
+            "output": 65536
+          }
         }
       }
     }
