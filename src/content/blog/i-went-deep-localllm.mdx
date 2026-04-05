@@ -377,7 +377,7 @@ Once `llama-server` is running, it exposes an OpenAI-compatible API. Any tool th
 ```json
 {
   "llamacpp-local": {
-    "name": "llama-server (Local)",
+    "name": "llama.cpp server (Local)",
     "npm": "@ai-sdk/openai-compatible",
     "options": {
       "baseURL": "http://0.0.0.0:8000/v1"
@@ -421,7 +421,7 @@ The API config also needs to declare the model's multimodal capabilities:
   "$schema": "https://opencode.ai/config.json",
   "provider": {
     "llamacpp-local": {
-      "name": "llama-server (Local)",
+      "name": "llama.cpp server (Local)",
       "npm": "@ai-sdk/openai-compatible",
       "options": {
         "baseURL": "http://0.0.0.0:8000/v1"
@@ -844,4 +844,4 @@ Its conclusion: *"The fundamental challenges of building reliable, scalable, sec
 
 If that's not the spirit of open source, I don't know what is.
 
-But seriously — if a 9B model running on a patched-together local setup can reason this well about its own limitations, maybe the rabbit hole was worth it after all.
+But seriously — a 9B model on a laptop GPU that can reason about its own limits *and* (with the right knobs turned) ship a one-line refactor matching Opus? Yeah — the rabbit hole was worth it.
