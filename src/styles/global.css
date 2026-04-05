@@ -895,8 +895,10 @@ html[data-blog="true"] .prose pre[data-lang]::before {
 
 .author-card-links {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
+  row-gap: 0.375rem;
   margin-top: 0.5rem;
 }
 

@@ -515,11 +515,11 @@ By now you've seen me juggle GGUF files, complain about safetensors model sizes,
 
 ### Safetensors
 
-Safetensors stores model weights at full precision — typically FP16 (16-bit floating point) or BF16 (brain float 16). It's the format you'll see in most HuggingFace model repos. A 9B parameter model in FP16 safetensors weighs roughly **18 GB** (9 billion parameters × 2 bytes each).
+Safetensors is a **container format**, not a precision level — it can hold weights at any precision (FP32, FP16, BF16, FP8, INT8, INT4, etc.). In practice, most HuggingFace model repos ship safetensors at FP16 or BF16, so a 9B model typically weighs roughly **18 GB** (9 billion parameters × 2 bytes each). But you'll also find quantized safetensors (INT4 via bitsandbytes/AWQ/GPTQ, FP8 via TensorRT) in the wild.
 
 The format was designed by Hugging Face with two priorities: **security** (it prevents arbitrary code execution during loading, unlike older pickle-based formats) and **speed** (it supports memory-mapped loading, so you can start using the model before the entire file is in RAM).
 
-Think of safetensors as the raw, uncompressed source. It's what you use for training, fine-tuning, or when you have enough VRAM to burn.
+Think of safetensors as a safe, mmap-friendly tensor container. It's what most of the HuggingFace ecosystem — training, fine-tuning, and GPU-native quantization stacks like AWQ/GPTQ/bitsandbytes — speaks natively.
 
 ### GGUF
 
@@ -557,21 +557,27 @@ The naming breaks down like this: **Q** = quantized, the **number** = bits per w
 **Q4_K_M is the sweet spot for most people.** It reduces model size by roughly 75% compared to FP16 while retaining over 95% of the model's capabilities. If you have the VRAM, Q5_K_M gives you a noticeable quality bump for only ~15% more space.
 </Callout>
 
-### Beyond the Basics: NF4 and NVFP4
+### Beyond the Basics: INT4, NF4, and FP4 (NVFP4/MXFP4)
 
-You might also encounter these two 4-bit formats. They sound similar but work very differently:
+GGUF's Q-series isn't the only 4-bit game in town. The GPU-native ecosystem has its own family of 4-bit formats, and they split along two axes: **integer vs floating point**, and **storage-only vs native compute**.
 
-**NF4** (Normal Float 4-bit) comes from the [QLoRA paper](https://arxiv.org/abs/2305.14314) by Tim Dettmers et al. The insight: pretrained neural network weights tend to follow a normal distribution. NF4 spaces its quantization bins to match that distribution — equal probability mass per bin — making it information-theoretically optimal for these weights. It's a **storage format**: weights are stored in 4-bit but dequantized to FP16/BF16 on-the-fly for computation. It runs on **any CUDA GPU** via the `bitsandbytes` library. You'll see it mostly used for QLoRA fine-tuning and memory-constrained inference.
+**INT4** is the plain-vanilla 4-bit integer format — 16 evenly-spaced bins. This is what **GPTQ** and **AWQ** produce: weights quantized to INT4 (usually with per-group FP16 scales), stored as safetensors, and dequantized to FP16/BF16 at compute time. GPTQ uses second-order error-correction during calibration; AWQ protects the top ~1% most "salient" weight channels based on activation statistics. Both run on essentially any CUDA GPU and are the default INT4 paths in vLLM, TGI, and ExLlama.
 
-**NVFP4** is NVIDIA's native 4-bit floating point format, introduced with the **Blackwell architecture** (B100/B200/GB200 GPUs). Unlike NF4, this is a **compute format**: the Blackwell Tensor Cores do arithmetic directly in FP4 without dequantizing first. That's the key difference — native hardware support means massive throughput gains. The catch: it **only runs on Blackwell GPUs**, which are currently data-center only. No consumer GPU supports it yet. You'll find it in TensorRT-LLM and NVIDIA's inference stack.
+**NF4** (Normal Float 4-bit) comes from the [QLoRA paper](https://arxiv.org/abs/2305.14314) by Tim Dettmers et al. The insight: pretrained neural network weights tend to follow a normal distribution, so evenly-spaced INT4 bins waste capacity in the tails. NF4 spaces its bins by equal probability mass under a normal distribution — information-theoretically optimal for these weights. Like INT4, it's a **storage format**: weights are 4-bit on disk/VRAM but dequantized to FP16/BF16 for computation. It ships via `bitsandbytes` and is the standard for QLoRA fine-tuning.
+
+**FP4** is 4-bit *floating point* (typically 1 sign bit + 2 exponent + 1 mantissa, i.e. E2M1). Unlike INT4/NF4, FP4 has a non-uniform, exponential spacing that handles outliers more gracefully. Two flavors matter:
+
+- **NVFP4** — NVIDIA's FP4 format for the **Blackwell architecture** (B100/B200/GB200). Blackwell Tensor Cores do arithmetic **directly** in FP4 without dequantizing — it's a **compute format**, not just storage. Native hardware support → massive throughput gains. The catch: Blackwell is data-center only right now. You'll find it in TensorRT-LLM and NVIDIA's NeMo stack.
+- **MXFP4** — the open [OCP Microscaling](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf) FP4 variant with shared per-block (32-element) E8M0 scales. Supported natively on Blackwell too, and increasingly in open inference stacks.
 
 | Format | Type | Runs on | Ecosystem |
 |--------|------|---------|-----------|
-| GGUF Q4_K_M | Storage + compute | Any CPU/GPU | llama.cpp, Ollama, LM Studio |
+| GGUF Q4_K_M | Storage + compute (CPU dequant) | Any CPU/GPU | llama.cpp, Ollama, LM Studio |
+| INT4 (GPTQ/AWQ) | Storage (dequant to FP16) | Any CUDA GPU | vLLM, TGI, ExLlama, AutoGPTQ |
 | NF4 | Storage (dequant to FP16) | Any CUDA GPU | bitsandbytes, HuggingFace |
-| NVFP4 | Native hardware compute | Blackwell GPUs only | TensorRT-LLM, NeMo |
+| NVFP4 / MXFP4 | Native hardware compute | Blackwell GPUs only | TensorRT-LLM, NeMo |
 
-For local inference on consumer hardware, GGUF quantization and NF4 are what matter. NVFP4 is the future — but it's a data-center future for now.
+For local inference on consumer hardware, GGUF Q-quants, INT4 (GPTQ/AWQ), and NF4 are what matter today. FP4 (NVFP4/MXFP4) is the future — but it's a data-center future for now.
 
 ---
 
