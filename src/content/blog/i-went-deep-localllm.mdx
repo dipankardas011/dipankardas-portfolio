@@ -515,11 +515,16 @@ By now you've seen me juggle GGUF files, complain about safetensors model sizes,
 
 ### Safetensors
 
-Safetensors is a **container format**, not a precision level — it can hold weights at any precision (FP32, FP16, BF16, FP8, INT8, INT4, etc.). In practice, most HuggingFace model repos ship safetensors at FP16 or BF16, so a 9B model typically weighs roughly **18 GB** (9 billion parameters × 2 bytes each). But you'll also find quantized safetensors (INT4 via bitsandbytes/AWQ/GPTQ, FP8 via TensorRT) in the wild.
+Think of safetensors as just a **box for tensors**. It doesn't care what's inside — FP16 weights, BF16 weights, or 4-bit quantized weights all go in the same kind of box. The box itself doesn't pick a precision; whoever saved the model did.
 
-The format was designed by Hugging Face with two priorities: **security** (it prevents arbitrary code execution during loading, unlike older pickle-based formats) and **speed** (it supports memory-mapped loading, so you can start using the model before the entire file is in RAM).
+In practice, most HuggingFace repos put FP16 or BF16 weights in that box. That's why people think of safetensors as "the full-precision format" — but that's just convention. A 9B model at FP16 lands around **18 GB** (9B params × 2 bytes). You'll also find boxes with INT4 weights from AWQ/GPTQ or bitsandbytes, or FP8 from TensorRT — same safetensors file format, different precision inside.
 
-Think of safetensors as a safe, mmap-friendly tensor container. It's what most of the HuggingFace ecosystem — training, fine-tuning, and GPU-native quantization stacks like AWQ/GPTQ/bitsandbytes — speaks natively.
+Why use this box at all? Two reasons:
+
+1. **Safety.** The older PyTorch `.bin`/pickle format could run arbitrary code when you loaded it. Safetensors can't — it's pure data.
+2. **Speed.** It's memory-mapped, so loading is basically instant. The GPU can pull weights straight from the file as it needs them.
+
+So when you see safetensors on HuggingFace, it's the GPU-native ecosystem's format: what PyTorch, transformers, vLLM, and the AWQ/GPTQ/bitsandbytes quantization tools all speak fluently.
 
 ### GGUF
 
@@ -557,27 +562,34 @@ The naming breaks down like this: **Q** = quantized, the **number** = bits per w
 **Q4_K_M is the sweet spot for most people.** It reduces model size by roughly 75% compared to FP16 while retaining over 95% of the model's capabilities. If you have the VRAM, Q5_K_M gives you a noticeable quality bump for only ~15% more space.
 </Callout>
 
-### Beyond the Basics: INT4, NF4, and FP4 (NVFP4/MXFP4)
+### Beyond the Basics: INT4, NF4, and FP4
 
-GGUF's Q-series isn't the only 4-bit game in town. The GPU-native ecosystem has its own family of 4-bit formats, and they split along two axes: **integer vs floating point**, and **storage-only vs native compute**.
+GGUF's Q-quants aren't the only way to get to 4 bits. If you hang around HuggingFace or vLLM long enough, you'll bump into **INT4**, **NF4**, and **FP4** as well. They're all "4-bit," but they answer two different questions:
 
-**INT4** is the plain-vanilla 4-bit integer format — 16 evenly-spaced bins. This is what **GPTQ** and **AWQ** produce: weights quantized to INT4 (usually with per-group FP16 scales), stored as safetensors, and dequantized to FP16/BF16 at compute time. GPTQ uses second-order error-correction during calibration; AWQ protects the top ~1% most "salient" weight channels based on activation statistics. Both run on essentially any CUDA GPU and are the default INT4 paths in vLLM, TGI, and ExLlama.
+1. **Integer or floating point?** Are the 16 possible values evenly spaced (integer), or spread out like a tiny float (floating point)?
+2. **Storage-only, or real compute?** Does the GPU dequantize back to FP16 before multiplying, or can it actually do math in 4 bits directly?
 
-**NF4** (Normal Float 4-bit) comes from the [QLoRA paper](https://arxiv.org/abs/2305.14314) by Tim Dettmers et al. The insight: pretrained neural network weights tend to follow a normal distribution, so evenly-spaced INT4 bins waste capacity in the tails. NF4 spaces its bins by equal probability mass under a normal distribution — information-theoretically optimal for these weights. Like INT4, it's a **storage format**: weights are 4-bit on disk/VRAM but dequantized to FP16/BF16 for computation. It ships via `bitsandbytes` and is the standard for QLoRA fine-tuning.
+Here's how each one fits:
 
-**FP4** is 4-bit *floating point* (typically 1 sign bit + 2 exponent + 1 mantissa, i.e. E2M1). Unlike INT4/NF4, FP4 has a non-uniform, exponential spacing that handles outliers more gracefully. Two flavors matter:
+**INT4** is the plain one — 16 evenly-spaced slots, just integers. This is what **GPTQ** and **AWQ** spit out. They each have their own clever calibration trick (GPTQ does error-correction math as it quantizes; AWQ protects the ~1% of weights that matter most for outputs), but the end result is the same: INT4 weights stored as safetensors, dequantized back to FP16 when the GPU actually does the multiplies. Runs on any CUDA GPU. This is the default 4-bit path in vLLM, TGI, and ExLlama.
 
-- **NVFP4** — NVIDIA's FP4 format for the **Blackwell architecture** (B100/B200/GB200). Blackwell Tensor Cores do arithmetic **directly** in FP4 without dequantizing — it's a **compute format**, not just storage. Native hardware support → massive throughput gains. The catch: Blackwell is data-center only right now. You'll find it in TensorRT-LLM and NVIDIA's NeMo stack.
-- **MXFP4** — the open [OCP Microscaling](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf) FP4 variant with shared per-block (32-element) E8M0 scales. Supported natively on Blackwell too, and increasingly in open inference stacks.
+**NF4** (Normal Float 4-bit) is INT4 with a smarter trick. The observation from the [QLoRA paper](https://arxiv.org/abs/2305.14314): trained model weights cluster around zero in a bell curve, so evenly-spaced bins waste slots on values that barely exist. NF4 spaces its 16 slots so each one holds roughly the same number of weights — more slots where the weights actually are. Same storage-only deal as INT4 (dequantized to FP16 at compute time). Ships via `bitsandbytes` and is the standard for QLoRA fine-tuning.
 
-| Format | Type | Runs on | Ecosystem |
-|--------|------|---------|-----------|
-| GGUF Q4_K_M | Storage + compute (CPU dequant) | Any CPU/GPU | llama.cpp, Ollama, LM Studio |
-| INT4 (GPTQ/AWQ) | Storage (dequant to FP16) | Any CUDA GPU | vLLM, TGI, ExLlama, AutoGPTQ |
-| NF4 | Storage (dequant to FP16) | Any CUDA GPU | bitsandbytes, HuggingFace |
-| NVFP4 / MXFP4 | Native hardware compute | Blackwell GPUs only | TensorRT-LLM, NeMo |
+**FP4** is genuinely different — it's 4-bit *floating point* (1 sign bit, 2 exponent bits, 1 mantissa bit). Because it's a float, the values it can represent aren't evenly spaced — they're bunched up near zero and spread out for bigger numbers, which matches how weights and especially *activations* actually behave. Two names you'll see:
 
-For local inference on consumer hardware, GGUF Q-quants, INT4 (GPTQ/AWQ), and NF4 are what matter today. FP4 (NVFP4/MXFP4) is the future — but it's a data-center future for now.
+- **NVFP4** — NVIDIA's FP4 on the **Blackwell** GPUs (B100/B200/GB200). The big deal: Blackwell Tensor Cores do math **directly in FP4**, no dequantizing. That's the first time 4-bit has been a real compute format, not just a storage trick. Downside: Blackwell is data-center only for now.
+- **MXFP4** — the open-standard ([OCP Microscaling](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf)) cousin of NVFP4. Also runs natively on Blackwell, and open inference stacks are starting to pick it up.
+
+Putting it side by side:
+
+| Format | What it is | Runs on | Where you'll see it |
+|--------|------------|---------|---------------------|
+| GGUF Q4_K_M | 4-bit integer, CPU-friendly | Any CPU/GPU | llama.cpp, Ollama, LM Studio |
+| INT4 (GPTQ/AWQ) | 4-bit integer, GPU-friendly | Any CUDA GPU | vLLM, TGI, ExLlama, AutoGPTQ |
+| NF4 | INT4 but bins are smarter | Any CUDA GPU | bitsandbytes, QLoRA |
+| NVFP4 / MXFP4 | 4-bit float, native math | Blackwell GPUs only | TensorRT-LLM, NeMo |
+
+**TL;DR:** On a consumer GPU today, you're picking between GGUF Q-quants (if you're on llama.cpp/Ollama) and GPTQ/AWQ/NF4 (if you're on vLLM or HuggingFace). FP4 is the next step up — but you need a Blackwell card to actually benefit from it.
 
 ---
 
