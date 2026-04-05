@@ -681,6 +681,111 @@ If you're over budget, you have options — drop from Q5_K_M to Q4_K_M to save ~
 
 ---
 
+## The Real Test: Three Models, One Refactor
+
+All that tuning — cache flags, VRAM math, GPU layer offloading — only matters if the model is actually *useful*. A local Claude-distill that can chat about philosophy but falls over on a real refactor is a demo, not a tool.
+
+So I ran a head-to-head. One task, same prompt, three models:
+
+| Model | How | Reasoning effort |
+|---|---|---|
+| Claude Opus 4.6 | Anthropic API | medium |
+| Qwen 3.6 Plus | OpenRouter | default |
+| Qwen 3.5 9B Claude-Distill Q5_K_M | Local llama.cpp (8 GB VRAM) | default |
+
+**The task:** My `/skills` page has a darker theme than the rest of the site — it's applied by passing `blogPost={true}` to `BaseLayout`, which flips a `data-blog="true"` attribute on `<html>` and swaps the CSS variable palette. The `/blog` list page doesn't have this yet. Make it match.
+
+The elegant answer is a **one-line change**: add `blogPost={true}` to the `BaseLayout` call in `src/pages/blog/index.astro`. Everything else — dark surface colors, accent tokens, gray scale — is already wired up through CSS variables. The model just has to *find* that pattern in the reference files and apply it.
+
+### First round
+
+The prompt was deliberately terse: *"Bro I need you to get the blog list to darker theme just like skills page and each individual blog post."*
+
+| Model | Diff size | What it did |
+|---|---|---|
+| **Anthropic/Opus 4.6** | 12 lines | Added `blogPost={true}` to `BaseLayout`. Done. |
+| **OpenRouter/Qwen 3.6 Plus** | 12 lines | Same one-line change. Done. |
+| [**HF/Qwen 9B Q5_K_M Distilled using Opus 4.6, KV q4_0**](https://huggingface.co/Jackrong/Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF/tree/main) | **78 lines** | Invented a custom dark palette in `global.css`, added `data-theme="dark"` hacks to `BlogList.tsx` and `BlogPostCard.tsx`, missed the `blogPost={true}` pattern entirely. |
+
+The local model didn't just produce a worse answer — it produced a *different kind* of answer. Both API models read the reference files, pattern-matched to `blogPost={true}`, and applied it. The local model read the same files and then built a parallel dark-theme system from scratch. It *didn't see the pattern it was supposed to copy*.
+
+<figure>
+  <img src="/img/blogs/experimenting-3-way.png" alt="Three-way tmux comparison: local Qwen distill on the left, Qwen 3.6 Plus in the middle, Claude Opus 4.6 on the right, all working on the same refactor task" />
+  <figcaption>Three models, one refactor. The local distill (top-left) went off-script; the tuned run (bottom-left) and both API models converged on the same one-line change.</figcaption>
+</figure>
+
+### The 2×2: KV cache vs. prompt scaffolding
+
+Why did the local model fail? Two hypotheses.
+
+**Hypothesis 1: the KV cache.** With `--cache-type-k q4_0 --cache-type-v q4_0`, every token the model reads into context gets compressed to ~4 bits. Over a long repo-exploration trace, that compression could blur the specific token `blogPost={true}` into noise — the model "read" the reference file but couldn't reliably retrieve what it saw.
+
+**Hypothesis 2: prompt scaffolding.** Maybe smaller models just need more hand-holding — explicit file references instead of expecting the agent to hunt through the tree.
+
+So I ran the 2×2:
+
+|  | Terse prompt | Richer prompt (explicit `@file` references) |
+|---|---|---|
+| **KV cache q4_0** | Failed (hallucinated palette) | Failed (still hallucinated palette) |
+| **KV cache q8_0** | Partial — correct main change + hallucinated noise | Clean surgical diff |
+
+The richer prompt added explicit file pointers: *"make sure to check `@src/pages/skills/index.astro` and `@src/pages/blog/[...slug].astro`, then work on `@src/pages/blog/index.astro`. Think before you change — check first."*
+
+Two things fell out:
+
+1. **q4_0 KV is a hard floor.** Even with the richer prompt, q4_0 failed — same hallucinated palette. Prompt scaffolding couldn't rescue it.
+2. **q8_0 alone isn't enough either.** With the terse prompt, q8_0 got the main change right (`blogPost={true}`) but *also* duplicated the entire "Other posts" block in `[...slug].astro`, adding a second copy with classes like `-backdrop-blur-sm` (not a valid Tailwind utility — leading hyphen = negative variant of a class that has no negative variant) and `bg-app-bg/50` (transparency modifier, not a dark theme). It solved a problem that didn't exist — `[...slug].astro` *already* passes `blogPost={true}`. The model generated a variant of code instead of modifying in place.
+
+Only the diagonal — **q8_0 KV + richer prompt** — produced a clean one-line diff matching the API models.
+
+### And f16/bf16?
+
+I also tried `--cache-type-k f16` and `--cache-type-v bf16` — the top of what llama.cpp supports for KV precision. Results depended on the prompt:
+
+- **Terse prompt + f16/bf16:** hit and miss. Some runs clean, some added phantom changes.
+- **Richer prompt + f16/bf16:** stable across the runs I sampled — drift effectively gone.
+
+So the refined picture is: **both knobs matter, and they compound.** q4_0 KV is a precision floor you can't prompt your way past. q8_0 + richer prompt gets you there. f16/bf16 + richer prompt squeezes out the residual flakiness. Each tier of KV precision buys you a little more stability when the prompt is already doing its share of the work.
+
+What I *couldn't* test is where the real ceiling is. Harder tasks, longer contexts, multi-file refactors — those might break this setup in ways the single-prop change didn't. And the two upgrades I'd actually want to try — a larger model (14B+) or a less aggressive weight quant (Q6_K, Q8_0) — both blow past 8 GB of VRAM on an RTX 4060 Laptop. There's probably more tuning left in llama.cpp (sampler settings, RoPE, batch sizing), but past a point you're moving deck chairs; the bigger levers require hardware I don't have.
+
+bf16 in the KV cache: it has wider dynamic range than f16 (more exponent, less mantissa) which *can* help activations spanning many magnitudes. I didn't see a meaningful difference from f16 on this specific task.
+
+### The speed tax (on *my* hardware)
+
+There's one more number that matters — and this one is specific to 8 GB VRAM, not local LLMs in general. With `--no-kv-offload` pushing the KV cache over PCIe to system RAM (the only way I could fit 131K context), throughput took a hit:
+
+```
+prompt eval:  93.36 ms/token  →  ~10.7 tps  (prefill, via PCIe)
+generation:   ~12 tps avg
+```
+
+A 500-token response takes ~42 seconds. A multi-turn agentic loop at 2–3K output tokens per turn is 3–4 minutes per turn. Opus via API returns the same in 5–10 seconds. Qwen 3.6 Plus is similar.
+
+**This is a constrained-VRAM problem, not an inherent local-LLM problem.** On a 24 GB card (RTX 4090, 3090), the same GGUF keeps its KV cache on GPU — prefill and generation are several times faster. On an A100, H100, or DGX-class box, throughput lands in the same neighborhood as hosted APIs. The speed axis only collapses against me because I'm running a laptop GPU with aggressive offloading.
+
+So for *my* setup, the local model trades quality **and speed** for privacy and zero marginal cost. For someone with a workstation 4090, the speed axis mostly goes away — they're trading quality alone. Scale up to data-center hardware and even that gap narrows. The "local is slow" take is a VRAM artifact; the "local is quality-capped at this parameter count" take is the real one.
+
+<Callout type="important">
+**Three things have to line up for a 9B distill to match Opus on a real refactor:**
+
+1. **KV cache ≥ q8_0.** q4_0 fails regardless of prompting. Higher precision (f16/bf16) compounds with better prompting to stabilize output further — each tier buys you a bit more reliability.
+2. **Explicit prompt scaffolding.** `@file` references to the patterns it should copy. Even at f16/bf16 KV, a terse prompt is hit-and-miss — the model can't afford to hunt through the repo.
+3. **Tolerance for ~12 tps.** Even when quality matches, you're waiting minutes per agentic turn.
+
+Miss any one and the quality cliff is sharp. This isn't "free Opus." It's a narrow, tuned, slow-but-competent tool that worked on *this* task with both knobs turned up. Harder tasks, longer contexts, or multi-file refactors might break it — and the fixes for that (bigger model, lighter weight quant) need more VRAM than 8 GB gives you. Still impressive for a laptop GPU, but it's a different claim than the model card's tagline.
+</Callout>
+
+<Callout type="note">
+**The flip side: when the model is forgiving, tooling compresses the gap. When it isn't, you do.**
+
+Flagship models like Opus 4.6 are forgiving — terse prompts still produce surgical outputs because the model can reason its way to what you probably meant. That forgiveness is exactly what the "agent ecosystem" is built to commoditize. **Custom agents** (scoped system prompts), **skills** (pre-loaded domain knowledge), and **planning-before-execution** workflows all do the same job: they compress the distance between *your* mental model and *the model's* next action before it starts editing code. The plan phase exists so the model flushes its flakiness against your review, not against your main branch — you and the model arrive on the same page *before* anyone commits.
+
+But none of that saves you if you don't have the mental model yourself. On this refactor, I already knew where the blog list page lived, how `BaseLayout` wires its theme flag through `data-blog="true"`, and that `/skills` was the reference implementation to point at. That's what let me write the richer prompt — I was handing the model a map. If I didn't know my own codebase at that level, no amount of prompting would have helped; I'd be paying per-token to watch it guess at my architecture. **The operator still needs domain knowledge. Without it, AI burns your time and money instead of saving them.**
+</Callout>
+
+---
+
 ## What I Actually Learned
 
 Before this rabbit hole, I treated model selection like picking a Docker image — find a name that sounds right, pull it, hope it works. Now I read model cards differently.
