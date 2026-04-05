@@ -14,13 +14,7 @@ const blogPosts = allPosts
   .filter((p) => p.id !== "external-blogs")
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-// Extract unique categories
-const categories = blogPosts.reduce((acc, post) => {
-  if (post.data.category && !acc.includes(post.data.category)) {
-    acc.push(post.data.category);
-  }
-  return acc;
-}, [] as string[]).sort();
+
 
 // Serialize posts for client-side
 const serializedPosts = blogPosts.map(post => ({
@@ -29,7 +23,6 @@ const serializedPosts = blogPosts.map(post => ({
   date: post.data.date.toISOString(),
   description: post.data.description,
   cover: post.data.cover,
-  category: post.data.category,
 }));
 ---
 
@@ -42,8 +35,8 @@ const serializedPosts = blogPosts.map(post => ({
     <AnimatedTitle title="Blog" client:load />
   </div>
 
-  <!-- Blog List with Search & Filters -->
-  <BlogList client:load posts={serializedPosts} categories={categories} />
+  <!-- Blog List -->
+  <BlogList client:load posts={serializedPosts} />
 
   <!-- External blogs -->
   <section class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20 lg:pb-24">
