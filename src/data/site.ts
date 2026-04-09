@@ -6,7 +6,7 @@ export const siteConfig = {
   url: "https://dipankar-das.com",
   email: "dipankar@dipankar-das.com",
   tagline: "Designing & Building Scalable, Reliable Systems",
-  profileImage: "/img/profile_v2.jpeg",
+  profileImage: "/img/profile_v2.webp",
   resumeUrl:
     "https://raw.githubusercontent.com/dipankardas011/dipankardas011/main/Resume.pdf",
 };

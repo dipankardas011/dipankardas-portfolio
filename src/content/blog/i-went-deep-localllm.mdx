@@ -4,7 +4,7 @@ author: "Dipankar Das"
 date: 2026-04-02
 description: "GGUF vs safetensors, quantization, distillation, VRAM math, and Ollama vs vLLM vs llama.cpp — one post to save you the weekend I lost."
 tags: ["llm", "local-ai", "quantization", "distillation", "vllm", "ollama", "lmstudio", "gguf", "llama-cpp", "cuda", "machine-learning"]
-cover: "/img/blogs/deepdrive-localllm-cover.png"
+cover: "/img/blogs/deepdrive-localllm-cover.webp"
 draft: false
 ---
 import Callout from '../../components/Callout.astro';
@@ -24,7 +24,7 @@ That's when I found this on HuggingFace: [Qwen3.5-9B-Claude-4.6-Opus-Reasoning-D
 A 9B parameter model. Distilled from Claude 4.6 Opus reasoning traces. Available in GGUF format. "Almost like Opus 4.6 for free" was the claim. No API key. No per-token cost. No data leaving your machine.
 
 <figure>
-  <img src="/img/blogs/huggingface.png" alt="HuggingFace model card for Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF showing model size, architecture, quantization options, and benchmark charts" />
+  <img src="/img/blogs/huggingface.webp" alt="HuggingFace model card for Qwen3.5-9B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF showing model size, architecture, quantization options, and benchmark charts" />
   <figcaption>The model card that started it all — 9B params, GGUF format, Q4/Q5/Q8 quantization options, benchmarks that looked too good to be true</figcaption>
 </figure>
 
@@ -55,7 +55,7 @@ The CLI's `--gpu` flag controls GPU offload ratio, `--context-length` sets the w
 The **GUI** is a different story — it exposes a lot more: flash attention toggle, KV cache quantization (key and value separately), mmap/mlock settings, RoPE frequency tuning, eval batch size, and all the sampling parameters (temperature, top-p, top-k, repeat penalty). These are the knobs that matter for squeezing performance out of constrained hardware, and none of them are available via `lms load`.
 
 <figure>
-  <img src="/img/blogs/lmstudio-model-configs.png" alt="LM Studio GUI showing advanced model configuration options including GPU offload, context length, flash attention, KV cache quantization, and RoPE settings" />
+  <img src="/img/blogs/lmstudio-model-configs.webp" alt="LM Studio GUI showing advanced model configuration options including GPU offload, context length, flash attention, KV cache quantization, and RoPE settings" />
   <figcaption>LM Studio's GUI exposes the knobs that the CLI hides — flash attention, KV cache quantization, RoPE tuning, and more</figcaption>
 </figure>
 
@@ -151,7 +151,7 @@ RuntimeError: Unknown gguf model_type: qwen3_5_moe
 ```
 
 <figure>
-  <img src="/img/blogs/vllm-error.png" alt="vLLM error output showing RuntimeError: Unknown gguf model_type: qwen3_5_moe" />
+  <img src="/img/blogs/vllm-error.webp" alt="vLLM error output showing RuntimeError: Unknown gguf model_type: qwen3_5_moe" />
   <figcaption>vLLM crashing on the Qwen 3.5 MoE architecture — the GGUF loader doesn't recognize it yet</figcaption>
 </figure>
 
@@ -366,7 +366,7 @@ The tradeoff: **prefill is slower.** Prefill is the phase where the model proces
 Why 262K and not more? Because that's the model's **trained context length**. The RoPE positional encodings were trained up to 262,144 tokens. Push beyond that and the model extrapolates into positions it's never seen — quality degrades, coherence breaks down, and you get garbage. The context window isn't just a memory limit; it's a capability boundary.
 
 <figure>
-  <img src="/img/blogs/llamacpp-server-duringload.png" alt="System monitor showing RTX 4060 GPU at full utilization while llama-server loads the model, with CPU, RAM, and disk activity visible" />
+  <img src="/img/blogs/llamacpp-server-duringload.webp" alt="System monitor showing RTX 4060 GPU at full utilization while llama-server loads the model, with CPU, RAM, and disk activity visible" />
   <figcaption>llama-server loading the model — GPU VRAM nearly full, system RAM handling the KV cache overflow</figcaption>
 </figure>
 
@@ -479,7 +479,7 @@ When I switched to a multimodal model, my OOM crashes became frequent. I realize
 **The Golden Rule:** If you are running multimodal on limited VRAM, **Batch Size is your enemy**. Lowering it doesn't just save memory; it prevents the *spikes* that crash the system.
 
 <figure>
-  <img src="/img/blogs/llamacpp-image-input.png" alt="Split screen showing GPU utilization during inference on the left, and the model correctly describing a tropical beach image on the right" />
+  <img src="/img/blogs/llamacpp-image-input.webp" alt="Split screen showing GPU utilization during inference on the left, and the model correctly describing a tropical beach image on the right" />
   <figcaption>The multimodal model in action — processing an image input locally, with GPU and system metrics visible on the left</figcaption>
 </figure>
 
@@ -530,7 +530,7 @@ So when you see safetensors on HuggingFace, it's the GPU-native ecosystem's form
 GGUF is the format that made local LLMs practical on consumer hardware. Developed in the llama.cpp ecosystem, it bundles everything into a single file: the model weights, architecture configuration, tokenizer, and quantization metadata.
 
 <figure>
-  <img src="/img/blogs/gguf-spec.png" alt="GGUF file format diagram showing magic bytes, metadata key-value pairs, tensor info, and weight data" />
+  <img src="/img/blogs/gguf-spec.webp" alt="GGUF file format diagram showing magic bytes, metadata key-value pairs, tensor info, and weight data" />
   <figcaption>The GGUF file format — everything the model needs in a single file: magic bytes, metadata, tensor info, and quantized weights (source: <a href="https://huggingface.co/docs/hub/gguf">HuggingFace GGUF docs</a>)</figcaption>
 </figure>
 
@@ -630,7 +630,7 @@ The v2 of this distilled model is interesting because it specifically optimized 
 This is where most guides lose people. They say "you need X GB of VRAM" without showing the math. Here's how it actually works — with real numbers from my RTX 4060 Laptop GPU (8 GB VRAM, 7,360 MiB usable).
 
 <figure>
-  <img src="/img/blogs/llm-deep-drive-normal-deviceload.png" alt="System monitor showing Ryzen AI 9 HX 370 CPU, RTX 4060 Laptop GPU with 8 GB VRAM, and 30 GB system RAM at idle" />
+  <img src="/img/blogs/llm-deep-drive-normal-deviceload.webp" alt="System monitor showing Ryzen AI 9 HX 370 CPU, RTX 4060 Laptop GPU with 8 GB VRAM, and 30 GB system RAM at idle" />
   <figcaption>My hardware at idle — Ryzen AI 9 HX 370, RTX 4060 Laptop (8 GB VRAM), 30 GB system RAM. This is the budget we're working with.</figcaption>
 </figure>
 
@@ -710,7 +710,7 @@ The prompt was deliberately terse: *"Bro I need you to get the blog list to dark
 The local model didn't just produce a worse answer — it produced a *different kind* of answer. Both API models read the reference files, pattern-matched to `blogPost={true}`, and applied it. The local model read the same files and then built a parallel dark-theme system from scratch. It *didn't see the pattern it was supposed to copy*.
 
 <figure>
-  <img src="/img/blogs/experimenting-3-way.png" alt="Three-way tmux comparison: local Qwen distill on the left, Qwen 3.6 Plus in the middle, Claude Opus 4.6 on the right, all working on the same refactor task" />
+  <img src="/img/blogs/experimenting-3-way.webp" alt="Three-way tmux comparison: local Qwen distill on the left, Qwen 3.6 Plus in the middle, Claude Opus 4.6 on the right, all working on the same refactor task" />
   <figcaption>Three models, one refactor. The local distill (top-left) went off-script; the tuned run (bottom-left) and both API models converged on the same one-line change.</figcaption>
 </figure>
 
@@ -817,12 +817,12 @@ Once you understand these axes, you stop asking "which model should I download?"
 So I had a Claude-distilled model running locally. Naturally, I had to test it with the hard questions. Like asking what it thinks about Anthropic's claim that "coding is largely solved."
 
 <figure>
-  <img src="/img/blogs/coding-is-largely-solved.jpeg" alt="Boris Cherny, Head of Claude Code, with the quote 'Coding is largely solved'" />
+  <img src="/img/blogs/coding-is-largely-solved.webp" alt="Boris Cherny, Head of Claude Code, with the quote 'Coding is largely solved'" />
   <figcaption>The claim that launched a thousand quote-tweets</figcaption>
 </figure>
 
 <figure>
-  <img src="/img/blogs/local-llm-claudefun.png" alt="The local Qwen-Claude distilled model responding to the 'coding is largely solved' image with a detailed, sarcastic analysis" />
+  <img src="/img/blogs/local-llm-claudefun.webp" alt="The local Qwen-Claude distilled model responding to the 'coding is largely solved' image with a detailed, sarcastic analysis" />
   <figcaption>A Claude-distilled model, running locally for free, roasting Claude's parent company. The future is beautiful.</figcaption>
 </figure>
 

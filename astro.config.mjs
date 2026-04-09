@@ -12,7 +12,10 @@ import rehypeKatex from "rehype-katex";
 
 export default defineConfig({
   site: "https://dipankar-das.com",
-  integrations: [mermaid({ theme: "dark", autoTheme: true }), mdx(), sitemap({ lastmod: new Date() }), react(), icon()],
+  integrations: [mermaid({ theme: "dark", autoTheme: true }), mdx(), sitemap({
+      lastmod: new Date(),
+      filter: (page) => !page.includes("/diary/"),
+    }), react(), icon()],
   vite: {
     plugins: [tailwindcss()],
   },

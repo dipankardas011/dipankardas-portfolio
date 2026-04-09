@@ -14,7 +14,7 @@ interface Props {
 const {
   title = siteConfig.title,
   description = siteConfig.description,
-  ogImage = "/img/bg_9.jpg",
+  ogImage = "/img/bg_9.webp",
   blogPost = false,
 } = Astro.props;
 
@@ -74,7 +74,7 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     )}
 
     <link rel="alternate" type="application/rss+xml" title={siteConfig.name} href="/rss.xml" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/webp" href="/favicon.webp" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <title>{title}</title>
 

@@ -121,7 +121,7 @@ export const projects: Project[] = [
     title: "AI Agents Skill Library",
     description:
       "A curated skill library for AI agents, enabling modular capability composition and reuse across agent architectures.",
-    image: "/img/projects/agent-library.jpeg",
+    image: "/img/projects/agent-library.webp",
     links: [
       {
         label: "Website",

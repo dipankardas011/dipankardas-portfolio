@@ -3,7 +3,7 @@ title: "The Kubelet Config Rabbit Hole That Changed How I Size Kubernetes Nodes"
 author: "Dipankar Das"
 date: 2026-03-01
 description: "I went down a rabbit hole figuring out why my nodes had less resources than expected. Here's everything I learned about kubelet reservations, the allocatable formula, and drop-in configs."
-cover: "/img/blogs/k8s-sched-framework.png"
+cover: "/img/blogs/k8s-sched-framework.webp"
 tags: ["kubernetes", "kubelet", "kubeadm", "k3s", "node allocatable", "kube-reserved", "system-reserved", "eviction threshold", "kubelet drop-in config", "GKE", "EKS", "AKS", "cluster management", "resource optimization"]
 ---
 import Callout from '../../components/Callout.astro';
@@ -14,7 +14,7 @@ I was working on a [kubmin](https://ksctl.com/product/kubmin) feature that analy
 
 Sounds straightforward until you realize "allocatable capacity" isn't just the VM's raw CPU and memory. The kubelet silently carves out a chunk for itself, the OS, and eviction safety margins before the scheduler ever sees it. If you don't account for these reservations when computing the fitScore, you end up recommending instance types that look perfect on paper but can't actually run the workload. One rabbit hole later, and here we are.
 
-![kubmin workload analysis showing Node Instance Recommendation with fitScore, cost savings, and alternative instance types](/img/blogs/kubmin-workload-instance-type-recomend.png)
+![kubmin workload analysis showing Node Instance Recommendation with fitScore, cost savings, and alternative instance types](/img/blogs/kubmin-workload-instance-type-recomend.webp)
 
 <Callout type="tip" title="TL;DR">
   Not all of a node's CPU and memory is available for your pods. The kubelet reserves a chunk for itself and the OS. On self-managed clusters (kubeadm), these reservations propagate uniformly to all nodes, which breaks down when you have mixed instance types. The fix: kubelet drop-in config directory (GA in Kubernetes v1.35) for per-node tuning.
@@ -28,7 +28,7 @@ Every cloud provider (Azure, AWS, GCP) runs your Kubernetes cluster on Virtual M
 
 The **available resources** (what Kubernetes calls `Allocatable`) are what's left after the kubelet reserves resources for itself, the OS, and eviction safety margins. This number is what the scheduler actually uses when deciding where to place pods — alongside filters like `nodeSelector`, `affinity`, and `taints and tolerations`.
 
-![Kubernetes scheduler framework — the filtering and scoring pipeline a pod goes through before being assigned to a node](/img/blogs/k8s-sched-framework.png)
+![Kubernetes scheduler framework — the filtering and scoring pipeline a pod goes through before being assigned to a node](/img/blogs/k8s-sched-framework.webp)
 
 ### The Allocatable Formula
 
@@ -273,21 +273,21 @@ We tested this on self-managed clusters provisioned via [ksctl](https://github.c
 
 The `/configz` endpoint on both the control plane and worker nodes shows the drop-in values merged correctly — `kubeReserved`, `systemReserved`, and `evictionHard` all reflect the per-node computed values.
 
-![kubectl proxy configz output showing kubeReserved, systemReserved, and evictionHard on kubeadm control plane and worker nodes](/img/blogs/k8s-avail-res-kubeadm-example.png)
+![kubectl proxy configz output showing kubeReserved, systemReserved, and evictionHard on kubeadm control plane and worker nodes](/img/blogs/k8s-avail-res-kubeadm-example.webp)
 
 And the kubmin dashboard confirms the cluster is running with kubeadm v1.35 on AWS:
 
-![kubmin dashboard showing a self-managed kubeadm v1.35 cluster running on AWS](/img/blogs/k8s-avail-res-kubeadm-example-kubmin.png)
+![kubmin dashboard showing a self-managed kubeadm v1.35 cluster running on AWS](/img/blogs/k8s-avail-res-kubeadm-example-kubmin.webp)
 
 ### K3s cluster
 
 Same story with K3s — the `--kubelet-arg` flags are passed per-node, and the configz output confirms the reservations are applied independently on each node.
 
-![kubectl proxy configz output showing kubelet reservations applied per-node on a K3s cluster](/img/blogs/k8s-avail-res-k3s-example.png)
+![kubectl proxy configz output showing kubelet reservations applied per-node on a K3s cluster](/img/blogs/k8s-avail-res-k3s-example.webp)
 
 The kubmin dashboard for the K3s cluster:
 
-![kubmin dashboard showing a self-managed K3s v1.35 cluster running on AWS](/img/blogs/k8s-avail-res-k3s-example-kubmin.png)
+![kubmin dashboard showing a self-managed K3s v1.35 cluster running on AWS](/img/blogs/k8s-avail-res-k3s-example-kubmin.webp)
 
 <Callout type="note">
   Yes, the K3s cluster is named `test-kubeadm` on the dashboard. I messed up the name while testing — don't judge.

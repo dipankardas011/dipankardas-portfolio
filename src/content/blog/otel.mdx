@@ -3,7 +3,7 @@ title: "My First Two Months with OpenTelemetry: A Practical Guide"
 author: "Dipankar Das"
 date: 2025-11-07
 description: "A developer's practical guide to instrumenting applications with OpenTelemetry, sharing key learnings on spans, context propagation, and sampling."
-cover: "/img/blogs/otel-cover.png"
+cover: "/img/blogs/otel-cover.webp"
 tags: ["go", "otel", "troubleshooting", "debugging", "grafana", "prometheus"]
 ---
 import Callout from '../../components/Callout.astro';
@@ -18,10 +18,10 @@ Before we get into the technical details, let's talk about the motivation. What 
 When your application is properly instrumented with traces, metrics, and logs, you can build powerful dashboards in tools like Grafana. This gives you a unified view of your system's health and behavior.
 
 1.  **Deep Visibility with Traces**: Understand what's happening under the hood of your application. You can see which functions are called, how long they take, and where failures occur. A distributed trace can often make a complex stack trace much easier to follow.
-2.  **Correlated Traces and Logs**: One of the most powerful features is correlating traces with logs. With a single `trace_id`, you can instantly find all the logs associated with a specific request, even as it hops across multiple services. ![searching-traceId](/img/blogs/tracetolog001.png)
+2.  **Correlated Traces and Logs**: One of the most powerful features is correlating traces with logs. With a single `trace_id`, you can instantly find all the logs associated with a specific request, even as it hops across multiple services. ![searching-traceId](/img/blogs/tracetolog001.webp)
 3.  **Powerful Metrics**: Monitor key indicators of your application's health. Are requests per second dropping? Is the error rate for a specific service increasing? Are your background workers keeping up with the queue? Metrics help you answer these questions proactively.
 4.  **Insightful Dashboards**: You can create detailed admin panels and operational dashboards using only your OTEL data, providing instant insights without needing a separate frontend. Here’s an example of a dashboard showing application health:
-    ![](/img/blogs/tracetolog004.png)
+    ![](/img/blogs/tracetolog004.webp)
 
 ## The Core Concepts: What is OpenTelemetry?
 
@@ -125,7 +125,7 @@ My rule of thumb: **create spans for operations that have a meaningful duration 
 
 In Go, this often means passing a `context.Context` variable through your function calls so you can create new spans that are correctly nested under their parent.
 
-![Example of correlated traces and logs in Grafana](/img/blogs/tracetolog002.png)
+![Example of correlated traces and logs in Grafana](/img/blogs/tracetolog002.webp)
 
 ### Good Spans vs. Bad Spans
 
@@ -151,7 +151,7 @@ Sometimes, you want to mark a point-in-time occurrence within a span's lifecycle
 
 Events are perfect for logging important checkpoints. For example, instead of creating a new span for every write in a batch database operation, you could have a single `db:batch_write` span and add an event for each record being written.
 
-![Example of using events within a span](/img/blogs/tracetolog003.png)
+![Example of using events within a span](/img/blogs/tracetolog003.webp)
 
 ## The "How": Instrumenting Your Application
 
@@ -203,7 +203,7 @@ What if you have a workflow where one event triggers multiple independent backgr
 
 I used this for a background job processing system. A single "group job" event would be consumed by multiple workers concurrently. By linking the spans from each worker back to the original parent span, I could create a unified view of the entire distributed operation.
 
-![Example of linking spans for a grouped job](/img/blogs/tracetolog005.png)
+![Example of linking spans for a grouped job](/img/blogs/tracetolog005.webp)
 
 ## Conclusion: My Key Takeaways
 

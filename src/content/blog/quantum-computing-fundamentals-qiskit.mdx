@@ -4,7 +4,7 @@ author: "Dipankar Das"
 date: 2026-03-24
 description: "A developer's hands-on guide to quantum computing fundamentals — from qubits and gates to building a quantum teleportation circuit, no physics degree required."
 tags: ["quantum-computing", "qiskit", "python", "ibm-quantum", "tutorial"]
-cover: "/img/blogs/qiskit_1.jpg"
+cover: "/img/blogs/qiskit_1.webp"
 ---
 import Callout from '../../components/Callout.astro';
 
@@ -91,7 +91,7 @@ You can also build and visualize these circuits directly in [IBM's Quantum Compo
 Here's our Hadamard circuit in the Composer:
 
 <figure>
-  <img src="/img/blogs/qiskit_1_h_gate.png" alt="Hadamard gate in IBM Quantum Composer showing Q-sphere, Statevector, and Probabilities" />
+  <img src="/img/blogs/qiskit_1_h_gate.webp" alt="Hadamard gate in IBM Quantum Composer showing Q-sphere, Statevector, and Probabilities" />
   <figcaption>Hadamard gate — Q-sphere shows equal weight at |0⟩ and |1⟩, probabilities confirm the 50/50 split</figcaption>
 </figure>
 
@@ -109,7 +109,7 @@ qc.x(0)  # Flip from |0⟩ to |1⟩
 ```
 
 <figure>
-  <img src="/img/blogs/qiskit_1_x_gate.png" alt="X gate in IBM Quantum Composer — Q-sphere shows the state flipped to |1⟩" />
+  <img src="/img/blogs/qiskit_1_x_gate.webp" alt="X gate in IBM Quantum Composer — Q-sphere shows the state flipped to |1⟩" />
   <figcaption>X gate flips the qubit — Q-sphere dot moves from |0⟩ (top) to |1⟩ (bottom)</figcaption>
 </figure>
 
@@ -135,7 +135,7 @@ print(qc.draw())
 This two-gate combo — Hadamard followed by CNOT — creates what's called a **Bell state**. It's the simplest entangled state and the building block for almost everything in quantum computing.
 
 <figure>
-  <img src="/img/blogs/qiskit_1_cnot_h_gate.png" alt="H + CNOT Bell state in IBM Quantum Composer — only 00 and 11 in the probability panel" />
+  <img src="/img/blogs/qiskit_1_cnot_h_gate.webp" alt="H + CNOT Bell state in IBM Quantum Composer — only 00 and 11 in the probability panel" />
   <figcaption>Bell state (H + CNOT) — probabilities show only 00 and 11, never 01 or 10</figcaption>
 </figure>
 
@@ -171,7 +171,7 @@ qc.measure([0, 1], [0, 1])
 # ONLY 00 and 11 — qubits are correlated
 ```
 <figure>
-  <img src="/img/blogs/qiskit_1_cnot_h_gate.png" alt="H + CNOT Bell state in IBM Quantum Composer — only 00 and 11 in the probability panel" />
+  <img src="/img/blogs/qiskit_1_cnot_h_gate.webp" alt="H + CNOT Bell state in IBM Quantum Composer — only 00 and 11 in the probability panel" />
   <figcaption>Bell state (H + CNOT) — probabilities show only 00 and 11, never 01 or 10</figcaption>
 </figure>
 
@@ -243,7 +243,7 @@ That's the beautiful paradox of entanglement: **each qubit individually is perfe
 Here's the same Estimator code running on real IBM hardware — the result `[0.951, -0.018, 0.002]` is close to the ideal `[1.0, 0.0, 0.0]`:
 
 <figure>
-  <img src="/img/blogs/qiskit_1_estimator_h_x_gate.png" alt="Estimator running on real IBM quantum hardware showing ZZ, ZI, IZ expectation values" />
+  <img src="/img/blogs/qiskit_1_estimator_h_x_gate.webp" alt="Estimator running on real IBM quantum hardware showing ZZ, ZI, IZ expectation values" />
   <figcaption>Estimator on real IBM hardware — ZZ = 0.951, ZI = -0.018, IZ = 0.002</figcaption>
 </figure>
 
@@ -346,7 +346,7 @@ Three barriers, three acts. State preparation, shared entanglement, teleportatio
 Here's the full circuit in IBM's Quantum Composer — the Q-sphere and probability panels confirm the teleportation:
 
 <figure>
-  <img src="/img/blogs/qiskit_1_teleport_gate.png" alt="Full teleportation circuit in IBM Quantum Composer" />
+  <img src="/img/blogs/qiskit_1_teleport_gate.webp" alt="Full teleportation circuit in IBM Quantum Composer" />
   <figcaption>Full teleportation circuit in IBM Quantum Composer — three acts visible across the wire diagram</figcaption>
 </figure>
 

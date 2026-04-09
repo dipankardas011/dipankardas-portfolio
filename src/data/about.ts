@@ -19,7 +19,7 @@ export const experiences: Experience[] = [
     company: "rtCamp",
     role: "DevOps Engineer",
     tenure: "Jan 2024 - Present",
-    logo: "/img/experience/rtcamp.png",
+    logo: "/img/experience/rtcamp.webp",
     link: "https://rtcamp.com",
     contributions: [
       {
@@ -58,7 +58,7 @@ export const experiences: Experience[] = [
     company: "Kubmin - Ksctl",
     role: "Founder & Principal Engineer",
     tenure: "Jun 2025 - Present",
-    logo: "/img/experience/kubmin-logo.png",
+    logo: "/img/experience/kubmin-logo.webp",
     link: "https://ksctl.com/product/kubmin/",
     contributions: [
       {
@@ -103,7 +103,7 @@ export const experiences: Experience[] = [
     company: "Viamagus",
     role: "DevSecMLOps Consultant",
     tenure: "Feb 2025 - Apr 2025",
-    logo: "/img/experience/viamagus.jpg",
+    logo: "/img/experience/viamagus.webp",
     link: "https://viamagus.com",
     contributions: [
       {
@@ -136,7 +136,7 @@ export const experiences: Experience[] = [
     company: "kli - ksctl",
     role: "Creator",
     tenure: "Jul 2022 - Jul 2025",
-    logo: "/img/experience/ksctl-logo.png",
+    logo: "/img/experience/ksctl-logo.webp",
     link: "https://ksctl.com/product/kli/",
     contributions: [
       {
@@ -169,7 +169,7 @@ export const experiences: Experience[] = [
     company: "Kubesimplify",
     role: "Ambassador",
     tenure: "Mar 2022 - Jul 2024",
-    logo: "/img/experience/kubesimplify.png",
+    logo: "/img/experience/kubesimplify.webp",
     contributions: [
       {
         title: "Technical Content & Education",
@@ -195,7 +195,7 @@ export const experiences: Experience[] = [
     company: "Viamagus",
     role: "DevOps Intern",
     tenure: "Mar 2023 - Sep 2023",
-    logo: "/img/experience/viamagus.jpg",
+    logo: "/img/experience/viamagus.webp",
     link: "https://viamagus.com",
     contributions: [
       {
