@@ -36,6 +36,34 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    title: "AI Agent Evals",
+    description:
+      "Security-focused evaluation benchmarks for AI coding agents. Tests whether agents can perform real-world incident response — investigating a compromised production server, removing attacker backdoors, restoring SSL/TLS chains, fixing nginx configs, and hardening Go services — all inside Docker-based infrastructure using the Harbor evaluation framework.",
+    image: "https://github.com/dipankardas011/ai-agent-evals/blob/main/assets/ai-agent-evals.webp?raw=true",
+    links: [
+      { label: "GitHub", url: "https://github.com/dipankardas011/ai-agent-evals" },
+      { label: "Blog", url: "https://dipankar-das.com/blog/i-went-deep-localllm/" },
+    ],
+    category: "AI/ML",
+    tags: ["AI Agents", "Security", "Evals", "Python", "Docker", "Go"],
+    featured: true,
+  },
+  {
+    title: "AI Agents Skill Library",
+    description:
+      "A curated skill library for AI agents, enabling modular capability composition and reuse across agent architectures.",
+    image: "/img/projects/agent-library.webp",
+    links: [
+      {
+        label: "Website",
+        url: "https://dipankar-das.com/skills",
+      },
+    ],
+    category: "AI/ML",
+    tags: ["AI Agents", "Skills", "LLM"],
+    featured: true,
+  },
+  {
     title: "wae (WASI App Experiment)",
     description:
       "Showcases latest WASI v0.2 development with composition features. Combines ML, Green Software, and WASI learnings into a single project.",
@@ -116,21 +144,6 @@ export const projects: Project[] = [
     ],
     category: "Infra Tools",
     tags: ["AWS", "CloudFormation", "Visualization"],
-  },
-  {
-    title: "AI Agents Skill Library",
-    description:
-      "A curated skill library for AI agents, enabling modular capability composition and reuse across agent architectures.",
-    image: "/img/projects/agent-library.webp",
-    links: [
-      {
-        label: "Website",
-        url: "https://dipankar-das.com/skills",
-      },
-    ],
-    category: "AI/ML",
-    tags: ["AI Agents", "Skills", "LLM"],
-    featured: true,
   },
   {
     title: "Chat Bot using GPT-2",
