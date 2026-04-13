@@ -1,4 +1,3 @@
 User-agent: *
-Disallow: /diary/
 
 Sitemap: https://dipankar-das.com/sitemap-index.xml
