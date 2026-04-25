@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../components/BaseLayout.astro";
-import AnimatedTitle from "../components/AnimatedTitle";
+import AnimatedTitle from "../components/AnimatedTitle.astro";
 import Timeline from "../components/Timeline.astro";
 import ContactSection from "../components/ContactSection.astro";
 import { experiences, skills, languages, tools, achievements } from "../data/about";
@@ -13,7 +13,6 @@ import { siteConfig } from "../data/site";
 >
   <AnimatedTitle 
     title="About" 
-    client:load 
   />
 
   <section class="py-10 lg:pb-14 animate-fade-in">

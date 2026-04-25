@@ -2,7 +2,7 @@
 import BaseLayout from "../../components/BaseLayout.astro";
 import BlogPostCard from "../../components/BlogPostCard.astro";
 import BlogList from "../../components/BlogList";
-import AnimatedTitle from "../../components/AnimatedTitle";
+import AnimatedTitle from "../../components/AnimatedTitle.astro";
 import TopGradient from "../../components/TopGradient";
 import { getCollection } from "astro:content";
 import { externalBlogs } from "../../data/external-blogs";
@@ -33,7 +33,7 @@ const serializedPosts = blogPosts.map(post => ({
 >
   <div class="relative">
     <TopGradient client:load />
-    <AnimatedTitle title="Blog" client:load />
+    <AnimatedTitle title="Blog" />
   </div>
 
   <!-- Blog List -->

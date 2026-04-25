@@ -3,7 +3,6 @@ import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 
 import sitemap from "@astrojs/sitemap";
-import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 import icon from "astro-icon";
 import mermaid from "astro-mermaid";
@@ -15,7 +14,7 @@ export default defineConfig({
   integrations: [mermaid({ theme: "dark", autoTheme: true }), mdx(), sitemap({
       lastmod: new Date(),
       filter: (page) => !page.includes("/diary/"),
-    }), react(), icon()],
+    }), icon()],
   vite: {
     plugins: [tailwindcss()],
   },

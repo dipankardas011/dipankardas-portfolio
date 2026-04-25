@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
-import AnimatedTitle from "../../components/AnimatedTitle";
+import AnimatedTitle from "../../components/AnimatedTitle.astro";
 import TopGradient from "../../components/TopGradient";
 import { getCollection } from "astro:content";
 
@@ -29,7 +29,6 @@ const years = Object.keys(entriesByYear).sort((a, b) => Number(b) - Number(a));
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8 md:mb-14 lg:mb-20">
           <AnimatedTitle 
-            client:load 
             title="Diary" 
             subtitle="Monthly log of learnings, activities, and professional development"
           />

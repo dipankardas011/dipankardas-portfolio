@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
-import AnimatedTitle from "../../components/AnimatedTitle";
+import AnimatedTitle from "../../components/AnimatedTitle.astro";
 import TopGradient from "../../components/TopGradient";
 import { Code } from "astro:components";
 import { getCollection } from "astro:content";
@@ -16,7 +16,7 @@ const sortedSkills = allSkills.sort((a, b) => a.data.title.localeCompare(b.data.
 >
   <div class="relative">
     <TopGradient client:load />
-    <AnimatedTitle title="Agent Library" client:load />
+    <AnimatedTitle title="Agent Library" />
   </div>
 
   <section class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20 lg:pb-24">

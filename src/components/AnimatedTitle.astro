@@ -1,0 +1,24 @@
+---
+interface Props {
+  title: string;
+  titleClassName?: string;
+  className?: string;
+  subtitle?: string;
+}
+
+const { title, titleClassName = "", className = "", subtitle } = Astro.props;
+---
+
+<div class:list={["overflow-hidden py-10 lg:pb-14", className]}>
+  <h1
+    class:list={[
+      "whitespace-nowrap font-display text-[114px] sm:text-[190px] md:text-[220px] lg:text-[300px] xl:text-[464px] leading-none tracking-[1.59px] lg:tracking-[5.59px]",
+      titleClassName
+    ]}
+  >
+    {title}
+  </h1>
+  {subtitle && (
+    <p class="text-lg text-app-gray-400 max-w-2xl leading-relaxed mt-4">{subtitle}</p>
+  )}
+</div>

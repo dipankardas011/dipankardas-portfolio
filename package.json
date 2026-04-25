@@ -11,7 +11,6 @@
   "dependencies": {
     "@astro-community/astro-embed-twitter": "^0.5.11",
     "@astrojs/mdx": "^4.3.13",
-    "@astrojs/react": "^4.4.2",
     "@astrojs/rss": "^4.0.15",
     "@astrojs/sitemap": "^3.7.0",
     "@iconify-json/mdi": "^1.2.3",
@@ -23,8 +22,6 @@
     "classnames": "^2.5.1",
     "gsap": "^3.14.2",
     "mermaid": "^11.13.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "swiper": "^12.1.1",

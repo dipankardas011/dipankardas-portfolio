@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
-import AnimatedTitle from "../../components/AnimatedTitle";
+import AnimatedTitle from "../../components/AnimatedTitle.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
 import OSSCard from "../../components/OSSCard.astro";
@@ -11,7 +11,7 @@ import { projects, ossContributions, categories } from "../../data/projects";
   title="Projects - Dipankar Das"
   description="Open-source projects, distributed systems, and infrastructure tools."
 >
-  <AnimatedTitle title="Projects" client:load />
+  <AnimatedTitle title="Projects" />
   
   <section class="py-10 lg:pb-14 animate-fade-in">
     <div class="container mx-auto">
