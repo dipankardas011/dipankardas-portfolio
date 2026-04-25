@@ -1025,20 +1025,6 @@ html[data-blog="true"] .prose pre[data-lang]::before {
   width: 100%;
 }
 
-/* Swiper Custom Styles (BCMS Reference) */
-.swiper-pagination-bullet {
-  width: 1.5rem;
-  height: 3px;
-  border-radius: 3px;
-  background-color: rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
-}
-
-.swiper-pagination-bullet-active {
-  width: 5rem;
-  background-color: #ffffff;
-}
-
 /* Custom Scrollbar Styles */
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;
