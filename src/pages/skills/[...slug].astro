@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
-import TopGradient from "../../components/TopGradient";
+import TopGradient from "../../components/TopGradient.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -25,7 +25,7 @@ const { Content } = await render(skill);
 
   <article class="animate-fade-in">
     <div class="relative pt-10 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16">
-      <TopGradient client:load />
+      <TopGradient />
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Back link -->

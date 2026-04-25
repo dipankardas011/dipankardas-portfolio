@@ -1,9 +1,9 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
 import BlogPostCard from "../../components/BlogPostCard.astro";
-import BlogList from "../../components/BlogList";
+import BlogList from "../../components/BlogList.astro";
 import AnimatedTitle from "../../components/AnimatedTitle.astro";
-import TopGradient from "../../components/TopGradient";
+import TopGradient from "../../components/TopGradient.astro";
 import { getCollection } from "astro:content";
 import { externalBlogs } from "../../data/external-blogs";
 
@@ -32,12 +32,12 @@ const serializedPosts = blogPosts.map(post => ({
   blogPost={true}
 >
   <div class="relative">
-    <TopGradient client:load />
+    <TopGradient />
     <AnimatedTitle title="Blog" />
   </div>
 
   <!-- Blog List -->
-  <BlogList client:load posts={serializedPosts} />
+  <BlogList posts={serializedPosts} />
 
   <!-- External blogs -->
   <section class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20 lg:pb-24">

@@ -19,12 +19,9 @@
     "astro": "^5.18.0",
     "astro-icon": "^1.1.5",
     "astro-mermaid": "^2.0.1",
-    "classnames": "^2.5.1",
-    "gsap": "^3.14.2",
     "mermaid": "^11.13.0",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
-    "swiper": "^12.1.1",
     "tailwindcss": "^4.1.18"
   }
 }

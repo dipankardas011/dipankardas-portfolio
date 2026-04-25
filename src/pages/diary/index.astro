@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
 import AnimatedTitle from "../../components/AnimatedTitle.astro";
-import TopGradient from "../../components/TopGradient";
+import TopGradient from "../../components/TopGradient.astro";
 import { getCollection } from "astro:content";
 
 const entries = (await getCollection("diary")).sort(
@@ -25,7 +25,7 @@ const years = Object.keys(entriesByYear).sort((a, b) => Number(b) - Number(a));
 >
   <section class="animate-fade-in">
     <div class="relative pt-10 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16">
-      <TopGradient client:load />
+      <TopGradient />
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8 md:mb-14 lg:mb-20">
           <AnimatedTitle 

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
 import BlogPostCard from "../../components/BlogPostCard.astro";
-import TopGradient from "../../components/TopGradient";
+import TopGradient from "../../components/TopGradient.astro";
 import { getCollection, render } from "astro:content";
 import { siteConfig, socialLinks } from "../../data/site";
 
@@ -45,7 +45,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
   <article class="animate-fade-in">
     <!-- Header -->
     <div class="relative pt-10 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16">
-      <TopGradient client:load />
+      <TopGradient />
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8 md:mb-14 lg:mb-20">
           <div class="flex flex-col lg:flex-row lg:items-center lg:gap-14">
