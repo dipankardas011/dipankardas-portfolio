@@ -42,10 +42,23 @@ export const projects: Project[] = [
     image: "https://github.com/dipankardas011/ai-agent-evals/blob/main/assets/ai-agent-evals.webp?raw=true",
     links: [
       { label: "GitHub", url: "https://github.com/dipankardas011/ai-agent-evals" },
-      { label: "Blog", url: "https://dipankar-das.com/blog/i-went-deep-localllm/" },
+      { label: "Website", url: "https://ai-benchmark.dipankar-das.com/" },
     ],
     category: "AI/ML",
     tags: ["AI Agents", "Security", "Evals", "Python", "Docker", "Go"],
+    featured: true,
+  },
+  {
+    title: "InfAI",
+    description:
+      "Zero-management launch templates for llama.cpp. Auto-detects GGUF models, saves named profiles in SQLite, and launches llama-server with live logs and real-time metrics — no flag soup. Supports 11+ themes on macOS and Linux.",
+    image: "https://github.com/dipankardas011/infai/blob/main/cover.webp?raw=true",
+    links: [
+      { label: "Website", url: "https://infai.dipankar-das.com/" },
+      { label: "GitHub", url: "https://github.com/dipankardas011/infai" },
+    ],
+    category: "AI/ML",
+    tags: ["Go", "TUI", "llama.cpp", "LLM", "SQLite"],
     featured: true,
   },
   {
@@ -323,7 +336,7 @@ export const ossContributions = [
 
 export const categories = [
   "Products",
+  "AI/ML",
   "Experiments",
   "Distributed Systems",
-  "AI/ML",
 ];
