@@ -1,0 +1,233 @@
+---
+title: "CrowdSec: The Free Bouncer Watching Your Servers While You Sleep"
+author: "Dipankar Das"
+date: 2026-04-27
+description: "Skip the paid WAF. CrowdSec gives one VPS — or a whole fleet — crowd-sourced intrusion prevention with a single decision pane. Plus the multi-server trap that costs people an afternoon."
+tags: ["crowdsec", "security", "self-hosting", "intrusion-prevention", "fail2ban", "devops"]
+cover: "/img/blogs/crowdsec-bouncer.png"
+---
+import Callout from '../../components/Callout.astro';
+
+## The 3 AM Problem Nobody Tells You About
+
+It's 3 AM. Your VPS is fine. You think.
+
+Meanwhile, `auth.log` is a horror film. A Brazilian IP tried `root` 4,000 times. A Vietnamese box is rotating through `admin`, `ubuntu`, `git`, `postgres`. A scanner from Frankfurt is probing `/wp-login.php` on a server that has never run WordPress.
+
+The advice you've heard sounds reasonable in isolation:
+
+- "Buy a WAF." Cloudflare Pro is $20/month per zone, and the rules that actually matter are gated behind enterprise pricing.
+- "Use fail2ban." It works. It scans your logs alone, sees only what your one box sees, and forgets everything when the ban expires.
+- "Just use SSH keys and a strong firewall." Sure — but that's hygiene, not detection. You still want to know who's knocking, and you still want known-bad IPs blocked before they touch anything.
+
+The gap is a free, lightweight tool that detects threats *and* draws on what every other user has already seen, *and* scales from one VPS to a fleet without a control plane that costs more than the servers themselves.
+
+That tool exists. It's CrowdSec. And once you understand the split between detection and enforcement, the multi-server pattern stops being mysterious — and the trap that wastes an afternoon stops being a trap.
+
+## Why CrowdSec Beats the Paid WAF for Most Self-Hosters
+
+CrowdSec does two things that matter:
+
+1. **Local detection.** It tails your logs (SSH, nginx, traefik, whatever you run) and runs them through community-maintained scenarios that decide who to ban.
+2. **Crowd-sourced reputation.** Every CrowdSec instance contributes signal. You inherit a community blocklist of IPs that already attacked someone else. Free.
+
+A paid WAF gives you managed rules and a dashboard. CrowdSec gives you managed rules, a dashboard, *and* the collective memory of every other person running it. For SSH brute force, vulnerability scanners, and known-bad residential proxies — the bulk of what hits a normal server — that's enough.
+
+Paid WAFs earn their keep against targeted L7 attacks on high-value apps. If that's not your threat model — and for most self-hosters, it isn't — you're paying for a feature you'll never trigger.
+
+## Two Parts, One Job
+
+CrowdSec splits cleanly into two pieces:
+
+- **The Security Engine (agent + LAPI)** reads logs and decides bans. Output: a decision (`ban this IP for 4h`).
+- **The Bouncer** reads decisions and *enforces* them — adds the IP to iptables/nftables, rejects it at nginx, drops it at Cloudflare, whatever.
+
+The engine is the brain. The bouncer is the muscle.
+
+<Callout type="warning">
+  Decisions without bouncers do nothing. A row in `cscli decisions list` is a database entry, not a firewall rule. This single fact explains every "but it's not blocking?" thread on the CrowdSec forum — including the multi-server trap covered later.
+</Callout>
+
+## Single-Server Setup (5 Minutes)
+
+```bash
+curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.deb.sh | sudo bash
+apt install crowdsec crowdsec-firewall-bouncer-iptables
+systemctl reload crowdsec
+cscli setup           # auto-detects services (SSH, nginx, etc.) and installs collections
+systemctl reload crowdsec
+```
+
+Verify:
+
+```bash
+cscli decisions list  # active bans
+cscli alerts list     # detected events
+cscli metrics         # what's being parsed
+```
+
+That's it. Your box now reads its logs, bans brute-forcers, and pulls the community blocklist on a schedule. It's already working harder than fail2ban ever did.
+
+If one server is all you have, you can stop here. The rest of this post is for when one isn't enough.
+
+## Going Multi-Server: One Decision Pane, Every Box Enforces
+
+The moment you have two servers, the question changes. If `node-a` sees an IP brute-forcing SSH, you don't want to wait for `node-b` to be hit by the same attacker before it learns. You want `node-a`'s detection to instantly become `node-b`'s block.
+
+The pattern CrowdSec recommends:
+
+| Role | What it runs |
+|---|---|
+| **Central node** (`node-a`) | LAPI + agent + bouncer |
+| **Edge nodes** (`node-b`, `node-c`, ...) | Agent only, registered against `node-a`'s LAPI + their own bouncer |
+
+Every agent ships alerts to the central LAPI. The LAPI turns alerts into decisions. Every bouncer (one per machine) pulls decisions from that one LAPI and applies them locally. One brain. Many hands.
+
+### Step 1 — Make the Central LAPI Reachable
+
+By default LAPI binds to `127.0.0.1:8080`. Change it so edge nodes can reach it:
+
+```bash
+sed -i 's/listen_uri: 127.0.0.1:8080/listen_uri: 0.0.0.0:8080/' /etc/crowdsec/config.yaml
+```
+
+<Callout type="caution">
+  Open inbound TCP `8080` in your cloud firewall **only from your edge nodes' IPs**. Do not expose LAPI to the open internet. It's an authenticated API, but minimizing reach is free.
+</Callout>
+
+### Step 2 — Re-register the Central Node Against Itself
+
+The local credentials file needs a clean machine record and a `127.0.0.1` URL. The `--auto` flag writes `0.0.0.0`, which doesn't work for a local client, so fix it after:
+
+```bash
+cscli machines add node-a --auto --force
+sed -i 's|url: http://0.0.0.0:8080|url: http://127.0.0.1:8080|' /etc/crowdsec/local_api_credentials.yaml
+systemctl restart crowdsec
+cscli lapi status     # expect: You can successfully interact with Local API (LAPI)
+ss -tlnp | grep 8080  # expect: 0.0.0.0:8080
+```
+
+### Step 3 — Strip the LAPI Server Config from Edge Nodes
+
+Edge nodes should not run their own LAPI. Remove the `api.server` block from `/etc/crowdsec/config.yaml` on each one. Keep only `api.client`.
+
+```bash
+python3 -c "
+import re
+with open('/etc/crowdsec/config.yaml','r') as f: c=f.read()
+c=re.sub(r'(?m)^  server:\n(    .*\n)*','',c)
+with open('/etc/crowdsec/config.yaml','w') as f: f.write(c)
+"
+grep -A 20 '^api:' /etc/crowdsec/config.yaml
+# Should only show api.client section, no api.server
+```
+
+### Step 4 — Match Versions Across the Fleet
+
+Distro packages lag. If your central LAPI is `v1.7.x` and an edge agent is on `v1.4.x`, expect heartbeat weirdness and silent failures. Install from the official repo on every node:
+
+```bash
+curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.deb.sh | bash
+DEBIAN_FRONTEND=noninteractive apt-get install -y -o Dpkg::Options::='--force-confold' crowdsec
+crowdsec --version
+```
+
+### Step 5 — Register the Edge Agent
+
+On `node-b`:
+
+```bash
+cscli lapi register --machine node-b --url http://<node-a-ip>:8080
+```
+
+### Step 6 — Validate from the Central Node
+
+On `node-a`:
+
+```bash
+cscli machines validate node-b
+```
+
+Restart `node-b`. Confirm both green:
+
+```bash
+cscli machines list
+# Both rows should show ✔️ and a recent heartbeat.
+```
+
+At this point alerts flow up. Decisions exist on the central LAPI. `cscli decisions list` on `node-a` shows everything from both machines.
+
+**And nothing is being blocked on `node-b`.** This is the trap.
+
+## The Trap: Decisions Without Bouncers
+
+Here's the gotcha that costs people an afternoon: a decision visible in `cscli decisions list` is *just a row in the central database*. It is **not** a firewall rule. The thing that turns a decision into an actual `iptables -j DROP` is the bouncer — and **each server needs its own bouncer pointing at the central LAPI**.
+
+If you only installed the firewall bouncer on `node-a`, only `node-a` blocks. `node-b` will happily continue serving the attacker, while `node-a`'s `cscli decisions list` smugly shows the IP "banned." Decisions are global; enforcement is local.
+
+<Callout type="tip">
+  Mental model: the LAPI is a shared blacklist database. Every bouncer subscribes to it. No subscriber on `node-b` means `node-b` never hears about the bans, even though they exist in the LAPI it's connected to.
+</Callout>
+
+The fix is mechanical. On the central node, mint a bouncer key for each edge node:
+
+```bash
+# On node-a
+cscli bouncers add node-b-firewall-bouncer
+# It prints the API key once. Copy it.
+```
+
+On the edge node:
+
+```bash
+# On node-b
+apt install crowdsec-firewall-bouncer-iptables
+```
+
+Then edit `/etc/crowdsec/bouncers/crowdsec-firewall-bouncer.yaml`:
+
+```yaml
+api_key: <key from cscli bouncers add>
+api_url: http://<node-a-ip>:8080
+```
+
+Restart and verify:
+
+```bash
+systemctl restart crowdsec-firewall-bouncer
+cscli bouncers list                  # run on node-a — node-b's bouncer should show with a recent pull
+iptables -L -n | grep -i crowdsec    # rules should exist on node-b
+```
+
+Now `node-a` detects, the LAPI decides, and *both* bouncers enforce. Brute-force SSH on `node-a` → instant ban on `node-b`. That's the property you wanted.
+
+## A Few Things Worth Knowing Before You Scale
+
+- **Parsers and scenarios are per-machine.** Each agent only parses logs it can see. Run `cscli collections install` on each node for the services it actually runs (SSH, nginx, traefik) — not on the LAPI.
+- **Profiles live on the LAPI.** Decision durations, ban vs captcha, alert routing — all configured once in `/etc/crowdsec/profiles.yaml` on the central node.
+- **CAPI talks to the central node only.** Community blocklist sync and the CrowdSec console run from the LAPI. Edge nodes are silent on that front, which is what you want.
+- **Logs don't share.** Each agent sees its own logs only. If your traffic is load-balanced across nodes and you want correlation, ship logs to a central collector and run the agent there instead.
+- **Adding a third node** is steps 3–6 with a new name. Plus a bouncer key. Plus opening `8080` from its IP.
+
+## Useful Commands (run on the central node)
+
+```bash
+cscli machines list      # see all registered log processors
+cscli alerts list        # alerts from all machines
+cscli decisions list     # active blocks across the fleet
+cscli bouncers list      # registered bouncers + last pull time
+cscli metrics            # metrics per machine
+```
+
+## What You Actually Got
+
+For zero dollars and an afternoon of yak-shaving:
+
+- An IDS that updates its rules from the global community.
+- Centralized decisions across every box you run.
+- Local enforcement on each box, surviving network blips between them.
+- A console (`app.crowdsec.net`, free tier) showing alerts across your fleet.
+
+The paid WAF still wins for very specific use cases — bot management on high-traffic e-commerce, complex L7 rules, managed compliance. For the SSH brute force, the credential stuffer, the vulnerability scanner, the residential-proxy slop that makes up the bulk of what hits a normal server: CrowdSec is enough. It's more than enough.
+
+The next time you go to bed at 1 AM after a deploy, your servers won't be alone. They'll have a bouncer at every door, working off a shared list of who not to let in. You earned the sleep. Take it.
