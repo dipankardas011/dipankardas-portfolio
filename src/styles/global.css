@@ -415,17 +415,6 @@ html[data-blog="true"] .prose :not(pre) > code {
   border-collapse: collapse;
   margin: 2rem 0;
   font-size: 0.9em;
-  display: block;
-  max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.prose table thead,
-.prose table tbody {
-  display: table;
-  width: 100%;
-  table-layout: auto;
 }
 
 .prose table td,
@@ -433,6 +422,17 @@ html[data-blog="true"] .prose :not(pre) > code {
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+/* Horizontal scroll wrapper injected by [...slug].astro */
+.prose .table-scroll {
+  margin: 2rem 0;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.prose .table-scroll > table {
+  margin: 0;
 }
 
 .prose thead {

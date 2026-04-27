@@ -257,6 +257,16 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
     headings.forEach((h) => observer.observe(h));
   }
 
+  // ---- Wrap wide tables in a horizontal scroll container ----
+  document.querySelectorAll(".prose table").forEach((table) => {
+    const parent = table.parentElement;
+    if (!parent || parent.classList.contains("table-scroll")) return;
+    const wrap = document.createElement("div");
+    wrap.className = "table-scroll";
+    parent.insertBefore(wrap, table);
+    wrap.appendChild(table);
+  });
+
   // ---- Code block language labels ----
   document.querySelectorAll(".prose pre").forEach((pre) => {
     // Shiki sets data-language on pre; fallback to reading the code class

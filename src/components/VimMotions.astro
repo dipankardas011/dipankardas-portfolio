@@ -4,8 +4,8 @@
 // State persists via localStorage. Disabled by default to avoid surprise.
 ---
 
-<div id="vim-chip" class="vim-chip" data-enabled="true" aria-label="Vim motions toggle">
-  <button type="button" class="vim-chip-btn" aria-pressed="true">
+<div id="vim-chip" class="vim-chip" data-enabled="false" aria-label="Vim motions toggle">
+  <button type="button" class="vim-chip-btn" aria-pressed="false">
     <svg
       class="vim-chip-logo"
       xmlns="http://www.w3.org/2000/svg"
@@ -204,7 +204,7 @@
     var flash = document.getElementById("vim-flash");
     if (!chip || !btn) return;
 
-    var enabled = true;
+    var enabled = false;
     try { 
       var stored = localStorage.getItem(STORAGE_KEY);
       if (stored !== null) {

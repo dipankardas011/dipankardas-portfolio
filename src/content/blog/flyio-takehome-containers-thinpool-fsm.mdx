@@ -4,9 +4,10 @@ author: "Dipankar Das"
 date: 2026-04-27
 description: "A fly.io take-home gave me an excuse to go deep on what containers actually are. What I learned about devicemapper thinpools, copy-on-write snapshots, and why a real orchestrator is just an FSM walking a state diff."
 tags: ["containers", "devicemapper", "thinpool", "fsm", "flyio", "orchestrator", "linux", "go"]
-cover: "/img/blogs/flyio-thinpool-fsm.png"
+cover: "/img/blogs/container-flyio.webp"
 ---
 import Callout from '../../components/Callout.astro';
+import { Tweet } from '@astro-community/astro-embed-twitter';
 
 ## How I Got Here
 
@@ -40,43 +41,201 @@ So far, no kernel involved. A Python script could do this. The interesting part 
 
 You could untar the image into a regular directory. Docker did that for years with the `vfs` driver. It is the slowest, dumbest, most-correct option.
 
-A serious orchestrator does not. It unpacks into a **thin volume** carved out of a **devicemapper thinpool**. The magic incantation:
+A serious orchestrator does not. It unpacks into a **thin volume** carved out of a **devicemapper thinpool**. Three tools build it:
 
 ```bash
 fallocate -l 1M pool_meta
-fallocate -l 2G pool_data
+fallocate -l 4G pool_data
 
-METADATA_DEV="$(losetup -f --show pool_meta)"
-DATA_DEV="$(losetup -f --show pool_data)"
+META=$(sudo losetup -f --show pool_meta)
+DATA=$(sudo losetup -f --show pool_data)
 
-dmsetup create --verifyudev pool --table \
-  "0 4194304 thin-pool ${METADATA_DEV} ${DATA_DEV} 2048 32768"
+sudo dmsetup create --verifyudev pool --table \
+  "0 8388608 thin-pool $META $DATA 2048 32768"
 ```
 
-Six lines. Worth dissecting, because if you do not understand them, the rest of the challenge is impossible.
+### What each tool does
 
-**`fallocate`** reserves disk space without writing zeros. Two files: `pool_meta` (1 MB, holds the block allocation map) and `pool_data` (2 GB, holds actual data blocks).
+**`fallocate -l <size> <file>`** — reserve space on the filesystem without writing zeros. Fast (no I/O). Here we make two files: `pool_meta` (1 MB, the block allocation map) and `pool_data` (4 GB, where actual blocks live).
 
-**`losetup -f --show <file>`** binds a file to a loop device — a `/dev/loopN` block device backed by that file. The kernel now treats the file as if it were a disk. (In production you use real block devices. The loop trick is for laptops and EC2 boxes.)
+**`losetup -f --show <file>`** — bind a regular file to a loop block device (`/dev/loopN`). The kernel now treats the file as if it were a disk. `-f` picks the first free loop slot, `--show` prints the chosen device. In production you point dmsetup straight at `/dev/nvme1n1` or similar; the loop trick is for VMs and laptops.
 
-**`dmsetup create`** is the load-bearing line:
+**`dmsetup create <name> --table "<table>"`** — create a virtual block device exposed at `/dev/mapper/<name>`. The "table" tells the kernel how to translate I/O on the virtual device into I/O on backing devices.
 
-```bash
-dmsetup create pool --table "0 4194304 thin-pool ${meta} ${data} 2048 32768"
+### The table line, field by field
+
+```
+0 8388608 thin-pool $META $DATA 2048 32768
 ```
 
-It says: *create a device-mapper target named `pool`, mapping sectors 0 through 4,194,304 (= 2 GB at 512 bytes/sector), of type `thin-pool`, using `${meta}` for metadata, `${data}` for data, with a block size of 2048 sectors (1 MB) and a low-water mark of 32,768 blocks.*
+Every dm table entry has the shape `<start_sector> <length_sectors> <target_type> <target_args...>`:
 
-A **thinpool** is a block of storage that hands out **thin volumes** on demand. The volumes look full-sized to whatever uses them, but blocks are only allocated on first write. You can create a 100 GB thin volume on a 2 GB pool and it costs you nothing — until something actually writes.
+| Field | Value | What it means |
+|---|---|---|
+| `start_sector` | `0` | Where this mapping begins on the virtual device. |
+| `length_sectors` | `8388608` | Total size in 512-byte sectors. **4 GB ÷ 512 B = 8,388,608.** Must equal `pool_data`. |
+| `target_type` | `thin-pool` | Kernel target module. Others: `linear`, `thin`, `snapshot`, `crypt`, `raid`. |
+| `metadata_dev` | `$META` | Loop device backing `pool_meta`. Holds the allocation map. |
+| `data_dev` | `$DATA` | Loop device backing `pool_data`. Holds actual blocks. |
+| `data_block_size` | `2048` | Allocation unit in sectors. **2048 × 512 B = 1 MB per block.** Smaller blocks = finer sharing, more metadata overhead. |
+| `low_water_mark` | `32768` | Free-block threshold. Below this the kernel fires an event so userspace can grow the pool. **32,768 × 1 MB = 32 GB warning headroom.** |
 
-Two things make this magical for an orchestrator:
+So nothing is actually hardcoded. Everything is derived from two choices: *how big is the pool* and *how big is one block*. Sectors come from `bytes / 512`, low-water from `<bytes-of-warning> / data_block_size`.
+
+### Why orchestrators care
+
+A **thinpool** hands out **thin volumes** on demand. Each volume looks full-sized to whatever uses it, but blocks only allocate on first write. Two consequences make this the right primitive for a container host:
 
 1. **Snapshots are basically free.** A snapshot of a thin volume is just another thin volume that shares blocks with the parent. Copy-on-write at the block layer. That is how an image becomes a runnable VM rootfs in milliseconds — the snapshot is metadata, not data.
 2. **Density.** One physical host can carry thousands of thin volumes derived from a few base images. Shared blocks stay shared until something writes.
 
-This is the primitive that makes per-customer-VM hosting affordable. Nobody invented it recently. Devicemapper thin provisioning has been in mainline Linux since 2011. Docker shipped the `devicemapper` storage driver in 2013. The contribution of a modern orchestrator is choosing it deliberately and building everything else around its guarantees.
+Nobody invented this recently. Devicemapper thin provisioning has shipped in mainline Linux since 2011. Docker shipped its `devicemapper` storage driver in 2013. The contribution of a modern orchestrator is choosing it deliberately and building everything else around its guarantees.
 
 So "unpack the image into a thinpool device, then snapshot it to activate" is, in miniature, the storage layer of a real fleet host.
+
+## Doing It By Hand: ubuntu:24.04 in a Thinpool
+
+You do not need the Go binary to feel this. On any Linux box with `dmsetup`, `losetup`, `skopeo`, and `jq` (Ubuntu 24.04 on AWS works fine), you can pull a real container image and run it from a thin volume in about ten minutes. Every output below is from a live `ssh` run, not invented.
+
+### 1. Build the pool
+
+```bash
+mkdir -p ~/demo && cd ~/demo
+fallocate -l 1M pool_meta
+fallocate -l 4G pool_data
+META=$(sudo losetup -f --show pool_meta)
+DATA=$(sudo losetup -f --show pool_data)
+sudo dmsetup create --verifyudev pool --table \
+  "0 8388608 thin-pool $META $DATA 2048 32768"
+
+sudo dmsetup ls
+# pool	(252:0)
+
+sudo dmsetup status pool
+# 0 8388608 thin-pool 0 34/256 0/4096 - rw discard_passdown queue_if_no_space - 64
+```
+
+`34/256` is metadata blocks used / total. `0/4096` is data blocks used / total — fresh pool.
+
+### 2. Carve out a thin volume
+
+```bash
+# device id 1 inside the pool, 1 GB volume = 2,097,152 sectors
+sudo dmsetup message /dev/mapper/pool 0 "create_thin 1"
+sudo dmsetup create pool-ubuntu --table "0 2097152 thin /dev/mapper/pool 1"
+
+sudo mkfs.ext4 -q /dev/mapper/pool-ubuntu
+sudo mkdir -p /mnt/ubuntu
+sudo mount /dev/mapper/pool-ubuntu /mnt/ubuntu
+
+df -h /mnt/ubuntu
+# /dev/mapper/pool-ubuntu  974M   24K  907M   1% /mnt/ubuntu
+```
+
+The volume looks like a 1 GB ext4 disk to userspace. Inside the pool, only the blocks ext4 just wrote are allocated.
+
+### 3. Pull ubuntu:24.04 as an OCI layout
+
+```bash
+sudo skopeo copy docker://docker.io/library/ubuntu:24.04 oci:./oci:24.04
+# Copying blob sha256:818154cd... 28.8 MB
+# Copying config sha256:3c220491...
+# Writing manifest to image destination
+```
+
+Inspect the manifest — this is what an "image" actually is:
+
+```bash
+MANIFEST=$(jq -r .manifests[0].digest oci/index.json | sed s/sha256://)
+jq . oci/blobs/sha256/$MANIFEST
+```
+
+```json
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.image.manifest.v1+json",
+  "config": { "digest": "sha256:3c220491...", "size": 2069 },
+  "layers": [
+    { "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "size": 28875785,
+      "digest": "sha256:818154cd..." }
+  ]
+}
+```
+
+One layer. 28 MB. That is ubuntu:24.04.
+
+<Callout type="note">
+Docker Hub will tell you ubuntu:24.04 has *five* layers. It does not lie — but it counts every Dockerfile instruction (`ARG`, `LABEL`, `CMD`, `ADD`, etc.) as a "layer" in the build history. The OCI image manifest only stores layers that actually change the filesystem. Four of those five instructions (`ARG RELEASE`, `ARG LAUNCHPAD_BUILD_ARCH`, `LABEL ...`, `CMD ["/bin/bash"]`) write zero bytes to the rootfs, so the manifest collapses to the one layer that does: `ADD file:8ce1caf... in /` — the 29.73 MB tarball that is the rootfs. Build steps ≠ filesystem layers. The orchestrator only cares about the latter.
+</Callout>
+
+### 4. Extract the layers onto the thin volume
+
+```bash
+LAYERS=$(jq -r ".layers[].digest" oci/blobs/sha256/$MANIFEST | sed s/sha256://)
+for L in $LAYERS; do
+  sudo tar -xf oci/blobs/sha256/$L -C /mnt/ubuntu
+done
+
+sudo ls /mnt/ubuntu
+# bin  boot  dev  etc  home  lib  ...  usr  var
+sudo du -sh /mnt/ubuntu
+# 106M	/mnt/ubuntu
+```
+
+That is a Linux root filesystem. You wrote it. No Docker daemon was involved.
+
+### 5. Run it
+
+```bash
+sudo cat /mnt/ubuntu/etc/os-release
+# PRETTY_NAME="Ubuntu 24.04.4 LTS"
+# VERSION="24.04.4 LTS (Noble Numbat)"
+
+sudo chroot /mnt/ubuntu /bin/cat /etc/issue
+# Ubuntu 24.04.4 LTS \n \l
+```
+
+You just executed a binary from inside an Ubuntu image you mounted off a thin volume. `chroot` is the smallest, oldest containment primitive in Linux. A real runtime adds namespaces, cgroups, seccomp; the *filesystem* part is already done.
+
+<Tweet id="https://x.com/iximiuz/status/2048357568213348431?s=20"/>
+
+### 6. Snapshot to "activate"
+
+```bash
+sudo umount /mnt/ubuntu
+sudo dmsetup message /dev/mapper/pool 0 "create_snap 2 1"
+sudo dmsetup create pool-ubuntu-snapshot --table "0 2097152 thin /dev/mapper/pool 2"
+
+sudo dmsetup ls
+# pool                  (252:0)
+# pool-ubuntu           (252:1)
+# pool-ubuntu-snapshot  (252:2)
+```
+
+Two `dmsetup` calls. Zero data copied. The snapshot shares every block with the parent until either side writes. Prove it:
+
+```bash
+sudo mkdir -p /mnt/ubuntu-snap
+sudo mount /dev/mapper/pool-ubuntu-snapshot /mnt/ubuntu-snap
+sudo touch /mnt/ubuntu-snap/HELLO_FROM_SNAPSHOT
+sudo umount /mnt/ubuntu-snap
+
+sudo mount /dev/mapper/pool-ubuntu /mnt/ubuntu
+sudo ls /mnt/ubuntu/HELLO_FROM_SNAPSHOT
+# ls: cannot access '/mnt/ubuntu/HELLO_FROM_SNAPSHOT': No such file or directory
+```
+
+The write happened in the snapshot's blocks. The parent volume was never touched. That is copy-on-write at the block layer — which means each "running container" can be a snapshot of one base image, paying for blocks only when it dirties them.
+
+Final pool usage:
+
+```
+sudo dmsetup status pool
+# 0 8388608 thin-pool 0 36/256 167/4096 - rw discard_passdown queue_if_no_space - 64
+```
+
+`167/4096` data blocks ≈ 167 MB allocated for both rootfs and snapshot combined. The 4 GB pool would happily host dozens of these.
 
 ## What My Code Actually Does
 
