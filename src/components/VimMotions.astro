@@ -47,45 +47,44 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    background: rgba(23, 23, 23, 0.85);
-    color: #d9faa1;
-    border: 1px solid rgba(217, 250, 161, 0.25);
+    background: var(--color-app-body);
+    color: var(--color-app-text);
+    border: 1px solid var(--color-app-ink-line);
     padding: 0.4rem 0.75rem;
     border-radius: 0.5rem;
     font-size: 0.75rem;
     line-height: 1;
     cursor: pointer;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    transition: border-color 0.15s ease, transform 0.15s ease;
+    box-shadow: 0 6px 14px -8px rgba(26,26,26,0.18);
+    transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
   }
   .vim-chip-btn:hover,
   .vim-chip-btn:focus-visible {
-    border-color: rgba(217, 250, 161, 0.6);
+    border-color: var(--color-app-accent-2);
     transform: translateY(-1px);
     outline: none;
   }
   .vim-chip-logo {
     width: 1.05rem;
     height: 1.05rem;
-    color: rgba(217, 250, 161, 0.6);
+    color: var(--color-app-accent);
     transition: color 0.15s ease, transform 0.15s ease;
   }
   .vim-chip-btn:hover .vim-chip-logo {
     transform: rotate(-4deg);
+    color: var(--color-app-accent-2);
   }
   .vim-chip-mode {
     letter-spacing: 0.08em;
     font-weight: 600;
   }
   .vim-chip[data-enabled="true"] .vim-chip-btn {
-    background: #d9faa1;
-    color: #171717;
-    border-color: #d9faa1;
-    box-shadow: 0 0 0 1px rgba(217, 250, 161, 0.5);
+    background: var(--color-app-text);
+    color: var(--color-app-body);
+    border-color: var(--color-app-text);
   }
   .vim-chip[data-enabled="true"] .vim-chip-logo {
-    color: #171717;
+    color: var(--color-app-accent-2);
   }
 
   .vim-chip-panel {
@@ -93,15 +92,15 @@
     bottom: calc(100% + 0.5rem);
     left: 0;
     min-width: 16rem;
-    background: rgba(17, 17, 17, 0.96);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-app-body);
+    border: 1px solid var(--color-app-ink-line);
     border-radius: 0.6rem;
     padding: 0.85rem 1rem;
-    color: #e7e7e7;
+    color: var(--color-app-text);
     font-family: var(--font-sans, system-ui, sans-serif);
     font-size: 0.8rem;
     line-height: 1.4;
-    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 18px 40px -16px rgba(26,26,26,0.25);
     opacity: 0;
     transform: translateY(4px);
     pointer-events: none;
@@ -117,13 +116,16 @@
   .vim-chip-title {
     margin: 0 0 0.15rem;
     font-weight: 600;
-    color: #d9faa1;
-    letter-spacing: 0.02em;
+    color: var(--color-app-accent);
+    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
   }
   .vim-chip-status {
     margin: 0 0 0.6rem;
     font-size: 0.7rem;
-    color: rgba(231, 231, 231, 0.65);
+    color: var(--color-app-gray-400);
     display: flex;
     align-items: center;
     gap: 0.4rem;
@@ -132,12 +134,12 @@
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background: #888;
+    background: var(--color-app-gray-300);
     transition: background 0.15s ease, box-shadow 0.15s ease;
   }
   .vim-chip[data-enabled="true"] .vim-status-dot {
-    background: #d9faa1;
-    box-shadow: 0 0 0 3px rgba(217, 250, 161, 0.18);
+    background: var(--color-app-accent-2);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.18);
   }
   .vim-chip-keys {
     list-style: none;
@@ -152,21 +154,21 @@
     gap: 0.45rem;
   }
   .vim-chip-keys li > span {
-    color: rgba(231, 231, 231, 0.78);
+    color: var(--color-app-gray-500);
     font-size: 0.75rem;
   }
   .vim-chip-keys kbd {
     display: inline-block;
     min-width: 1.4rem;
     text-align: center;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: var(--color-app-surface);
+    border: 1px solid var(--color-app-border);
     border-bottom-width: 2px;
     border-radius: 0.3rem;
     padding: 0.1rem 0.35rem;
     font-family: var(--font-mono, ui-monospace, monospace);
     font-size: 0.7rem;
-    color: #f5f5f5;
+    color: var(--color-app-text);
   }
 
   @media (max-width: 640px) {
@@ -178,8 +180,8 @@
     left: 50%;
     bottom: 4.25rem;
     transform: translateX(-50%);
-    background: rgba(217, 250, 161, 0.95);
-    color: #111;
+    background: var(--color-app-text);
+    color: var(--color-app-body);
     font-family: var(--font-mono, ui-monospace, monospace);
     font-size: 0.75rem;
     font-weight: 600;
