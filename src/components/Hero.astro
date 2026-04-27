@@ -5,7 +5,7 @@ import BlurDecoration from "./BlurDecoration.astro";
 const today = new Date().toISOString().slice(0, 10);
 ---
 
-<section class="relative pt-6 pb-12 lg:pt-10 lg:pb-20">
+<section class="hero-section relative pt-6 pb-12 lg:pt-10 lg:pb-20">
   <div class="container mx-auto">
 
     <!-- System strip -->
@@ -107,6 +107,15 @@ const today = new Date().toISOString().slice(0, 10);
 </section>
 
 <style>
+  /*
+   * Full-viewport hero on large screens.
+   * On small screens content can exceed viewport — min-height ensures
+   * it grows naturally instead of clipping.
+   */
+  .hero-section {
+    min-height: calc(100svh - 5rem); /* 5rem ≈ header + border */
+  }
+
   /* Staggered reveal animation for hero elements */
   @keyframes hero-reveal-up {
     from {
