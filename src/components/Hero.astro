@@ -5,11 +5,11 @@ import BlurDecoration from "./BlurDecoration.astro";
 const today = new Date().toISOString().slice(0, 10);
 ---
 
-<section class="relative pt-6 pb-12 lg:pt-10 lg:pb-20 animate-fade-in">
+<section class="relative pt-6 pb-12 lg:pt-10 lg:pb-20">
   <div class="container mx-auto">
 
     <!-- System strip -->
-    <div class="sys-strip mb-10 lg:mb-14">
+    <div class="sys-strip mb-10 lg:mb-14 hero-reveal" style="--reveal-d:0">
       <span class="sys-key">~/dipankar-das</span>
       <span class="sys-dot">●</span>
       <span class="sys-value">platform-engineer</span>
@@ -24,9 +24,9 @@ const today = new Date().toISOString().slice(0, 10);
 
       <!-- LEFT: copy block (8 cols) -->
       <div class="lg:col-span-8">
-        <div class="kicker mb-5">Platform Engineer · Systems Thinker</div>
+        <div class="kicker mb-5 hero-reveal" style="--reveal-d:1">Platform Engineer · Systems Thinker</div>
 
-        <h1 class="font-display font-medium text-[clamp(2.4rem,6.4vw,4.8rem)] leading-[1.02] tracking-[-0.03em] text-app-text">
+        <h1 class="font-display font-medium text-[clamp(2.4rem,6.4vw,4.8rem)] leading-[1.02] tracking-[-0.03em] text-app-text hero-reveal" style="--reveal-d:2">
           Hi, I'm <span class="font-serif italic font-normal text-app-accent">Dipankar</span> —
           I build systems that
           <span class="relative inline-block">
@@ -35,7 +35,7 @@ const today = new Date().toISOString().slice(0, 10);
           </span>.
         </h1>
 
-        <p class="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[12px] tracking-[0.04em] text-app-gray-500">
+        <p class="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[12px] tracking-[0.04em] text-app-gray-500 hero-reveal" style="--reveal-d:3">
           <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-gray-400">principles —</span>
           <span class="text-app-text">don't fail</span>
           <span class="text-app-accent-2 font-bold">+</span>
@@ -44,13 +44,13 @@ const today = new Date().toISOString().slice(0, 10);
           <span class="text-app-text">stay efficient</span>
         </p>
 
-        <p class="mt-6 lg:mt-8 max-w-xl text-base lg:text-lg leading-[1.55] text-app-gray-500">
+        <p class="mt-6 lg:mt-8 max-w-xl text-base lg:text-lg leading-[1.55] text-app-gray-500 hero-reveal" style="--reveal-d:4">
           Kubernetes, Go, OpenTelemetry. Deep-dives on DevOps and distributed
           systems — efficiency is the goal, not an afterthought.
         </p>
 
         <!-- CTAs -->
-        <div class="mt-7 flex flex-wrap gap-3">
+        <div class="mt-7 flex flex-wrap gap-3 hero-reveal" style="--reveal-d:5">
           <a href="/services/" class="btn-primary">
             <span>Work with me</span>
             <span class="font-mono text-xs">→</span>
@@ -66,7 +66,7 @@ const today = new Date().toISOString().slice(0, 10);
         </div>
 
         <!-- Social shortcut row (mono) -->
-        <ul class="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-[0.14em] text-app-gray-400">
+        <ul class="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-[0.14em] text-app-gray-400 hero-reveal" style="--reveal-d:6">
           <li><a href={socialLinks.github} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">github ↗</a></li>
           <li><a href={socialLinks.linkedin} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">linkedin ↗</a></li>
           <li><a href={socialLinks.twitter} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">twitter ↗</a></li>
@@ -75,7 +75,7 @@ const today = new Date().toISOString().slice(0, 10);
       </div>
 
       <!-- RIGHT: portrait card (4 cols) -->
-      <div class="lg:col-span-4">
+      <div class="lg:col-span-4 hero-reveal" style="--reveal-d:3">
         <div class="relative">
           <BlurDecoration variant="purple" position="top-right" />
           <BlurDecoration variant="terra"  position="bottom-left" />
@@ -105,3 +105,32 @@ const today = new Date().toISOString().slice(0, 10);
     </div>
   </div>
 </section>
+
+<style>
+  /* Staggered reveal animation for hero elements */
+  @keyframes hero-reveal-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-reveal {
+    opacity: 0;
+    animation: hero-reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: calc(var(--reveal-d, 0) * 0.1s + 0.15s);
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-reveal {
+      opacity: 1;
+      animation: none;
+      transform: none;
+    }
+  }
+</style>
