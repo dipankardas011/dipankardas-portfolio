@@ -23,9 +23,10 @@ export default defineConfig({
     rehypePlugins: [rehypeKatex],
     shikiConfig: {
       themes: {
-        light: "github-light",
-        dark: "everforest-dark",
+        light: "rose-pine-dawn",
+        dark: "rose-pine-dawn",
       },
+      wrap: true,
     },
   },
 });

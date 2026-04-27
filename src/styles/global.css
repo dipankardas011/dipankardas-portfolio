@@ -320,9 +320,22 @@ body {
   word-break: break-word;
 }
 .prose pre {
-  background-color: var(--color-app-surface);
+  background-color: #FAF4ED !important; /* rose-pine-dawn surface */
   border: 1px solid var(--color-app-border);
-  border-radius: 0.5rem;
+  border-radius: 0.4rem;
+  padding: 1rem 1.1rem;
+  font-size: 0.86em;
+  line-height: 1.55;
+  box-shadow: 0 1px 0 var(--color-app-border), 0 8px 18px -10px rgba(26,26,26,0.10);
+  overflow-x: auto;
+}
+.prose pre code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  font-size: inherit;
+  color: inherit;
+  font-family: var(--font-mono);
 }
 
 .prose ul { list-style: none; padding-left: 0; margin: 1.5rem 0; }
