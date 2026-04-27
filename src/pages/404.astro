@@ -1,118 +1,76 @@
 ---
 import BaseLayout from "../components/BaseLayout.astro";
-import BlurDecoration from "../components/BlurDecoration.astro";
 ---
 
 <BaseLayout title="404 — Page Not Found">
-  <section class="py-10 lg:py-20 animate-fade-in">
+  <section class="py-16 lg:py-24 animate-fade-in">
     <div class="container mx-auto">
-      <div class="relative bg-app-surface rounded-3xl overflow-hidden px-6 py-16 md:px-12 md:py-24 lg:px-20 lg:py-32 text-center">
-        <BlurDecoration variant="purple" position="top-right" />
-        <BlurDecoration variant="yellow" position="bottom-left" />
 
-        <div class="relative z-10">
-          <div class="glitch-wrapper" aria-hidden="true">
-            <p class="glitch font-display text-[120px] md:text-[180px] lg:text-[220px] leading-none font-bold tracking-tight select-none" data-text="404">
-              404
-            </p>
-          </div>
-          <h1 class="text-2xl md:text-3xl lg:text-4xl font-semibold tracking-[var(--tracking-tight)] mt-4">
-            Page not found
+      <div class="sys-strip mb-12 lg:mb-16">
+        <span class="sys-key">~/404</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value">status: not_found</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value">code: 0x194</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value ml-auto">retry: manual</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-end mb-16 lg:mb-24">
+        <div class="lg:col-span-7">
+          <div class="kicker mb-6">/error · stack underflow</div>
+          <h1 class="marquee-title text-[28vw] sm:text-[24vw] md:text-[20vw] lg:text-[18vw] leading-[0.85]">
+            <span class="text-app-text">4</span><span class="text-app-accent">0</span><span class="text-app-text">4</span><span class="text-app-accent-2">.</span>
           </h1>
-          <p class="text-sm md:text-base text-app-gray-400 tracking-[var(--tracking-tight)] mt-3 max-w-md mx-auto leading-relaxed">
-            The page you're looking for doesn't exist or has been moved.
-          </p>
-          <a
-            href="/"
-            class="inline-flex items-center px-7 py-3 mt-8 border border-app-gray-200 rounded-[32px] text-sm lg:text-base font-medium text-app-gray-500 hover:border-app-text hover:bg-app-text hover:text-white transition-colors duration-300 tracking-[var(--tracking-tight)] uppercase"
-          >
-            Back to Home
-          </a>
         </div>
+        <div class="lg:col-span-5">
+          <h2 class="font-display text-2xl md:text-3xl lg:text-4xl text-app-text tracking-tight leading-[1.1] mb-4">
+            This page is<br/>
+            <span class="font-serif italic font-normal text-app-accent">not in the index</span>.
+          </h2>
+          <p class="text-base lg:text-lg text-app-gray-500 leading-[1.55] max-w-md mb-8">
+            Either the URL is wrong, the page moved, or it never existed. No
+            backtrace to follow — just turn back.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <a href="/" class="btn-primary">
+              <span>Back to home</span>
+              <span class="font-mono text-xs">←</span>
+            </a>
+            <a href="/blog/" class="btn-ghost">
+              <span class="font-mono text-[11px] uppercase tracking-[0.12em]">Read the blog</span>
+              <span>↘</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Helpful map -->
+      <div class="border-t border-app-ink-line pt-10">
+        <div class="kicker mb-6">/sitemap · try one of these</div>
+        <ul class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-app-border border border-app-border">
+          {[
+            { label: "Home", href: "/" },
+            { label: "Blog", href: "/blog/" },
+            { label: "Skills", href: "/skills/" },
+            { label: "Projects", href: "/projects/" },
+            { label: "Services", href: "/services/" },
+            { label: "About", href: "/about/" },
+          ].map((l, i) => (
+            <li>
+              <a
+                href={l.href}
+                class="group bg-app-body hover:bg-app-text hover:text-app-body transition-colors duration-300 px-5 py-5 flex flex-col justify-between min-h-[88px]"
+              >
+                <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-accent group-hover:text-app-accent-2">
+                  /{String(i + 1).padStart(2, "0")} ↗
+                </span>
+                <span class="font-display text-base font-medium tracking-tight">{l.label}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </section>
-<style>
-  .glitch-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-
-  .glitch {
-    position: relative;
-    background: linear-gradient(135deg, #c1c3d4 0%, #efefef 45%, #fbebd0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .glitch::before,
-  .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: linear-gradient(135deg, #c1c3d4 0%, #efefef 45%, #fbebd0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .glitch::before {
-    opacity: 0.6;
-    clip-path: inset(0 0 65% 0);
-    animation: glitch-top 3s infinite linear alternate-reverse;
-  }
-
-  .glitch::after {
-    opacity: 0.4;
-    clip-path: inset(60% 0 0 0);
-    animation: glitch-bottom 2.5s infinite linear alternate-reverse;
-  }
-
-  @keyframes glitch-top {
-    0%, 90% {
-      transform: translate(0);
-    }
-    92% {
-      transform: translate(-8px, -2px);
-    }
-    94% {
-      transform: translate(8px, 2px);
-    }
-    96% {
-      transform: translate(-4px, 1px);
-    }
-    98% {
-      transform: translate(3px, -1px);
-    }
-    100% {
-      transform: translate(0);
-    }
-  }
-
-  @keyframes glitch-bottom {
-    0%, 88% {
-      transform: translate(0);
-    }
-    90% {
-      transform: translate(6px, 2px);
-    }
-    93% {
-      transform: translate(-6px, -1px);
-    }
-    95% {
-      transform: translate(4px, 1px);
-    }
-    97% {
-      transform: translate(-3px, -2px);
-    }
-    100% {
-      transform: translate(0);
-    }
-  }
-</style>
 </BaseLayout>

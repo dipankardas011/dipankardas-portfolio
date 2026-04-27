@@ -3,20 +3,15 @@ import BaseLayout from "../../components/BaseLayout.astro";
 import BlogPostCard from "../../components/BlogPostCard.astro";
 import BlogList from "../../components/BlogList.astro";
 import AnimatedTitle from "../../components/AnimatedTitle.astro";
-import TopGradient from "../../components/TopGradient.astro";
 import { getCollection } from "astro:content";
 import { externalBlogs } from "../../data/external-blogs";
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
-// Filter out the external-blogs index file and sort by date
 const blogPosts = allPosts
   .filter((p) => p.id !== "external-blogs")
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-
-
-// Serialize posts for client-side
 const serializedPosts = blogPosts.map(post => ({
   id: post.id,
   title: post.data.title,
@@ -24,31 +19,88 @@ const serializedPosts = blogPosts.map(post => ({
   description: post.data.description,
   cover: post.data.cover,
 }));
+
+const latest = blogPosts[0];
+const latestDate = latest?.data.date;
 ---
 
 <BaseLayout
   title="Blog - Dipankar Das"
   description="Technical articles on DevOps, Kubernetes, Go, and cloud-native development."
-  blogPost={true}
 >
-  <div class="relative">
-    <TopGradient />
-    <AnimatedTitle title="Blog" />
-  </div>
+  <AnimatedTitle title="Blog" kicker="/blog · long-form notes" />
 
-  <!-- Blog List -->
+  <section class="py-10 lg:py-16 animate-fade-in">
+    <div class="container mx-auto">
+
+      <div class="sys-strip mb-12 lg:mb-16">
+        <span class="sys-key">~/blog</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value">{blogPosts.length} posts</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value">{externalBlogs.length} external</span>
+        {latestDate && (
+          <>
+            <span class="sys-dot">●</span>
+            <span class="sys-value ml-auto">last shipped: {latestDate.toISOString().slice(0, 10)}</span>
+          </>
+        )}
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16 lg:mb-20">
+        <div class="lg:col-span-8">
+          <h2 class="font-display text-3xl md:text-5xl lg:text-6xl text-app-text tracking-tight leading-[1.02]">
+            Notes from the<br/>
+            <span class="font-serif italic font-normal text-app-accent">control plane</span>.
+          </h2>
+          <p class="mt-8 max-w-xl text-base lg:text-lg text-app-gray-500 leading-[1.55]">
+            Deep-dives on DevOps, Kubernetes, Go, and the unglamorous parts of running
+            real systems. Written when I have something genuinely useful to say.
+          </p>
+        </div>
+        {latest && (
+          <a href={`/blog/${latest.id}/`} class="lg:col-span-4 group block lg:pl-8 lg:border-l border-app-border">
+            <div class="kicker mb-3">/latest</div>
+            <p class="font-mono text-[11px] uppercase tracking-[0.16em] text-app-accent-2 mb-2">
+              {latestDate?.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }).toUpperCase()}
+            </p>
+            <h3 class="font-display text-xl lg:text-2xl text-app-text leading-[1.15] tracking-tight group-hover:text-app-accent transition-colors">
+              {latest.data.title}
+            </h3>
+            {latest.data.description && (
+              <p class="mt-3 text-sm text-app-gray-500 line-clamp-3 leading-[1.5]">
+                {latest.data.description}
+              </p>
+            )}
+            <span class="inline-flex items-center gap-2 mt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-app-text group-hover:text-app-accent transition-colors">
+              Read post <span>→</span>
+            </span>
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+
   <BlogList posts={serializedPosts} />
 
   <!-- External blogs -->
   <section class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20 lg:pb-24">
-    <div class="border-t border-app-gray-200 pt-12 lg:pt-16">
-      <h2 class="text-xl md:text-2xl lg:text-[32px] font-display text-app-text mb-2 lg:mb-3 tracking-[var(--tracking-tight)]">
-        External articles
-      </h2>
-      <p class="text-sm lg:text-base text-app-gray-400 mb-8 lg:mb-10 tracking-[var(--tracking-tight)]">
-        Posts published on Hashnode, WordPress, and Kubesimplify
-      </p>
-      <div class="grid grid-cols-1 auto-rows-fr gap-6 p-4 border border-app-gray-200 rounded-2xl md:grid-cols-2 lg:grid-cols-3 lg:gap-8 lg:p-8">
+    <div class="border-t border-app-ink-line pt-14 lg:pt-20">
+      <div class="flex items-end justify-between gap-4 mb-10 lg:mb-12">
+        <div>
+          <div class="kicker mb-2">/external · syndicated</div>
+          <h2 class="font-display text-2xl md:text-3xl lg:text-4xl text-app-text tracking-tight">
+            Posts elsewhere
+          </h2>
+          <p class="mt-3 text-sm lg:text-base text-app-gray-400 max-w-md">
+            Articles published on Hashnode, WordPress, and Kubesimplify.
+          </p>
+        </div>
+        <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-gray-400 hidden sm:inline">
+          [{String(externalBlogs.length).padStart(2, "0")} entries]
+        </span>
+      </div>
+      <div class="grid grid-cols-1 auto-rows-fr gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
         {externalBlogs.map((blog) => (
           <BlogPostCard
             title={blog.title}

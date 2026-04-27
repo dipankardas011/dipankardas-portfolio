@@ -14,18 +14,31 @@ const sortedSkills = allSkills.sort((a, b) => a.data.title.localeCompare(b.data.
   description="A collection of specialized AI Agent skill modules (SKILLS.md) for automated engineering workflows."
   blogPost={true}
 >
-  <div class="relative">
-    <TopGradient />
-    <AnimatedTitle title="Agent Library" />
-  </div>
+  <AnimatedTitle title="Agent Library" kicker="/skills · agent-readable" />
 
   <section class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20 lg:pb-24">
-    <div class="mb-12">
-      <p class="text-lg text-app-gray-400 max-w-2xl leading-relaxed">
-        I build high-context "skills" to teach AI agents how to think like platform engineers.
-        Explore my collection of <code class="px-1.5 py-0.5 rounded text-app-accent bg-app-surface border border-app-gray-200 font-mono text-sm">SKILLS.md</code> modules,
-        their inspiration, and the logic behind them.
-      </p>
+
+    <div class="sys-strip mb-12 lg:mb-16">
+      <span class="sys-key">~/agent-library</span>
+      <span class="sys-dot">●</span>
+      <span class="sys-value">{sortedSkills.length} skills</span>
+      <span class="sys-dot">●</span>
+      <span class="sys-value">format: SKILLS.md</span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16 lg:mb-20">
+      <div class="lg:col-span-8">
+        <h2 class="font-display text-3xl md:text-5xl lg:text-6xl text-app-text tracking-tight leading-[1.02]">
+          Teaching AI to think<br/>
+          like a <span class="font-serif italic font-normal text-app-accent">platform engineer</span>.
+        </h2>
+        <p class="mt-8 max-w-xl text-base lg:text-lg text-app-gray-500 leading-[1.55]">
+          High-context modules I write for coding agents — encoded as
+          <code class="px-1.5 py-0.5 rounded text-app-accent-2 bg-app-surface border border-app-border font-mono text-[0.9em]">SKILLS.md</code>
+          files. Each captures the inspiration, logic, and rules so agents
+          can compose them into real workflows.
+        </p>
+      </div>
     </div>
 
     <!-- Setup guide -->

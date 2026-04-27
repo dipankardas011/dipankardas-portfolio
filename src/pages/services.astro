@@ -27,11 +27,28 @@ import { siteConfig } from "../data/site";
         <span class="sys-value">availability: open</span>
       </div>
 
-      <p class="text-base lg:text-xl text-app-gray-500 leading-[1.55] max-w-3xl mb-16 lg:mb-24">
-        I help teams <span class="font-serif italic text-app-accent">{siteConfig.tagline.toLowerCase()}</span>.
-        From Software Development and System Design to DevOps and Cloud-Native infrastructure —
-        a focused suite of services to elevate the layer your business runs on.
-      </p>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 lg:mb-24">
+        <div class="lg:col-span-8">
+          <h2 class="font-display text-3xl md:text-5xl lg:text-6xl text-app-text tracking-tight leading-[1.02]">
+            I help teams<br/>
+            <span class="font-serif italic font-normal text-app-accent">{siteConfig.tagline.toLowerCase()}</span>.
+          </h2>
+          <p class="mt-8 max-w-xl text-base lg:text-lg text-app-gray-500 leading-[1.55]">
+            From Software Development and System Design to DevOps and Cloud-Native
+            infrastructure — a focused suite of services to elevate the layer your
+            business runs on.
+          </p>
+        </div>
+        <aside class="lg:col-span-4 lg:pl-8 lg:border-l border-app-border flex flex-col justify-end">
+          <div class="kicker mb-3">/engagement modes</div>
+          <ul class="space-y-2 font-mono text-[11px] uppercase tracking-[0.14em] text-app-gray-500">
+            <li class="flex items-baseline gap-2"><span class="text-app-accent">●</span> hourly consult</li>
+            <li class="flex items-baseline gap-2"><span class="text-app-accent">●</span> fixed-scope project</li>
+            <li class="flex items-baseline gap-2"><span class="text-app-accent">●</span> retainer / fractional</li>
+            <li class="flex items-baseline gap-2"><span class="text-app-accent">●</span> one-shot audit</li>
+          </ul>
+        </aside>
+      </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-20 lg:mb-28 animate-stagger">
         {services.map((s) => (

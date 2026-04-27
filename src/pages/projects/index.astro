@@ -27,10 +27,33 @@ import { projects, ossContributions, categories } from "../../data/projects";
         <span class="sys-value">{ossContributions.length} oss orgs</span>
       </div>
 
-      <p class="text-base lg:text-xl text-app-gray-500 leading-[1.55] max-w-3xl mb-16 lg:mb-24 font-serif italic">
-        Tools, systems, and experiments built to solve real-world infrastructure problems —
-        not portfolio pieces. Every one of these has shipped or been used in anger.
-      </p>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 lg:mb-24">
+        <div class="lg:col-span-8">
+          <h2 class="font-display text-3xl md:text-5xl lg:text-6xl text-app-text tracking-tight leading-[1.02]">
+            Things I've<br/>
+            <span class="font-serif italic font-normal text-app-accent">shipped &amp; broken</span>
+            in production.
+          </h2>
+          <p class="mt-8 max-w-xl text-base lg:text-lg text-app-gray-500 leading-[1.55]">
+            Tools, systems, and experiments built to solve real-world infrastructure
+            problems — not portfolio pieces. Every one of these has shipped or been
+            used in anger.
+          </p>
+        </div>
+        <aside class="lg:col-span-4 lg:pl-8 lg:border-l border-app-border flex flex-col justify-end">
+          <div class="kicker mb-3">/ledger</div>
+          <dl class="grid grid-cols-2 gap-y-3 gap-x-4 font-mono text-[11px] uppercase tracking-[0.14em]">
+            <dt class="text-app-gray-400">projects</dt>
+            <dd class="text-app-text font-semibold text-right">{projects.length}</dd>
+            <dt class="text-app-gray-400">categories</dt>
+            <dd class="text-app-text font-semibold text-right">{categories.length}</dd>
+            <dt class="text-app-gray-400">oss orgs</dt>
+            <dd class="text-app-text font-semibold text-right">{ossContributions.length}</dd>
+            <dt class="text-app-gray-400">prs merged</dt>
+            <dd class="text-app-accent font-semibold text-right">{ossContributions.reduce((a, c) => a + c.prs.length, 0)}+</dd>
+          </dl>
+        </aside>
+      </div>
 
       {categories.map((cat, catIndex) => {
         const catProjects = projects.filter((p) => p.category === cat);

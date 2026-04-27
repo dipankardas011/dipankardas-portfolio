@@ -46,9 +46,9 @@
    Cream paper · Indigo load-bearing · Terracotta sharp accent
    ============================================ */
 @theme {
-  /* Core palette */
-  --color-app-accent:        #3A437E;   /* deep indigo — load-bearing */
-  --color-app-accent-2:      #FF6B35;   /* terracotta — sharp accent */
+  /* Core palette — cream paper · ink · terracotta only */
+  --color-app-accent:        #FF6B35;   /* terracotta — load-bearing */
+  --color-app-accent-2:      #C24A1B;   /* deep terracotta — hover/punctuation */
   --color-app-body:          #FAF7F0;   /* warm cream */
   --color-app-bg:            #FAF7F0;
   --color-app-text:          #1A1A1A;   /* near-black ink */
@@ -68,7 +68,7 @@
   --color-app-ink-line:      #1A1A1A;   /* hard rule color */
 
   /* Decorative blur */
-  --color-blur-purple: #3A437E;
+  --color-blur-purple: #FF6B35;
   --color-blur-yellow: #FFBF4B;
   --color-blur-terra:  #FF6B35;
 
@@ -87,11 +87,11 @@
 }
 
 /* Replace old gradient util with cream-paper bg + soft glow */
-.bg-app-accent {
+.bg-app-accent-glow {
   background:
-    radial-gradient(900px 480px at 12% -10%, rgba(58,67,126,0.10), transparent 60%),
-    radial-gradient(800px 420px at 90% 110%, rgba(255,107,53,0.08), transparent 60%),
-    var(--color-app-body) !important;
+    radial-gradient(900px 480px at 12% -10%, rgba(255,107,53,0.12), transparent 60%),
+    radial-gradient(800px 420px at 90% 110%, rgba(255,191,75,0.10), transparent 60%),
+    var(--color-app-body);
 }
 
 /* ============================================
@@ -110,8 +110,8 @@ body {
   background-color: var(--color-app-body);
   /* Subtle paper grain — SVG noise */
   background-image:
-    radial-gradient(1100px 600px at 8% 0%, rgba(58,67,126,0.05), transparent 55%),
-    radial-gradient(900px 500px at 100% 100%, rgba(255,107,53,0.04), transparent 60%),
+    radial-gradient(1100px 600px at 8% 0%, rgba(255,107,53,0.07), transparent 55%),
+    radial-gradient(900px 500px at 100% 100%, rgba(255,191,75,0.06), transparent 60%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.09 0 0 0 0 0.07 0 0 0 0.045 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
   background-attachment: fixed;
 }
@@ -200,6 +200,7 @@ body {
 }
 .btn-primary:hover {
   background: var(--color-app-accent);
+  color: #fff;
   border-color: var(--color-app-accent);
   transform: translateY(-1px);
 }
@@ -308,9 +309,9 @@ body {
 .prose code { font-family: var(--font-mono); font-size: 0.875em; }
 .prose code::before, .prose code::after { content: none; }
 .prose :not(pre) > code {
-  background-color: rgba(58,67,126,0.08);
-  color: var(--color-app-accent);
-  border: 1px solid rgba(58,67,126,0.18);
+  background-color: rgba(255,107,53,0.08);
+  color: var(--color-app-accent-2);
+  border: 1px solid rgba(255,107,53,0.20);
   border-radius: 0.3em;
   padding: 0.15em 0.45em;
   font-size: 0.85em;
@@ -392,14 +393,14 @@ body {
   border-left: 4px solid;
   background: var(--color-app-surface);
 }
-.prose .callout-info     { border-color: var(--color-app-accent);  background: rgba(58,67,126,0.05); }
+.prose .callout-info     { border-color: var(--color-app-accent);  background: rgba(255,107,53,0.05); }
 .prose .callout-warning  { border-color: #C57E1A;                  background: rgba(197,126,26,0.06); }
 .prose .callout-warning::before { content: '⚠ '; font-size: 1.25rem; margin-right: 0.5rem; }
 .prose .callout-success  { border-color: #2E7D5B;                  background: rgba(46,125,91,0.05); }
 .prose .callout-success::before { content: '✓ '; font-size: 1.25rem; margin-right: 0.5rem; color: #2E7D5B; }
 .prose .callout-danger   { border-color: var(--color-app-accent-2); background: rgba(255,107,53,0.06); }
 .prose .callout-danger::before  { content: '⚠ '; font-size: 1.25rem; margin-right: 0.5rem; color: var(--color-app-accent-2); }
-.prose .callout-tip      { border-color: var(--color-app-accent);  background: rgba(58,67,126,0.05); }
+.prose .callout-tip      { border-color: var(--color-app-accent);  background: rgba(255,107,53,0.05); }
 .prose .callout-tip::before     { content: '✦ '; font-size: 1.25rem; margin-right: 0.5rem; }
 
 .callout-block {
