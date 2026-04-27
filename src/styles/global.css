@@ -99,21 +99,38 @@
    ============================================ */
 html {
   font-size: clamp(15px, 12px + 0.2vw, 20px);
-  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* native smooth scroll only when user opts in via reduced-motion=no-pref */
+  scroll-behavior: auto;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
 }
 
 body {
   color: var(--color-app-text);
   font-family: var(--font-sans);
   background-color: var(--color-app-body);
-  /* Subtle paper grain — SVG noise */
+  position: relative;
+  overscroll-behavior-y: none;
+  text-rendering: optimizeLegibility;
+}
+
+/* Decorative paper layer — fixed, painted once, never scrolled.
+   Avoids the jank of `background-attachment: fixed` on a long body. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--color-app-body);
   background-image:
-    radial-gradient(1100px 600px at 8% 0%, rgba(255,107,53,0.07), transparent 55%),
-    radial-gradient(900px 500px at 100% 100%, rgba(255,191,75,0.06), transparent 60%),
+    radial-gradient(900px 500px at 8% 0%, rgba(255,107,53,0.07), transparent 55%),
+    radial-gradient(800px 460px at 100% 100%, rgba(255,191,75,0.06), transparent 60%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.09 0 0 0 0 0.07 0 0 0 0.045 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-attachment: fixed;
+  will-change: transform;
 }
 
 .container { padding-left: 1rem; padding-right: 1rem; }
