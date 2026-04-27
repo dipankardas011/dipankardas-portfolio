@@ -1,6 +1,7 @@
 ---
 import Header from "./Header.astro";
 import Footer from "./Footer.astro";
+import VimMotions from "./VimMotions.astro";
 import "../styles/global.css";
 import { siteConfig, socialLinks } from "../data/site";
 
@@ -94,5 +95,163 @@ const ogImageUrl = new URL(ogImage, Astro.site);
       <slot />
     </main>
     <Footer />
+    <VimMotions />
+
+    {blogPost && (
+      <>
+        <div id="mermaid-zoom-overlay" class="mermaid-zoom-overlay" hidden>
+          <button type="button" class="mermaid-zoom-close" aria-label="Close diagram">×</button>
+          <div class="mermaid-zoom-stage" role="dialog" aria-modal="true" aria-label="Zoomed diagram"></div>
+        </div>
+
+        <style is:global>
+          .mermaid {
+            position: relative;
+          }
+          .mermaid-zoom-trigger {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            z-index: 2;
+            background: rgba(23, 23, 23, 0.7);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            line-height: 1;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+          }
+          .mermaid:hover .mermaid-zoom-trigger,
+          .mermaid:focus-within .mermaid-zoom-trigger {
+            opacity: 1;
+          }
+          .mermaid-zoom-trigger:hover {
+            background: rgba(0, 0, 0, 0.85);
+          }
+          .mermaid-zoom-overlay[hidden] {
+            display: none;
+          }
+          .mermaid-zoom-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.92);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+          }
+          .mermaid-zoom-stage {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            background: #171717;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+          }
+          .mermaid-zoom-stage svg {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+          }
+          .mermaid-zoom-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.25rem;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 2.5rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+          }
+          .mermaid-zoom-close:hover,
+          .mermaid-zoom-close:focus-visible {
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+          }
+          body.mermaid-zoom-open {
+            overflow: hidden;
+          }
+        </style>
+
+        <script is:inline>
+          (function () {
+            function init() {
+              var overlay = document.getElementById("mermaid-zoom-overlay");
+              if (!overlay) return;
+              var stage = overlay.querySelector(".mermaid-zoom-stage");
+              var closeBtn = overlay.querySelector(".mermaid-zoom-close");
+
+              function open(svg) {
+                if (!svg) return;
+                stage.innerHTML = "";
+                var clone = svg.cloneNode(true);
+                clone.removeAttribute("style");
+                stage.appendChild(clone);
+                overlay.hidden = false;
+                document.body.classList.add("mermaid-zoom-open");
+                closeBtn.focus();
+              }
+
+              function close() {
+                overlay.hidden = true;
+                stage.innerHTML = "";
+                document.body.classList.remove("mermaid-zoom-open");
+              }
+
+              closeBtn.addEventListener("click", close);
+              overlay.addEventListener("click", function (e) {
+                if (e.target === overlay) close();
+              });
+              document.addEventListener("keydown", function (e) {
+                if (!overlay.hidden && e.key === "Escape") close();
+              });
+
+              function attach(container) {
+                if (container.dataset.zoomReady === "1") return;
+                var svg = container.querySelector("svg");
+                if (!svg) return;
+                container.dataset.zoomReady = "1";
+                var btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "mermaid-zoom-trigger";
+                btn.setAttribute("aria-label", "Zoom diagram");
+                btn.textContent = "⤢ Zoom";
+                btn.addEventListener("click", function (e) {
+                  e.stopPropagation();
+                  open(container.querySelector("svg"));
+                });
+                container.appendChild(btn);
+              }
+
+              function scan() {
+                document.querySelectorAll(".mermaid").forEach(attach);
+              }
+
+              scan();
+              var mo = new MutationObserver(scan);
+              mo.observe(document.body, { childList: true, subtree: true });
+            }
+
+            if (document.readyState === "loading") {
+              document.addEventListener("DOMContentLoaded", init);
+            } else {
+              init();
+            }
+          })();
+        </script>
+      </>
+    )}
   </body>
 </html>

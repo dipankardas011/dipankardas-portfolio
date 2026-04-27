@@ -285,7 +285,13 @@ This is actually a [documented issue in the llama.cpp build guide](https://githu
 **Save yourself the headache:** If you're not on a bleeding-edge distro, use **CUDA 12.x with GCC 13 or 14**. That combination compiles llama.cpp (and vLLM) without any header patching. The issue I hit is specific to CUDA 13.x + GCC 15 — a combo you'll only encounter on Fedora 43+, Arch, or similar rolling-release distros.
 </Callout>
 
-If you *are* stuck with CUDA 13.x and GCC 15, the fix is surgical. In `/usr/local/cuda-13.1/targets/x86_64-linux/include/crt/math_functions.h`, functions like `rsqrtf` and `rsqrt` needed `noexcept(true)` annotations to satisfy GCC 15:
+If you *are* stuck with CUDA 13.x and GCC 15, the fix is surgical. In this header:
+
+```text
+/usr/local/cuda-13.1/targets/x86_64-linux/include/crt/math_functions.h
+```
+
+functions like `rsqrtf` and `rsqrt` needed `noexcept(true)` annotations to satisfy GCC 15:
 
 ```cpp
 // Before (CUDA 13.x shipped this):

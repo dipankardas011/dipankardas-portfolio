@@ -1,0 +1,338 @@
+---
+// Floating left-side "vim" chip + global keyboard motions.
+// Hover the chip to see the bindings. Click to toggle enable/disable.
+// State persists via localStorage. Disabled by default to avoid surprise.
+---
+
+<div id="vim-chip" class="vim-chip" data-enabled="true" aria-label="Vim motions toggle">
+  <button type="button" class="vim-chip-btn" aria-pressed="true">
+    <svg
+      class="vim-chip-logo"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      role="img"
+      aria-label="Vim"
+    >
+      <path
+        fill="currentColor"
+        d="M24 11.986h-.027l-4.318-4.318 4.303-4.414V1.461l-.649-.648h-8.198l-.66.605v1.045L12.015.027V0L12 .014 11.986 0v.027l-1.29 1.291-.538-.539H2.035l-.638.692v1.885l.616.616h.72v5.31L.027 11.987H0L.014 12 0 12.014h.027l2.706 2.706v6.467l.907.523h2.322l1.857-1.904 4.166 4.166V24l.015-.014.014.014v-.028l2.51-2.509h.485c.111 0 .211-.07.25-.179l.146-.426c.028-.084.012-.172-.037-.239l1.462-1.462-.612 1.962c-.043.141.036.289.177.332.025.008.052.012.078.012h1.824c.106-.001.201-.064.243-.163l.165-.394c.025-.065.024-.138-.004-.203-.027-.065-.08-.116-.146-.142-.029-.012-.062-.019-.097-.02h-.075l.84-2.644h1.232l-1.016 3.221c-.043.141.036.289.176.332.025.008.052.012.079.012h2.002c.11 0 .207-.066.248-.17l.164-.428c.051-.138-.021-.29-.158-.341-.029-.011-.06-.017-.091-.017h-.145l1.131-3.673c.027-.082.012-.173-.039-.24l-.375-.504-.003-.005c-.051-.064-.127-.102-.209-.102h-1.436c-.071 0-.141.03-.19.081l-.4.439h-.624l-.042-.046 4.445-4.445H24L23.986 12l.014-.014zM9.838 21.139l1.579-4.509h-.501l.297-.304h1.659l-1.563 4.555h.623l-.079.258H9.838zm3.695-7.516l.15.151-.269.922-.225.226h-.969l-.181-.181.311-.871.288-.247h.895zM5.59 20.829H3.877l-.262-.15V3.091H2.379l-.1-.1V1.815l.143-.154h7.371l.213.214v1.108l-.142.173H8.785v8.688l8.807-8.688h-2.086l-.175-.188V1.805l.121-.111h7.49l.132.133v1.07L12.979 13.25h-.373c-.015-.001-.028 0-.042.001l-.02.003c-.045.01-.086.03-.119.06l-.343.295-.004.003c-.033.031-.059.069-.073.111l-.296.83-6.119 6.276zm14.768-3.952l.474-.519h1.334l.309.415-1.265 4.107h.493l-.08.209H19.84l1.124-3.564h-2.015l-1.077 3.391h.424l-.072.209H13.27l1.514-4.46H14.198l.091-.271h1.65l.519.537h.906l.491-.554h1.061l.489.535h.953z"
+      />
+    </svg>
+    <span class="vim-chip-mode">MOTION</span>
+  </button>
+  <div class="vim-chip-panel" role="tooltip">
+    <p class="vim-chip-title">Vim motions</p>
+    <p class="vim-chip-status"><span class="vim-status-dot"></span><span class="vim-status-label">off</span> · click to toggle</p>
+    <ul class="vim-chip-keys">
+      <li><kbd>j</kbd><kbd>k</kbd><span>scroll down / up</span></li>
+      <li><kbd>d</kbd><kbd>u</kbd><span>half page down / up</span></li>
+      <li><kbd>g</kbd><kbd>g</kbd><span>jump to top</span></li>
+      <li><kbd>G</kbd><span>jump to bottom</span></li>
+      <li><kbd>n</kbd><kbd>p</kbd><span>next / prev heading</span></li>
+      <li><kbd>?</kbd><span>open this panel</span></li>
+      <li><kbd>Esc</kbd><span>close panel</span></li>
+    </ul>
+  </div>
+</div>
+
+<style is:global>
+  .vim-chip {
+    position: fixed;
+    left: 0.75rem;
+    bottom: 1.25rem;
+    z-index: 60;
+    font-family: var(--font-mono, ui-monospace, monospace);
+  }
+  .vim-chip-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(23, 23, 23, 0.85);
+    color: #d9faa1;
+    border: 1px solid rgba(217, 250, 161, 0.25);
+    padding: 0.4rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .vim-chip-btn:hover,
+  .vim-chip-btn:focus-visible {
+    border-color: rgba(217, 250, 161, 0.6);
+    transform: translateY(-1px);
+    outline: none;
+  }
+  .vim-chip-logo {
+    width: 1.05rem;
+    height: 1.05rem;
+    color: rgba(217, 250, 161, 0.6);
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+  .vim-chip-btn:hover .vim-chip-logo {
+    transform: rotate(-4deg);
+  }
+  .vim-chip-mode {
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .vim-chip[data-enabled="true"] .vim-chip-btn {
+    background: #d9faa1;
+    color: #171717;
+    border-color: #d9faa1;
+    box-shadow: 0 0 0 1px rgba(217, 250, 161, 0.5);
+  }
+  .vim-chip[data-enabled="true"] .vim-chip-logo {
+    color: #171717;
+  }
+
+  .vim-chip-panel {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 0;
+    min-width: 16rem;
+    background: rgba(17, 17, 17, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.6rem;
+    padding: 0.85rem 1rem;
+    color: #e7e7e7;
+    font-family: var(--font-sans, system-ui, sans-serif);
+    font-size: 0.8rem;
+    line-height: 1.4;
+    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transform: translateY(4px);
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .vim-chip:hover .vim-chip-panel,
+  .vim-chip:focus-within .vim-chip-panel,
+  .vim-chip[data-open="true"] .vim-chip-panel {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .vim-chip-title {
+    margin: 0 0 0.15rem;
+    font-weight: 600;
+    color: #d9faa1;
+    letter-spacing: 0.02em;
+  }
+  .vim-chip-status {
+    margin: 0 0 0.6rem;
+    font-size: 0.7rem;
+    color: rgba(231, 231, 231, 0.65);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .vim-status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #888;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+  }
+  .vim-chip[data-enabled="true"] .vim-status-dot {
+    background: #d9faa1;
+    box-shadow: 0 0 0 3px rgba(217, 250, 161, 0.18);
+  }
+  .vim-chip-keys {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.3rem;
+  }
+  .vim-chip-keys li {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .vim-chip-keys li > span {
+    color: rgba(231, 231, 231, 0.78);
+    font-size: 0.75rem;
+  }
+  .vim-chip-keys kbd {
+    display: inline-block;
+    min-width: 1.4rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom-width: 2px;
+    border-radius: 0.3rem;
+    padding: 0.1rem 0.35rem;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.7rem;
+    color: #f5f5f5;
+  }
+
+  @media (max-width: 640px) {
+    .vim-chip { display: none; }
+  }
+
+  .vim-flash {
+    position: fixed;
+    left: 50%;
+    bottom: 4.25rem;
+    transform: translateX(-50%);
+    background: rgba(217, 250, 161, 0.95);
+    color: #111;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 0.4rem;
+    z-index: 70;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+  .vim-flash[data-show="true"] { opacity: 1; }
+</style>
+
+<div id="vim-flash" class="vim-flash" aria-hidden="true"></div>
+
+<script is:inline>
+  (function () {
+    var STORAGE_KEY = "vim-motions-enabled";
+    var chip = document.getElementById("vim-chip");
+    var btn = chip ? chip.querySelector(".vim-chip-btn") : null;
+    var statusLabel = chip ? chip.querySelector(".vim-status-label") : null;
+    var flash = document.getElementById("vim-flash");
+    if (!chip || !btn) return;
+
+    var enabled = true;
+    try { 
+      var stored = localStorage.getItem(STORAGE_KEY);
+      if (stored !== null) {
+        enabled = stored === "1";
+      }
+    } catch (e) {}
+    setEnabled(enabled, false);
+
+    btn.addEventListener("click", function () { setEnabled(!enabled, true); });
+
+    function setEnabled(v, announce) {
+      enabled = !!v;
+      chip.dataset.enabled = enabled ? "true" : "false";
+      btn.setAttribute("aria-pressed", enabled ? "true" : "false");
+      if (statusLabel) statusLabel.textContent = enabled ? "on" : "off";
+      try { localStorage.setItem(STORAGE_KEY, enabled ? "1" : "0"); } catch (e) {}
+      if (announce) showFlash(enabled ? "vim: on" : "vim: off");
+    }
+
+    var flashTimer = null;
+    function showFlash(text) {
+      if (!flash) return;
+      flash.textContent = text;
+      flash.dataset.show = "true";
+      clearTimeout(flashTimer);
+      flashTimer = setTimeout(function () { flash.dataset.show = "false"; }, 900);
+    }
+
+    var lastG = 0;
+    function isTyping(el) {
+      if (!el) return false;
+      var tag = el.tagName;
+      return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || el.isContentEditable;
+    }
+
+    var scrollTargetY = null;
+    var scrollIsAnimating = false;
+
+    window.addEventListener("wheel", function() { scrollTargetY = null; }, { passive: true });
+    window.addEventListener("touchstart", function() { scrollTargetY = null; }, { passive: true });
+
+    function scrollLoop() {
+      if (scrollTargetY === null) {
+        scrollIsAnimating = false;
+        return;
+      }
+      var current = window.scrollY;
+      var diff = scrollTargetY - current;
+      if (Math.abs(diff) < 0.5) {
+        window.scrollTo({ top: scrollTargetY, behavior: "instant" });
+        scrollTargetY = null;
+        scrollIsAnimating = false;
+        return;
+      }
+      // Lower lerp factor (0.12) gives a longer, graceful glide similar to native smooth scroll
+      window.scrollTo({ top: current + diff * 0.12, behavior: "instant" });
+      requestAnimationFrame(scrollLoop);
+    }
+
+    function customScrollBy(dy) {
+      if (scrollTargetY === null) scrollTargetY = window.scrollY;
+      scrollTargetY += dy;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      scrollTargetY = Math.max(0, Math.min(scrollTargetY, max));
+      if (!scrollIsAnimating) {
+        scrollIsAnimating = true;
+        requestAnimationFrame(scrollLoop);
+      }
+    }
+
+    function jumpHeading(direction) {
+      var hs = Array.prototype.slice.call(document.querySelectorAll(".prose h2, .prose h3"));
+      if (!hs.length) return;
+      var top = window.scrollY + 80;
+      var target = null;
+      if (direction > 0) {
+        for (var i = 0; i < hs.length; i++) {
+          if (hs[i].offsetTop > top + 5) { target = hs[i]; break; }
+        }
+      } else {
+        for (var j = hs.length - 1; j >= 0; j--) {
+          if (hs[j].offsetTop < top - 5) { target = hs[j]; break; }
+        }
+      }
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "?") {
+        chip.dataset.open = chip.dataset.open === "true" ? "false" : "true";
+        e.preventDefault();
+        return;
+      }
+      if (e.key === "Escape" && chip.dataset.open === "true") {
+        chip.dataset.open = "false";
+        return;
+      }
+      if (!enabled) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (isTyping(e.target)) return;
+
+      var vh = window.innerHeight;
+      // Tweaked step sizes: single press feels distinct, holding feels fluid
+      var step = e.repeat ? 40 : 120;
+      switch (e.key) {
+        case "j": customScrollBy(step); e.preventDefault(); break;
+        case "k": customScrollBy(-step); e.preventDefault(); break;
+        case "d": customScrollBy(vh * 0.5); e.preventDefault(); break;
+        case "u": customScrollBy(-vh * 0.5); e.preventDefault(); break;
+        case "G":
+          scrollTargetY = null;
+          window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+          e.preventDefault();
+          break;
+        case "g":
+          var now = Date.now();
+          if (now - lastG < 400) {
+            scrollTargetY = null;
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            lastG = 0;
+          } else {
+            lastG = now;
+          }
+          e.preventDefault();
+          break;
+        case "n": scrollTargetY = null; jumpHeading(1); e.preventDefault(); break;
+        case "p": scrollTargetY = null; jumpHeading(-1); e.preventDefault(); break;
+      }
+    });
+  })();
+</script>
