@@ -1,116 +1,103 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* Self-hosted Fonts — all registered under "Helvetica" for consistent display font */
+/* ============================================
+   FONTS — Helvetica (display) self-hosted
+   ============================================ */
 @font-face {
   font-family: 'Helvetica';
-  src:
-    url('/fonts/HelveticaNeue-Light.woff2') format('woff2'),
-    url('/fonts/HelveticaNeue-Light.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
+  src: url('/fonts/HelveticaNeue-Light.woff2') format('woff2'),
+       url('/fonts/HelveticaNeue-Light.woff') format('woff');
+  font-weight: 300; font-style: normal; font-display: swap;
 }
-
 @font-face {
   font-family: 'Helvetica';
-  src:
-    url('/fonts/Helvetica.woff2') format('woff2'),
-    url('/fonts/Helvetica.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+  src: url('/fonts/Helvetica.woff2') format('woff2'),
+       url('/fonts/Helvetica.woff') format('woff');
+  font-weight: 400; font-style: normal; font-display: swap;
 }
-
 @font-face {
   font-family: 'Helvetica';
-  src:
-    url('/fonts/HelveticaNeue-Medium.woff2') format('woff2'),
-    url('/fonts/HelveticaNeue-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
+  src: url('/fonts/HelveticaNeue-Medium.woff2') format('woff2'),
+       url('/fonts/HelveticaNeue-Medium.woff') format('woff');
+  font-weight: 500; font-style: normal; font-display: swap;
 }
-
 @font-face {
   font-family: 'Helvetica';
-  src:
-    url('/fonts/HelveticaNeue-Bold.woff2') format('woff2'),
-    url('/fonts/HelveticaNeue-Bold.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
+  src: url('/fonts/HelveticaNeue-Bold.woff2') format('woff2'),
+       url('/fonts/HelveticaNeue-Bold.woff') format('woff');
+  font-weight: 600; font-style: normal; font-display: swap;
 }
-
 @font-face {
   font-family: 'Helvetica';
-  src:
-    url('/fonts/HelveticaNeue-Bold.woff2') format('woff2'),
-    url('/fonts/HelveticaNeue-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+  src: url('/fonts/HelveticaNeue-Bold.woff2') format('woff2'),
+       url('/fonts/HelveticaNeue-Bold.woff') format('woff');
+  font-weight: 700; font-style: normal; font-display: swap;
 }
-
 @font-face {
   font-family: 'Helvetica';
-  src:
-    url('/fonts/HelveticaNeue-Heavy.woff2') format('woff2'),
-    url('/fonts/HelveticaNeue-Heavy.woff') format('woff');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
+  src: url('/fonts/HelveticaNeue-Heavy.woff2') format('woff2'),
+       url('/fonts/HelveticaNeue-Heavy.woff') format('woff');
+  font-weight: 900; font-style: normal; font-display: swap;
 }
 
-/* BCMS Reference Design Tokens */
+/* ============================================
+   DESIGN TOKENS — Editorial Engineer (Light)
+   Cream paper · Indigo load-bearing · Terracotta sharp accent
+   ============================================ */
 @theme {
-  /* Primary Colors */
-  --color-app-accent: #3A437E;
-  --color-app-body: #ffffff;
-  --color-app-bg: #ffffff;
-  --color-app-text: #171717;
-  
-  /* Grayscale System */
-  --color-app-gray-100: #EBEBEB;
-  --color-app-gray-200: #D4D4D4;
-  --color-app-gray-300: #828282;
-  --color-app-gray-400: #636363;
-  --color-app-gray-500: #525252;
-  --color-app-gray-600: #242424;
-  
-  /* Background Variations */
-  --color-app-surface: #FAFAFA;
-  --color-app-surface-alt: #F7F7F7;
-  --color-app-border: #D9D9D9;
-  
-  /* Decorative Blur Colors */
+  /* Core palette */
+  --color-app-accent:        #3A437E;   /* deep indigo — load-bearing */
+  --color-app-accent-2:      #FF6B35;   /* terracotta — sharp accent */
+  --color-app-body:          #FAF7F0;   /* warm cream */
+  --color-app-bg:            #FAF7F0;
+  --color-app-text:          #1A1A1A;   /* near-black ink */
+
+  /* Grayscale (warm-tinted) */
+  --color-app-gray-100: #ECE7DA;
+  --color-app-gray-200: #D8D2C2;
+  --color-app-gray-300: #9A9285;
+  --color-app-gray-400: #6E665A;
+  --color-app-gray-500: #4D4639;
+  --color-app-gray-600: #2A241B;
+
+  /* Surfaces */
+  --color-app-surface:       #F2EDE0;   /* paper darker */
+  --color-app-surface-alt:   #EFE8D8;
+  --color-app-border:        #D8D2C2;
+  --color-app-ink-line:      #1A1A1A;   /* hard rule color */
+
+  /* Decorative blur */
   --color-blur-purple: #3A437E;
   --color-blur-yellow: #FFBF4B;
+  --color-blur-terra:  #FF6B35;
 
   /* Typography */
   --font-display: "Helvetica", -apple-system, "Arial", sans-serif;
-  --font-sans: "Inter", -apple-system, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "Courier New", monospace;
-  
-  /* Letter Spacing */
+  --font-serif:   "Instrument Serif", "Cambria", Georgia, serif;
+  --font-sans:    "Inter", -apple-system, system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", "Courier New", monospace;
+
   --tracking-tight: -0.41px;
-  
-  /* Font Family Utilities */
+
   --font-family-display: var(--font-display);
-  --font-family-sans: var(--font-sans);
-  --font-family-mono: var(--font-mono);
+  --font-family-serif:   var(--font-serif);
+  --font-family-sans:    var(--font-sans);
+  --font-family-mono:    var(--font-mono);
 }
 
-/* Gradient accent for background uses (light mode only) */
+/* Replace old gradient util with cream-paper bg + soft glow */
 .bg-app-accent {
-  background: linear-gradient(135deg, #c1c3d4 0%, #f9f9f9 45%, #fbebd0 100%) !important;
+  background:
+    radial-gradient(900px 480px at 12% -10%, rgba(58,67,126,0.10), transparent 60%),
+    radial-gradient(800px 420px at 90% 110%, rgba(255,107,53,0.08), transparent 60%),
+    var(--color-app-body) !important;
 }
 
-/* Global base styles */
+/* ============================================
+   GLOBAL BASE
+   ============================================ */
 html {
-  /* Fluid root font: 15px floor on small screens, 16px @ 1920px,
-     ~17px @ 2560px, 20px ceiling @ 3840px. Tailwind v4 breakpoints
-     are px-based so layouts do not shift; spacing scales with text. */
   font-size: clamp(15px, 12px + 0.2vw, 20px);
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -121,34 +108,124 @@ body {
   color: var(--color-app-text);
   font-family: var(--font-sans);
   background-color: var(--color-app-body);
+  /* Subtle paper grain — SVG noise */
+  background-image:
+    radial-gradient(1100px 600px at 8% 0%, rgba(58,67,126,0.05), transparent 55%),
+    radial-gradient(900px 500px at 100% 100%, rgba(255,107,53,0.04), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.09 0 0 0 0 0.07 0 0 0 0.045 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-attachment: fixed;
 }
 
-/* Container padding for mobile */
-.container {
-  padding-left: 1rem;
-  padding-right: 1rem;
+.container { padding-left: 1rem; padding-right: 1rem; }
+@media (min-width: 640px)  { .container { padding-left: 1.5rem; padding-right: 1.5rem; } }
+@media (min-width: 1024px) { .container { padding-left: 2rem;   padding-right: 2rem;   } }
+
+.font-display { font-family: var(--font-display); }
+.font-serif   { font-family: var(--font-serif); font-style: italic; }
+.font-mono    { font-family: var(--font-mono); }
+
+/* ============================================
+   SYSTEM STRIP — mono metadata bar
+   Used as a top-of-page or top-of-section "ops console" line.
+   <div class="sys-strip"><span>PATH</span><span>·</span><span>STATUS</span></div>
+   ============================================ */
+.sys-strip {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-app-gray-400);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--color-app-ink-line);
+  border-bottom: 1px solid var(--color-app-ink-line);
+}
+.sys-strip .sys-key   { color: var(--color-app-text); font-weight: 600; }
+.sys-strip .sys-dot   { color: var(--color-app-accent-2); }
+.sys-strip .sys-value { color: var(--color-app-gray-500); }
+
+/* Editorial kicker — small uppercase mono label above titles */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-app-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.kicker::before {
+  content: "";
+  width: 1.5rem;
+  height: 1px;
+  background: var(--color-app-accent);
+  display: inline-block;
 }
 
-@media (min-width: 640px) {
-  .container {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
+/* Hard rule */
+.rule {
+  height: 1px;
+  background: var(--color-app-ink-line);
+  border: none;
+  margin: 0;
+}
+.rule-soft {
+  height: 1px;
+  background: var(--color-app-border);
+  border: none;
+  margin: 0;
 }
 
-@media (min-width: 1024px) {
-  .container {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
+/* ============================================
+   BUTTONS / LINKS
+   ============================================ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-app-text);
+  color: var(--color-app-body);
+  border: 1px solid var(--color-app-text);
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-tight);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.btn-primary:hover {
+  background: var(--color-app-accent);
+  border-color: var(--color-app-accent);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  background: transparent;
+  color: var(--color-app-gray-500);
+  border: 1px solid var(--color-app-border);
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-tight);
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.btn-ghost:hover {
+  border-color: var(--color-app-text);
+  color: var(--color-app-text);
+  background: var(--color-app-surface);
 }
 
-/* Display font utility */
-.font-display {
-  font-family: var(--font-display);
-}
-
-/* Prose overrides for blog content */
+/* ============================================
+   PROSE — Editorial body for diary, content
+   ============================================ */
 .prose {
   --tw-prose-body: var(--color-app-gray-500);
   --tw-prose-headings: var(--color-app-text);
@@ -158,81 +235,38 @@ body {
   --tw-prose-counters: var(--color-app-gray-400);
   --tw-prose-bullets: var(--color-app-accent);
   --tw-prose-quotes: var(--color-app-text);
-  --tw-prose-quote-borders: var(--color-app-accent);
+  --tw-prose-quote-borders: var(--color-app-accent-2);
   max-width: none;
   font-size: 1.125rem;
   line-height: 1.7;
   letter-spacing: -0.41px;
 }
 
-/* Enhanced Headings */
-.prose h1 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.41px;
-  line-height: 1.1;
-  margin-top: 2.5rem;
-  margin-bottom: 1.5rem;
-  font-size: 2.222em;
-}
-
-.prose h2 {
+.prose h1, .prose h2, .prose h3, .prose h4 {
   font-family: var(--font-display);
   font-weight: 600;
   letter-spacing: -0.41px;
   line-height: 1.2;
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
-  font-size: 1.778em;
-  scroll-margin-top: 5rem;
 }
+.prose h1 { font-size: 2.222em; margin: 2.5rem 0 1.5rem; line-height: 1.1; }
+.prose h2 { font-size: 1.778em; margin: 2.5rem 0 1rem; scroll-margin-top: 5rem; }
+.prose h3 { font-size: 1.333em; margin: 2rem 0 0.75rem; line-height: 1.3; scroll-margin-top: 5rem; }
+.prose h4 { font-size: 1.111em; margin: 1.5rem 0 0.5rem; line-height: 1.4; }
 
-.prose h3 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.41px;
-  line-height: 1.3;
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
-  font-size: 1.333em;
-  scroll-margin-top: 5rem;
-}
+.prose p { margin: 1.5rem 0; line-height: 1.7; }
+.prose p strong { color: var(--color-app-text); font-weight: 600; }
 
-.prose h4 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.41px;
-  line-height: 1.4;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  font-size: 1.111em;
-}
-
-/* Paragraphs */
-.prose p {
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.7;
-}
-
-.prose p strong {
-  color: var(--color-app-text);
-  font-weight: 600;
-}
-
-/* Drop Cap for first paragraph */
 .prose > p:first-of-type::first-letter {
   float: left;
   font-size: 3.556em;
   line-height: 0.85;
   font-weight: 700;
   font-family: var(--font-display);
-  color: var(--color-app-accent);
+  color: var(--color-app-accent-2);
   margin-right: 0.5rem;
   margin-top: 0.1rem;
 }
 
-/* Links */
 .prose a {
   color: var(--color-app-accent);
   text-decoration: none;
@@ -240,79 +274,43 @@ body {
   position: relative;
   transition: color 0.2s ease;
 }
-
-.prose a:hover {
-  color: var(--color-app-text);
-}
-
+.prose a:hover { color: var(--color-app-accent-2); }
 .prose a::after {
   content: '';
   position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
+  bottom: -2px; left: 0;
+  width: 100%; height: 2px;
   background: linear-gradient(to right, var(--color-app-accent), var(--color-app-accent) 50%, transparent 50%);
   background-size: 200% 100%;
   background-position: 100%;
   transition: background-position 0.3s ease;
 }
+.prose a:hover::after { background-position: 0%; }
 
-.prose a:hover::after {
-  background-position: 0%;
-}
-
-/* Remove decorative " " quote marks injected by @tailwindcss/typography */
-.prose blockquote p::before,
-.prose blockquote p::after {
-  content: none;
-}
-
-/* Blockquotes */
+.prose blockquote p::before, .prose blockquote p::after { content: none; }
 .prose blockquote {
-  font-style: normal;
-  font-weight: 500;
+  font-style: italic;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.15em;
   color: var(--color-app-text);
-  border-left: 4px solid var(--color-app-accent);
-  padding-left: 1.5rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  border-left: 3px solid var(--color-app-accent-2);
+  padding: 0.5rem 0 0.5rem 1.5rem;
   margin: 2rem 0;
-  background: var(--color-app-surface);
-  border-radius: 0 0.5rem 0.5rem 0;
-  font-size: 1em;
-  line-height: 1.6;
+  background: transparent;
+  border-radius: 0;
+  line-height: 1.55;
 }
+.prose blockquote p { margin: 0.5rem 0; }
+.prose blockquote p:first-child { margin-top: 0; }
+.prose blockquote p:last-child  { margin-bottom: 0; }
 
-.prose blockquote p {
-  margin: 0.5rem 0;
-}
-
-.prose blockquote p:first-child {
-  margin-top: 0;
-}
-
-.prose blockquote p:last-child {
-  margin-bottom: 0;
-}
-
-/* Code styling — font applies to all code (inline + blocks) */
-.prose code {
-  font-family: var(--font-mono);
-  font-size: 0.875em;
-}
-
-/* Remove backtick pseudo-elements added by @tailwindcss/typography */
-.prose code::before,
-.prose code::after {
-  content: none;
-}
-
-/* Inline code only (not inside <pre> blocks) — light mode */
+.prose code { font-family: var(--font-mono); font-size: 0.875em; }
+.prose code::before, .prose code::after { content: none; }
 .prose :not(pre) > code {
-  background-color: rgba(0, 0, 0, 0.06);
-  color: var(--color-app-gray-600);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: rgba(58,67,126,0.08);
+  color: var(--color-app-accent);
+  border: 1px solid rgba(58,67,126,0.18);
   border-radius: 0.3em;
   padding: 0.15em 0.45em;
   font-size: 0.85em;
@@ -320,8 +318,6 @@ body {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
-
-/* Inline code — dark blog override */
 html[data-blog="true"] .prose :not(pre) > code {
   background-color: rgba(217, 250, 161, 0.1);
   color: #D9FAA1;
@@ -334,62 +330,28 @@ html[data-blog="true"] .prose :not(pre) > code {
   border-radius: 0.5rem;
 }
 
-/* Lists */
-.prose ul {
-  list-style: none;
-  padding-left: 0;
-  margin: 1.5rem 0;
-}
-
-.prose ul > li {
-  position: relative;
-  padding-left: 2rem;
-  margin-bottom: 0.75rem;
-}
-
+.prose ul { list-style: none; padding-left: 0; margin: 1.5rem 0; }
+.prose ul > li { position: relative; padding-left: 2rem; margin-bottom: 0.75rem; }
 .prose ul > li::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 0.65em;
-  width: 0.5rem;
-  height: 0.5rem;
-  background: var(--color-app-accent);
+  left: 0; top: 0.65em;
+  width: 0.5rem; height: 0.5rem;
+  background: var(--color-app-accent-2);
   border-radius: 50%;
 }
 
+.prose ol { padding-left: 2rem; margin: 1.5rem 0; counter-reset: list-counter; }
+.prose ol > li { position: relative; counter-increment: list-counter; margin-bottom: 0.75rem; }
+.prose ol > li::marker { color: var(--color-app-accent); font-weight: 600; font-family: var(--font-display); }
 
-.prose ol {
-  padding-left: 2rem;
-  margin: 1.5rem 0;
-  counter-reset: list-counter;
-}
+.prose ul ul, .prose ol ul, .prose ul ol, .prose ol ol { margin: 0.75rem 0; }
 
-.prose ol > li {
-  position: relative;
-  counter-increment: list-counter;
-  margin-bottom: 0.75rem;
-}
-
-.prose ol > li::marker {
-  color: var(--color-app-accent);
-  font-weight: 600;
-  font-family: var(--font-display);
-}
-
-.prose ul ul,
-.prose ol ul,
-.prose ul ol,
-.prose ol ol {
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
-/* Images */
 .prose img {
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   margin: 2.5rem auto;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 14px 30px -12px rgba(26,26,26,0.18);
+  border: 1px solid var(--color-app-border);
 }
 
 .prose figcaption {
@@ -397,172 +359,76 @@ html[data-blog="true"] .prose :not(pre) > code {
   font-size: 0.875em;
   color: var(--color-app-gray-400);
   margin-top: 1rem;
+  font-family: var(--font-serif);
   font-style: italic;
 }
 
-/* Horizontal Rule */
 .prose hr {
   border: none;
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--color-app-gray-200), transparent);
+  background: var(--color-app-ink-line);
   margin: 3rem auto;
-  max-width: 50%;
+  max-width: 35%;
 }
 
-/* Tables */
-.prose table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 2rem 0;
-  font-size: 0.9em;
-}
-
-.prose table td,
-.prose table th {
-  white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-/* Horizontal scroll wrapper injected by [...slug].astro */
-.prose .table-scroll {
-  margin: 2rem 0;
-  max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-.prose .table-scroll > table {
-  margin: 0;
-}
-
-.prose thead {
-  border-bottom: 2px solid var(--color-app-accent);
-}
-
+.prose table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.9em; }
+.prose table td, .prose table th { white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
+.prose .table-scroll { margin: 2rem 0; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.prose .table-scroll > table { margin: 0; }
+.prose thead { border-bottom: 2px solid var(--color-app-text); }
 .prose thead th {
   padding: 0.75rem 1rem;
   text-align: left;
   font-weight: 600;
   color: var(--color-app-text);
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
+.prose tbody td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-app-gray-200); }
+.prose tbody tr:last-child td { border-bottom: none; }
+.prose tbody tr:hover { background: var(--color-app-surface); }
 
-.prose tbody td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--color-app-gray-200);
-}
-
-.prose tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.prose tbody tr:hover {
-  background: var(--color-app-surface);
-}
-
-/* Callout Boxes */
+/* Callouts */
 .prose .callout {
   padding: 1.5rem;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   margin: 2rem 0;
   border-left: 4px solid;
   background: var(--color-app-surface);
 }
+.prose .callout-info     { border-color: var(--color-app-accent);  background: rgba(58,67,126,0.05); }
+.prose .callout-warning  { border-color: #C57E1A;                  background: rgba(197,126,26,0.06); }
+.prose .callout-warning::before { content: '⚠ '; font-size: 1.25rem; margin-right: 0.5rem; }
+.prose .callout-success  { border-color: #2E7D5B;                  background: rgba(46,125,91,0.05); }
+.prose .callout-success::before { content: '✓ '; font-size: 1.25rem; margin-right: 0.5rem; color: #2E7D5B; }
+.prose .callout-danger   { border-color: var(--color-app-accent-2); background: rgba(255,107,53,0.06); }
+.prose .callout-danger::before  { content: '⚠ '; font-size: 1.25rem; margin-right: 0.5rem; color: var(--color-app-accent-2); }
+.prose .callout-tip      { border-color: var(--color-app-accent);  background: rgba(58,67,126,0.05); }
+.prose .callout-tip::before     { content: '✦ '; font-size: 1.25rem; margin-right: 0.5rem; }
 
-.prose .callout-info {
-  border-color: var(--color-app-accent);
-  background: rgba(6, 182, 212, 0.05);
-}
-
-.prose .callout-warning {
-  border-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.05);
-}
-
-.prose .callout-warning::before {
-  content: '⚠️ ';
-  font-size: 1.25rem;
-  margin-right: 0.5rem;
-}
-
-.prose .callout-success {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.05);
-}
-
-.prose .callout-success::before {
-  content: '✓ ';
-  font-size: 1.25rem;
-  margin-right: 0.5rem;
-  color: #10b981;
-}
-
-.prose .callout-danger {
-  border-color: #ef4444;
-  background: rgba(239, 68, 68, 0.05);
-}
-
-.prose .callout-danger::before {
-  content: '⚠ ';
-  font-size: 1.25rem;
-  margin-right: 0.5rem;
-  color: #ef4444;
-}
-
-.prose .callout-tip {
-  border-color: #8b5cf6;
-  background: rgba(139, 92, 246, 0.05);
-}
-
-.prose .callout-tip::before {
-  content: '💡 ';
-  font-size: 1.25rem;
-  margin-right: 0.5rem;
-}
-
-/* ---- Callout blocks (used via MDX <Callout> component) ---- */
 .callout-block {
   border: 1px solid var(--cc);
   background: var(--cb);
-  border-radius: 0.6rem;
+  border-radius: 0.5rem;
   padding: 1rem 1.25rem;
   margin: 1.75rem 0;
 }
-
-.callout-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.callout-icon {
-  display: flex;
-  align-items: center;
-  color: var(--ca);
-  flex-shrink: 0;
-}
-
+.callout-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+.callout-icon { display: flex; align-items: center; color: var(--ca); flex-shrink: 0; }
 .callout-title {
-  font-family: var(--font-display);
-  font-size: 0.8125rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ca);
 }
-
-.callout-body {
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: var(--color-app-gray-500);
-}
-
+.callout-body { font-size: 0.9375rem; line-height: 1.65; color: var(--color-app-gray-500); }
 .callout-body > *:first-child { margin-top: 0; }
 .callout-body > *:last-child  { margin-bottom: 0; }
 
-/* ---- Blockquote used as image caption (> text \n ![img]) ---- */
-/* Strips the blockquote styling and turns it into a proper caption */
 .prose blockquote:has(+ p > img) {
   background: transparent;
   border-left-color: transparent;
@@ -574,20 +440,14 @@ html[data-blog="true"] .prose :not(pre) > code {
   color: var(--color-app-gray-400);
   text-align: center;
 }
+.prose blockquote:has(+ p > img) p { margin: 0; }
+.prose blockquote + p:has(> img) { margin-top: 0; }
 
-.prose blockquote:has(+ p > img) p {
-  margin: 0;
-}
-
-.prose blockquote + p:has(> img) {
-  margin-top: 0;
-}
-
-/* Pull Quotes */
 .prose .pull-quote {
-  font-size: 1.5rem;
-  font-weight: 600;
-  font-family: var(--font-display);
+  font-size: 1.625rem;
+  font-weight: 400;
+  font-family: var(--font-serif);
+  font-style: italic;
   color: var(--color-app-text);
   text-align: center;
   padding: 2rem 0;
@@ -595,48 +455,38 @@ html[data-blog="true"] .prose :not(pre) > code {
   max-width: 80%;
   position: relative;
   line-height: 1.4;
-  letter-spacing: -0.41px;
+  letter-spacing: -0.01em;
 }
-
 .prose .pull-quote::before {
   content: '"';
   font-size: 4rem;
-  color: var(--color-app-accent);
-  opacity: 0.3;
+  color: var(--color-app-accent-2);
+  opacity: 0.4;
   position: absolute;
-  top: 0;
-  left: -1rem;
+  top: 0; left: -1rem;
   font-family: Georgia, serif;
 }
 
-/* Keyboard Keys */
 .prose kbd {
   background: var(--color-app-text);
-  color: white;
+  color: var(--color-app-body);
   padding: 0.2em 0.5em;
   border-radius: 0.25rem;
   font-family: var(--font-mono);
   font-size: 0.85em;
   font-weight: 600;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1) inset;
 }
 
-/* Mark/Highlight */
 .prose mark {
-  background: linear-gradient(120deg, rgba(6, 182, 212, 0.2) 0%, rgba(6, 182, 212, 0.3) 100%);
+  background: linear-gradient(120deg, rgba(255,107,53,0.18) 0%, rgba(255,107,53,0.32) 100%);
   padding: 0.1em 0.2em;
-  border-radius: 0.25rem;
+  border-radius: 0.2rem;
   color: var(--color-app-text);
 }
 
-/* Abbreviations */
-.prose abbr {
-  text-decoration: underline dotted;
-  text-decoration-color: var(--color-app-gray-400);
-  cursor: help;
-}
+.prose abbr { text-decoration: underline dotted; text-decoration-color: var(--color-app-gray-400); cursor: help; }
 
-/* Details/Summary */
 .prose details {
   border: 1px solid var(--color-app-gray-200);
   border-radius: 0.5rem;
@@ -644,87 +494,66 @@ html[data-blog="true"] .prose :not(pre) > code {
   margin: 1.5rem 0;
   background: var(--color-app-surface);
 }
-
-.prose summary {
-  cursor: pointer;
-  font-weight: 600;
-  color: var(--color-app-text);
-  user-select: none;
-}
-
-.prose details[open] summary {
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--color-app-gray-200);
-}
+.prose summary { cursor: pointer; font-weight: 600; color: var(--color-app-text); user-select: none; }
+.prose details[open] summary { margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-app-gray-200); }
 
 /* ============================================
-   BLOG POST DARK THEME
-   Scoped to html[data-blog="true"] so other
-   pages remain unchanged.
+   BLOG POST DARK THEME (also: skills, agent-skills)
+   Triggered by html[data-blog="true"]
    ============================================ */
-
 html[data-blog="true"] {
-  --color-app-accent: #D9FAA1;
-  --color-app-body: #0D1117;
-  --color-app-bg: #0D1117;
-  --color-app-text: #E6EDF3;
-  --color-app-gray-100: #21262D;
-  --color-app-gray-200: #30363D;
-  --color-app-gray-300: #8B949E;
-  --color-app-gray-400: #8B949E;
-  --color-app-gray-500: #C9D1D9;
-  --color-app-gray-600: #E6EDF3;
-  --color-app-surface: #161B22;
+  --color-app-accent:    #D9FAA1;
+  --color-app-accent-2:  #FF8A65;
+  --color-app-body:      #0D1117;
+  --color-app-bg:        #0D1117;
+  --color-app-text:      #E6EDF3;
+  --color-app-gray-100:  #21262D;
+  --color-app-gray-200:  #30363D;
+  --color-app-gray-300:  #8B949E;
+  --color-app-gray-400:  #8B949E;
+  --color-app-gray-500:  #C9D1D9;
+  --color-app-gray-600:  #E6EDF3;
+  --color-app-surface:     #161B22;
   --color-app-surface-alt: #1C2128;
-  --color-app-border: #30363D;
+  --color-app-border:      #30363D;
+  --color-app-ink-line:    #30363D;
   --color-blur-purple: #6E40C9;
   --color-blur-yellow: #D9FAA1;
-  /* Space Grotesk for all display/headings */
   --font-display: "Space Grotesk", -apple-system, "Arial", sans-serif;
 }
 
 html[data-blog="true"] body {
   background-color: var(--color-app-body);
   color: var(--color-app-text);
+  background-image:
+    radial-gradient(900px 500px at 8% 0%, rgba(217,250,161,0.05), transparent 55%),
+    radial-gradient(800px 400px at 100% 100%, rgba(110,64,201,0.08), transparent 60%);
 }
 
-/* ---- Button contrast fixes for dark blog theme ----
-   These fix cases where color vars flip (text becomes near-white,
-   accent becomes light lime) making white text invisible. */
-
-/* "See all posts" and any accent-bg button: accent is light #D9FAA1
-   so white text is unreadable — force near-black text */
 html[data-blog="true"] .bg-app-accent {
   background: var(--color-app-accent) !important;
   color: #0D1117;
 }
 
-/* Footer LinkedIn button uses bg-app-text which is now near-white (#E6EDF3).
-   Restyle as an accent outline button instead. */
 html[data-blog="true"] footer .bg-app-text {
-  background-color: rgba(217, 250, 161, 0.08);
-  border-color: rgba(217, 250, 161, 0.35);
+  background-color: rgba(217,250,161,0.08);
+  border-color: rgba(217,250,161,0.35);
   color: #D9FAA1;
 }
 html[data-blog="true"] footer .bg-app-text:hover {
-  background-color: rgba(217, 250, 161, 0.15);
+  background-color: rgba(217,250,161,0.15);
   border-color: #D9FAA1;
 }
-
-/* Footer outline buttons: their hover:bg-app-text / hover:text-white would
-   produce white-on-white in dark mode — override to a subtle surface tint */
 html[data-blog="true"] footer a.text-app-gray-500:hover {
   background-color: var(--color-app-surface) !important;
   color: var(--color-app-text) !important;
   border-color: var(--color-app-gray-300) !important;
 }
 
-/* ---- Reading Progress Bar ---- */
+/* Reading progress bar */
 #reading-progress {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   height: 3px;
   width: 0%;
   background: linear-gradient(to right, #D9FAA1, #D9FAA1);
@@ -733,7 +562,6 @@ html[data-blog="true"] footer a.text-app-gray-500:hover {
   pointer-events: none;
 }
 
-/* ---- Table of Contents ---- */
 .toc-link {
   display: block;
   color: var(--color-app-gray-400);
@@ -744,24 +572,10 @@ html[data-blog="true"] footer a.text-app-gray-500:hover {
   line-height: 1.5;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
+.toc-link:hover { color: var(--color-app-text); border-left-color: var(--color-app-gray-300); }
+.toc-link.toc-active { color: #D9FAA1; border-left-color: #D9FAA1; font-weight: 500; }
+.toc-link.toc-h3 { padding-left: 1.5rem; font-size: 0.75rem; }
 
-.toc-link:hover {
-  color: var(--color-app-text);
-  border-left-color: var(--color-app-gray-300);
-}
-
-.toc-link.toc-active {
-  color: #D9FAA1;
-  border-left-color: #D9FAA1;
-  font-weight: 500;
-}
-
-.toc-link.toc-h3 {
-  padding-left: 1.5rem;
-  font-size: 0.75rem;
-}
-
-/* ---- Description lede ---- */
 .blog-lede {
   font-size: 1.125rem;
   color: var(--color-app-gray-400);
@@ -770,34 +584,29 @@ html[data-blog="true"] footer a.text-app-gray-500:hover {
   letter-spacing: -0.01em;
 }
 
-/* ---- Visual entry divider before prose ---- */
 .blog-entry-divider {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 2.5rem;
   color: var(--color-app-accent);
-  opacity: 0.4;
+  opacity: 0.5;
 }
-
 .blog-entry-divider span {
   flex: 1;
   height: 1px;
   background: linear-gradient(to right, transparent, var(--color-app-accent));
 }
-
 .blog-entry-divider span:last-child {
   background: linear-gradient(to left, transparent, var(--color-app-accent));
 }
 
-/* ---- First paragraph intro treatment ---- */
 html[data-blog="true"] .prose > p:first-of-type {
   font-size: 1.2rem;
   color: var(--color-app-gray-600);
   line-height: 1.7;
 }
 
-/* ---- Blog Reading Meta (time + date row) ---- */
 .blog-meta {
   display: flex;
   align-items: center;
@@ -807,24 +616,15 @@ html[data-blog="true"] .prose > p:first-of-type {
   color: var(--color-app-gray-400);
   letter-spacing: -0.41px;
 }
-
 .blog-meta-divider {
-  width: 3px;
-  height: 3px;
+  width: 3px; height: 3px;
   border-radius: 50%;
   background: var(--color-app-gray-300);
   flex-shrink: 0;
 }
 
-/* ---- Section numbering for h2 in dark blog ---- */
-html[data-blog="true"] .prose {
-  counter-reset: blog-section;
-}
-
-html[data-blog="true"] .prose h2 {
-  counter-increment: blog-section;
-}
-
+html[data-blog="true"] .prose { counter-reset: blog-section; }
+html[data-blog="true"] .prose h2 { counter-increment: blog-section; }
 html[data-blog="true"] .prose h2::before {
   content: counter(blog-section, decimal-leading-zero) " ";
   color: #D9FAA1;
@@ -836,12 +636,8 @@ html[data-blog="true"] .prose h2::before {
   letter-spacing: 0.05em;
 }
 
-/* ---- Mobile menu backdrop fix for dark blog theme ---- */
-html[data-blog="true"] #mobile-backdrop {
-  background-color: #0D1117;
-}
+html[data-blog="true"] #mobile-backdrop { background-color: #0D1117; }
 
-/* ---- Force dark Shiki theme on blog pages ---- */
 html[data-blog="true"] .astro-code,
 html[data-blog="true"] .astro-code span {
   color: var(--shiki-dark) !important;
@@ -851,20 +647,16 @@ html[data-blog="true"] .astro-code span {
   text-decoration: var(--shiki-dark-text-decoration) !important;
 }
 
-/* ---- Code block language label ---- */
 html[data-blog="true"] .prose pre {
   position: relative;
   padding-top: 2.75rem;
   background-color: #161B22;
   border-color: #30363D;
 }
-
 html[data-blog="true"] .prose pre[data-lang]::before {
   content: attr(data-lang);
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   padding: 0.4rem 1rem;
   font-family: var(--font-mono);
   font-size: 0.7rem;
@@ -872,37 +664,29 @@ html[data-blog="true"] .prose pre[data-lang]::before {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #D9FAA1;
-  background: rgba(217, 250, 161, 0.08);
-  border-bottom: 1px solid rgba(217, 250, 161, 0.2);
+  background: rgba(217,250,161,0.08);
+  border-bottom: 1px solid rgba(217,250,161,0.2);
   border-radius: 0.5rem 0.5rem 0 0;
 }
 
-/* ---- Author Card ---- */
 .author-card {
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
   border: 1px solid var(--color-app-border);
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   background: var(--color-app-surface);
   margin: 3rem 0 2rem;
 }
-
 .author-card img {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3.5rem; height: 3.5rem;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
   border: 2px solid #D9FAA1;
 }
-
-.author-card-info {
-  flex: 1;
-  min-width: 0;
-}
-
+.author-card-info { flex: 1; min-width: 0; }
 .author-card-name {
   font-weight: 600;
   font-family: var(--font-display);
@@ -910,22 +694,8 @@ html[data-blog="true"] .prose pre[data-lang]::before {
   font-size: 0.9375rem;
   margin-bottom: 0.25rem;
 }
-
-.author-card-bio {
-  font-size: 0.8125rem;
-  color: var(--color-app-gray-400);
-  line-height: 1.4;
-}
-
-.author-card-links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  row-gap: 0.375rem;
-  margin-top: 0.5rem;
-}
-
+.author-card-bio { font-size: 0.8125rem; color: var(--color-app-gray-400); line-height: 1.4; }
+.author-card-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; row-gap: 0.375rem; margin-top: 0.5rem; }
 .author-card-link {
   font-size: 0.75rem;
   color: #D9FAA1;
@@ -933,11 +703,7 @@ html[data-blog="true"] .prose pre[data-lang]::before {
   font-weight: 500;
   transition: opacity 0.15s ease;
 }
-
-.author-card-link:hover {
-  opacity: 0.75;
-}
-
+.author-card-link:hover { opacity: 0.75; }
 .author-card-sponsor {
   display: inline-flex;
   align-items: center;
@@ -948,129 +714,87 @@ html[data-blog="true"] .prose pre[data-lang]::before {
   color: var(--color-app-accent);
   font-size: 0.75rem;
   font-weight: 600;
-  opacity: 1;
   transition: background 0.15s ease, color 0.15s ease;
 }
+.author-card-sponsor:hover { background: var(--color-app-accent); color: var(--color-app-body); }
 
-.author-card-sponsor:hover {
-  background: var(--color-app-accent);
-  color: var(--color-app-body);
-  opacity: 1;
-}
-
-/* ---- Responsive Typography Adjustments ---- */
 @media (max-width: 768px) {
-  .prose {
-    font-size: 1rem;
-  }
-
-  .prose h1 {
-    font-size: 2rem;
-  }
-
-  .prose h2 {
-    font-size: 1.5rem;
-  }
-
-  .prose h3 {
-    font-size: 1.25rem;
-  }
-
-  .prose > p:first-of-type::first-letter {
-    font-size: 3rem;
-  }
-
-  .prose .pull-quote {
-    font-size: 1.25rem;
-    padding: 1.5rem 0;
-  }
+  .prose { font-size: 1rem; }
+  .prose h1 { font-size: 2rem; }
+  .prose h2 { font-size: 1.5rem; }
+  .prose h3 { font-size: 1.25rem; }
+  .prose > p:first-of-type::first-letter { font-size: 3rem; }
+  .prose .pull-quote { font-size: 1.25rem; padding: 1.5rem 0; }
 }
 
-/* Fade-in animation */
+/* ============================================
+   ANIMATIONS
+   ============================================ */
 @keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+.animate-fade-in { animation: fade-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
-.animate-fade-in {
-  animation: fade-in 0.5s ease both;
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+.animate-stagger > * {
+  opacity: 0;
+  animation: fade-in-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.animate-stagger > *:nth-child(2) { animation-delay: 0.12s; }
+.animate-stagger > *:nth-child(3) { animation-delay: 0.19s; }
+.animate-stagger > *:nth-child(4) { animation-delay: 0.26s; }
+.animate-stagger > *:nth-child(5) { animation-delay: 0.33s; }
+.animate-stagger > *:nth-child(6) { animation-delay: 0.40s; }
 
-/* Heartbeat animation for sponsor button */
 @keyframes heartbeat {
   0%, 100% { transform: scale(1); }
   25% { transform: scale(1.3); }
   50% { transform: scale(1); }
   75% { transform: scale(1.3); }
 }
+.animate-heartbeat { animation: heartbeat 0.8s ease-in-out; }
+.group:hover .group-hover\:animate-heartbeat { animation: heartbeat 0.8s ease-in-out; }
 
-.animate-heartbeat {
-  animation: heartbeat 0.8s ease-in-out;
-}
-
-.group:hover .group-hover\:animate-heartbeat {
-  animation: heartbeat 0.8s ease-in-out;
-}
-
-/* Card hover effect */
-.card-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
+.card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 14px 28px -10px rgba(26,26,26,0.18);
+  border-color: var(--color-app-text);
 }
 
-/* Smooth link underline */
-.link-underline {
-  position: relative;
-  text-decoration: none;
-}
-
+.link-underline { position: relative; text-decoration: none; }
 .link-underline::after {
   content: "";
   position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: var(--color-app-accent);
-  transition: width 0.2s ease;
+  bottom: -2px; left: 0;
+  width: 0; height: 2px;
+  background-color: var(--color-app-accent-2);
+  transition: width 0.25s ease;
 }
+.link-underline:hover::after { width: 100%; }
 
-.link-underline:hover::after {
-  width: 100%;
-}
-
-/* Custom Scrollbar Styles */
-.scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+/* Scrollbar */
+.scrollbar-thin::-webkit-scrollbar { width: 6px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
 .scrollbar-thin::-webkit-scrollbar-thumb {
   background-color: var(--color-app-gray-200);
   border-radius: 3px;
   transition: background-color 0.2s ease;
 }
+.scrollbar-thin:hover::-webkit-scrollbar-thumb { background-color: var(--color-app-gray-300); }
+.scrollbar-thin { scrollbar-width: thin; scrollbar-color: var(--color-app-gray-200) transparent; }
 
-.scrollbar-thin:hover::-webkit-scrollbar-thumb {
-  background-color: var(--color-app-gray-300);
+/* Marquee oversized titles — used by AnimatedTitle */
+.marquee-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: var(--color-app-text);
 }
-
-/* Firefox scrollbar */
-.scrollbar-thin {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-app-gray-200) transparent;
-}
-

@@ -12,21 +12,26 @@ const { name, badgeImage, link } = Astro.props;
   href={link}
   target="_blank"
   rel="noopener"
-  class="flex flex-col items-center gap-2 p-4 bg-white border border-app-border rounded-xl card-hover text-center"
+  class="group flex flex-col items-center gap-3 p-4 bg-app-body border border-app-border card-hover text-center"
 >
   {badgeImage ? (
     <img
       src={badgeImage}
       alt={name}
-      class="w-16 h-16 object-contain"
+      class="w-16 h-16 object-contain group-hover:scale-110 transition-transform duration-300"
       loading="lazy"
     />
   ) : (
-    <div class="w-16 h-16 bg-app-accent-light rounded-lg flex items-center justify-center">
-      <span class="text-app-accent text-2xl font-bold">
+    <div class="w-16 h-16 bg-app-surface border border-app-border flex items-center justify-center">
+      <span class="font-display text-2xl font-bold text-app-accent-2">
         {name.charAt(0)}
       </span>
     </div>
   )}
-  <span class="text-xs font-medium text-app-gray leading-tight">{name}</span>
+  <span class="text-xs font-medium text-app-gray-500 leading-tight group-hover:text-app-text transition-colors">
+    {name}
+  </span>
+  <span class="font-mono text-[9px] uppercase tracking-[0.18em] text-app-gray-300 group-hover:text-app-accent-2 transition-colors mt-auto">
+    verify ↗
+  </span>
 </a>

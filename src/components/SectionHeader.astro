@@ -2,21 +2,30 @@
 interface Props {
   title: string;
   subtitle?: string;
+  kicker?: string;
+  index?: number | string;
   className?: string;
 }
 
-const { title, subtitle, className = '' } = Astro.props;
+const { title, subtitle, kicker, index, className = '' } = Astro.props;
 ---
 
-<div class={`mb-8 lg:mb-10 ${className}`}>
-  <div class="flex items-center gap-2 lg:gap-4 mb-3 lg:mb-4">
-    <span class="w-1.5 h-1.5 lg:w-2.5 lg:h-2.5 bg-app-text rounded-full"></span>
-    <h2 class="text-2xl lg:text-[32px] font-display text-app-text tracking-[var(--tracking-tight)] leading-none">
-      {title}
-    </h2>
-  </div>
+<div class={`mb-8 lg:mb-12 ${className}`}>
+  {(kicker || index !== undefined) && (
+    <div class="flex items-center gap-3 mb-3">
+      {index !== undefined && (
+        <span class="font-mono text-[11px] tracking-[0.18em] font-semibold text-app-accent-2">
+          {typeof index === "number" ? String(index).padStart(2, "0") : index}
+        </span>
+      )}
+      {kicker && <span class="kicker">{kicker}</span>}
+    </div>
+  )}
+  <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-app-text tracking-tight leading-[1.05] max-w-3xl">
+    {title}
+  </h2>
   {subtitle && (
-    <p class="text-base lg:text-lg text-app-gray-400 tracking-[var(--tracking-tight)] leading-[1.4] max-w-2xl">
+    <p class="mt-4 text-base lg:text-lg text-app-gray-400 leading-[1.5] max-w-2xl">
       {subtitle}
     </p>
   )}

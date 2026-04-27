@@ -3,7 +3,7 @@ import BaseLayout from "../components/BaseLayout.astro";
 import AnimatedTitle from "../components/AnimatedTitle.astro";
 import Timeline from "../components/Timeline.astro";
 import ContactSection from "../components/ContactSection.astro";
-import { experiences, skills, languages, tools, achievements } from "../data/about";
+import { experiences, achievements } from "../data/about";
 import { siteConfig } from "../data/site";
 ---
 
@@ -11,102 +11,130 @@ import { siteConfig } from "../data/site";
   title="About - Dipankar Das"
   description="Platform engineer passionate about DevOps, Kubernetes, and sustainable computing."
 >
-  <AnimatedTitle 
-    title="About" 
-  />
+  <AnimatedTitle title="About" kicker="/about · the long version" />
 
-  <section class="py-10 lg:pb-14 animate-fade-in">
-    <div class="container mx-auto mb-10 lg:mb-20">
-      <!-- Intro Section -->
-      <div class="flex flex-col items-center gap-6 mb-14 md:flex-row md:items-start md:gap-10 lg:gap-14 lg:mb-20">
-        <div class="w-40 h-40 flex-shrink-0 rounded-2xl overflow-hidden md:w-48 md:h-48 lg:w-56 lg:h-56">
-          <img
-            src="/img/profile_bw.webp"
-            alt={siteConfig.name}
-            class="w-full h-full object-cover"
-            loading="eager"
-          />
+  <section class="py-12 lg:py-16 animate-fade-in">
+    <div class="container mx-auto">
+
+      <!-- System strip -->
+      <div class="sys-strip mb-12 lg:mb-16">
+        <span class="sys-key">~/about</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value">{experiences.length} roles</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value">{achievements.length} milestones</span>
+      </div>
+
+      <!-- Intro -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 mb-16 lg:mb-24">
+        <div class="lg:col-span-5">
+          <div class="relative aspect-[4/5] border border-app-ink-line bg-app-surface overflow-hidden">
+            <img
+              src="/img/profile_bw.webp"
+              alt={siteConfig.name}
+              class="w-full h-full object-cover"
+              loading="eager"
+            />
+            <span class="absolute top-2 left-2 w-3 h-3 border-l border-t border-app-accent-2"></span>
+            <span class="absolute top-2 right-2 w-3 h-3 border-r border-t border-app-accent-2"></span>
+            <span class="absolute bottom-2 left-2 w-3 h-3 border-l border-b border-app-accent-2"></span>
+            <span class="absolute bottom-2 right-2 w-3 h-3 border-r border-b border-app-accent-2"></span>
+          </div>
+          <p class="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-app-gray-400 flex items-center justify-between">
+            <span>fig.02 / portrait, b&w</span>
+            <span class="text-app-accent">2025</span>
+          </p>
         </div>
-        <div class="text-center md:text-left">
-          <h2 class="text-xl font-display tracking-[var(--tracking-tight)] mb-3 lg:text-3xl lg:mb-4">
-            {siteConfig.name}
+
+        <div class="lg:col-span-7">
+          <div class="kicker mb-5">/intro</div>
+          <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-app-text tracking-tight leading-[1.05] mb-6">
+            {siteConfig.name},<br/>
+            <span class="font-serif italic font-normal text-app-accent">platform engineer</span>
+            who treats infrastructure like a product.
           </h2>
-          <p class="text-sm leading-[1.6] tracking-[var(--tracking-tight)] text-app-gray-400 lg:text-base lg:leading-[1.6]">
-            {siteConfig.tagline}. I build sustainable platforms and share technical deep-dives on Software Development, DevOps, Kubernetes, and System Design.
+          <p class="text-base lg:text-lg text-app-gray-500 leading-[1.6] mb-4">
+            {siteConfig.tagline}. I build sustainable platforms and write deep-dives
+            on Software Development, DevOps, Kubernetes, and System Design.
           </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="container mx-auto mb-10 lg:mb-[128px] xl:pr-[220px]">
-
-      <!-- Education Section -->
-      <div class="mb-8 lg:flex lg:items-start lg:gap-[98px] lg:mb-14">
-        <div class="flex items-center mb-[14px] flex-shrink-0 lg:w-[200px]">
-          <div class="w-1.5 h-1.5 flex-shrink-0 bg-app-text rounded-full mr-2 lg:w-2 lg:h-2 lg:mr-4"></div>
-          <div class="text-lg leading-none font-display tracking-[var(--tracking-tight)] lg:text-[32px]">
-            Education
-          </div>
-        </div>
-        <div>
-          <p class="text-sm leading-[1.4] tracking-[var(--tracking-tight)] text-app-gray-400 mb-6 lg:text-base lg:leading-[1.4] lg:mb-8">
-            My academic background in computer science and engineering, providing the foundation for my technical expertise.
+          <p class="text-base lg:text-lg text-app-gray-500 leading-[1.6]">
+            Most of my work lives at the seam between application code and the
+            infrastructure that runs it — eliminating the "it works on my machine"
+            class of problems for everyone, permanently.
           </p>
-          <div class="flex flex-wrap gap-3">
-            <div class="flex text-sm leading-none tracking-[var(--tracking-tight)] text-app-gray-500 font-medium px-4 py-3 border border-app-gray-200 rounded-[32px] lg:text-base lg:leading-none">
-              Bachelor of Technology
-            </div>
-            <div class="flex text-sm leading-none tracking-[var(--tracking-tight)] text-app-gray-500 font-medium px-4 py-3 border border-app-gray-200 rounded-[32px] lg:text-base lg:leading-none">
-              Computer Science
+
+          <!-- Education chip row -->
+          <div class="mt-10 pt-6 border-t border-app-border">
+            <p class="kicker mb-4">/education</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 border border-app-border font-mono text-[11px] uppercase tracking-[0.12em] text-app-gray-500">
+                B.Tech
+              </span>
+              <span class="px-3 py-1.5 border border-app-border font-mono text-[11px] uppercase tracking-[0.12em] text-app-gray-500">
+                Computer Science
+              </span>
+              <span class="px-3 py-1.5 border border-app-border font-mono text-[11px] uppercase tracking-[0.12em] text-app-gray-500">
+                Class of 2024
+              </span>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- Work History Section -->
-      <div class="mb-10 lg:mb-20">
-        <div class="flex items-center mb-6 lg:mb-10">
-          <div class="w-1.5 h-1.5 flex-shrink-0 bg-app-text rounded-full mr-2 lg:w-2 lg:h-2 lg:mr-4"></div>
-          <div class="text-lg leading-none font-display tracking-[var(--tracking-tight)] lg:text-[32px]">
-            Work history
+
+      <!-- Work history -->
+      <div class="mb-16 lg:mb-24">
+        <div class="flex items-end justify-between gap-4 mb-10 lg:mb-12 border-b border-app-ink-line pb-4">
+          <div>
+            <div class="kicker mb-2">/work-history</div>
+            <h2 class="font-display text-3xl md:text-4xl text-app-text tracking-tight">
+              Roles, in reverse chronology
+            </h2>
           </div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-gray-400 hidden sm:inline">
+            [{String(experiences.length).padStart(2, "0")} entries]
+          </span>
         </div>
         <Timeline experiences={experiences} />
       </div>
     </div>
-    
-    <!-- Cover Image -->
-    <img
-      src="/img/bg_9.webp"
-      alt="Workspace"
-      class="w-full object-cover aspect-[1.84] mb-10 lg:aspect-[2.59] lg:mb-20"
-      loading="lazy"
-    />
-    
-    <!-- Awards Section -->
+
+    <!-- Cover image -->
+    <div class="container mx-auto mb-16 lg:mb-24">
+      <figure class="border border-app-ink-line">
+        <img
+          src="/img/bg_9.webp"
+          alt="Workspace"
+          class="w-full object-cover aspect-[1.84] lg:aspect-[2.59]"
+          loading="lazy"
+        />
+        <figcaption class="px-4 py-2 border-t border-app-ink-line bg-app-surface flex justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-app-gray-400">
+          <span>fig.03 / workspace</span>
+          <span>shutter open</span>
+        </figcaption>
+      </figure>
+    </div>
+
+    <!-- Achievements -->
     <div class="container mx-auto">
-      <div class="max-w-[969px] mx-auto">
-        <h2 class="text-lg leading-[1.2] tracking-[var(--tracking-tight)] font-display mb-6 lg:text-[40px] lg:mb-16">
-          Some of my achievements
-        </h2>
-        <div class="grid grid-cols-1 gap-[14px] lg:gap-6">
-          {achievements.map((achievement, index) => (
-            <div class="flex items-center justify-between pb-[14px] border-b border-app-gray-200 lg:pb-6">
-              <div class="flex">
-                <span class="text-xs leading-none tracking-[var(--tracking-tight)] mr-1 lg:text-base lg:leading-none lg:mr-2">
-                  {index + 1}<sup>st</sup>
-                </span>
-                <span class="text-sm leading-none tracking-[var(--tracking-tight)] text-app-gray-400 lg:text-2xl lg:leading-none">
-                  {achievement.title}
-                </span>
-              </div>
-              <div class="text-sm leading-none tracking-[var(--tracking-tight)] lg:text-base lg:leading-none">
-                ({achievement.year})
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <div class="kicker mb-3">/achievements</div>
+      <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-app-text tracking-tight mb-10 lg:mb-14 max-w-3xl leading-[1.05]">
+        A few things I'm <span class="font-serif italic font-normal text-app-accent-2">proud of</span>.
+      </h2>
+      <ul class="border-t border-app-ink-line">
+        {achievements.map((a, i) => (
+          <li class="group grid grid-cols-[auto_1fr_auto] items-baseline gap-4 lg:gap-8 py-4 lg:py-5 border-b border-app-border hover:bg-app-surface transition-colors">
+            <span class="font-mono text-xs lg:text-sm text-app-accent-2 tracking-[0.14em] font-semibold w-10">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span class="text-base lg:text-xl text-app-gray-500 leading-snug group-hover:text-app-text transition-colors">
+              {a.title}
+            </span>
+            <span class="font-mono text-xs lg:text-sm text-app-gray-400 tracking-[0.12em]">
+              {a.year}
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 

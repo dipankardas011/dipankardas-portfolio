@@ -2,37 +2,34 @@
 import { siteConfig, socialLinks } from "../data/site";
 ---
 
-<section class="py-10 lg:pb-14 bg-app-surface-alt">
-  <div class="container mx-auto text-center">
-    <h2 class="text-2xl lg:text-[40px] font-display text-app-text leading-tight lg:leading-none tracking-[var(--tracking-tight)] mb-4 lg:mb-6">
-      Let's work together
-    </h2>
-    <p class="text-base lg:text-lg text-app-gray-400 tracking-[var(--tracking-tight)] leading-[1.4] mb-8 lg:mb-10 max-w-2xl mx-auto">
-      Looking for a DevOps consultant, Kubernetes expert, or Go developer? I'd love to hear about your project.
-    </p>
-    <div class="flex flex-wrap gap-3 lg:gap-4 justify-center">
-      <a
-        href={`mailto:${siteConfig.email}`}
-        class="px-4 py-[9px] lg:px-7 lg:py-3 bg-app-text text-white border border-app-text rounded-[32px] text-sm lg:text-base font-medium hover:bg-app-gray-600 transition-colors duration-300 tracking-[var(--tracking-tight)]"
-      >
-        Get in touch
-      </a>
-      <a
-        href={socialLinks.linkedin}
-        target="_blank"
-        rel="noopener"
-        class="px-4 py-[9px] lg:px-7 lg:py-3 border border-app-gray-200 rounded-[32px] text-sm lg:text-base font-medium text-app-gray-500 hover:border-app-text hover:bg-app-text hover:text-white transition-colors duration-300 tracking-[var(--tracking-tight)]"
-      >
-        LinkedIn
-      </a>
-      <a
-        href={siteConfig.resumeUrl}
-        target="_blank"
-        rel="noopener"
-        class="px-4 py-[9px] lg:px-7 lg:py-3 border border-app-gray-200 rounded-[32px] text-sm lg:text-base font-medium text-app-gray-500 hover:border-app-text hover:bg-app-text hover:text-white transition-colors duration-300 tracking-[var(--tracking-tight)]"
-      >
-        Resume
-      </a>
+<section class="relative py-16 lg:py-24 border-t border-app-ink-line">
+  <div class="container mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div class="lg:col-span-7">
+        <div class="kicker mb-6">/cta · the next move</div>
+        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl text-app-text tracking-tight leading-[0.98]">
+          Pick a thread.<br/>
+          <span class="font-serif italic font-normal text-app-accent">Let's pull on it</span> together.
+        </h2>
+        <p class="mt-6 lg:mt-8 max-w-xl text-base lg:text-lg text-app-gray-500 leading-[1.55]">
+          DevOps consulting, Kubernetes audits, Go service design, or just a 30-minute
+          sanity-check on your platform — start with whatever feels right.
+        </p>
+      </div>
+      <div class="lg:col-span-5 flex flex-col gap-3 justify-end">
+        <a href={`mailto:${siteConfig.email}`} class="btn-primary justify-between">
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em]">Send a brief</span>
+          <span>→</span>
+        </a>
+        <a href={socialLinks.linkedin} target="_blank" rel="noopener" class="btn-ghost justify-between">
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em]">LinkedIn</span>
+          <span>↗</span>
+        </a>
+        <a href={siteConfig.resumeUrl} target="_blank" rel="noopener" class="btn-ghost justify-between">
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em]">Resume PDF</span>
+          <span>↗</span>
+        </a>
+      </div>
     </div>
   </div>
 </section>

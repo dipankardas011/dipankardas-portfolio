@@ -7,29 +7,37 @@ import ContactSection from "../components/ContactSection.astro";
 import DirectBooking from "../components/DirectBooking.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import { services, certifications } from "../data/services";
-import { siteConfig, socialLinks } from "../data/site";
+import { siteConfig } from "../data/site";
 ---
 
 <BaseLayout
   title="Services - Dipankar Das"
   description="DevOps consulting, Kubernetes expertise, Go development, and sustainability engineering."
 >
-  <AnimatedTitle title="Services" />
-  
-  <section class="py-10 lg:pb-14 animate-fade-in">
+  <AnimatedTitle title="Services" kicker="/services · how i can help" />
+
+  <section class="py-10 lg:py-16 animate-fade-in">
     <div class="container mx-auto">
-      <!-- Intro -->
-      <div class="mb-10 lg:mb-[120px]">
-        <p class="text-base lg:text-lg text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] max-w-3xl">
-          I Help Teams <b>{siteConfig.tagline}</b>. Ranging from Software Development, System Design to DevOps and Cloud-Native Systems, I offer a comprehensive suite of services to elevate your infrastructure and development practices.
-        </p>
+
+      <div class="sys-strip mb-10 lg:mb-14">
+        <span class="sys-key">~/services</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value">{services.length} core offerings</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value">availability: open</span>
       </div>
 
-      <!-- Services Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-10 lg:mb-[120px]">
+      <p class="text-base lg:text-xl text-app-gray-500 leading-[1.55] max-w-3xl mb-16 lg:mb-24">
+        I help teams <span class="font-serif italic text-app-accent">{siteConfig.tagline.toLowerCase()}</span>.
+        From Software Development and System Design to DevOps and Cloud-Native infrastructure —
+        a focused suite of services to elevate the layer your business runs on.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-20 lg:mb-28 animate-stagger">
         {services.map((s) => (
           <ServiceCard
             title={s.title}
+            abbreviation={s.abbreviation}
             icon={s.icon}
             description={s.description}
             skills={s.skills}
@@ -38,20 +46,17 @@ import { siteConfig, socialLinks } from "../data/site";
         ))}
       </div>
 
-      <!-- Certifications -->
-      <div class="border-t border-app-gray-100 pt-10 lg:pt-14">
-        <SectionHeader 
-          title="Certifications & Badges" 
-          subtitle="Industry-recognized credentials backing my expertise"
-          className="mb-8 lg:mb-10"
+      <div class="border-t border-app-ink-line pt-14 lg:pt-20">
+        <SectionHeader
+          title="Certifications & badges"
+          kicker="credentials"
+          index={services.length + 1}
+          subtitle="Industry-recognized proof of work backing the practice."
+          className="mb-10 lg:mb-12"
         />
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-5">
           {certifications.map((cert) => (
-            <CertBadge
-              name={cert.name}
-              badgeImage={cert.badgeImage}
-              link={cert.link}
-            />
+            <CertBadge name={cert.name} badgeImage={cert.badgeImage} link={cert.link} />
           ))}
         </div>
       </div>

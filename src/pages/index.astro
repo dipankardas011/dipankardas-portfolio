@@ -9,7 +9,6 @@ import Testimonials from "../components/Testimonials.astro";
 import { services } from "../data/services";
 import { projects } from "../data/projects";
 import { testimonials } from "../data/testimonials";
-import { Tweet } from '@astro-community/astro-embed-twitter';
 
 const featuredProjects = projects.filter((p) => p.featured);
 ---
@@ -18,19 +17,25 @@ const featuredProjects = projects.filter((p) => p.featured);
   <Hero />
 
   <!-- Services -->
-  <section class="py-10 lg:pb-14">
+  <section class="py-16 lg:py-24 border-t border-app-ink-line">
     <div class="container mx-auto">
-      <div class="mb-5 md:flex md:items-start md:justify-between md:gap-16 md:mb-10 lg:gap-20">
-        <SectionHeader 
-          title="What I do" 
-          subtitle=""
-          className="mb-0 md:mt-4"
-        />
-        <p class="text-sm leading-[1.4] tracking-[var(--tracking-tight)] text-app-gray-400 md:max-w-[761px] lg:text-base lg:leading-[1.4]">
-          Consulting and engineering services for modern infrastructure, covering Software Development, DevOps, cloud-native systems, and sustainable computing.
-        </p>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10 lg:mb-14">
+        <div class="lg:col-span-6">
+          <SectionHeader
+            title="What I do"
+            kicker="services"
+            index={1}
+            className="mb-0"
+          />
+        </div>
+        <div class="lg:col-span-6 lg:pt-12">
+          <p class="text-base lg:text-lg leading-[1.55] text-app-gray-500 max-w-xl">
+            Consulting and engineering for modern infrastructure — Software Development,
+            DevOps, cloud-native systems, and sustainable computing.
+          </p>
+        </div>
       </div>
-      <ul class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 animate-stagger">
         {services.map((s) => (
           <li>
             <ServiceCard
@@ -51,22 +56,22 @@ const featuredProjects = projects.filter((p) => p.featured);
   <Testimonials testimonials={testimonials} />
 
   <!-- Featured Projects -->
-  <section class="py-10 lg:pb-14">
+  <section class="py-16 lg:py-24 border-t border-app-ink-line">
     <div class="container mx-auto">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 lg:mb-10">
-        <SectionHeader 
-          title="Featured projects" 
-          subtitle="Open-source tools and systems I've built"
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 lg:mb-12">
+        <SectionHeader
+          title="Featured projects"
+          kicker="oss · tools"
+          index={2}
+          subtitle="Open-source tools and systems I've built and shipped."
           className="mb-0"
         />
-        <a
-          href="/projects/"
-          class="hidden sm:inline-flex items-center px-4 py-[9px] lg:px-7 lg:py-3 border border-app-gray-200 rounded-[32px] text-sm lg:text-base font-medium text-app-gray-500 hover:border-app-text hover:bg-app-text hover:text-white transition-colors duration-300 tracking-[var(--tracking-tight)]"
-        >
-          View all
+        <a href="/projects/" class="btn-ghost shrink-0">
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em]">View all</span>
+          <span>→</span>
         </a>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 animate-stagger">
         {featuredProjects.map((p) => (
           <ProjectCard
             title={p.title}
@@ -76,14 +81,6 @@ const featuredProjects = projects.filter((p) => p.featured);
             tags={p.tags}
           />
         ))}
-      </div>
-      <div class="mt-8 text-center sm:hidden">
-        <a
-          href="/projects/"
-          class="inline-flex items-center px-4 py-3 border border-app-gray-200 rounded-[32px] text-sm font-medium text-app-gray-500 hover:border-app-text hover:bg-app-text hover:text-white transition-colors duration-300 tracking-[var(--tracking-tight)]"
-        >
-          View all projects
-        </a>
       </div>
     </div>
   </section>

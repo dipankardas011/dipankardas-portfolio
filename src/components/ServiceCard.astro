@@ -3,7 +3,7 @@ import { Icon } from "astro-icon/components";
 
 interface Props {
   title: string;
-  abbreviation: string;
+  abbreviation?: string;
   icon: string;
   description: string;
   skills: string[];
@@ -13,15 +13,41 @@ interface Props {
 const { title, abbreviation, icon, description, skills, color } = Astro.props;
 ---
 
-<div class="bg-app-surface-alt rounded-2xl p-6">
-  <div class="flex items-center mb-4">
-    <div 
-      class="w-10 h-10 lg:w-[52px] lg:h-[52px] rounded-lg flex items-center justify-center font-display text-sm lg:text-base leading-none tracking-[var(--tracking-tight)] mr-4"
-      style={`background-color: ${color}`}
+<article class="group relative bg-app-body border border-app-border p-6 lg:p-7 card-hover overflow-hidden">
+  <!-- Top edge accent -->
+  <span class="absolute top-0 left-0 right-0 h-px bg-app-ink-line"></span>
+  <span class="absolute top-0 left-0 h-px bg-app-accent-2 w-0 group-hover:w-full transition-[width] duration-500"></span>
+
+  <div class="flex items-start justify-between mb-6">
+    <div
+      class="w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center border border-app-border bg-app-surface"
+      style={`box-shadow: inset 0 0 0 4px ${color}`}
     >
-      <Icon name={icon} class="w-5 h-5 lg:w-6 lg:h-6 text-gray-600" />
+      <Icon name={icon} class="w-6 h-6 lg:w-7 lg:h-7 text-app-text" />
     </div>
-    <h3 class="leading-none font-medium tracking-[var(--tracking-tight)] lg:text-xl lg:leading-none text-app-text">{title}</h3>
+    {abbreviation && (
+      <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-gray-400">
+        / {abbreviation}
+      </span>
+    )}
   </div>
-  <p class="text-sm leading-[1.4] tracking-[var(--tracking-tight)] text-app-gray-300">{description}</p>
-</div>
+
+  <h3 class="font-display text-xl lg:text-2xl text-app-text tracking-tight leading-[1.15] mb-3">
+    {title}
+  </h3>
+  <p class="text-sm lg:text-[15px] text-app-gray-500 leading-[1.55] mb-6">
+    {description}
+  </p>
+
+  <div class="pt-5 border-t border-dashed border-app-border">
+    <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-gray-400 mb-3">Stack</p>
+    <ul class="flex flex-wrap gap-x-3 gap-y-1.5 font-mono text-[11px] text-app-gray-500">
+      {skills.map((s, i) => (
+        <li>
+          {i > 0 && <span class="text-app-accent-2 mr-3">·</span>}
+          {s}
+        </li>
+      ))}
+    </ul>
+  </div>
+</article>

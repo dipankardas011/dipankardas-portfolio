@@ -1,24 +1,26 @@
 ---
 interface Props {
-  variant?: 'purple' | 'yellow';
+  variant?: 'purple' | 'yellow' | 'terra';
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   className?: string;
 }
 
 const { variant = 'purple', position = 'top-left', className = '' } = Astro.props;
 
-const bgColor = variant === 'purple' ? 'bg-[#3A437E]' : 'bg-[#FFBF4B]';
+const bgColor =
+  variant === 'purple' ? 'bg-[#3A437E]' :
+  variant === 'terra'  ? 'bg-[#FF6B35]' :
+                          'bg-[#FFBF4B]';
 
 const positionClasses = {
-  'top-left': 'top-0 left-0 -translate-x-1/2 -translate-y-1/2',
-  'top-right': 'top-0 right-0 translate-x-1/2 -translate-y-1/2',
-  'bottom-left': 'bottom-0 left-0 -translate-x-1/2 translate-y-1/2',
-  'bottom-right': 'bottom-0 right-0 translate-x-1/2 translate-y-1/2',
+  'top-left':     'top-0 left-0 -translate-x-1/3 -translate-y-1/3',
+  'top-right':    'top-0 right-0 translate-x-1/3 -translate-y-1/3',
+  'bottom-left':  'bottom-0 left-0 -translate-x-1/3 translate-y-1/3',
+  'bottom-right': 'bottom-0 right-0 translate-x-1/3 translate-y-1/3',
 };
 ---
 
 <div
-  class={`absolute w-[150px] h-[150px] md:w-[244px] md:h-[244px] lg:w-[296px] lg:h-[296px] ${bgColor} opacity-50 blur-[80px] md:blur-[100px] lg:blur-[120px] pointer-events-none ${positionClasses[position]} ${className}`}
+  class={`absolute w-[180px] h-[180px] md:w-[280px] md:h-[280px] lg:w-[340px] lg:h-[340px] ${bgColor} opacity-30 blur-[90px] md:blur-[120px] lg:blur-[140px] pointer-events-none ${positionClasses[position]} ${className}`}
   aria-hidden="true"
->
-</div>
+></div>

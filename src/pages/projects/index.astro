@@ -11,22 +11,38 @@ import { projects, ossContributions, categories } from "../../data/projects";
   title="Projects - Dipankar Das"
   description="Open-source projects, distributed systems, and infrastructure tools."
 >
-  <AnimatedTitle title="Projects" />
-  
-  <section class="py-10 lg:pb-14 animate-fade-in">
+  <AnimatedTitle title="Projects" kicker="/projects · things i've shipped" />
+
+  <section class="py-10 lg:py-16 animate-fade-in">
     <div class="container mx-auto">
-      <!-- Intro -->
-      <div class="mb-10 lg:mb-[120px]">
-        <p class="text-base lg:text-lg text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] max-w-3xl">
-          Tools, systems, and experiments I've built to solve real-world infrastructure challenges
-        </p>
+
+      <!-- System strip -->
+      <div class="sys-strip mb-10 lg:mb-14">
+        <span class="sys-key">~/projects</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value">{projects.length} entries</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value">{categories.length} categories</span>
+        <span class="sys-dot">●</span>
+        <span class="sys-value">{ossContributions.length} oss orgs</span>
       </div>
+
+      <p class="text-base lg:text-xl text-app-gray-500 leading-[1.55] max-w-3xl mb-16 lg:mb-24 font-serif italic">
+        Tools, systems, and experiments built to solve real-world infrastructure problems —
+        not portfolio pieces. Every one of these has shipped or been used in anger.
+      </p>
 
       {categories.map((cat, catIndex) => {
         const catProjects = projects.filter((p) => p.category === cat);
-        return catProjects.length > 0 ? (
-          <div class={catIndex < categories.length - 1 ? "mb-10 lg:mb-[120px]" : "mb-10 lg:mb-14"}>
-            <SectionHeader title={cat} className="mb-8 lg:mb-10" />
+        if (catProjects.length === 0) return null;
+        return (
+          <div class="mb-20 lg:mb-28">
+            <SectionHeader
+              title={cat}
+              index={catIndex + 1}
+              kicker={`category · ${catProjects.length} ${catProjects.length === 1 ? "entry" : "entries"}`}
+              className="mb-8 lg:mb-12"
+            />
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {catProjects.map((p) => (
                 <ProjectCard
@@ -39,22 +55,21 @@ import { projects, ossContributions, categories } from "../../data/projects";
               ))}
             </div>
           </div>
-        ) : null;
+        );
       })}
 
       <!-- OSS Contributions -->
-      <div class="border-t border-app-gray-100 pt-10 lg:pt-14">
-        <SectionHeader 
-          title="Open Source Contributions" 
-          subtitle="Contributing to CNCF and open-source projects"
-          className="mb-8 lg:mb-10"
+      <div class="border-t border-app-ink-line pt-14 lg:pt-20">
+        <SectionHeader
+          title="Open source contributions"
+          kicker="upstream · oss"
+          index={categories.length + 1}
+          subtitle="Pull requests merged into CNCF and other community projects."
+          className="mb-10 lg:mb-12"
         />
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {ossContributions.map((contribution) => (
-            <OSSCard
-              org={contribution.org}
-              prs={contribution.prs}
-            />
+          {ossContributions.map((c) => (
+            <OSSCard org={c.org} prs={c.prs} />
           ))}
         </div>
       </div>

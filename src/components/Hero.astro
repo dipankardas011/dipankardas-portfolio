@@ -1,101 +1,101 @@
 ---
 import { siteConfig, socialLinks } from "../data/site";
 import BlurDecoration from "./BlurDecoration.astro";
+
+const today = new Date().toISOString().slice(0, 10);
 ---
 
-<section class="py-10 lg:pb-14 animate-fade-in">
+<section class="relative pt-6 pb-12 lg:pt-10 lg:pb-20 animate-fade-in">
   <div class="container mx-auto">
-    <div class="grid grid-cols-1 gap-4 auto-rows-fr md:grid-cols-2 lg:grid-cols-[500px_1fr] xl:grid-cols-[615px_1fr]">
-      <!-- Info Card with Blur Decorations -->
-      <div class="relative bg-app-surface rounded-3xl p-6 overflow-hidden xl:p-10">
-        <BlurDecoration variant="purple" position="top-right" />
-        <BlurDecoration variant="yellow" position="bottom-left" />
-        
-        <div class="relative z-10 h-full flex flex-col items-start">
-          <h1 class="text-2xl leading-[1.2] tracking-[var(--tracking-tight)] text-app-text mb-2.5 md:text-lg lg:text-[34px] lg:leading-[1.2] lg:mb-4">
-            Hi, I’m Dipankar, a Platform Engineer & Systems Thinker
-          </h1>
-          <p class="text-sm leading-[1.4] tracking-[var(--tracking-tight)] text-app-gray-400 pr-0 md:pr-[70px] mb-8 md:text-xs lg:text-base lg:leading-[1.4] lg:mb-8">
-            {siteConfig.tagline}. <br><br>
-            I build sustainable platforms and share my technical deep-dives on Software Development, DevOps, Kubernetes, and System Design.
-          </p>
-          
-          <a
-            href="/services/"
-            class="flex px-5 py-3.5 rounded-[32px] border border-app-gray-200 text-sm leading-none tracking-[var(--tracking-tight)] font-medium text-app-gray-500 uppercase mb-8 hover:border-app-text hover:bg-app-text hover:text-white transition-colors duration-300 md:px-[18px] md:py-[14px] md:text-xs md:mb-14 lg:px-6 lg:py-4 lg:text-sm lg:leading-none"
-          >
-            Contact me
+
+    <!-- System strip -->
+    <div class="sys-strip mb-10 lg:mb-14">
+      <span class="sys-key">~/dipankar-das</span>
+      <span class="sys-dot">●</span>
+      <span class="sys-value">platform-engineer</span>
+      <span class="sys-dot">●</span>
+      <span class="sys-value hidden sm:inline">status: open-to-collab</span>
+      <span class="sys-dot hidden sm:inline">●</span>
+      <span class="sys-value ml-auto">{today}</span>
+    </div>
+
+    <!-- Hero grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
+
+      <!-- LEFT: copy block (8 cols) -->
+      <div class="lg:col-span-8">
+        <div class="kicker mb-6">Engineering systems that don't break at 3am</div>
+
+        <h1 class="font-display font-medium text-[clamp(2.6rem,7vw,5.6rem)] leading-[0.98] tracking-[-0.03em] text-app-text">
+          Hi — I'm <span class="font-serif italic font-normal text-app-accent">Dipankar</span>,<br/>
+          a platform engineer<br/>
+          building the boring,<br/>
+          load-bearing layer<br/>
+          <span class="relative inline-block">
+            of the internet
+            <span class="absolute left-0 right-0 -bottom-2 h-[10px] bg-app-accent-2/30 -z-10"></span>
+          </span>.
+        </h1>
+
+        <p class="mt-8 lg:mt-10 max-w-xl text-base lg:text-lg leading-[1.55] text-app-gray-500">
+          I run on Kubernetes, Go, and OpenTelemetry. I write deep-dives on
+          DevOps, distributed systems, and the unglamorous work that keeps
+          your services up — so your developers don't have to think about it.
+        </p>
+
+        <!-- CTAs -->
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a href="/services/" class="btn-primary">
+            <span>Work with me</span>
+            <span class="font-mono text-xs">→</span>
           </a>
-          
-          <!-- Social Links at bottom -->
-          <ul class="flex items-center gap-3 mt-auto lg:gap-5">
-            <li>
-              <a
-                href={socialLinks.linkedin}
-                target="_blank"
-                rel="noopener"
-                class="flex items-center group"
-              >
-                <div class="w-4 h-4 mr-1.5 flex-shrink-0">
-                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="1" y="1" width="14" height="14" rx="7" fill="#1275B1" class="group-hover:fill-app-accent transition-colors"></rect>
-                    <path d="M6.30928 4.84607C6.30928 5.31335 5.90426 5.69215 5.40464 5.69215C4.90502 5.69215 4.5 5.31335 4.5 4.84607C4.5 4.3788 4.90502 4 5.40464 4C5.90426 4 6.30928 4.3788 6.30928 4.84607Z" fill="white"></path>
-                    <path d="M4.62371 6.31405H6.1701V11H4.62371V6.31405Z" fill="white"></path>
-                    <path d="M8.65979 6.31405H7.1134V11H8.65979C8.65979 11 8.65979 9.52479 8.65979 8.60243C8.65979 8.04881 8.84883 7.49277 9.60309 7.49277C10.4555 7.49277 10.4504 8.21727 10.4464 8.77855C10.4412 9.51222 10.4536 10.2609 10.4536 11H12V8.52686C11.9869 6.94769 11.5754 6.22004 10.2216 6.22004C9.4177 6.22004 8.91936 6.58503 8.65979 6.91525V6.31405Z" fill="white"></path>
-                  </svg>
-                </div>
-                <span class="text-xs leading-none tracking-[var(--tracking-tight)] group-hover:text-app-accent transition-colors lg:text-base lg:leading-none">
-                  LinkedIn
-                </span>
-              </a>
-            </li>
-            <li>
-              <a
-                href={socialLinks.github}
-                target="_blank"
-                rel="noopener"
-                class="flex items-center group"
-              >
-                <div class="w-4 h-4 mr-1.5 flex-shrink-0">
-                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z" fill="#181717" class="group-hover:fill-app-accent transition-colors"/>
-                  </svg>
-                </div>
-                <span class="text-xs leading-none tracking-[var(--tracking-tight)] group-hover:text-app-accent transition-colors lg:text-base lg:leading-none">
-                  GitHub
-                </span>
-              </a>
-            </li>
-            <li>
-              <a
-                href={socialLinks.twitter}
-                target="_blank"
-                rel="noopener"
-                class="flex items-center group"
-              >
-                <div class="w-4 h-4 mr-1.5 flex-shrink-0">
-                  <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-                    <path d="M12.6 0h2.454l-5.36 6.778L16 16h-4.937l-3.867-5.594L2.771 16H.316l5.733-7.25L0 0h5.063l3.495 5.114L12.6 0Zm-.86 14.376h1.36L4.323 1.539H2.865l8.875 12.837Z" fill="#000" class="group-hover:fill-app-accent transition-colors"/>
-                  </svg>
-                </div>
-                <span class="text-xs leading-none tracking-[var(--tracking-tight)] group-hover:text-app-accent transition-colors lg:text-base lg:leading-none">
-                  Twitter
-                </span>
-              </a>
-            </li>
-          </ul>
+          <a href="/blog/" class="btn-ghost">
+            <span>Read the blog</span>
+            <span class="font-mono text-xs">↘</span>
+          </a>
+          <a href={siteConfig.resumeUrl} target="_blank" rel="noopener" class="btn-ghost">
+            <span>Resume</span>
+            <span class="font-mono text-xs">↗</span>
+          </a>
+        </div>
+
+        <!-- Social shortcut row (mono) -->
+        <ul class="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-[0.14em] text-app-gray-400">
+          <li><a href={socialLinks.github} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">github ↗</a></li>
+          <li><a href={socialLinks.linkedin} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">linkedin ↗</a></li>
+          <li><a href={socialLinks.twitter} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">twitter ↗</a></li>
+          <li><a href={socialLinks.hashnode} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">hashnode ↗</a></li>
+        </ul>
+      </div>
+
+      <!-- RIGHT: portrait card (4 cols) -->
+      <div class="lg:col-span-4">
+        <div class="relative">
+          <BlurDecoration variant="purple" position="top-right" />
+          <BlurDecoration variant="terra"  position="bottom-left" />
+
+          <div class="relative aspect-[3/4] overflow-hidden border border-app-ink-line bg-app-surface">
+            <img
+              src={siteConfig.profileImage}
+              alt={siteConfig.name}
+              class="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700"
+              loading="eager"
+            />
+            <!-- corner crosshairs -->
+            <span class="absolute top-2 left-2 w-3 h-3 border-l border-t border-app-accent-2"></span>
+            <span class="absolute top-2 right-2 w-3 h-3 border-r border-t border-app-accent-2"></span>
+            <span class="absolute bottom-2 left-2 w-3 h-3 border-l border-b border-app-accent-2"></span>
+            <span class="absolute bottom-2 right-2 w-3 h-3 border-r border-b border-app-accent-2"></span>
+          </div>
+
+          <!-- caption strip -->
+          <div class="mt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-app-gray-400">
+            <span>fig.01 / portrait</span>
+            <span class="text-app-accent">live</span>
+          </div>
         </div>
       </div>
-      
-      <!-- Profile Image -->
-      <div class="relative rounded-3xl overflow-hidden aspect-[1.5] md:aspect-auto lg:aspect-[1.5] xl:aspect-[1.3]">
-        <img
-          src={siteConfig.profileImage}
-          alt={siteConfig.name}
-          class="size-full object-cover"
-          loading="eager"
-        />
-      </div>
+
     </div>
   </div>
 </section>

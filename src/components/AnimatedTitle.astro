@@ -4,21 +4,34 @@ interface Props {
   titleClassName?: string;
   className?: string;
   subtitle?: string;
+  kicker?: string;
 }
 
-const { title, titleClassName = "", className = "", subtitle } = Astro.props;
+const { title, titleClassName = "", className = "", subtitle, kicker } = Astro.props;
 ---
 
-<div class:list={["overflow-hidden py-10 lg:pb-14", className]}>
-  <h1
-    class:list={[
-      "whitespace-nowrap font-display text-[114px] sm:text-[190px] md:text-[220px] lg:text-[300px] xl:text-[464px] leading-none tracking-[1.59px] lg:tracking-[5.59px]",
-      titleClassName
-    ]}
-  >
-    {title}
-  </h1>
+<div class:list={["overflow-hidden pt-6 pb-8 lg:pt-10 lg:pb-12", className]}>
+  <div class="container mx-auto">
+    {kicker && (
+      <div class="kicker mb-6 lg:mb-8 animate-fade-in">{kicker}</div>
+    )}
+  </div>
+  <div class="relative">
+    <h1
+      class:list={[
+        "marquee-title text-[22vw] md:text-[18vw] lg:text-[16vw] xl:text-[15vw] px-4 sm:px-6 lg:px-8",
+        titleClassName,
+      ]}
+    >
+      {title.toLowerCase()}
+      <span class="text-app-accent-2">.</span>
+    </h1>
+  </div>
   {subtitle && (
-    <p class="text-lg text-app-gray-400 max-w-2xl leading-relaxed mt-4">{subtitle}</p>
+    <div class="container mx-auto mt-6 lg:mt-8">
+      <p class="text-lg lg:text-xl text-app-gray-400 max-w-2xl leading-relaxed font-serif italic">
+        {subtitle}
+      </p>
+    </div>
   )}
 </div>

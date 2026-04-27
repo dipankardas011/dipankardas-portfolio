@@ -30,7 +30,7 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="author" content={siteConfig.name} />
-    <meta name="theme-color" content="#171717" />
+    <meta name="theme-color" content={blogPost ? "#0D1117" : "#FAF7F0"} />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalUrl} />
 
@@ -57,7 +57,7 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     {blogPost && (
@@ -89,7 +89,7 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     </script>
     <script async src="https://platform.twitter.com/widgets.js"></script>
   </head>
-  <body class="bg-app-body text-app-text min-h-screen flex flex-col font-sans antialiased">
+  <body class="bg-app-body text-app-text min-h-screen flex flex-col font-sans antialiased selection:bg-app-accent-2/30 selection:text-app-text">
     <Header />
     <main class="flex-1">
       <slot />
