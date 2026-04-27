@@ -74,7 +74,7 @@ Every dm table entry has the shape `<start_sector> <length_sectors> <target_type
 |---|---|---|
 | `start_sector` | `0` | Where this mapping begins on the virtual device. |
 | `length_sectors` | `8388608` | Total size in 512-byte sectors. **4 GB ÷ 512 B = 8,388,608.** Must equal `pool_data`. |
-| `target_type` | `thin-pool` | Kernel target module. Others: `linear`, `thin`, `snapshot`, `crypt`, `raid`. |
+| `target_type` | `thin-pool` | Kernel target module. Run `dmsetup targets` to list yours. Others in mainline include `linear`, `thin`, `striped`, `crypt`, `raid`, `snapshot`. |
 | `metadata_dev` | `$META` | Loop device backing `pool_meta`. Holds the allocation map. |
 | `data_dev` | `$DATA` | Loop device backing `pool_data`. Holds actual blocks. |
 | `data_block_size` | `2048` | Allocation unit in sectors. **2048 × 512 B = 1 MB per block.** Smaller blocks = finer sharing, more metadata overhead. |
@@ -87,7 +87,7 @@ So nothing is actually hardcoded. Everything is derived from two choices: *how b
 A **thinpool** hands out **thin volumes** on demand. Each volume looks full-sized to whatever uses it, but blocks only allocate on first write. Two consequences make this the right primitive for a container host:
 
 1. **Snapshots are basically free.** A snapshot of a thin volume is just another thin volume that shares blocks with the parent. Copy-on-write at the block layer. That is how an image becomes a runnable VM rootfs in milliseconds — the snapshot is metadata, not data.
-2. **Density.** One physical host can carry thousands of thin volumes derived from a few base images. Shared blocks stay shared until something writes.
+2. **Density.** One physical host can carry thousands of thin volumes derived from a few base images. Shared blocks stay shared until something writes. This is the only reason a single fleet host can run thousands of customer VMs without burning through its NVMe in a week.
 
 Nobody invented this recently. Devicemapper thin provisioning has shipped in mainline Linux since 2011. Docker shipped its `devicemapper` storage driver in 2013. The contribution of a modern orchestrator is choosing it deliberately and building everything else around its guarantees.
 
@@ -237,9 +237,11 @@ sudo dmsetup status pool
 
 `167/4096` data blocks ≈ 167 MB allocated for both rootfs and snapshot combined. The 4 GB pool would happily host dozens of these.
 
-## What My Code Actually Does
+## From S3 to Snapshot: The Code Path
 
-The Go binary auto-discovers `*.tar.gz` keys under `images/` in the configured S3 bucket and feeds each one to the FSM. For each image, it runs six transitions:
+Now scale that flow. One image, by hand, in a tutorial, takes ten minutes. A real host has thousands of images, churns daily, crashes mid-extract, and cannot afford to redo work. That is what the Go binary handles.
+
+It auto-discovers `*.tar.gz` keys under `images/` in the configured S3 bucket and feeds each one to the FSM. For each image, six transitions run:
 
 ```mermaid
 graph LR
@@ -253,40 +255,17 @@ graph LR
 
 The two `check-*` transitions are why the task says "only if it hasn't been retrieved already" / "only if that hasn't already been done." Idempotency. If the box reboots mid-run, the FSM picks up where the SQLite row says it was, not where the goroutine thought it was.
 
-In `unpack-image`, the meat:
+`unpack-image` does the same `dmsetup`/`mkfs.ext4`/`tar -x` you ran by hand — wrapped in a function that reports back to the FSM:
 
 ```go
-devicePath, err := deps.DeviceMapper.CreateThinVolume(req.Msg.ImageID, 1024)
-// dmsetup message <pool> 0 "create_thin <id>"
-// dmsetup create pool-<imageID> --table "0 <sectors> thin <pool> <id>"
-
-deps.DeviceMapper.FormatVolume(devicePath)        // mkfs.ext4
+devicePath, _ := deps.DeviceMapper.CreateThinVolume(req.Msg.ImageID, 1024)
+deps.DeviceMapper.FormatVolume(devicePath)
 mountPoint, _ := deps.DeviceMapper.MountVolume(devicePath, req.Msg.ImageID)
-deps.ImageUnpacker.ExtractImage(imagePath, mountPoint)  // tar over tar
+deps.ImageUnpacker.ExtractImage(imagePath, mountPoint)
 deps.DeviceMapper.UnmountVolume(mountPoint)
 ```
 
-Then `create-snapshot` runs:
-
-```bash
-dmsetup message pool 0 "create_snap <new_id> <parent_id>"
-dmsetup create pool-<imageID>-snapshot --table "0 <sectors> thin <pool> <new_id>"
-```
-
-The first line tells the pool to allocate snapshot metadata sharing blocks with the parent. The second exposes it as `/dev/mapper/pool-<imageID>-snapshot`. That is the "activation."
-
-Output snippet from a clean run:
-
-```
-Unpacked container image to thin volume - analyzed blob structure
-  config_digest=sha256:87bfd6...  container_format=OCI  has_manifest=true
-  layers=1  size=4163354  device_path=/dev/mapper/pool-alpine-3.22.1
-Created snapshot for image activation
-  snapshot_path=/dev/mapper/pool-alpine-3.22.1-snapshot
-Image processing completed successfully
-```
-
-No daemon. No Docker. Six `dmsetup` calls, one `mkfs`, one `tar -x`, three SQLite updates. That is a container image becoming a runnable rootfs.
+`create-snapshot` runs the two `dmsetup` calls from §6 — `create_snap` then `dmsetup create`. That is the "activation": the same primitives, automated, idempotent, restartable.
 
 ## Why the FSM Is the Whole Point
 
@@ -335,20 +314,16 @@ This rewires how you write every function. Concretely, what it cost me:
 
 I do not know which of these mattered most to the reviewer. I do know that the challenge rewards paranoia and punishes "happy path only" code, and the bar is calibrated for people who already think this way.
 
-## Reproducing It on a VM
+## Reproducing the Full Pipeline
 
-The repo ships a Terraform module that brings up an Ubuntu 24.04 EC2 box (t3.small, 30 GB gp3, github-keys-fed SSH) and a `setup-thinpool.sh` that installs Go via Nix, the AWS CLI, sqlite3, and creates the loop-backed thinpool. End to end:
+If you want the binary, not the tutorial: the repo ships Terraform for an EC2 box plus `setup-thinpool.sh`. End to end:
 
 ```bash
 cd deploy/terraform && terraform init && terraform apply
-rsync -avhPz --exclude 'deploy/' . ubuntu@<IP>:/home/ubuntu/fly.io/154428
-ssh ubuntu@<IP>
-sudo bash scripts/setup-thinpool.sh
-CGO_ENABLED=1 go build -o image-processor
-sudo ./image-processor
+ssh ubuntu@<IP>  # then clone the repo, build with CGO_ENABLED=1, run as root
 ```
 
-A 2 GB thinpool on an EC2 box can hold half a dozen real images (alpine, python:alpine, golang:alpine, ubuntu:24.04, two ksctl images) with snapshots. Real fleet hosts run the same primitives on real NVMe. Same `dmsetup` calls. More zeros.
+A 4 GB thinpool comfortably holds half a dozen real images (alpine, python:alpine, golang:alpine, ubuntu:24.04, two ksctl images) with snapshots. Real fleet hosts run the same primitives on real NVMe. Same `dmsetup` calls. More zeros.
 
 
 ## What I Actually Learned
