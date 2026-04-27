@@ -45,35 +45,46 @@ const iconPaths: Record<string, string> = {
 };
 ---
 
-<section class="py-10 lg:py-14">
+<section class="py-16 lg:py-24 border-t border-app-ink-line">
   <div class="container mx-auto">
 
-    {/* Section Header with Decision Tree */}
-    <div class="mb-8 lg:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-      <div>
-        <div class="flex items-center gap-2 mb-3">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-app-accent opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-app-accent"></span>
-          </span>
-          <span class="text-sm font-medium text-app-accent tracking-[var(--tracking-tight)]">Available Now</span>
-        </div>
-        <p class="text-3xl lg:text-[40px] font-display text-app-text leading-tight lg:leading-none tracking-[var(--tracking-tight)]">
-          Work with me directly
-        </p>
-        <p class="text-base text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] mt-3 max-w-xl">
-          Skip the platform fees. Choose a fixed-scope service below or request a custom project.
+    <div class="sys-strip mb-12 lg:mb-16">
+      <span class="sys-key">~/work-with-me</span>
+      <span class="sys-dot">●</span>
+      <span class="sys-value">direct booking</span>
+      <span class="sys-dot">●</span>
+      <span class="sys-value">no platform fees</span>
+      <span class="sys-dot">●</span>
+      <span class="sys-value ml-auto flex items-center gap-2">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-app-accent opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-app-accent"></span>
+        </span>
+        available now
+      </span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-12 lg:mb-16 items-end">
+      <div class="lg:col-span-8">
+        <div class="kicker mb-5">/direct booking</div>
+        <h2 class="font-display text-3xl md:text-5xl lg:text-6xl text-app-text tracking-tight leading-[1.02]">
+          Work with me<br/>
+          <span class="font-serif italic font-normal text-app-accent">directly</span>.
+        </h2>
+        <p class="mt-6 max-w-xl text-base lg:text-lg text-app-gray-500 leading-[1.55]">
+          Skip the platform fees. Pick a fixed-scope service below or request
+          a custom project — no middleman, no markup.
         </p>
       </div>
 
-      <div class="bg-app-surface border border-app-gray-100 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 shrink-0">
-        <p class="text-sm text-app-gray-500 font-medium tracking-[var(--tracking-tight)]">Prefer platforms?</p>
-        <div class="flex items-center gap-2">
+      <aside class="lg:col-span-4 lg:pl-8 lg:border-l border-app-border">
+        <div class="kicker mb-3">/prefer platforms</div>
+        <div class="flex flex-wrap gap-2">
           <a
             href={socialLinks.upwork}
             target="_blank"
             rel="noopener"
-            class="inline-flex items-center gap-2 px-3 py-2 bg-app-surface-alt border border-app-gray-200 rounded-xl text-sm font-medium text-app-gray-500 hover:border-[#14A800] hover:text-[#14A800] hover:bg-white transition-colors duration-300 tracking-[var(--tracking-tight)]"
+            class="inline-flex items-center gap-2 px-3 py-2 border border-app-border bg-app-body font-mono text-[11px] uppercase tracking-[0.12em] text-app-gray-500 hover:border-[#14A800] hover:text-[#14A800] transition-colors"
           >
             <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0">
               <path d="M345.516 181.708c-42.168 0-65.774 27.481-72.532 55.773-7.658-14.416-13.335-33.698-17.75-51.628H196.94v72.531c0 26.31-11.984 45.772-35.41 45.772-23.427 0-36.852-19.462-36.852-45.772l.27-72.531H91.34v72.531c0 21.174 6.848 40.366 19.372 54.061 12.884 14.146 30.454 21.534 50.817 21.534 40.545 0 68.837-31.085 68.837-75.595V209.64c4.235 16.038 14.326 46.853 33.608 73.884l-18.02 102.625h34.148l11.893-72.712c3.875 3.244 8.02 6.127 12.434 8.74 11.443 7.208 24.508 11.263 38.023 11.713 0 0 2.073.09 3.154.09 41.807 0 75.054-32.346 75.054-76.045 0-43.7-33.337-76.226-75.144-76.226m0 122.358c-25.86 0-42.979-20.003-47.754-27.752 6.127-49.015 24.057-64.512 47.754-64.512 23.426 0 41.626 18.741 41.626 46.132 0 27.39-18.2 46.132-41.626 46.132" fill="currentColor" fill-rule="nonzero"/>
@@ -84,7 +95,7 @@ const iconPaths: Record<string, string> = {
             href={socialLinks.fiverr}
             target="_blank"
             rel="noopener"
-            class="inline-flex items-center gap-2 px-3 py-2 bg-app-surface-alt border border-app-gray-200 rounded-xl text-sm font-medium text-app-gray-500 hover:border-app-accent hover:text-app-accent hover:bg-white transition-colors duration-300 tracking-[var(--tracking-tight)]"
+            class="inline-flex items-center gap-2 px-3 py-2 border border-app-border bg-app-body font-mono text-[11px] uppercase tracking-[0.12em] text-app-gray-500 hover:border-app-accent hover:text-app-accent transition-colors"
           >
             <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0">
               <path d="M13.95 8.024h-5.9V6.612c0-.718.582-1.3 1.3-1.3h.65V3.6h-.65a3.016 3.016 0 0 0-3.012 3.012v1.412H4.05v1.712h2.288V13.4H8.05V9.736h5.9V8.024Z" fill="currentColor"/>
@@ -93,7 +104,7 @@ const iconPaths: Record<string, string> = {
             Fiverr
           </a>
         </div>
-      </div>
+      </aside>
     </div>
 
     {/* Quick Services Grid */}
@@ -113,31 +124,28 @@ const iconPaths: Record<string, string> = {
         return (
           <Tag
             {...props}
-            class={`${props.class || ""} group relative bg-app-surface-alt border border-app-gray-100 rounded-2xl px-6 py-6 lg:px-8 lg:py-7 hover:border-app-accent/40 transition-all duration-300 block focus:outline-none`}
+            class={`${props.class || ""} group relative bg-app-body border border-app-border px-6 py-6 lg:px-7 lg:py-7 card-hover block focus:outline-none overflow-hidden`}
           >
-            <div class="flex items-start justify-between mb-3">
+            <span class="absolute top-0 left-0 h-px bg-app-accent w-0 group-hover:w-full transition-[width] duration-500"></span>
+            <div class="flex items-start justify-between mb-4">
               <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-lg bg-app-accent/10 flex items-center justify-center flex-shrink-0">
+                <div class="w-10 h-10 border border-app-border bg-app-surface flex items-center justify-center flex-shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--color-app-accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4.5 h-4.5">
                     <path d={iconPaths[service.icon]} />
                   </svg>
                 </div>
-                <h3 class="text-base font-medium text-app-text tracking-[var(--tracking-tight)]">{service.name}</h3>
+                <h3 class="font-display text-base lg:text-lg text-app-text tracking-tight">{service.name}</h3>
               </div>
-              <span class="text-sm font-semibold text-app-accent tracking-[var(--tracking-tight)] whitespace-nowrap ml-3">
+              <span class="font-mono text-[11px] uppercase tracking-[0.12em] font-semibold text-app-accent whitespace-nowrap ml-3">
                 from {service.price}
               </span>
             </div>
-            <p class="text-sm text-app-gray-400 leading-[1.5] tracking-[var(--tracking-tight)] pl-12">
+            <p class="text-sm text-app-gray-500 leading-[1.55] mb-4 pl-[3.25rem]">
               {service.description}
             </p>
-            <div class="flex items-center gap-1.5 mt-4 pl-12">
-              <span class="text-xs font-medium text-app-accent tracking-[var(--tracking-tight)] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                {checkoutUrl ? "Book now" : "Send inquiry"}
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--color-app-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 transform translate-x-0 group-hover:translate-x-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-              </svg>
+            <div class="flex items-center gap-1.5 pl-[3.25rem] font-mono text-[10px] uppercase tracking-[0.18em] font-semibold text-app-accent">
+              <span>{checkoutUrl ? "Book now" : "Send inquiry"}</span>
+              <span class="transform translate-x-0 group-hover:translate-x-1 transition-transform duration-300">→</span>
             </div>
           </Tag>
         );
@@ -145,31 +153,25 @@ const iconPaths: Record<string, string> = {
     </div>
 
     {/* Custom Project CTA */}
-    <div class="relative group/custom">
-      <div class="absolute -inset-[1px] bg-gradient-to-r from-app-accent/30 to-[#29b6f6]/30 rounded-[17px] blur-sm opacity-0 group-hover/custom:opacity-30 transition-opacity duration-500"></div>
-      <div class="relative bg-app-surface-alt border border-app-gray-100 rounded-2xl px-8 py-8 lg:px-14 lg:py-10">
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-          <div class="flex-1">
-            <p class="text-xl lg:text-2xl font-display text-app-text leading-tight tracking-[var(--tracking-tight)]">
-              Need something custom?
-            </p>
-            <p class="text-base text-app-gray-400 leading-[1.4] tracking-[var(--tracking-tight)] mt-2 max-w-lg">
-              Larger projects, ongoing consulting, or specialized DevOps & cloud work. Describe your needs and I'll send a tailored proposal with pricing.
-            </p>
-          </div>
-          <button
-            data-service="Custom Project"
-            class="open-contact-modal group/btn relative inline-flex items-center gap-2 px-8 py-4 bg-app-text text-white rounded-[32px] text-sm font-medium transition-all duration-300 tracking-[var(--tracking-tight)] overflow-hidden flex-shrink-0 focus:outline-none cursor-pointer"
-          >
-            <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
-            <span class="relative flex items-center gap-2">
-              Discuss Your Project
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform duration-300">
-                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-              </svg>
-            </span>
-          </button>
+    <div class="bg-app-surface border border-app-ink-line px-8 py-8 lg:px-12 lg:py-10">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div class="flex-1">
+          <div class="kicker mb-3">/custom · scoped proposal</div>
+          <p class="font-display text-2xl lg:text-3xl text-app-text leading-tight tracking-tight">
+            Need something <span class="font-serif italic font-normal text-app-accent">custom</span>?
+          </p>
+          <p class="text-base text-app-gray-500 leading-[1.55] mt-3 max-w-lg">
+            Larger projects, ongoing consulting, or specialized DevOps &amp; cloud work.
+            Describe your needs and I'll send a tailored proposal with pricing.
+          </p>
         </div>
+        <button
+          data-service="Custom Project"
+          class="open-contact-modal btn-primary flex-shrink-0 cursor-pointer"
+        >
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em]">Discuss your project</span>
+          <span>→</span>
+        </button>
       </div>
     </div>
 
