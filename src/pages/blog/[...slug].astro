@@ -38,6 +38,9 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
   description={post.data.description}
   ogImage={post.data.cover}
   blogPost={true}
+  publishedDate={post.data.date}
+  author={post.data.author ?? siteConfig.name}
+  tags={post.data.tags}
 >
   <!-- Reading progress bar -->
   <div id="reading-progress"></div>

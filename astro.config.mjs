@@ -13,7 +13,7 @@ export default defineConfig({
   site: "https://dipankar-das.com",
   integrations: [mermaid({ theme: "dark", autoTheme: true }), mdx(), sitemap({
       lastmod: new Date(),
-      filter: (page) => !page.includes("/diary/"),
+      filter: (page) => !page.includes("/diary/") && !page.includes("/404"),
     }), icon()],
   vite: {
     plugins: [tailwindcss()],

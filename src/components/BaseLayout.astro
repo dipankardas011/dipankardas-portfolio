@@ -10,6 +10,11 @@ interface Props {
   description?: string;
   ogImage?: string;
   blogPost?: boolean;
+  author?: string;
+  publishedDate?: Date;
+  modifiedDate?: Date;
+  tags?: string[];
+  noindex?: boolean;
 }
 
 const {
@@ -17,10 +22,45 @@ const {
   description = siteConfig.description,
   ogImage = "/img/bg_9.webp",
   blogPost = false,
+  author = siteConfig.name,
+  publishedDate,
+  modifiedDate,
+  tags,
+  noindex = false,
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site);
+const ogType = blogPost ? "article" : "website";
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: siteConfig.name,
+  url: siteConfig.url,
+  image: new URL(siteConfig.profileImage, Astro.site).toString(),
+  sameAs: [
+    socialLinks.github,
+    socialLinks.gitlab,
+    socialLinks.linkedin,
+    socialLinks.twitter,
+    socialLinks.hashnode,
+  ],
+};
+
+const articleSchema = blogPost && publishedDate
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: title,
+      description,
+      image: ogImageUrl.toString(),
+      datePublished: publishedDate.toISOString(),
+      dateModified: (modifiedDate ?? publishedDate).toISOString(),
+      author: { "@type": "Person", name: author, url: siteConfig.url },
+      mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl.toString() },
+    }
+  : null;
 ---
 
 <!doctype html>
@@ -29,29 +69,34 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="author" content={siteConfig.name} />
+    <meta name="author" content={author} />
     <meta name="theme-color" content="#FAF7F0" />
-    <meta name="robots" content="index, follow" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={siteConfig.name} />
-    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={title} />
     <meta property="og:image:width" content="2220" />
     <meta property="og:image:height" content="1510" />
     <meta property="og:url" content={canonicalUrl} />
+    {blogPost && publishedDate && (
+      <meta property="article:published_time" content={publishedDate.toISOString()} />
+    )}
+    {blogPost && modifiedDate && (
+      <meta property="article:modified_time" content={modifiedDate.toISOString()} />
+    )}
+    {blogPost && (
+      <meta property="article:author" content={author} />
+    )}
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@DipanakarDas011" />
     <meta name="twitter:creator" content="@DipanakarDas011" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImageUrl} />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -82,6 +127,12 @@ const ogImageUrl = new URL(ogImage, Astro.site);
       gtag('config', 'G-9PXLCZL052');
     </script>
     <script async src="https://platform.twitter.com/widgets.js"></script>
+
+    <!-- Structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    {articleSchema && (
+      <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+    )}
   </head>
   <body class="bg-app-body text-app-text min-h-screen flex flex-col font-sans antialiased selection:bg-app-accent-2/30 selection:text-app-text">
     <Header />
