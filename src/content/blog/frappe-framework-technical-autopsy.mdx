@@ -12,15 +12,15 @@ import Callout from '../../components/Callout.astro';
 
 ## The Pitch That Hooks You
 
-You're evaluating frameworks for a business application. You need forms, workflows, role-based permissions, REST APIs, a database layer, background jobs, and an admin interface. Building all of that from scratch sounds like six months of work you don't have.
+You're evaluating frameworks for a business application. You need forms, workflows, role-based permissions, REST APIs, a database layer, background jobs, and an admin interface. Building all of that from scratch sounds like six months of work that you don't have.
 
 Then you find Frappe.
 
-Full-stack. Low-code. Batteries-included. Define a "DocType" in the UI, and the framework generates your database table, REST API, form view, list view, and permission model — automatically. Need an ERP? ERPNext sits on top and gives you accounting, inventory, HR, and CRM out of the box. The GitHub stars are healthy. The documentation looks comprehensive. The demo is *slick*.
+Full-stack. Low-code. Batteries included. Define a "DocType" in the UI, and the framework generates your database table, REST API, form view, list view, and permission model — automatically. Need an ERP? ERPNext sits on top and gives you accounting, inventory, HR, and CRM out of the box. The GitHub stars are healthy. The documentation looks comprehensive. The demo is *slick*.
 
-You spin up a bench, create your first DocType, watch the form materialize from thin air, and think: *this is the future of rapid application development*.
+You spin up a bench, create your first DocType, watch the form materialize out of thin air, and think: *this is the future of rapid application development*.
 
-I thought the same thing. So did a lot of developers. What follows is what we found after the honeymoon ended — not opinion dressed as fact, but a catalogue of architectural decisions that the framework's own maintainers have acknowledged as problematic, backed by forum threads, blog posts, and GitHub issues from the community that lived through them.
+I thought the same thing. So did a lot of developers. What follows is what we found after the honeymoon ended — not opinion dressed as fact, but a catalog of architectural decisions that the framework's own maintainers have acknowledged as problematic, backed by forum threads, blog posts, and GitHub issues from the community that lived through them.
 
 This isn't a hit piece. It's a technical autopsy. And if you're evaluating Frappe right now, you deserve to read it before you commit.
 
@@ -55,7 +55,7 @@ With 500 orders, that's 501 database queries. The "fix" is to write a raw SQL JO
 
 ### The 97% Trap
 
-Frappe's maintainers estimate that **97% of data manipulation can be done through the ORM's building blocks**. That sounds great until you realize the remaining 3% — the complex reports, the multi-table aggregations, the queries that actually matter in a business application — require you to "bypass the ORM layer and write raw SQL queries yourself."
+Frappe's maintainers estimate that **97% of data manipulation can be done through the ORM's building blocks**. That sounds great until you realize that the remaining 3% — the complex reports, the multi-table aggregations, the queries that actually matter in a business application — require you to "bypass the ORM layer and write raw SQL queries yourself."
 
 And when you bypass the ORM, you also bypass Frappe's permission model. The [engineering blog](https://frappe.io/blog/engineering/evolving-frappes-orm-for-security-and-flexibility) admits this means developers must "reimplement Frappe's non-trivial permission model to avoid leaking unauthorised data." So you're writing raw SQL *and* reimplementing authorization. At that point, what is the framework giving you?
 
@@ -65,7 +65,7 @@ A community audit found approximately **694 uses of `frappe.db.sql()` across 263
 **Version 16 update:** Frappe has introduced a unified query builder based on pypika. It's a genuine improvement. But it doesn't retroactively fix the years of raw SQL already embedded in ERPNext and every custom Frappe app ever written.
 </Callout>
 
-The consequences of this history aren't abstract. Frappe has a dedicated [vendor page on CVEDetails](https://www.cvedetails.com/vendor/17053/Frappe.html) with a documented track record of SQL injection CVEs. CVE-2025-56381, for which a public PoC exists, is a recent example of the class of issue that emerges when a framework's ORM was historically built on string stitching. Chained with another vector — an administrator misconfiguration or a second SQLi flipping the right flag — these issues can escalate to wholesale data exposure. That's not a bug. That's a consequence of the original design.
+The consequences of this history aren't abstract. Frappe has a dedicated [vendor page on CVEDetails](https://www.cvedetails.com/vendor/17053/Frappe.html) with a documented track record of SQL injection CVEs. CVE-2025-56381, for which a public PoC exists, is a recent example of the class of issues that emerges when a framework's ORM was historically built on string stitching. Chained with another vector — an administrator misconfiguration or a second SQLi flipping the right flag — these issues can escalate to wholesale data exposure. That's not a bug. That's a consequence of the original design.
 
 ## Child Tables: Where Data Modeling Goes to Die
 
@@ -91,9 +91,9 @@ These aren't edge cases. One-to-many relationships with validation, permissions,
 
 ## The Permission System That Fights Itself
 
-Frappe's permission model has three layers, each capable of overriding the one beneath it: role-level permissions (`tabDoc Perm`), user-level restrictions (`tabUser Perm`), and document sharing (`tabDoc Share`). On paper that's defense-in-depth. In practice each layer can override the one below it, and the surface area required to reason about access is enormous: DocPerm, DocShare, User Permission, Role Profile, Permission Manager, Module Profile, Custom DocPerm — a parade of DocTypes the framework spawned to hold a permission model together. Configuring access for one user means traversing all of them.
+Frappe's permission model has three layers, each capable of overriding the one beneath it: role-level permissions (`tabDoc Perm`), user-level restrictions (`tabUser Perm`), and document sharing (`tabDoc Share`). On paper, that's defense-in-depth. In practice, each layer can override the one below it, and the surface area required to reason about access is enormous: DocPerm, DocShare, User Permission, Role Profile, Permission Manager, Module Profile, Custom DocPerm — a parade of DocTypes the framework spawned to hold a permission model together. Configuring access for one user means traversing all of them.
 
-### Allow-by-Default in an Allow-by-Default-is-Dead World
+### Allow-by-Default in a Deny-by-Default World
 
 The industry has been moving toward least-privilege for a decade. Zero-trust, deny-by-default, explicit grants — the consensus is that systems should refuse access unless a rule grants it. Frappe runs the opposite playbook: **absence of any role deactivates the permission barrier entirely**. No roles assigned? You're implicitly approved. The moment you add a role, the barrier engages — but only as a flat allow-list of explicit grants. Restriction is a workaround layered on top of an allow-by-default base, not a primitive.
 
@@ -107,11 +107,11 @@ The implication: a user with read-only access who also has share permission can 
 
 ### Permissive-by-Default
 
-Frappe Cloud's own documentation admits: *"Implementation of access controls is not complete. There maybe hiccups here and there."*
+Frappe Cloud's own documentation admits: *"Implementation of access controls is not complete. There maybe [sic] hiccups here and there."*
 
 That quote is from Frappe's official documentation for their own cloud product. When the people who built the system feel the need to disclaim their access controls in the docs, the signal is clear.
 
-The user-level restriction system (`tabUser Perm`) operates on a permissive-by-default model: absence of any role results in deactivation of the permission barrier, meaning users with no roles assigned get implicit approval on resources not explicitly denied. The moment you create a role and add nothing to it, the barrier activates — but "all permissions must be explicit" means a team of 10 organizations, each with 6 resource types, requires 60 explicit permission records per user just to baseline the system.
+The user-level restriction system (`tabUser Perm`) operates on a permissive-by-default model: absence of any role results in deactivation of the permission barrier, meaning users with no roles assigned get implicit approval on resources not explicitly denied. The moment you create a role and add nothing to it, the barrier activates — but "all permissions must be explicit" means that a team of 10 organizations, each with 6 resource types, requires 60 explicit permission records per user just to baseline the system.
 
 ### The Scale Cliff
 
@@ -177,7 +177,7 @@ The fingerprint of these issues is visible in Frappe Cloud's own code. Press shi
 
 ## The WSGI Tax
 
-Frappe runs on WSGI — one thread per request, no async I/O. Profiling Frappe requests with `py-spy` reveals that the actual user code handling accounts for only **53.63% of request time**. Framework initialization takes another **23.86%**. Response serialization takes **22.49%**. That's a **~46% framework overhead** on every request, before your code runs.
+Frappe runs on WSGI — one thread per request, no async I/O. Profiling Frappe requests with `py-spy` reveals that the actual user code handling the request accounts for only **53.63% of request time**. Framework initialization takes another **23.86%**. Response serialization takes **22.49%**. That's a **~46% framework overhead** on every request, before your code runs.
 
 ASGI — the async successor specification adopted by Django, FastAPI, and Starlette — handles concurrent connections via async I/O instead of thread-per-request. Frappe cannot adopt it. Its ORM, database layer, and numerous dependencies are synchronous-only. Even if you deployed Frappe behind an ASGI server, the framework would weigh it down and make it slower than pure WSGI. The path to async is permanently blocked by architectural decisions baked in at the foundation.
 
@@ -189,7 +189,7 @@ This means a worker doing nothing — idle, waiting for a job — sits at hundre
 
 The coupling goes deeper than memory. Job code can't import from "just Frappe utilities" — it imports from `frappe`, which means `frappe.init()` must have run, which means a site context must exist, which means MariaDB and Redis must be reachable. A unit test for a job function can't run without a full bench. CI pipelines pay this tax on every commit. New team members pay it on day one — a forum thread titled [*"Why this framework is so frustrating to work with?"*](https://discuss.frappe.io/t/why-this-framework-is-so-frustrating-to-work-with-always-unexpected-things-keep-happening/128494) opens with the developer noting "it takes an immense amount of effort to get the bench utility set up on your local system." Background schedulers keep running for inactive sites, generating exceptions that cause broken pipe errors in *active* sites. Services persist on ports after abrupt terminal closures. The runtime doesn't just have rough edges — it has hidden trapdoors.
 
-### RQ's "Horse" Errors and Mystery Crashes
+### RQ's 'Horse' Errors and Mystery Crashes
 
 The RQ library Frappe uses forks a "work horse" subprocess for each job. When that horse dies unexpectedly — OOM, segfault, signal — Frappe surfaces it as a generic `Work-horse terminated unexpectedly; waitpid returned ...` error. No stack trace from the job itself. No indication of *why* the horse died. The user-visible job status is "failed," but the actual cause lives in `dmesg`, kernel logs, or nowhere.
 
@@ -209,7 +209,7 @@ Mature web frameworks treat database migrations as a first-class concern. Django
 
 Frappe's `bench migrate` does not. There is no `*-up.sql` / `*-down.sql` pair. Schema changes happen as a side effect of DocType JSON edits — modify a DocType definition, run migrate, and Frappe diffs the JSON against the live schema and applies whatever ALTER statements it thinks are needed. There is no rollback. If a migration breaks, your options are: fix forward, restore from backup, or surgically reverse the schema by hand. There is no `bench migrate --rollback 1`.
 
-Add custom patches via `patches.txt`, which lists Python files run once per site. Each patch is imperative code — no down version, no checksum, no enforced ordering beyond append-order. The framework's response to "how do we evolve the schema safely?" is "be careful and have backups." For an ERP that businesses run their accounting on, that's an alarmingly thin guarantee.
+Add custom patches via `patches.txt`, which lists Python files run once per site. Each patch is imperative code — no down version, no checksum, no enforced ordering beyond append-order. The framework's response to 'how do we evolve the schema safely?' is 'be careful and have backups.' For an ERP that businesses run their accounting on, that's an alarmingly thin guarantee.
 
 This also rules out **rolling deployments**. A Frappe upgrade requires `bench migrate`, which requires schema changes against a database that can't tolerate two app versions reading it simultaneously. Production deploys are stop-the-world: drain traffic, run migrate, restart bench, hope. Zero-downtime deployment — table-stakes for any service-grade web app in 2026 — is structurally not on the menu.
 
