@@ -115,7 +115,7 @@ The user-level restriction system (`tabUser Perm`) operates on a permissive-by-d
 
 ### The Scale Cliff
 
-This isn't theoretical. In one production multi-tenant setup we analyzed, the system had accumulated **28,272 User Permission override documents** — just for permission management. A single admin-level user required **2,010 individual permission overrides** (335 organizations × 6 resource types per org). For a flat org structure, that growth is linear. Add a second tier — a "grandfather" org above multiple "father" orgs — and it becomes multiplicative.
+This isn't theoretical. In any sufficiently complex multi-tenant setup, the system accumulates thousands of **User Permission override documents** — just for permission management. A single admin-level user might require hundreds or thousands of individual permission overrides depending on the number of organizations and resource types involved. For a flat organizational structure, that growth is linear. Add a second tier of hierarchy, and it becomes multiplicative.
 
 At ~40 organizations, permission sync operations begin timing out. UX degrades. The system needs a manual "Resync" button as a workaround. The workaround then breaks at scale, requiring another workaround.
 
@@ -177,7 +177,7 @@ The fingerprint of these issues is visible in Frappe Cloud's own code. Press shi
 
 ## The WSGI Tax
 
-Frappe runs on WSGI — one thread per request, no async I/O. Profiling Frappe requests with `py-spy` reveals that the actual user code handling the request accounts for only **53.63% of request time**. Framework initialization takes another **23.86%**. Response serialization takes **22.49%**. That's a **~46% framework overhead** on every request, before your code runs.
+Frappe runs on WSGI — one thread per request, no async I/O. When we tested the system with profilers using `py-spy` on a simple `/ping` method call (which only returns "pong"), it revealed that the actual user code handling the request accounts for only **53.63% of request time**. Framework initialization takes another **23.86%**. Response serialization takes **22.49%**. That's a **~46% framework overhead** on every request, before your code runs.
 
 ASGI — the async successor specification adopted by Django, FastAPI, and Starlette — handles concurrent connections via async I/O instead of thread-per-request. Frappe cannot adopt it. Its ORM, database layer, and numerous dependencies are synchronous-only. Even if you deployed Frappe behind an ASGI server, the framework would weigh it down and make it slower than pure WSGI. The path to async is permanently blocked by architectural decisions baked in at the foundation.
 
