@@ -115,6 +115,7 @@ body {
   position: relative;
   overscroll-behavior-y: none;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 
 /* Decorative paper layer — fixed, painted once, never scrolled.
