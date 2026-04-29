@@ -91,7 +91,15 @@ These aren't edge cases. One-to-many relationships with validation, permissions,
 
 ## The Permission System That Fights Itself
 
-Frappe's permission model has three layers, each capable of overriding the one beneath it: role-level permissions (`tabDoc Perm`), user-level restrictions (`tabUser Perm`), and document sharing (`tabDoc Share`). On paper, that's defense-in-depth. In practice, each layer can override the one below it, and the surface area required to reason about access is enormous: DocPerm, DocShare, User Permission, Role Profile, Permission Manager, Module Profile, Custom DocPerm — a parade of DocTypes the framework spawned to hold a permission model together. Configuring access for one user means traversing all of them.
+Frappe's permission model has three layers, each capable of overriding the one beneath it. On paper, that's defense-in-depth. In practice, the surface area required to reason about access is enormous, and the layers actively undermine each other.
+
+Here is how the framework maps them out:
+
+1. **`tabDoc Perm` (Role-Level Permissions):** The gatekeeper. Its core purpose is to allow a system role access to a DocType. For example, a "Helpdesk Ticket" is allowed to be accessed by System Manager, Support Agent, and Agent Manager roles. However, the catch is absolute: if a role is permitted, *any* user with that role can access *any* document in that DocType.
+2. **`tabUser Perm` (User-Level Permissions):** To mitigate the massive over-permissioning caused by `tabDoc Perm`, Frappe added a user-level restriction. You select a User, a DocType to restrict (e.g., Company), and a Value (e.g., "Company A"). If the document contains that link, it's a "Pass." Anything else is a "Fail." But here is the fatal flaw: if the link field is simply not present on the document, the restriction silently fails open, resulting in massive data leaks.
+3. **`tabDoc Share` (Permission Override on Doc Level):** The last line of permissions. If a user is blocked by user-level restrictions, you can "share" the document with them. But it's not a gentle override — it completely bypasses every check mentioned above. Worse, if someone has just "Read" and "Share" permissions on a document, and *no* permission to write, they can still share the document with other people and grant *them* "Write" permission.
+
+Configuring access for one user means traversing all of these layers, plus Role Profiles, Permission Managers, Module Profiles, and Custom DocPerms — a parade of DocTypes the framework spawned to hold a permission model together.
 
 ### Allow-by-Default in a Deny-by-Default World
 
@@ -228,6 +236,27 @@ The consequences:
 
 The framework was built around a god account, and the god account leaks into every layer.
 
+## The `tabUser` Model: Primary Keys from 1999
+
+If you want to understand Frappe's architectural age, look no further than the `tabUser` table schema. In modern systems, users are identified by an immutable UUID. This ensures that if a user changes their email, gets married and changes their name, or merges accounts, their core identity remains stable across all relational tables.
+
+Frappe does not use UUIDs for users. It uses the user's email address as the primary key (the `name` field in the database).
+
+```sql
+desc tabUser;
++-----------------------------------------+--------------+------+-----+-------------+-------+
+| Field                                   | Type         | Null | Key | Default     | Extra |
++-----------------------------------------+--------------+------+-----+-------------+-------+
+| name                                    | varchar(140) | NO   | PRI | NULL        |       |
+| email                                   | varchar(140) | YES  |     | NULL        |       |
+| username                                | varchar(140) | YES  | UNI | NULL        |       |
+...
+```
+
+The implications of making a mutable string the primary key are disastrous for data integrity. If `dipankar@dipankar-das.com` wants to update their email address to a corporate domain, Frappe cannot just update an `email` column. Because the email *is* the primary key, the framework must execute a cascading rename operation. It has to crawl through every single table in the database that references the user — audit trails, document owners, assigned tasks, comments, permissions — and run an `UPDATE` query to change the old string to the new string.
+
+If this cascading operation fails halfway through (due to a lock, a timeout, or a custom table missing the cascade hook), the database is left in a corrupted state where half the system thinks the user is the old email, and half thinks it's the new one. Furthermore, because Frappe allows a separate `username` field that is only marked as `UNI` (Unique) rather than being the identifier, you can easily end up in states where multiple records conflict or where user resolution logic requires complex fallback checking. It is a fundamental data modeling error baked into the bedrock of the framework.
+
 ## The Developer Experience: Python Without the Benefits
 
 In 2026, modern Python is a strongly-typed, statically-checkable language. Type hints are universal. Pydantic, mypy, and pyright catch a class of bugs at edit-time that used to require runtime tests. FastAPI uses type hints to derive request schemas. SQLModel uses them to derive table definitions. The standard now is: if it isn't typed, it isn't reviewable.
@@ -243,13 +272,21 @@ What this means in practice:
 
 The framework predates the typing era and has not retrofitted. Newer Frappe code adds annotations sporadically, but the core APIs and the auto-generated DocType layer remain untyped. You write Python in 2026 with the developer experience of Python in 2014.
 
+## Session Management by Database Write
+
+A core tenet of modern web architecture is that read-heavy workloads should hit a cache, and sessions should be as lightweight as possible. Frappe technically uses Redis, but its session management still heavily leans on the database.
+
+Every time session state needs validation or updating, the framework frequently writes a database record to the `tabSessions` table. It generates and updates `csrf_token`s and tracks timestamps directly in the database rather than properly utilizing the Redis cache to relieve the load. When you have hundreds of concurrent users, this architectural choice translates to a constant, inescapable barrage of database write queries just to maintain user state. Redis is present in the stack, but the framework refuses to fully trust it for the one job it excels at.
+
 ## The Notification DocType: Markdown, Jinja, and Error Logs in a Trench Coat
 
 Frappe ships a "Notification" DocType — a UI for configuring email, SMS, and system notifications triggered by document events. The pitch is low-code: pick a DocType, pick an event, write a template, save. The reality is a fragile pipeline of three layered template engines stitched together, and any of them can fail silently.
 
 The template body is Markdown. The Markdown is rendered with Jinja for variable interpolation. The Jinja runs inside Frappe's sandbox, which exposes a curated subset of `frappe.*` calls. Get a single brace wrong, reference a field that doesn't exist on the bound document, or call a server method that hits a permission edge — and the notification doesn't send. Worse, the failure isn't surfaced to the user who configured it. It lands in the **Error Log** DocType as a stack trace, where it sits until someone notices the error log table has grown to a million rows.
 
-The compounding effect: notifications that worked yesterday silently stop working today because a custom field got renamed, a hook changed the document's shape, or an upgrade altered the sandbox's allow-list. The user thinks the system is fine. The accountants stop getting their alerts. The error log piles up. The fix is invariably "go to /app/error-log and read the trace yourself" — a workflow that assumes every business user is also a Python developer.
+The compounding effect: notifications that worked yesterday silently stop working today because a custom field got renamed, a hook changed the document's shape, or an upgrade altered the sandbox's allow-list. The user thinks the system is fine. The accountants stop getting their alerts. The error log piles up.
+
+But it doesn't just pile up — it silently kills your database. Frappe stores Error Logs, Notification Logs, and Activity Logs directly as rows in the relational database without aggressive, default rotation policies. Over time, these tables grow unbounded, bloating the database size, slowing down queries, and exhausting disk space until the database simply crashes. The fix is invariably "go to /app/error-log and read the trace yourself" — a workflow that assumes every business user is also a Python developer.
 
 ## A Frontend Frozen in 2015
 
@@ -346,5 +383,8 @@ If you specifically need an open-source ERP: evaluate with eyes wide open. ERPNe
 ### The Real Cost
 
 You found Frappe because it promised to save you time. It will — for the first two weeks. Then you'll spend that time back, with interest, fighting an ORM that stitches strings, child tables that can't nest, upgrades that break schemas, a frontend from 2015, and a contribution process that burns goodwill.
+
+The most expensive software isn't the kind you pay for. It's the kind that's free until you're too deep to leave.
+s, child tables that can't nest, upgrades that break schemas, a frontend from 2015, and a contribution process that burns goodwill.
 
 The most expensive software isn't the kind you pay for. It's the kind that's free until you're too deep to leave.
