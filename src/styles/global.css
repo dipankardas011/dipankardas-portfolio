@@ -103,6 +103,8 @@ html {
   -moz-osx-font-smoothing: grayscale;
   /* native smooth scroll only when user opts in via reduced-motion=no-pref */
   scroll-behavior: auto;
+
+  overflow-x: clip;
 }
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
