@@ -1,0 +1,41 @@
+---
+interface Props {
+  people: { name: string; url?: string; note?: string }[];
+  label?: string;
+}
+
+const { people, label = "Thanks To" } = Astro.props;
+---
+
+<aside class="special-thanks not-prose" aria-label="Acknowledgements">
+  <div class="special-thanks-rule" aria-hidden="true"></div>
+
+  <div class="special-thanks-head">
+    <span class="special-thanks-kicker">ACK</span>
+    <span class="special-thanks-divider" aria-hidden="true">·</span>
+    <span class="special-thanks-label">{label}</span>
+  </div>
+
+  <ul class="special-thanks-list" role="list">
+    {people.map((person) => (
+      <li class="special-thanks-item">
+        {person.url ? (
+          <a
+            href={person.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="special-thanks-link"
+          >
+            <span class="special-thanks-name">{person.name}</span>
+            <span class="special-thanks-arrow" aria-hidden="true">↗</span>
+          </a>
+        ) : (
+          <span class="special-thanks-name special-thanks-name--plain">{person.name}</span>
+        )}
+        {person.note && (
+          <span class="special-thanks-note">— {person.note}</span>
+        )}
+      </li>
+    ))}
+  </ul>
+</aside>

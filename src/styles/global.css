@@ -693,6 +693,107 @@ html[data-blog="true"] .prose pre[data-lang]::before {
   color: var(--color-app-body) !important;
 }
 
+/* Editorial acknowledgements — margin-note feel on cream paper.
+   Hard top rule, mono kicker, terracotta-bulleted list. */
+.special-thanks {
+  margin: 3.5rem 0 2.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+.special-thanks-rule {
+  height: 1px;
+  width: 100%;
+  background: var(--color-app-ink-line);
+  margin-bottom: 1.25rem;
+}
+.special-thanks-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.special-thanks-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-app-accent);
+}
+.special-thanks-divider {
+  color: var(--color-app-accent-2);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+.special-thanks-label {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--color-app-text);
+  letter-spacing: -0.005em;
+}
+.special-thanks-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.special-thanks-item {
+  position: relative;
+  padding-left: 0;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-app-gray-500);
+}
+.special-thanks .special-thanks-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  color: var(--color-app-text);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+.special-thanks .special-thanks-link::after,
+.special-thanks .special-thanks-link::before {
+  content: none !important;
+  display: none !important;
+}
+.special-thanks .special-thanks-link:hover {
+  color: var(--color-app-accent-2);
+  border-bottom-color: var(--color-app-accent-2);
+}
+.special-thanks-name {
+  letter-spacing: -0.005em;
+}
+.special-thanks-name--plain {
+  color: var(--color-app-text);
+  font-weight: 500;
+}
+.special-thanks-arrow {
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  color: var(--color-app-accent);
+  transform: translateY(-1px);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.special-thanks-link:hover .special-thanks-arrow {
+  transform: translate(2px, -3px);
+  color: var(--color-app-accent-2);
+}
+.special-thanks-note {
+  margin-left: 0.4rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.92em;
+  color: var(--color-app-gray-400);
+}
+
 @media (max-width: 768px) {
   .prose { font-size: 1rem; }
   .prose h1 { font-size: 2rem; }
