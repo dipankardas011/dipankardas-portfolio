@@ -127,6 +127,16 @@ But internal code paths — `doctype.validate()`, whitelisted server methods, ba
 
 This creates a false sense of security. The API looks properly guarded from the outside. Inside, the code runs with whatever permissions the calling context happens to have — which is often Administrator because so much internal code assumes it.
 
+### There Is No Middleware Layer
+
+Here's something most people don't realize: **Frappe doesn't have a middleware layer.**
+
+Every modern Python web framework has middleware. Django has middleware classes. Flask has `before_request`/`after_request`. FastAPI has dependencies and middleware. The pattern is universal because cross-cutting concerns — auth, rate limiting, request logging, tracing, CSRF — belong in one place that runs on every request.
+
+Frappe doesn't have one. It has hooks (`before_request`, `after_request`) that are roughly middleware-shaped, but they don't compose, don't short-circuit cleanly, and don't have a documented ordering contract between apps. There's no idiomatic place to plug in OpenTelemetry, no clean way to layer a rate limiter, no standard pattern for tenant-scoped request validation. Teams either monkey-patch `frappe.handler`, fork the routing layer, or stand up a separate proxy in front of the bench to do what middleware would do in any other framework.
+
+The downstream effect: observability is bolted on per-app rather than installed once. Auth additions live in scattered hooks. Cross-cutting changes touch dozens of files. The framework that markets itself as full-stack quietly assumes you won't need the architectural primitive every other full-stack framework treats as table stakes.
+
 ## The Runtime Tax: Workers, Memory, and WSGI
 
 Frappe's background workers — the RQ-based job runners — are not standalone Python processes. They are **Frappe processes**. Every worker boots the entire Frappe runtime: load `frappe.controllers`, hydrate every DocType meta, connect to MariaDB and Redis, register hooks, populate `frappe.local`. Then, after all that, it pulls a job off the queue.
