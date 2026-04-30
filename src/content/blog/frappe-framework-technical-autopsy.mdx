@@ -119,6 +119,14 @@ Frappe Press also completely ignores Frappe's built-in `DocShare` feature — a 
 
 Frappe Cloud's own documentation admits: *"Implementation of access controls is not complete. There maybe [sic] hiccups here and there."* When the people who built the system feel the need to disclaim their access controls in the docs, the signal is clear.
 
+### Middleware vs. Internal Code Paths
+
+There's a subtle but critical detail most people miss: **permission evaluation happens in the middleware layer**, not for backend's internal code paths. When a request comes in through the API, middleware checks permissions before reaching the controller. That's the surface-level defense.
+
+But internal code paths — `doctype.validate()`, whitelisted server methods, background job handlers — bypass that middleware entirely. The permission checks inside those functions are manual, opt-in, and inconsistently applied. Every write operation that calls `validate()` or a whitelisted method needs its own permission evaluation. If a developer forgets, there's no safety net. The middleware that protects the API surface does nothing for the backend logic that actually modifies data.
+
+This creates a false sense of security. The API looks properly guarded from the outside. Inside, the code runs with whatever permissions the calling context happens to have — which is often Administrator because so much internal code assumes it.
+
 ## The Runtime Tax: Workers, Memory, and WSGI
 
 Frappe's background workers — the RQ-based job runners — are not standalone Python processes. They are **Frappe processes**. Every worker boots the entire Frappe runtime: load `frappe.controllers`, hydrate every DocType meta, connect to MariaDB and Redis, register hooks, populate `frappe.local`. Then, after all that, it pulls a job off the queue.
@@ -127,7 +135,79 @@ This means a worker doing nothing — idle, waiting for a job — sits at hundre
 
 Frappe uses `gc.freeze()` — Python's garbage collector freeze — to reduce memory usage in its Gunicorn workers. The idea is sound: freeze all pre-fork objects into a "permanent generation" that the GC ignores, so forked worker processes can share memory via Copy-on-Write. Frappe claims ~50MB+ savings per worker.
 
-The cost isn't in the savings. It's in what happens after. `gc.freeze()` permanently exempts pre-fork objects from collection. Any object created *after* the freeze that holds a circular reference back to something frozen becomes immortal. The GC will never collect it. RQ workers fork constantly. Each fork inherits the frozen objects. Each job creates new objects. Some have circular references. They accumulate. The worker slowly bloats. Frappe's solution: `max_jobs`, which restarts workers after a fixed number of jobs to reclaim memory. Their own codebase comments describe this as a band-aid.
+The cost isn't in the savings. It's in what happens after. `gc.freeze()` permanently exempts pre-fork objects from collection. Any object created *after* the freeze that holds a circular reference back to something frozen becomes immortal. The GC will never collect it.
+
+### The gthread Complication
+
+When we looked deeper, we found the real problem isn't just `gc.freeze()` — it's how it interacts with the worker class Frappe actually ships with. `bench start` runs Gunicorn with `gthread` as the worker class:
+
+```shell
+/workspace/frappe-bench/env/bin/gunicorn
+- "-b"
+- "0.0.0.0:{{ .Values.frappeBench.service.containerPort }}"
+- "--workers=2"
+- "--threads=4"
+- "--worker-class=gthread"
+- "--log-level=debug"
+- "--max-requests"
+- "5000"
+- "--max-requests-jitter"
+- "500"
+- "-t"
+- "120"
+- "--graceful-timeout"
+- "30"
+- "frappe.app:application"
+- "--preload"
+```
+
+With `gthread`, workers don't fork — they use threads. `gc.freeze()` was designed for forking workers where Copy-on-Write gives you the memory benefits. With threads, the Copy-on-Write advantage disappears entirely. You get the freeze's cost without its benefit.
+
+When these gthread workers process requests and eventually idle down (before/after load testing, or post-peak), CPU returns to normal — but memory doesn't. It doesn't release. The frozen GC plus thread-based workers create a one-way memory leak: memory goes up, never comes back down.
+
+### The Code That Freezes Everything
+
+The real culprit lives in Frappe's own codebase:
+
+```python
+def freeze_gc():
+    global _gc_frozen
+    if _gc_frozen:
+        return
+    # Both Gunicorn and RQ use forking to spawn workers. In an ideal world, the fork should be sharing
+    # most of the memory if there are no writes made to data because of Copy on Write, however,
+    # python's GC is not CoW friendly and writes to data even if user-code doesn't. Specifically, the
+    # generational GC which stores and mutates every python object: `PyGC_Head`
+    #
+    # Calling gc.freeze() moves all the objects imported so far into permanant generation and hence
+    # doesn't mutate `PyGC_Head`
+    #
+    # Refer to issue for more info: https://github.com/frappe/frappe/issues/18927
+    gc.collect()
+    gc.freeze()
+    # RQ workers constantly fork, there' no benefit in doing this in that case.
+    _gc_frozen = True
+```
+
+Notice the comment: *"Both Gunicorn and RQ use forking to spawn workers."* That was true for the original design. But `gthread` doesn't fork. The code makes an assumption that doesn't match the deployment reality.
+
+### Kubernetes HPA Breaks
+
+This has a real operational consequence: **HPA doesn't work**. Kubernetes Horizontal Pod Autoscaler scales down when application workload drops and memory usage decreases. Normal applications release their resources. Frappe workers don't.
+
+The memory stays elevated after peak load. HPA sees high memory and keeps replicas at their maximum. If new nodes are created for this workload, they're preserved instead of recycled. The result is higher costs — you're paying for pods that should have scaled down but can't because the application never releases what it's taken.
+
+There's a workaround — though we're not sure about it, and it's not advised for production unless you're confident about the trade-offs:
+
+```shell
+--max-requests 1000 --max-requests-jitter 200
+```
+
+Lower the `--max-requests` value so workers restart more frequently, reclaiming memory before it gets out of hand. But this is a band-aid. It doesn't fix the underlying issue: `gc.freeze()` on non-forking workers is a design mismatch, and the memory leak is structural.
+
+If HPA doesn't work, you need to fall back to static replica counts. You're manually sizing your cluster based on peak load that may not repeat for months, paying for it 24/7. That's not how you operate on Kubernetes. That's how you operate a monolith that forgot it was supposed to be cloud-native.
+
+### The Smoking Gun in Press's Codebase
 
 The fingerprint of these issues is visible in Frappe Cloud's own code. Press ships scheduled functions named `fail_stuck_press_jobs`, `fail_old_jobs`, and `mark_stuck_updates_as_fatal`. There is a function whose entire purpose is to fail jobs that got stuck. Step timeouts are hardcoded to **18000 seconds** (5 hours) for individual migration steps — long enough that even a memory-leaking worker will probably finish before being killed. These aren't features. They're admissions in code form.
 
@@ -169,6 +249,8 @@ Frappe's job queue is RQ, which sits on Redis. Redis is also the cache layer, th
 The database story is worse. Frappe officially supports MariaDB. Postgres support exists but is **second-class and full of holes** — community threads catalogue migration failures, missing features, and DocTypes that ship MariaDB-specific SQL. The framework's own raw `frappe.db.sql()` calls (recall the 694 instances across 263 files) frequently use MariaDB syntax — backtick identifiers, `INSERT ... ON DUPLICATE KEY UPDATE`, MariaDB-specific JSON functions — that doesn't translate to Postgres.
 
 The implication: if your team has Postgres expertise, Postgres tooling, Postgres-based observability, or a compliance requirement that mandates Postgres, Frappe is not a real option. You're picking the framework *and* its database, and the database choice is MariaDB whether you wanted it or not.
+
+And here's the kicker: **you can't even get a managed MariaDB on two of the three major cloud providers.** AWS RDS is the only major cloud that still offers managed MariaDB. Azure dropped their managed MariaDB offering. GCP Cloud SQL never supported it. If you deploy Frappe on Azure or GCP, you're running MariaDB on a VM — managing patches, backups, HA, and scaling yourself. The framework that promises "batteries included" makes you build the database ops layer from scratch on most cloud platforms.
 
 Migrations make the lock-in worse. Frappe's `bench migrate` has no rollback. Schema changes happen as a side effect of DocType JSON edits — modify a DocType, run migrate, and Frappe diffs the JSON against the live schema and applies whatever ALTER statements it thinks are needed. There is no `bench migrate --rollback 1`. If a migration breaks, your options are: fix forward, restore from backup, or surgically reverse the schema by hand.
 
