@@ -300,7 +300,17 @@ A few details I kept tripping over until I got them right.
 
 **Shutdown is not just `docker compose down`.** SIGTERM kills client threads in arbitrary order. On a primary, that includes binlog dump threads — meaning a transaction can commit on the primary but never reach the replica. The right sequence is: `SET GLOBAL read_only = ON`, drain active connections, then `SHUTDOWN WAIT FOR ALL REPLICAS` so binlog dump threads stay alive until replicas catch up. Add `docker update --restart=no db` before the SQL shutdown, otherwise Docker's `restart: unless-stopped` will yank the rug.
 
-**Docker waits for the mount.** A `docker.service.d` drop-in with `Requires=mariadbdata.mount` and `After=mariadbdata.mount` keeps Docker from racing the data disk on boot. If MariaDB starts on an empty `/mariadbdata`, it cheerfully initializes a fresh database on top of nothing. Don't do that to yourself.
+**Docker waits for the mount, or it will silently destroy your day.** This one bit me on a reboot once and it's the reason I'm including it. The data disk is mounted via `/etc/fstab` (UUID-based, `defaults,nofail`), but `nofail` means "don't block boot if the mount fails" — *Docker still boots*. If the systemd `*.mount` unit hasn't finished by the time `docker.service` starts, MariaDB comes up on an empty `/mariadbdata` and cheerfully initializes a fresh, blank database directory on top of nothing. The container goes healthy. The application connects. You serve queries against an empty schema. The real data is sitting one mount away, fine, but unreachable.
+
+The fix is a one-line ordering constraint in a `docker.service.d` drop-in:
+
+```ini
+[Unit]
+Requires=mariadbdata.mount
+After=mariadbdata.mount
+```
+
+`Requires=` says Docker should fail (not boot the container) if the mount didn't come up. `After=` says wait for it before starting. Together they turn "silently serving an empty DB" into "Docker doesn't start" — which is exactly the failure mode you want. The setup script writes this drop-in automatically as part of `mount`. The only reason to know about it is to recognize the symptom and not blame the database when you ever skip it.
 
 **InnoDB tuning that pays for itself on a snapshot-restore world.** `innodb_flush_log_at_trx_commit=1`, `sync_binlog=1`, `innodb_doublewrite=ON`, `innodb_checksum_algorithm=full_crc32`, a generously sized `innodb_log_file_size` (2G for ~1TB), and the buffer-pool dump/load pair. That config is what makes "boot from a crash-consistent snapshot" boring instead of scary.
 
