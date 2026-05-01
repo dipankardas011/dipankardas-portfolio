@@ -1,11 +1,10 @@
 ---
 title: "You Probably Don't Need mariadb-backup"
 author: "Dipankar Das"
-date: 2026-04-26
+date: 2026-05-01
 description: "How re-questioning assumptions turned a complicated MariaDB backup pipeline into a simple disk-snapshot workflow on Azure."
 tags: ["mariadb", "azure", "self-hosting", "backup", "replication", "innodb"]
 cover: "/img/blogs/mariadb_snapshots.webp"
-draft: true
 ---
 import Callout from '../../components/Callout.astro';
 
@@ -72,7 +71,7 @@ I stopped and asked: what's the simplest mechanism that could possibly capture "
 
 The OS disk holds Linux, Docker, my setup script. None of that is precious — I can rebuild it in 15 minutes. The data disk holds `/var/lib/mysql`. That's the *only* thing that needs to survive.
 
-So I split them. OS on its own disk. A dedicated Premium SSD attached at LUN 8, mounted at `/mariadbdata`, bind-mounted into the container as `/var/lib/mysql`.
+So I split them. OS on its own disk. A dedicated Premium SSD attached at LUN 9, mounted at `/mariadbdata`, bind-mounted into the container as `/var/lib/mysql`. (The backup disk later joins at LUN 11 — different role, different lifecycle.)
 
 ```mermaid
 graph LR
@@ -118,7 +117,7 @@ But — *and this is the part I had to convince myself of* — the snapshot is *
   Crash-consistent on Azure means write-order preserved within a single disk. That's why having data, binlogs, and redo log all on the *same* data disk matters. If they were spread across disks, the snapshot wouldn't necessarily preserve write-order across them.
 </Callout>
 
-Restore is detach-attach. Restore from the vault → new managed disk → attach to a VM at LUN 8 → start MariaDB. For ~100GB this is minutes. The replica gets the same treatment: create another disk from the same snapshot, attach to the replica VM, boot, then re-link replication. Because the GTID is baked into the data files, `SELECT @@gtid_binlog_pos` on the booted replica tells you exactly where to resume:
+Restore is detach-attach. Restore from the vault → new managed disk → attach to a VM at LUN 9 → start MariaDB. For ~100GB this is minutes. The replica gets the same treatment: create another disk from the same snapshot, attach to the replica VM, boot, then re-link replication. Because the GTID is baked into the data files, `SELECT @@gtid_binlog_pos` on the booted replica tells you exactly where to resume:
 
 ```sql
 SELECT @@gtid_binlog_pos;
@@ -153,7 +152,7 @@ After `--prepare`, the backup disk *is* a bootable MariaDB data directory. Then 
 | `--prepare` | At restore (10–30 min for 1TB) | At backup time, already done |
 | `--copy-back` | At restore (30–60 min for 1TB) | Eliminated — backup disk *is* the datadir |
 
-Restore from this path is the same procedure as Stage 5: pull a disk from the vault, attach it at LUN 8, boot. There's nothing left to copy. It's a defense-in-depth path that's independent of the primary snapshot chain — different disk, different backup instance, different recovery point — but uses the exact same restore mechanism. Two parallel paths, one workflow.
+Restore from this path is the same procedure as Stage 5: pull the backup disk from the vault, attach it at LUN 9 (it *becomes* the data disk now), boot. One subtlety: `--prepare` resets the binlog, so `@@gtid_binlog_pos` is empty after boot. The GTID lives in `mariadb_backup_binlog_info` instead. On the primary, run `RESET MASTER` then `SET GLOBAL gtid_binlog_state = '<gtid>'` from that file so new transactions continue from the right place; replicas link with the same GTID via `gtid_slave_pos`. There's nothing left to copy. It's a defense-in-depth path that's independent of the primary snapshot chain — different disk, different backup instance, different recovery point — but uses the exact same restore mechanism. Two parallel paths, one workflow.
 
 ## The config knobs that earned their keep
 
@@ -303,6 +302,81 @@ A few details I kept tripping over until I got them right.
 
 **One disk for state. Period.** If you start putting binlogs on a separate "log disk" for IOPS reasons, your snapshots stop being a complete picture. The cleaner answer is to size the data disk's IOPS for the combined workload.
 
+## Stage 7 — The hour you didn't lose
+
+Hourly snapshots are great until the bad event happens at 14:23 and the snapshots sit at 14:00 and 15:00. Restoring 14:00 throws away twenty-three minutes of perfectly good writes. Restoring 15:00 brings the bad event back with it. The honest version of "we have backups" should let you land *between* the snapshots, on a specific transaction.
+
+My first instinct was to snapshot more often. Azure has opinions about that: Backup Vault disk policies are one-hour minimum, and managed disks cap at five hundred incremental snapshots per source. Going sub-hourly means hand-rolling `az snapshot create` from a runbook, with its own monitoring and retention math — the same backup-service-that-needs-a-backup-service trap I'd just crawled out of in Stage 3.
+
+My second instinct was to stream binlogs to blob storage. It works, but it adds a streamer process, a lifecycle policy, and a separate restore step. The wrong size of hammer for the RPO I actually have.
+
+The reframe was hiding in plain sight, again: **the binlogs are already on the data disk.** Every snapshot the Vault takes already contains them, alongside InnoDB. With seven-day binlog retention, every snapshot quietly ships a week of replayable history. I didn't need new infrastructure. I needed a procedure.
+
+The shape of that procedure is two snapshots and a timeline.
+
+```
+              T0 (snap)         T_target          T_bad           T1 (snap)
+                │                   │                │                │
+   ─────────────┼───────────────────┼────────────────┼────────────────┼─────►
+                ▲                   ▲                                 ▲
+            InnoDB state        want to land                     binlogs covering
+            base for replay     here (just before                [T0 .. T1]
+                                the bad event)
+```
+
+Pick `T_target` — the moment just before things went wrong. Take the snapshot before it (`snap_T0`) and the snapshot after it (`snap_T1`). Each plays a different role. `snap_T0` becomes the **state base**: restore it, boot it, leave it `read_only=ON`. `snap_T1` is just a **binlog donor**: restore it to a scratch VM, mount it **read-only**, copy out the binlog files, discard the disk. Then on the booted base, replay the binlogs from the position you booted at, up to `T_target`. Promote out of read-only. Rebuild replicas from the new primary. That's the whole thing.
+
+It works because three guarantees line up. The snapshot is crash-consistent, so InnoDB recovery on the booted base produces the exact state at `T0` — same trick as Stage 5. `sync_binlog=1` and `innodb_flush_log_at_trx_commit=1` make every committed transaction durable before COMMIT returns, so the binlog inside the snapshot reflects everything the application believes happened. And `binlog_format=ROW` plus `gtid_strict_mode=ON` make the replay deterministic — ROW ships actual row changes (so `NOW()` and `UUID()` don't drift), strict GTID rejects anything out of order.
+
+The interesting question is where to stop. `--stop-datetime` resolves to one second, and if two transactions share a second you'll over- or under-shoot. So I always inspect first:
+
+```bash
+mariadb-binlog --base64-output=DECODE-ROWS --verbose \
+  /tmp/replay/mariadb-bin.0000{42..47} > /tmp/inspect.sql
+```
+
+Out comes a readable transcript:
+
+```
+# at 12345
+#260430 14:22:58 server id 1  end_log_pos 12500  GTID 0-1-2653459 trans
+BEGIN
+... (last good transaction) ...
+COMMIT/*!*/;
+
+# at 12500
+#260430 14:23:03 server id 1  end_log_pos 12780  GTID 0-1-2653460 trans
+BEGIN
+DROP TABLE customers   ← the bad event
+COMMIT/*!*/;
+```
+
+`--stop-position=12500` is the cleanest cut: the byte offset of the bad event's start, applied to the last file in `argv`. Frame-perfect, no second-rounding. `--stop-datetime` is the fallback when you only have a wall-clock instant. `--exclude-gtids` is the surgical option when you want to keep almost everything and skip one specific transaction. `mariadb-binlog` always stops at transaction boundaries, so whichever flag you choose, the cut lands cleanly between BEGIN and COMMIT.
+
+The replay itself is anticlimactic:
+
+```bash
+docker compose exec -T db sh -c '
+  mariadb-binlog \
+    --start-position='"$T0_POS"' \
+    --stop-position=12500 \
+    /tmp/replay/mariadb-bin.0000{42..47} \
+  | mariadb -uroot -p"$MYSQL_ROOT_PASSWORD"
+'
+```
+
+Two flags bit me on the first dry run, both worth flagging up front: `--start-position` applies *only to the first file in `argv`*; subsequent files are read from their start. `--stop-position` applies *only to the last file*. If you forget that and brace-expand a wide range carelessly, you'll silently re-apply transactions you didn't mean to.
+
+<Callout type="important">
+  If a file in `argv` contains pre-`T0` events because rotation straddled the snapshot, `gtid_strict_mode` silently skips already-applied GTIDs — `mariadb-binlog` preserves original identifiers, and the server recognizes the duplicates. Treat this as a safety net, not the plan. Still scope `--start-position` correctly. The skip stops working if the binlogs come from a different `domain-server_id` stream, and you'll get an error instead of a quiet skip.
+</Callout>
+
+A few honest limits worth naming. The smallest unit you can land on is a single transaction — that's the granularity of the binlog stream and it's almost always what you want, but it does mean PITR cannot split a multi-statement transaction in half. If `T_bad` is a destructive DDL like `DROP TABLE` and `T_target` is on the far side of it, the DDL is sitting in the replay stream waiting to ruin your day; you'd have to remove that event from the SQL output by hand before piping. And replay is single-threaded — a quiet OLTP hour replays in a few minutes, a busy one can take close to its real wall-clock duration. Plan the RTO accordingly.
+
+PITR rides on the snapshot path, not the `mariadb-backup` path. The `mariadb-backup` disk is the failsafe for the day the Vault itself can't be trusted; when you're reaching for it, you've already lost the precision PITR was offering. Different tool, different bad day.
+
+What I like about this whole arrangement is that I didn't *add* anything to make it work. Binlogs were already on the data disk because that's the only way the snapshot stays a complete picture. Commits were already durable because that's what makes "the snapshot captured a committed transaction" actually true. PITR is what those choices look like once you write down the procedure.
+
 ## Where I landed
 
 I started looking for the right backup tool. I ended up looking for the right *disk*. Once `/var/lib/mysql` was a separable, snappable, attachable thing, the rest of the architecture got smaller and smaller. The database engine handles its own crash recovery — that's its job. The cloud provider handles cheap incremental block-level snapshots — that's its job. My job is to get out of the way and let those two things meet.
@@ -310,3 +384,7 @@ I started looking for the right backup tool. I ended up looking for the right *d
 The complicated version of this was a backup service with cron, retention, dashboards, restore drills, and an "incremental chain" that I had to trust. The simple version is: state on its own disk, a vault that snapshots it, and a script that knows how to attach it somewhere new. `mariadb-backup` is still in the toolbox — as a failsafe with an independent recovery path — but it's no longer the load-bearing wall.
 
 If you're staring at a checklist that says "must survive a bad day," start with that question: *what is the smallest thing that has to survive?* Put it on its own disk. The rest follows.
+
+---
+
+I've been wearing both the infra and the DB hat on this one, so it's entirely possible I've talked myself into a corner somewhere — a sharp edge I haven't hit yet, an assumption that doesn't hold at a different scale, a config knob I'm reading wrong. If you spot one, I'd genuinely like to hear about it — [drop a note in the discussion thread](https://github.com/dipankardas011/dipankardas-portfolio/discussions/8) and let's get into it.
