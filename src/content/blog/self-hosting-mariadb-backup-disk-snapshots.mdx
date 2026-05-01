@@ -12,6 +12,10 @@ Every MariaDB self-hosting guide opens the same way: install `mariadb-backup`, s
 
 This post is the path from "logical backups, full restores, cron everywhere" to "snapshot a disk, attach it, done." I was running MariaDB 11.8 LTS on a cloud VM (Azure, in this case), Docker Compose, single primary plus a read replica. Around 1TB of InnoDB on a Premium SSD data disk. The story isn't about the cloud — it's about the assumption I kept dragging around: *the database has to do its own backups.* Turns out it didn't.
 
+<Callout type="warning">
+  One caveat before you read further: don't self-host a database because this post made it look easy. I went this route because constraints I couldn't move around forced my hand — cost ceilings, data residency, a workload the managed offerings in my region didn't fit cleanly. If Azure Database for MariaDB / MySQL, RDS, Cloud SQL, PlanetScale, or any managed equivalent works for your shape, take it. Backups, patching, failover, and the 3 AM pager all stop being yours. The story below is what to do when "use the managed one" isn't an option, not an argument that you should opt out of one.
+</Callout>
+
 ## Stage 1 — Learning the words
 
 Before any of this, I had to learn the vocabulary. If you've never set up replication, three things deserve to live rent-free in your head.
@@ -376,6 +380,60 @@ A few honest limits worth naming. The smallest unit you can land on is a single 
 PITR rides on the snapshot path, not the `mariadb-backup` path. The `mariadb-backup` disk is the failsafe for the day the Vault itself can't be trusted; when you're reaching for it, you've already lost the precision PITR was offering. Different tool, different bad day.
 
 What I like about this whole arrangement is that I didn't *add* anything to make it work. Binlogs were already on the data disk because that's the only way the snapshot stays a complete picture. Commits were already durable because that's what makes "the snapshot captured a committed transaction" actually true. PITR is what those choices look like once you write down the procedure.
+
+## The whole picture, on one page
+
+Two backup paths flow off the same primary, and three recovery paths flow back in. Worth seeing them side by side.
+
+```
+                           ┌──────────────────────────┐
+                           │   PRIMARY (LUN 9)        │
+                           │   /mariadbdata           │
+                           │   InnoDB + binlogs       │
+                           └────────────┬─────────────┘
+                                        │
+                ┌───────────────────────┴───────────────────────┐
+                │                                               │
+        BACKUP PATH A                                  BACKUP PATH B
+        (primary defense)                              (failsafe)
+                │                                               │
+                ▼                                               ▼
+   ┌─────────────────────────┐                    ┌────────────────────────┐
+   │  Azure Backup Vault     │                    │  Backup Disk (LUN 11)  │
+   │  hourly disk snapshots  │                    │  /mariadbbackup        │
+   │  7-day retention        │                    │  mariadb-backup        │
+   │  zero prod impact       │                    │  --backup + --prepare  │
+   │  (binlogs included)     │                    │  → bootable datadir    │
+   └────────────┬────────────┘                    └────────────┬───────────┘
+                │                                              │
+                │                                              ▼
+                │                                    ┌─────────────────────┐
+                │                                    │  Vault snap of      │
+                │                                    │  backup disk        │
+                │                                    │  (independent path) │
+                │                                    └────────────┬────────┘
+                │                                                 │
+       ┌────────┴────────┐                                        │
+       │                 │                                        │
+       ▼                 ▼                                        ▼
+  ┌─────────┐       ┌─────────┐                              ┌─────────┐
+  │  DR #1  │       │  DR #2  │                              │  DR #3  │
+  │ restore │       │  PITR   │                              │ backup  │
+  │ to snap │       │ replay  │                              │ restore │
+  └─────────┘       └─────────┘                              └─────────┘
+```
+
+And the three DR doors:
+
+| | **DR #1 — snap restore (non-PITR)** | **DR #2 — snap + binlog replay (PITR)** | **DR #3 — mariadb-backup restore** |
+|---|---|---|---|
+| **What you do** | Pick a snap. Restore disk → attach LUN 9 → boot → re-link replicas. | Pick `snap_T0 ≤ T_target` and `snap_T1 > T_target`. Boot T0 read-only. Mount T1 on scratch, harvest binlogs. Replay up to `T_target`. Promote. Rebuild replicas. | Restore backup disk → attach at LUN 9 (it *is* the datadir). `RESET MASTER`, set GTID from `mariadb_backup_binlog_info`. Boot. Re-link replicas. |
+| **RPO** | ≤ 1 hour | 1 transaction (within last 7 days) | ≤ 24 hours |
+| **RTO** | ~15 min | 30–60 min | ~15 min |
+| **Granularity** | Snapshot point | Arbitrary timestamp | Backup point |
+| **When to reach for it** | Hardware loss, plain rollback to a known-good hour. | Bad migration at 14:23 — land at 14:22:58. | Vault is gone, compromised, or recovery points are corrupt. |
+
+Three doors, one hallway. Every one ends in the same thing — a managed disk attached at LUN 9 and a `START REPLICA` somewhere — because that's the only operation the database actually understands. Backup *strategy* differs; backup *primitive* doesn't.
 
 ## Where I landed
 
