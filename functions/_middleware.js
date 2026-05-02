@@ -149,6 +149,8 @@ async function convertToMarkdown(response) {
     .on('link[rel="canonical"]', {
       element(el) { state.meta.canonical = el.getAttribute('href') ?? ''; },
     })
+    // ----- data-md-skip: generic opt-out for any element -----
+    .on('[data-md-skip]', skipHandler(state))
     // ----- skip entirely -----
     .on('head',   skipHandler(state))
     .on('script', skipHandler(state))
