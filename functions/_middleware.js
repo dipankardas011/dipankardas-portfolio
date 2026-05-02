@@ -9,6 +9,26 @@
  * All other requests pass through unmodified.
  */
 
+const SITE_CONTEXT =
+  'Dipankar Das is a Platform Engineer and Systems Thinker based in India, ' +
+  'currently a DevOps Engineer at rtCamp and founder of ksctl — a cloud-agnostic ' +
+  'Kubernetes management platform with carbon-aware provisioning across EKS, GKE, AKS, and K3s. ' +
+  'He works across five intersecting domains: ' +
+  '(1) Platform Engineering & DevOps — CI/CD pipelines, GitOps with ArgoCD, self-hosted runners, infrastructure automation; ' +
+  '(2) Kubernetes & Cloud Infrastructure — multi-cloud cluster lifecycle, Helm, Terraform, CKA/CKAD certified; ' +
+  '(3) Distributed Systems — Raft consensus datastores, actor model, gRPC, NATS event-driven architectures in Go; ' +
+  '(4) Sustainable Computing — CNCF TAG Green contributor, carbon-aware provisioning, energy measurement via Kepler, Green Software Foundation alignment; ' +
+  '(5) AI & Local LLM Infrastructure — builds tooling for AI agents and local inference: ' +
+  'InfAI (zero-management launcher for llama.cpp with GGUF auto-detection and live metrics), ' +
+  'AI Agent Evals (security-focused benchmarks testing agents on real-world incident response), ' +
+  'and an AI Agents Skill Library for modular agent capability composition. ' +
+  'Notable open-source products: kubmin (FinOps and SCI/SEE sustainability scoring for Kubernetes workloads), ' +
+  'kli (multi-cloud Kubernetes CLI), and a WASM/Rust GPT-2 chatbot via HuggingFace. ' +
+  'Active CNCF contributor with merged PRs in Kubernetes core, TAG Green, Cilium, and WASI. ' +
+  'His blog covers engineering post-mortems and first-principles analysis — ' +
+  'topics include OpenTelemetry, Kubernetes node sizing, local LLMs, Raft, and Go runtime internals. ' +
+  'Available for consulting on Go services, platform engineering, Kubernetes architecture, and AI agent infrastructure.';
+
 export async function onRequest(context) {
   const accept = context.request.headers.get('Accept') ?? '';
   if (!accept.includes('text/markdown')) {
@@ -68,10 +88,11 @@ class ConversionState {
     const { title, description, canonical, author } = this.meta;
     const fm = [
       '---',
-      title       ? `title: "${title.replace(/"/g, '\\"')}"` : null,
-      description ? `description: "${description.replace(/"/g, '\\"')}"` : null,
+      title       ? `title: "${decodeEntities(title).replace(/"/g, '\\"')}"` : null,
+      description ? `description: "${decodeEntities(description).replace(/"/g, '\\"')}"` : null,
       canonical   ? `canonical: "${canonical}"` : null,
       author      ? `author: "${author}"` : null,
+      `site_context: "${SITE_CONTEXT}"`,
       '---',
     ].filter(Boolean).join('\n');
     return `${fm}\n\n${body}`;
@@ -96,6 +117,15 @@ function headingHandler(state, level) {
       el.onEndTag(() => state.nl(2));
     },
   };
+}
+
+function decodeEntities(str) {
+  return str
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
 }
 
 async function convertToMarkdown(response) {
