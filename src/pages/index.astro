@@ -1,4 +1,12 @@
 ---
+Astro.response.headers.append("Link", `<${Astro.site}skills/>; rel="describes"`);
+Astro.response.headers.append("Link", `<${Astro.site}skills/>; rel="http://www.iana.org/assignments/link-relations/api-catalog"`);
+Astro.response.headers.append("Link", `<${Astro.site}services/>; rel="service-doc"`);
+Astro.response.headers.append("Link", `<${Astro.site}projects/>; rel="describes"`);
+Astro.response.headers.append("Link", `<${Astro.site}blog/>; rel="describes"`);
+Astro.response.headers.append("Link", `<${Astro.site}about/>; rel="about"`);
+Astro.response.headers.append("Link", `<${Astro.site}rss.xml>; rel="alternate"; type="application/rss+xml"`);
+
 import BaseLayout from "../components/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import ServiceCard from "../components/ServiceCard.astro";
