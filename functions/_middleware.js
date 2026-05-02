@@ -149,14 +149,17 @@ async function convertToMarkdown(response) {
     .on('link[rel="canonical"]', {
       element(el) { state.meta.canonical = el.getAttribute('href') ?? ''; },
     })
-    // ----- data-md-skip: generic opt-out for any element -----
-    .on('[data-md-skip]', skipHandler(state))
+    // ----- custom wrapper: <md-skip> blocks UI-only content from markdown output -----
+    .on('md-skip', skipHandler(state))
     // ----- skip entirely -----
-    .on('head',   skipHandler(state))
-    .on('script', skipHandler(state))
-    .on('style',  skipHandler(state))
-    .on('nav',    skipHandler(state))
-    .on('footer', skipHandler(state))
+    .on('head',     skipHandler(state))
+    .on('script',   skipHandler(state))
+    .on('style',    skipHandler(state))
+    .on('nav',      skipHandler(state))
+    .on('footer',   skipHandler(state))
+    .on('dialog',   skipHandler(state))
+    .on('form',     skipHandler(state))
+    .on('select',   skipHandler(state))
     // ----- headings -----
     .on('h1', headingHandler(state, 1))
     .on('h2', headingHandler(state, 2))
@@ -297,7 +300,8 @@ async function convertToMarkdown(response) {
       text(t) {
         if (state.skip > 0) return;
         const raw = t.text;
-        const text = state.pre > 0 ? raw : raw.replace(/\s+/g, ' ');
+        const decoded = decodeEntities(raw);
+        const text = state.pre > 0 ? decoded : decoded.replace(/\s+/g, ' ');
         if (text.trim() || (state.pre > 0 && raw.length)) {
           state.push(text);
         }

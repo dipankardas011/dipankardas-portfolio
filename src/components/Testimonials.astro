@@ -39,17 +39,18 @@ const col3 = shuffle(testimonials, 7);
         </div>
       </div>
 
+      <md-skip>
       <div class="testimonial-columns flex justify-center gap-6 max-h-[680px] overflow-hidden">
         {[
-          { items: col1, speed: '40s', class: '', mdSkip: false },
-          { items: col2, speed: '48s', class: 'hidden md:block', mdSkip: true },
-          { items: col3, speed: '44s', class: 'hidden lg:block', mdSkip: true },
-        ].map(({ items, speed, class: cls, mdSkip }) => (
-          <div class={`flex-1 max-w-sm ${cls}`} data-md-skip={mdSkip || undefined}>
+          { items: col1, speed: '40s', class: '' },
+          { items: col2, speed: '48s', class: 'hidden md:block' },
+          { items: col3, speed: '44s', class: 'hidden lg:block' },
+        ].map(({ items, speed, class: cls }) => (
+          <div class={`flex-1 max-w-sm ${cls}`}>
             <div class="testimonial-scroll flex flex-col gap-6 pb-6" style={`--scroll-speed: ${speed}`}>
               {/* Duplicate items for seamless infinite scroll */}
-              {items.map((item, i) => (
-                <div class="p-6 lg:p-7 border border-app-border bg-app-body" key={`a-${i}`}>
+              {[...items, ...items].map((item, i) => (
+                <div class="p-6 lg:p-7 border border-app-border bg-app-body" key={i}>
                   <p class="text-sm leading-[1.5] tracking-[var(--tracking-tight)] text-app-gray-400 lg:text-[15px] lg:leading-[1.5]">
                     {item.content}
                   </p>
@@ -88,27 +89,11 @@ const col3 = shuffle(testimonials, 7);
                   </div>
                 </div>
               ))}
-              {/* Scroll animation duplicate — hidden from markdown */}
-              {items.map((item, i) => (
-                <div class="p-6 lg:p-7 border border-app-border bg-app-body" key={`b-${i}`} data-md-skip="">
-                  <p class="text-sm leading-[1.5] tracking-[var(--tracking-tight)] text-app-gray-400 lg:text-[15px] lg:leading-[1.5]">
-                    {item.content}
-                  </p>
-                  <div class="flex items-center mt-5">
-                    <img src={item.photo} alt={item.name} class="w-8 h-8 rounded-full overflow-hidden object-cover mr-2.5" loading="lazy" />
-                    <div>
-                      <div class="text-sm font-display">{item.name}</div>
-                      {item.role && item.company && (
-                        <div class="text-app-gray-400 text-xs mt-1">{item.role} at {item.company}</div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         ))}
       </div>
+      </md-skip>
     </div>
 
     <!-- Blur Decorations -->
