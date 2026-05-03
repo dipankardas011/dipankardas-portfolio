@@ -328,15 +328,10 @@ The reframe was hiding in plain sight, again: **the binlogs are already on the d
 
 The shape of that procedure is two snapshots and a timeline.
 
-```
-              T0 (snap)         T_target          T_bad           T1 (snap)
-                │                   │                │                │
-   ─────────────┼───────────────────┼────────────────┼────────────────┼─────►
-                ▲                   ▲                                 ▲
-            InnoDB state        want to land                     binlogs covering
-            base for replay     here (just before                [T0 .. T1]
-                                the bad event)
-```
+<figure>
+  <img src="/img/blogs/mariadb-pitr-timeline.svg" alt="PITR timeline: snapshot interval plus binlog replay to a target instant" />
+  <figcaption>Two snapshots and a target — snap_T0 is the state base, snap_T1 is the binlog donor, replay carries you to T_target.</figcaption>
+</figure>
 
 Pick `T_target` — the moment just before things went wrong. Take the snapshot before it (`snap_T0`) and the snapshot after it (`snap_T1`). Each plays a different role. `snap_T0` becomes the **state base**: restore it, boot it, leave it `read_only=ON`. `snap_T1` is just a **binlog donor**: restore it to a scratch VM, mount it **read-only**, copy out the binlog files, discard the disk. Then on the booted base, replay the binlogs from the position you booted at, up to `T_target`. Promote out of read-only. Rebuild replicas from the new primary. That's the whole thing.
 
@@ -395,43 +390,10 @@ What I like about this whole arrangement is that I didn't *add* anything to make
 
 Two backup paths flow off the same primary, and three recovery paths flow back in. Worth seeing them side by side.
 
-```
-                           ┌──────────────────────────┐
-                           │   PRIMARY (LUN 9)        │
-                           │   /mariadbdata           │
-                           │   InnoDB + binlogs       │
-                           └────────────┬─────────────┘
-                                        │
-                ┌───────────────────────┴───────────────────────┐
-                │                                               │
-        BACKUP PATH A                                  BACKUP PATH B
-        (primary defense)                              (failsafe)
-                │                                               │
-                ▼                                               ▼
-   ┌─────────────────────────┐                    ┌────────────────────────┐
-   │  Azure Backup Vault     │                    │  Backup Disk (LUN 11)  │
-   │  hourly disk snapshots  │                    │  /mariadbbackup        │
-   │  7-day retention        │                    │  mariadb-backup        │
-   │  zero prod impact       │                    │  --backup + --prepare  │
-   │  (binlogs included)     │                    │  → bootable datadir    │
-   └────────────┬────────────┘                    └────────────┬───────────┘
-                │                                              │
-                │                                              ▼
-                │                                    ┌─────────────────────┐
-                │                                    │  Vault snap of      │
-                │                                    │  backup disk        │
-                │                                    │  (independent path) │
-                │                                    └────────────┬────────┘
-                │                                                 │
-       ┌────────┴────────┐                                        │
-       │                 │                                        │
-       ▼                 ▼                                        ▼
-  ┌─────────┐       ┌─────────┐                              ┌─────────┐
-  │  DR #1  │       │  DR #2  │                              │  DR #3  │
-  │ restore │       │  PITR   │                              │ backup  │
-  │ to snap │       │ replay  │                              │ restore │
-  └─────────┘       └─────────┘                              └─────────┘
-```
+<figure>
+  <img src="/img/blogs/mariadb-backup-architecture.svg" alt="End-state architecture: snapshot path as primary, mariadb-backup disk as failsafe" />
+  <figcaption>Two backup paths off the primary, three recovery doors back in — Vault snaps for fast/PITR, the backup disk as an independent failsafe.</figcaption>
+</figure>
 
 And the three DR doors:
 
