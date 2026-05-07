@@ -81,7 +81,7 @@ export const projects: Project[] = [
     description:
       "Showcases latest WASI v0.2 development with composition features. Combines ML, Green Software, and WASI learnings into a single project.",
     image:
-      "https://github.com/dipankardas011/wae/blob/main/cover.png?raw=true",
+      "https://github.com/dipankardas011/wae/blob/main/cover.webp?raw=true",
     links: [
       { label: "GitHub", url: "https://github.com/dipankardas011/wae" },
       { label: "Tweet", url: "https://twitter.com/DipankarDas011/status/1809538678835847218" },
