@@ -541,23 +541,147 @@ body::before {
   pointer-events: none;
 }
 
-.toc-link {
-  display: block;
+/* ── ToC Sidebar (desktop) ── */
+.toc-sidebar {
+  min-width: 0;
+}
+
+.toc-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   color: var(--color-app-gray-400);
-  border-left: 2px solid transparent;
-  padding: 0.25rem 0 0.25rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.toc-nav {
+  position: relative;
+}
+
+.toc-link {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  color: var(--color-app-gray-400);
+  padding: 0.3rem 0 0.3rem 1rem;
   text-decoration: none;
   font-size: 0.8125rem;
-  line-height: 1.5;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  line-height: 1.45;
+  transition: color 0.15s ease;
+  border-left: 2px solid transparent;
+  position: relative;
+  z-index: 1;
 }
-.toc-link:hover { color: var(--color-app-text); border-left-color: var(--color-app-border); }
+.toc-link:hover {
+  color: var(--color-app-text);
+}
 .toc-link.toc-active {
   color: var(--color-app-accent);
-  border-left-color: var(--color-app-accent-2);
   font-weight: 500;
 }
-.toc-link.toc-h3 { padding-left: 1.5rem; font-size: 0.75rem; }
+.toc-link.toc-h3 {
+  padding-left: 1.75rem;
+  font-size: 0.75rem;
+}
+
+/* Section number prefix */
+.toc-num {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  color: var(--color-app-accent-2);
+  opacity: 0.7;
+  flex-shrink: 0;
+  min-width: 1.4em;
+}
+.toc-active .toc-num {
+  opacity: 1;
+}
+
+/* Animated indicator bar — slides to the active item */
+.toc-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 0;
+  background: linear-gradient(to bottom, var(--color-app-accent-2), var(--color-app-accent));
+  border-radius: 1px;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), height 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 0;
+  pointer-events: none;
+}
+.toc-nav:has(.toc-active) .toc-indicator {
+  opacity: 1;
+}
+
+/* ── ToC Mobile (below xl) ── */
+.toc-mobile-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.toc-mobile-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.625rem 1rem;
+  background: var(--color-app-surface);
+  border: 1px solid var(--color-app-border);
+  border-radius: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-app-gray-400);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  user-select: none;
+}
+.toc-mobile-toggle:hover {
+  color: var(--color-app-text);
+  border-color: var(--color-app-gray-300);
+}
+.toc-toggle-icon {
+  transition: transform 0.25s ease;
+  color: var(--color-app-accent-2);
+}
+
+.toc-mobile-nav {
+  display: none;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-app-surface);
+  border: 1px solid var(--color-app-border);
+  border-radius: 0.5rem;
+}
+.toc-mobile-nav .toc-link {
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+  border-left: none;
+  padding-left: 0;
+}
+.toc-mobile-nav .toc-link.toc-h3 {
+  padding-left: 1rem;
+}
+.toc-mobile-open {
+  display: block;
+}
+
+/* Active link within mobile nav */
+.toc-mobile-nav .toc-link.toc-active {
+  color: var(--color-app-accent);
+}
+
+/* ── Smooth scroll for heading targets ── */
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
 
 .blog-lede {
   font-family: var(--font-serif);

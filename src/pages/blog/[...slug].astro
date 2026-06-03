@@ -16,7 +16,18 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+
+// ---- Table of Contents data ----
+const tocHeadings = headings.filter((h) => h.depth <= 3);
+let h2Counter = 0;
+const tocItems = tocHeadings.map((h) => {
+  if (h.depth === 2) h2Counter++;
+  return {
+    ...h,
+    num: h.depth === 2 ? String(h2Counter).padStart(2, "0") : null,
+  };
+});
 
 const allPosts = (await getCollection("blog", ({ data }) => !data.draft))
   .filter((p) => p.id !== "external-blogs" && p.id !== post.id)
@@ -106,14 +117,56 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
         <div class="grid grid-cols-1 xl:grid-cols-[220px_minmax(0,1fr)] gap-12">
 
           <!-- Sticky ToC (xl+ only) -->
-          <aside class="hidden xl:block">
-            <div class="sticky top-24 pt-1">
-              <p class="text-xs font-semibold uppercase tracking-widest mb-4" style="color: var(--color-app-gray-400); letter-spacing: 0.1em;">
-                On this page
-              </p>
-              <nav id="toc-nav" class="space-y-0.5"></nav>
+          {tocItems.length > 1 && (
+            <aside class="hidden xl:block toc-sidebar">
+              <div class="sticky top-24 pt-1">
+                <p class="toc-label">On this page</p>
+                <nav id="toc-nav" class="toc-nav">
+                  {tocItems.map((item) => (
+                    <a
+                      href={`#${item.slug}`}
+                      class={`toc-link${item.depth === 3 ? " toc-h3" : ""}`}
+                      data-heading-id={item.slug}
+                    >
+                      {item.num && <span class="toc-num">{item.num}</span>}
+                      {item.text}
+                    </a>
+                  ))}
+                  <div class="toc-indicator" aria-hidden="true"></div>
+                </nav>
+              </div>
+            </aside>
+          )}
+
+          <!-- Mobile ToC (below xl) -->
+          {tocItems.length > 1 && (
+            <div class="block xl:hidden toc-mobile-wrapper">
+              <button
+                type="button"
+                id="toc-mobile-toggle"
+                class="toc-mobile-toggle"
+                aria-expanded="false"
+                aria-controls="toc-mobile"
+              >
+                <span>On this page</span>
+                <svg class="toc-toggle-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              <nav id="toc-mobile" class="toc-mobile-nav">
+                {tocItems.map((item) => (
+                  <a
+                    href={`#${item.slug}`}
+                    class={`toc-link${item.depth === 3 ? " toc-h3" : ""}`}
+                    data-heading-id={item.slug}
+                  >
+                    {item.num && <span class="toc-num">{item.num}</span>}
+                    {item.text}
+                  </a>
+                ))}
+              </nav>
             </div>
-          </aside>
+          )}
 
           <!-- Main prose -->
           <div>
@@ -218,46 +271,88 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
   }
 
   // ---- Table of Contents ----
-  const headings = document.querySelectorAll(".prose h2, .prose h3");
   const tocNav = document.getElementById("toc-nav");
+  const tocLinks = tocNav?.querySelectorAll(".toc-link");
+  const tocIndicator = tocNav?.querySelector(".toc-indicator");
 
-  if (headings.length > 0 && tocNav) {
-    headings.forEach((heading, i) => {
-      // Ensure heading has an id
-      if (!heading.id) {
-        const slug = (heading.textContent ?? "")
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-|-$/g, "");
-        heading.id = slug || `heading-${i}`;
-      }
-
-      const a = document.createElement("a");
-      a.href = `#${heading.id}`;
-      a.textContent = heading.textContent ?? "";
-      a.className = `toc-link${heading.tagName === "H3" ? " toc-h3" : ""}`;
-      a.dataset.headingId = heading.id;
-      tocNav.appendChild(a);
+  if (tocLinks && tocLinks.length > 0 && tocNav) {
+    // ── Smooth scroll on click ──
+    tocLinks.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const id = link.getAttribute("href")?.slice(1);
+        if (!id) return;
+        const target = document.getElementById(id);
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          history.replaceState(null, "", `#${id}`);
+        }
+      });
     });
 
-    // Highlight active section on scroll
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            document.querySelectorAll(".toc-link").forEach((l) =>
-              l.classList.remove("toc-active")
-            );
-            document
-              .querySelector(`.toc-link[data-heading-id="${entry.target.id}"]`)
-              ?.classList.add("toc-active");
+    // ── Collect heading elements matching our TOC links ──
+    const headingEls = [];
+    tocLinks.forEach((link) => {
+      const id = link.dataset.headingId;
+      if (id) {
+        const el = document.getElementById(id);
+        if (el) headingEls.push(el);
+      }
+    });
+
+    if (headingEls.length > 0) {
+      function updateActive() {
+        let activeIdx = -1;
+        // Find the last heading that's above/before the current scroll
+        for (let i = 0; i < headingEls.length; i++) {
+          const rect = headingEls[i].getBoundingClientRect();
+          if (rect.top <= 120) {
+            activeIdx = i;
           }
         }
-      },
-      { rootMargin: "-80px 0px -65% 0px" }
-    );
 
-    headings.forEach((h) => observer.observe(h));
+        tocLinks.forEach((l) => l.classList.remove("toc-active"));
+        if (activeIdx >= 0) {
+          tocLinks[activeIdx].classList.add("toc-active");
+          // Move the indicator
+          if (tocIndicator) {
+            const activeLink = tocLinks[activeIdx];
+            const navRect = tocNav.getBoundingClientRect();
+            const linkRect = activeLink.getBoundingClientRect();
+            tocIndicator.style.height = `${linkRect.height}px`;
+            tocIndicator.style.transform = `translateY(${linkRect.top - navRect.top}px)`;
+          }
+        }
+      }
+
+      updateActive();
+      window.addEventListener("scroll", updateActive, { passive: true });
+    }
+  }
+
+  // ---- Mobile TOC toggle ----
+  const tocToggle = document.getElementById("toc-mobile-toggle");
+  const tocMobile = document.getElementById("toc-mobile");
+  if (tocToggle && tocMobile) {
+    tocToggle.addEventListener("click", () => {
+      const expanded = tocToggle.getAttribute("aria-expanded") === "true";
+      tocToggle.setAttribute("aria-expanded", String(!expanded));
+      tocMobile.classList.toggle("toc-mobile-open");
+      const icon = tocToggle.querySelector(".toc-toggle-icon");
+      if (icon) {
+        icon.style.transform = expanded ? "rotate(0deg)" : "rotate(180deg)";
+      }
+    });
+
+    // Close mobile TOC when clicking a link
+    tocMobile.querySelectorAll(".toc-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        tocToggle.setAttribute("aria-expanded", "false");
+        tocMobile.classList.remove("toc-mobile-open");
+        const icon = tocToggle.querySelector(".toc-toggle-icon");
+        if (icon) icon.style.transform = "rotate(0deg)";
+      });
+    });
   }
 
   // ---- Wrap wide tables in a horizontal scroll container ----
