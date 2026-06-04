@@ -4,8 +4,8 @@ author: "Dipankar Das"
 date: 2026-06-03
 description: "What building Kubmin taught me about SaaS system design, observability, deployment, queues, auth, and using AI agents without losing ownership."
 tags: ["kubmin", "saas", "system-design", "ai-agents", "observability"]
-cover: "/img/blogs/blog-post-kubmin.webp"
-draft: true
+cover: "/img/blogs/kubmin-ai-agent-era-cover.webp"
+draft: false
 ---
 
 I have been building [Kubmin](https://ksctl.com/product/kubmin) — my first SaaS — long enough for the architecture decisions to start arguing back.
@@ -24,6 +24,11 @@ This post is the practical version of that learning. What Kubmin is, what I lear
 - AI agents are great when I already understand the system and can split work into bounded tasks. They are dangerous when I ask them to invent the architecture.
 - The biggest unlock was treating observability, queues, quotas, and deployment recovery as core product infrastructure from day one — not later-stage polish.
 
+<figure>
+  <img src="/img/blogs/blog-post-kubmin.webp" alt="Kubmin product visual showing workload cost, energy, and efficiency insights" />
+  <figcaption>Kubmin in practice — connecting workload cost, energy, and efficiency into one product view.</figcaption>
+</figure>
+
 ## What Kubmin is actually about
 
 Kubmin started from a simple problem: Kubernetes teams know they are spending money, but they often do not know what each workload costs.
@@ -32,7 +37,7 @@ Cloud bills show instance-level cost. Monitoring tools show CPU and memory. But 
 
 That is where Kubmin sits.
 
-Kubmin tracks per-workload cost, energy consumption, Running Efficiency in the form of SCI/SEE scores, and release-over-release efficiency changes. It can work with clusters you create or clusters you import. It connects with observability stacks like Prometheus, Loki, Tempo, and Grafana through OpenTelemetry Collector, and uses [Kepler](https://www.cncf.io/projects/kepler/) for workload-level energy attribution.
+Kubmin tracks per-workload cost, energy consumption, Running Efficiency in the form of [SCI/SEE](https://ksctl.com/product/kubmin) scores, and release-over-release efficiency changes. It can work with clusters you create or clusters you import. It connects with observability stacks like [Prometheus, Loki, Tempo, and Grafana through OpenTelemetry Collector](https://ksctl.com/product/kubmin/#guided-observability), and uses [Kepler](https://www.cncf.io/projects/kepler/) for workload-level energy attribution.
 
 On the [Kubmin product page](https://ksctl.com/product/kubmin), I summarize it as:
 
@@ -62,7 +67,7 @@ If your product is not about identity, this is a lot of complexity to voluntaril
 
 If you must store passwords, follow OWASP guidance: strong slow hashing like Argon2id, bcrypt, or PBKDF2; no plaintext; no homemade crypto. But my learning from Kubmin is straightforward: **do not own password risk before the product needs it.**
 
-OAuth/OIDC is not “less engineering.” It is choosing where your engineering time should go.
+OAuth/OIDC is not "less engineering." It is choosing where your engineering time should go.
 
 ## Lesson 2: authorization becomes a graph before you notice
 
@@ -83,11 +88,13 @@ But once the product has a growing permission surface, authorization starts look
 
 That is where Authzed/SpiceDB-style authorization makes sense. It lets you model permissions as relationships instead of scattering checks across handlers.
 
-The important lesson is not “always use Authzed.” The lesson is:
+The important lesson is not "always use Authzed." The lesson is:
 
 > If your authorization model is going to grow, model it as a first-class system before random `if role == ...` checks become your architecture.
 
 I also learned that this is exactly the kind of thing AI agents need explicit ground truth for. If an agent does not understand your permission model, it will confidently add a route that “works” and quietly bypasses the real access rules.
+
+And Here is the bonus tip for you I have already made a [Agent SKILL.md](https://dipankar-das.com/skills) for helping you from zero -> production ready authzed setup.
 
 ## Lesson 3: UUIDv7 is a boring choice that ages well
 
@@ -102,19 +109,19 @@ Why I like it:
 - Index locality is better than random UUIDs.
 - Debugging feels nicer when IDs have temporal behavior.
 
-It is not a magic performance fix. It is one of those “choose the good default early and stop thinking about it” decisions.
+It is not a magic performance fix. It is one of those "choose the good default early and stop thinking about it" decisions.
 
 In a SaaS control plane, there are already enough hard problems. ID format should not become one later.
 
 ## Lesson 4: SQL vs NoSQL is not a religion
 
-I have stopped treating “SQL vs NoSQL” like a stack identity question.
+I have stopped treating "SQL vs NoSQL" like a stack identity question.
 
-For Kubmin-style data, SQL is the natural default: users, orgs, quotas, clusters, subscriptions, jobs, workload records, billing state, and relationships. Those things benefit from schema, constraints, transactions, and predictable queries.
+For Kubmin-style data, SQL is the natural default: users, orgs, ... Those things benefit from schema, constraints, transactions, and predictable queries.
 
 If you want ACID properties — Atomicity, Consistency, Isolation, Durability — SQL databases are usually the easiest path. When several changes must succeed or fail together, transactions matter.
 
-NoSQL still has a place. If your data is document-shaped, flexible, rapidly evolving, and does not need relational joins everywhere, something like MongoDB can be a good fit. MongoDB also has transactions, so the debate is not “SQL has correctness and NoSQL has scale.” The real question is how your data wants to be modeled.
+NoSQL still has a place. If your data is document-shaped, flexible, rapidly evolving, and does not need relational joins everywhere, something like MongoDB can be a good fit. MongoDB also has transactions, so the debate is not "SQL has correctness and NoSQL has scale." The real question is how your data wants to be modeled.
 
 My Kubmin learning:
 
@@ -122,7 +129,7 @@ My Kubmin learning:
 - Highly flexible product data may want document storage.
 - Pick based on invariants, not trends.
 
-AI agents can write database code quickly. But they cannot decide your consistency model for you.
+AI agents can write database code quickly. But they cannot decide your consistency model and access patterns for you. Thats exactly where your systems engineer part comes in.
 
 ## Lesson 5: migrations need their own operational path
 
@@ -131,20 +138,20 @@ Database migrations are not just files. They are deployment events.
 I like migration names shaped like this:
 
 ```txt
-0001-create-users.up.sql
-0001-create-users.down.sql
-0002-add-organization-quotas.up.sql
-0002-add-organization-quotas.down.sql
+00001-create-users.up.sql
+00001-create-users.down.sql
+00002-add-organization-quotas.up.sql
+00002-add-organization-quotas.down.sql
 ```
 
 Or generally:
 
 ```txt
-####-{name}.up.sql
-####-{name}.down.sql
+#####-{name}.up.sql
+#####-{name}.down.sql
 ```
 
-The exact separator is not the point. The discipline is:
+The exact separator is not the point. The *discipline* is:
 
 - numeric prefix for ordering
 - descriptive name for humans
@@ -152,11 +159,11 @@ The exact separator is not the point. The discipline is:
 - explicit `down`
 - dedicated migration run mode/job
 
-In Kubmin, one pattern I like is having a single backend binary with multiple modes: API server, worker, migration, maintenance, RBAC sync, admin metrics, subscription sync, and so on.
+In Kubmin, one pattern I like is having a single backend binary with multiple modes: API server, worker, migration, and so on.
 
 That keeps operations explicit. The API is not secretly mutating schema on startup. A migration run is a migration run.
 
-When you deploy a SaaS, you need to answer: “How do I move the database forward?” and also “How do I move it backward if this deploy is bad?”
+When you deploy a SaaS, you need to answer: *"How do I move the database forward?"* and also *"How do I move it backward if this deploy is bad?"*
 
 If you cannot answer the second question, you do not have a migration strategy. You have hope.
 
@@ -166,7 +173,7 @@ Caching is one of the easiest ways to make a system more complicated.
 
 My current default is: avoid cache until there is a measurable reason.
 
-For Kubmin, Valkey/Redis-style cache makes sense for sessions, quota plan limits, job logs, cluster access checks, and a few short-lived computed states. These have clear keys, TTLs, and invalidation paths.
+For Kubmin, Valkey/Redis-style cache makes sense for sessions, quota plan limits, and a few short-lived computed states. These have clear keys, TTLs, and invalidation paths.
 
 But I would not blindly cache every database query.
 
@@ -177,7 +184,7 @@ A cache needs at least four answers:
 3. What invalidates it on writes?
 4. What happens when many requests miss at the same time?
 
-That fourth one is the cache stampede problem. If a hot key expires and 100 requests all hit the database to rebuild it, your cache just moved the failure somewhere else.
+That fourth one is the **cache stampede problem**. If a hot key expires and 100 requests all hit the database to rebuild it, your cache just moved the failure somewhere else.
 
 Another practical learning: keep the cache close to the backend. If the cache is in another region and costs ~200ms to reach, you might hit cache, miss cache, then hit the database anyway. Congratulations, you added a slower path with more failure modes.
 
@@ -191,7 +198,7 @@ The same applies to static assets.
 
 CDNs are great when you have lots of static assets, global users, large images, downloads, or public pages where edge caching matters.
 
-But for a normal SaaS dashboard, do not blindly add a CDN just because “production architecture” sounds incomplete without one.
+But for a normal SaaS dashboard, do not blindly add a CDN just because "production architecture" sounds incomplete without one.
 
 A CDN can add:
 
@@ -214,9 +221,9 @@ Ideally, your backend and database live in the same region and preferably the sa
 
 In early MVP mode, this is not always possible. You may use a managed database on one platform and compute somewhere else because of cost. That is fine. But be honest about it.
 
-Even when two services claim to be in the “same region,” moving across providers can still add noticeable latency.
+Even when two services claim to be in the "same region," moving across providers can still add noticeable latency.
 
-The learning is not “always buy expensive managed infra.” The learning is:
+The learning is not "always buy expensive managed infra." The learning is:
 
 > Latency is not abstract. Your deployment topology is user experience.
 
@@ -224,9 +231,9 @@ The learning is not “always buy expensive managed infra.” The learning is:
 
 “You do not need Kubernetes” is true for many products.
 
-But I think the better version is: you do not need a complicated Kubernetes platform.
+But I think the better version is: you *do not need a complicated* Kubernetes platform.
 
-For Kubmin, a small k3s setup made sense. A single self-hosted node on Hetzner with enough CPU/RAM buffer gave me a consistent deployment environment: deployments, services, secrets, config, health checks, volumes, jobs, cron jobs, and a path to add nodes later.
+For Kubmin, a small k3s setup made sense. A single self-hosted node on Hetzner with enough CPU/RAM buffer gave me a consistent deployment environment: deployments, services, secrets, config, health checks, volumes, jobs, cron jobs, and a path to add nodes later without switch later.
 
 That does not mean installing every shiny thing into the cluster.
 
@@ -244,9 +251,9 @@ The real goal is not Kubernetes. The goal is a deployment strategy you can keep 
 
 If there is one decision I would push harder from the beginning, it is observability.
 
-OpenTelemetry should not be a “later” task. It should be part of the foundation.
+OpenTelemetry should not be a "later" task. It should be part of the foundation.
 
-The best mental model is simple: your application only needs to know where the OpenTelemetry Collector is. The app emits traces, logs, and metrics through OTLP. The collector sends them to Prometheus, Loki, Tempo, Grafana, Grafana Cloud, Jaeger, or whatever backend you choose.
+The best mental model is simple: your application only needs to know where the OpenTelemetry Collector is. The app emits traces, logs, and metrics through OTLP. The collector sends them to Prometheus, Loki, Tempo, or whatever backend you choose.
 
 That separation is beautiful.
 
@@ -254,13 +261,13 @@ In practice, OTEL saved me time in three ways:
 
 **Metrics** told me whether workers were alive, whether background processing was moving, whether DB connection pools were healthy, and whether resource usage looked wrong.
 
-**Logs** reduced the “paid visit” to the server. Instead of SSH-ing and grepping random files, I could inspect logs from one dashboard.
+**Logs** reduced the "paid visit" to the server. Instead of SSH-ing and grepping random files, I could inspect logs from one dashboard.
 
 **Traces** showed which route, function, database call, or worker transition caused the issue. Stack traces are useful, but traces tell the story of a request across boundaries.
 
 The real win is correlation: metrics ↔ traces ↔ logs. When those connect, debugging becomes following evidence instead of guessing.
 
-I wrote a longer post on this in [My First Two Months with OpenTelemetry](https://dipankar-das.com/blog/otel/), and Kubmin’s Guided Observability feature came from the same pain. Kubmin can help wire OpenTelemetry Collector with Prometheus, Loki, Tempo, Grafana, and Kepler so teams can connect telemetry back to workload cost and energy.
+I had written a longer post on this in [My First Two Months with OpenTelemetry](https://dipankar-das.com/blog/otel/), and [Kubmin's Guided Observability](https://ksctl.com/product/kubmin/#guided-observability) feature came from the same pain. Kubmin can help wire OpenTelemetry Collector with Prometheus, Loki, Tempo, Grafana, and Kepler so teams can connect telemetry back to workload cost and energy.
 
 Observability stopped being a dashboard feature for me. It became a requirement for moving fast safely.
 
@@ -284,7 +291,21 @@ Configuration also needs a clear strategy. Environment variables are fine. Mount
 
 The more agents help write code, the more deterministic your release process needs to be.
 
-## Lesson 12: disaster recovery should assume the server dies
+## Lesson 12: your application should run locally without fancy stuff
+
+Your SaaS should be able to run locally without needing the full production circus.
+
+Not because a laptop is production. It is not. But local development gives you the best possible case: the frontend, backend, database, cache, and workers are all close together. Network latency is near zero. Cloud noise is gone. If the app still feels heavy there, the problem is probably not the cloud.
+
+This is one of the simplest ways to understand how much your application actually needs. How much memory does the backend take when nobody is using it? Does the frontend dev server eat CPU for no reason? Do workers leak memory after running for a while? Does the API feel slow even when the database is basically next door?
+
+Local mode gives you the clean picture before infrastructure latency blurs the signal.
+
+This does not mean every external integration must work perfectly on your laptop. Some things can be stubbed, mocked, or pointed at a dev service. But the core product loop should run locally. If the application only works inside a fancy deployed environment, debugging becomes theatre.
+
+A good local setup is not just developer experience. It is an architecture health check.
+
+## Lesson 13: disaster recovery should assume the server dies
 
 A SaaS deployment should be replaceable.
 
@@ -300,7 +321,7 @@ The exact backup method depends on the stack. The principle does not:
 
 > Recovery should be practiced, not imagined.
 
-## Lesson 13: simple APIs help humans and agents
+## Lesson 14: simple APIs help humans and agents
 
 Kubmin reinforced my preference for simple HTTP APIs.
 
@@ -319,7 +340,7 @@ My current API design bias:
 
 AI agents do better when contracts are explicit. So do humans.
 
-## Lesson 14: quotas and rate limits are core SaaS mechanics
+## Lesson 15: quotas and rate limits are core SaaS mechanics
 
 Rate limits and quotas look similar from far away, but they solve different problems.
 
@@ -333,15 +354,34 @@ The lesson:
 
 > If pricing depends on it, quota enforcement is product logic, not a TODO.
 
-## Lesson 15: queues are required, but they need policies
+## Lesson 16: circuit breakers are product decisions
 
-Kubmin has long-running work: cluster creation, cluster import, cluster deletion, billing events, notifications, agent events, workload processing.
+Circuit breakers are worth mentioning because SaaS systems depend on things that fail: cache, database, queues, cloud APIs, billing providers, email providers, observability backends.
 
-These should not be normal synchronous HTTP requests.
+The mistake is treating a circuit breaker as a library checkbox. The hard part is deciding what the product should do when a dependency is unhealthy.
+
+For every external dependency, I now think in this order:
+
+- Set a timeout.
+- Retry only when the operation is safe or idempotent.
+- Add a circuit breaker when repeated failure would hurt the whole system.
+- Decide whether failure should be fail-open, fail-closed, or fail-soft.
+
+That last decision matters.
+
+If rate limiting storage is down, maybe fail-open is better than taking the whole product offline. If authorization is down, fail-closed is safer. If telemetry export is failing, fail-soft and keep serving the user. If a destructive cloud operation is uncertain, do not blindly retry without knowing whether the first attempt succeeded.
+
+A circuit breaker has technical states like closed, open, and half-open. But the real design question is product-level: **what should users experience while this dependency is broken?**
+
+## Lesson 17: queues are required, but they need policies
+
+Every serious SaaS eventually has work that does not fit inside a normal request/response cycle.
+
+These should not be forced into synchronous HTTP requests.
 
 The API should accept the request, create a job, enqueue work, and return. Workers should process with controlled concurrency.
 
-Queues are also useful for webhooks from systems like Stripe or Polar.sh. Billing events need retry behavior, idempotency, and controlled processing. Dropping a billing event silently is not acceptable.
+Queues are also useful for external callbacks and billing-related events. Those flows need retry behavior, idempotency, and controlled processing. Dropping an important event silently is not acceptable.
 
 But queues are not infinite buffers.
 
@@ -355,13 +395,13 @@ You need to decide:
 - whether new events block or old events drop
 - how much concurrency each worker pool gets
 
-NATS JetStream is useful here because it gives durable streams, consumers, acknowledgments, redelivery, retention, and storage controls. But the tool does not choose your policy. You do.
+NATS JetStream is useful here because it gives durable streams, consumers, acknowledgments, redelivery, retention, and storage controls. But the tool does not choose your policy. **You do**.
 
 Write-heavy systems especially need this. A queue can absorb spikes, but only inside the limits you configured.
 
-## Lesson 16: read-heavy systems should precompute more
+## Lesson 18: read-heavy systems should precompute more
 
-Kubmin has many read-heavy paths: dashboards, workload comparisons, hourly metrics, quick wins, cost summaries, energy summaries, SCI/SEE views.
+Kubmin has many read-heavy paths: dashboards, workload comparisons, hourly metrics, cost summaries, energy summaries, SCI/SEE views.
 
 The lesson here is simple: do expensive work before the user asks.
 
@@ -376,11 +416,11 @@ For read-heavy patterns:
 
 For example, if the UI always needs workload cost by hour, do not make every request recalculate the world. Process telemetry into a read-friendly shape, then serve that.
 
-Read replicas can help too. In the MariaDB snapshot post, I wrote about how snapshots can help spin up a replica path from a primary data disk. Replicas are useful when reads overwhelm the primary, but they also introduce lag. So route only stale-tolerant reads there.
+Read replicas can help too. In the [MariaDB snapshot post](https://dipankar-das.com/blog/self-hosting-mariadb-backup-disk-snapshots/), I wrote about how snapshots can help spin up a replica path from a primary data disk. Replicas are useful when reads overwhelm the primary, but they also introduce lag. So route only stale-tolerant reads there.
 
 A read-heavy SaaS should not rediscover facts on every request.
 
-## Lesson 17: AI agents are not magic, but they are useful
+## Lesson 19: AI agents are not magic, but they are useful
 
 Now the AI part.
 
@@ -408,9 +448,9 @@ But this only works when the tasks are independent. If every task depends on eve
 
 ### 2. Big feature, unclear breakdown
 
-This is where I slow down.
+This is where to slow down.
 
-If I only understand the feature superficially, I do not ask an agent to build it. That is how you get architecture by hallucination.
+If you understand the feature superficially like its a start small steps towards the goal and the path is unknown, I do not ask an agent to build it. That is how you get architecture by hallucination.
 
 Instead, I use agents for exploration:
 
@@ -435,7 +475,7 @@ Small tasks with clear acceptance criteria are perfect for agents.
 
 The speedup is real, but only if review stays real too.
 
-## Lesson 18: skills help when they encode maintainer knowledge
+## Lesson 20: skills help when they encode maintainer knowledge
 
 I have used Gemini, Claude Code, OpenCode, and Pi with project skills and agent workflows.
 
@@ -457,9 +497,15 @@ This matters because agents do not need more random context. They need the right
 
 For Kubmin, skills around backend API, Authzed RBAC, database/cache, DevOps, testing, data engineering, and green software metrics make agents more useful. They reduce the chance that the agent invents a pattern that does not belong in the codebase.
 
-I have not used long-term memory from zero to one full year enough to make a strong claim. But project skills have clearly helped.
+On long-term memory, I can comment a bit more now: it is useful, but not because the agent remembers everything.
 
-The best agent context is not “remember everything.” It is “know the invariants.”
+The hard problem is filtering.
+
+A project collects decisions, failed attempts, naming patterns, edge cases, TODOs, and random historical context. Dumping all of that into an agent is not intelligence. It is noise with confidence.
+
+The next key is selection and compression. Human memory works like that too. We do not replay every conversation before making a decision; we carry compressed models of what matters. AI project memory needs the same shape: remember enough to preserve intent, filter enough to avoid dragging old confusion into new work.
+
+The best agent context is not "remember everything." It is "know what matters right now."
 
 ## The biggest learning: ownership did not go away
 
@@ -474,13 +520,16 @@ I still had to decide:
 - SQL vs document storage
 - cache or no cache
 - queue policies
+- circuit breaker behavior
 - migration discipline
+- local development path
 - deployment topology
 - k3s vs simpler runtime
 - OTEL from day one
 - quota enforcement
 - read-heavy precomputation
 - recovery strategy
+- and many more
 
 Those decisions are the product.
 
@@ -492,6 +541,15 @@ If you have the mental model, agents are leverage.
 
 If you do not, they are a very fast way to make your confusion executable.
 
+<figure>
+  <img src="/img/blogs/coding-is-largely-solved.webp" alt="Boris Cherny with the quote Coding is largely solved" />
+  <figcaption>The quote is useful provocation: coding may get cheaper, but system ownership does not.</figcaption>
+</figure>
+
+Finally, I keep coming back to this quote. It may become true in terms of writing code, but code is not the whole thing. The system is what matters.
+
+If you want to see what these lessons turned into as a product, check out the [Kubmin product page](https://ksctl.com/product/kubmin). It shows the workload cost, energy, efficiency, and observability layer I have been building from these decisions.
+
 ## Related reading
 
 - [Kubmin — Track What Each Deploy Costs](https://ksctl.com/product/kubmin)
@@ -501,5 +559,3 @@ If you do not, they are a very fast way to make your confusion executable.
 - [RFC 9562: UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html)
 - [OpenTelemetry Collector configuration](https://opentelemetry.io/docs/collector/configuration/)
 - [OpenAPI Specification](https://spec.openapis.org/oas/v3.1.html)
-
-Keywords: Kubmin, SaaS system design, AI agents, OpenTelemetry, Kubernetes cost optimization
