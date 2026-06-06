@@ -1,0 +1,374 @@
+---
+title: "I Built a Copilot Clone in Neovim With a 1.5B Model on a Laptop GPU"
+author: "Dipankar Das"
+date: 2026-06-06
+description: "FIM (Fill-in-the-Middle), Qwen2.5-Coder-1.5B, GGUF conversion from HuggingFace, llama.cpp server setup, and Minuet AI configuration — everything it took to get Copilot-like completions in Neovim without the subscription."
+tags: ["neovim", "llm", "local-ai", "fim", "gguf", "llama-cpp", "code-completion", "copilot", "qwen", "minuet-ai"]
+cover: "/img/blogs/copilot-neovim-localllm-fim-cover.webp"
+draft: true
+---
+import Callout from '../../components/Callout.astro';
+
+The Slack message arrives at 4:47 PM Friday. "Can we look into Copilot pricing for next quarter?" You close your laptop and think: *there has to be another way.*
+
+GitHub Copilot is great. It's also \$10–\$19/month per seat, requires sending code to Microsoft's servers, has zero offline capability, and only supports a handful of models. I wanted the same inline completion experience — the ghost text that suggests what to type next — without the subscription, without the telemetry, running entirely on my laptop.
+
+Turns out, you can build it. A 1.5B parameter model on a consumer laptop GPU, served locally, feeding completions into Neovim through a FIM-based backend. It's not magic. It's just a few well-understood pieces working together.
+
+Here's exactly how I did it.
+
+---
+
+## The Missing Piece: FIM
+
+Every LLM completion you've seen — ChatGPT, Claude, Copilot Chat — works by predicting the next token from the text you've written so far. You give it a prefix, it generates what comes next. That's fine for chat. It's *wrong* for inline code completion.
+
+When you're typing code, the cursor isn't always at the end of the file. You might be editing a function in the middle of a class. The model needs to see what's *before* the cursor **and** what's *after* it, then fill the gap.
+
+That's **Fill-in-the-Middle (FIM)**.
+
+```
+┌─────────────────────────────────────┐
+│  def calculate_total(items):        │  ← prefix (before cursor)
+│    total = 0                        │
+│    for item in items:               │
+│      █                              │  ← cursor is here
+│    return total                     │  ← suffix (after cursor)
+└─────────────────────────────────────┘
+│           │                         │
+│     prompt          suffix          │
+│           │                         │
+│           ▼                         │
+│     model fills the middle:         │
+│     total += item.price             │
+└─────────────────────────────────────┘
+```
+
+Without FIM, the model only sees what's before the cursor. It has no idea the function has a `return total` below. It might suggest indentation, closing braces, or something irrelevant. With FIM, it understands the full context and generates code that actually fits.
+
+GitHub Copilot uses FIM internally. So does Codeium, Tabnine, and every other serious inline completion engine. The technique itself isn't proprietary — it was [introduced by OpenAI in 2023](https://arxiv.org/abs/2207.14255) and has been implemented in open-source models since.
+
+You just need a model that supports FIM tokens and a client that knows how to use them.
+
+---
+
+## Choosing the Model: Qwen2.5-Coder-1.5B
+
+I needed something small enough to run fast on an **NVIDIA GeForce RTX 4060 Laptop GPU** (7.8 GB VRAM) but capable enough to produce useful code completions. After some research, I landed on [Qwen2.5-Coder-1.5B](https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B).
+
+Why this model:
+
+- **1.5B parameters** — tiny by modern standards. Fits entirely in GPU memory at full precision (f16) with room to spare.
+- **Native FIM support** — has `<|fim_prefix|>`, `<|fim_suffix|>`, `<|fim_middle|>` tokens built in. No hacky workarounds.
+- **32K context window** — plenty of code context for meaningful completions.
+- **Code-specialized** — trained on code rather than general text. Outputs syntactically correct suggestions.
+
+The HuggingFace page gives you the model in **safetensors** format — the standard for PyTorch-based inference. But I wanted to run it in **llama.cpp**, which needs **GGUF** format. That meant a conversion step.
+
+---
+
+## Step 1: Converting HuggingFace Safetensors to GGUF
+
+llama.cpp can't read HuggingFace safetensors directly. It expects GGUF — a format optimized for CPU/GPU inference that bundles weights, tokenizer, and configuration into a single file.
+
+The conversion script lives right in the llama.cpp repo:
+
+```bash
+cd ~/llama.cpp
+
+# Install dependencies
+pip install transformers torch sentencepiece
+
+# Convert
+python convert_hf_to_gguf.py ~/models/Qwen2.5-Coder-1.5B \
+  --outfile ~/models/Qwen2.5-Coder-1.5B.gguf \
+  --outtype f16
+```
+
+The `--outtype f16` flag keeps the weights in half-precision (16-bit float). For a 1.5B model, this produces a ~3.1 GB file — small enough that further quantization is unnecessary. The RTX 4060 has plenty of VRAM to hold it at full quality.
+
+<Callout>
+  **Why f16 and not Q4_K_M?** For a 1.5B model used in inline completion, latency matters more than VRAM savings. f16 preserves the original model quality with zero quantization loss. On this GPU, inference runs at ~50 tokens/second — fast enough for sub-second completions. Quantizing to Q4_K_M would save ~1 GB but degrade code suggestion quality with no perceptible speed gain.
+</Callout>
+
+The conversion took about 4 seconds. The output:
+
+```
+INFO:hf-to-gguf:Model successfully exported to /home/dipankardas/ws/vllm/Qwen2.5-Coder-1.5B.gguf
+Writing: 100% | 3.09G/3.09G [00:04<00:00, 684Mbyte/s]
+```
+
+---
+
+## Step 2: Starting the llama.cpp Server
+
+With the GGUF file ready, the next step is serving it via llama.cpp's built-in HTTP server:
+
+```bash
+~/llama.cpp/build/bin/llama-server \
+  -m ~/models/Qwen2.5-Coder-1.5B.gguf \
+  --port 6969 \
+  --host 127.0.0.1 \
+  -c 8192 \
+  -ngl all \
+  --parallel 4
+```
+
+Key flags explained:
+
+| Flag | What it does |
+|------|-------------|
+| `-m` | Path to the GGUF model file |
+| `-c 8192` | Context window (8K tokens) |
+| `-ngl all` | Offload all layers to GPU |
+| `--parallel 4` | Handle up to 4 concurrent requests |
+| `--host 127.0.0.1` | Listen locally only (not exposed to network) |
+
+This exposes two endpoints I care about:
+
+- **`/v1/chat/completions`** — standard chat completions (for CodeCompanion / AI chat)
+- **`/v1/completions`** — text completions with FIM support (for Minuet inline completions)
+
+The `/v1/completions` endpoint is the one that makes FIM work. When you pass both `prompt` (code before cursor) and `suffix` (code after cursor), llama.cpp automatically inserts the model's FIM tokens and returns the generated middle section.
+
+I verified this with a quick curl:
+
+```bash
+curl -s http://127.0.0.1:6969/v1/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "def is_prime(n):\n    ",
+    "suffix": "\n    return True",
+    "max_tokens": 50,
+    "temperature": 0.1
+  }'
+```
+
+The model returned:
+
+```python
+if n == 2:
+    return True
+if n % 2 == 0 or n <= 1:
+    return False
+
+sqr = int(n**0.5) + 1
+
+for divisor in range(3, sqr + 1, 2):
+```
+
+It correctly filled the middle of the function — exactly what inline completion needs.
+
+---
+
+## Step 3: Configuring Neovim — Minuet AI
+
+For the Neovim side, I used **Minuet AI** — an open-source plugin that supports multiple backends for inline code completion. Critically, it has a dedicated `openai_fim_compatible` provider built specifically for FIM-based models.
+
+Here's the configuration that makes it work with our llama.cpp server:
+
+```lua
+require("minuet").setup({
+    provider = "openai_fim_compatible",
+    n_completions = 1,
+    request_timeout = 3,
+    throttle = 300,
+    debounce = 150,
+    context_window = 8192,
+    provider_options = {
+        openai_fim_compatible = {
+            api_key = "TERM",           -- llama.cpp doesn't require auth
+            name = "Llama.cpp",
+            end_point = "http://127.0.0.1:6969/v1/completions",
+            model = "Qwen2.5-Coder-1.5B",
+            stream = true,
+            optional = {
+                max_tokens = 64,
+                top_p = 0.9,
+                temperature = 0.1,
+                stop = { "<|im_end|>", "<|endoftext|>" },
+            },
+        },
+    },
+    virtualtext = {
+        auto_trigger_ft = {
+            "go", "lua", "typescript", "javascript",
+            "python", "rust", "terraform"
+        },
+        keymap = {
+            accept = "<A-A>",
+            accept_line = "<A-a>",
+            accept_n_lines = "<A-z>",
+            prev = "<A-[>",
+            next = "<A-]>",
+            dismiss = "<A-e>",
+        },
+    },
+})
+```
+
+Key choices:
+
+- **`openai_fim_compatible`** — this is what enables FIM. The provider sends `prompt` + `suffix` to the `/v1/completions` endpoint instead of a chat messages array.
+- **`end_point = "/v1/completions"`** — not `/v1/chat/completions`. This is a common mistake. The chat endpoint doesn't support FIM.
+- **`stop` tokens** — Qwen uses `<|im_end|>` and `<|endoftext|>` as end-of-generation markers. Without these, the model might keep generating past the useful completion.
+- **`stream = true`** — enables token-by-token streaming for faster visual feedback.
+
+### Keybindings
+
+| Key | Action |
+|-----|--------|
+| `<A-A>` | Accept full completion |
+| `<A-a>` | Accept next line |
+| `<A-z>` | Accept N lines |
+| `<A-[>` / `<A-]>` | Cycle through suggestions |
+| `<A-e>` | Dismiss |
+
+---
+
+## Step 4: Adding AI Chat with CodeCompanion
+
+Inline completions handle the moment-to-moment suggestions. For the "explain this code" or "write a function that does X" type interactions, I added **CodeCompanion** — a chat-based AI assistant similar to Copilot Chat.
+
+```lua
+require("codecompanion").setup({
+    adapters = {
+        gemma_local = function()
+            return require("codecompanion.adapters").extend("openai_compatible", {
+                env = {
+                    api_key = "hello",
+                    url = "http://127.0.0.1:6969/v1",
+                },
+                schema = {
+                    model = {
+                        default = "Qwen2.5-Coder-1.5B",
+                    },
+                },
+            })
+        end,
+    },
+})
+```
+
+<Callout>
+  **Two models, one server?** llama.cpp can serve only one model at a time. I use Qwen2.5-Coder-1.5B for both FIM completions and chat — it works well enough for code-focused conversations. If you want a better chat experience, you can run a second llama.cpp instance with a larger instruct model on a different port.
+</Callout>
+
+---
+
+## How Fast Is It?
+
+On my RTX 4060 laptop GPU (with 12 CPU threads for prompt processing):
+
+| Metric | Value |
+|--------|-------|
+| Prompt processing | **457 tokens/second** |
+| Token generation | **~50 tokens/second** |
+| Time to first completion | **~100ms** (for small prompts) |
+| VRAM usage | **~3.1 GB** (out of 7.8 GB) |
+
+For inline completion, the model generates 64 tokens in about 1.3 seconds. Combined with Minuet's 300ms throttle, the ghost text appears within a second of pausing typing — fast enough to feel snappy, not distracting.
+
+---
+
+## What This Replaces
+
+| Feature | GitHub Copilot | This setup |
+|---------|---------------|------------|
+| Inline code completion | ✅ | ✅ (FIM via Minuet AI) |
+| AI chat | ✅ | ✅ (CodeCompanion) |
+| Offline | ❌ | ✅ |
+| Data privacy | ❌ (sends to Microsoft) | ✅ (stays on your machine) |
+| Cost | $10–19/month per seat | Free (electricity only) |
+| Model choice | Limited to Copilot models | Any GGUF model you want |
+| Setup time | 5 minutes | ~30 minutes (one-time) |
+
+---
+
+## What You Give Up
+
+I won't pretend this matches Copilot's quality. Here's what's worse:
+
+- **Completions are less context-aware.** Copilot has a massive model and telemetry across millions of developers. A 1.5B model can't match that.
+- **Longer completions (8+ lines) degrade.** The small model struggles with multi-line suggestions. I keep `max_tokens` at 64 to avoid garbage.
+- **No multi-language model switching.** Copilot uses separate models per language. This uses one model for everything.
+- **Slower than Copilot.** Copilot's cloud GPUs are faster. Local inference at 50 tok/s is respectable but not as instant.
+
+But for day-to-day coding — boilerplate, patterns, conditionals, simple functions — it's genuinely useful. And it runs completely offline.
+
+---
+
+## FIM: The Technical Detail That Made It Work
+
+Since this is the piece most articles gloss over, here's exactly what FIM does under the hood.
+
+llama.cpp's `/v1/completions` endpoint, when given both `prompt` and `suffix`, constructs a special input format using the model's FIM tokens:
+
+```
+<|fim_prefix|>def is_prime(n):
+    <|fim_suffix|>
+    return True<|fim_middle|>
+```
+
+The model sees this full sequence and predicts what comes after `<|fim_middle|>` — which is the code that would naturally fit between the prefix and suffix. The FIM tokens act as structural markers that tell the model: "the prefix comes first, the suffix comes after, fill what belongs in between."
+
+This is different from simple prefix completion:
+
+```
+# Prefix-only (what most chat models do):
+def is_prime(n):
+    # model guesses what comes here
+    # but has no idea there's a "return True" below
+
+# FIM (what Qwen2.5-Coder does):
+<|fim_prefix|>def is_prime(n):
+    <|fim_suffix|>
+    return True<|fim_middle|>
+    # model fills: if n == 2:\n        return True...
+```
+
+The difference is night and day. Without FIM, the model often generates code that conflicts with the surrounding context — extra closing braces, mismatched indentation, logic that duplicates what comes after. With FIM, the completion naturally integrates.
+
+---
+
+## The Full Pipeline
+
+```
+┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
+│  HuggingFace     │    │  llama.cpp       │    │  Neovim          │
+│  Qwen2.5-Coder-  │───▶│  llama-server    │◀───│  Minuet AI       │
+│  1.5B (safet.)   │    │  (GGUF / F16)    │    │  (FIM backend)   │
+└──────────────────┘    └──────────────────┘    └──────────────────┘
+                              │  port 6969     │  \
+                              │                 │   CodeCompanion
+                              │                 │   (chat)
+                              └─────────────────┘
+```
+
+1. Download safetensors from HuggingFace
+2. Convert to GGUF with `convert_hf_to_gguf.py`
+3. Serve with `llama-server` on localhost:6969
+4. Configure Minuet AI with `openai_fim_compatible` pointing to `/v1/completions`
+5. Optionally add CodeCompanion for chat, pointing to `/v1/chat/completions`
+
+---
+
+## What's Next
+
+This is good enough to replace Copilot for most of my daily coding. But there are clear upgrade paths:
+
+- **Speculative decoding.** llama.cpp supports draft models for faster generation. A smaller draft model (0.5B) could double the token rate.
+- **Bigger model for chat.** Run a second llama.cpp instance with a 7B or 9B instruct model on a different port for richer chat responses.
+- **Per-filetype model selection.** Minuet AI can switch providers per buffer. Use Qwen2.5-Coder for code files, a different model for prose.
+
+The barrier to entry for local AI-assisted coding has dropped dramatically. A laptop GPU, an open model, and three hours on a weekend — that's all it takes to disconnect from the subscription model.
+
+---
+
+I started this because I didn't want another SaaS bill. I kept it because the completions don't pause when the internet goes down, no code leaves my machine, and I can swap in any model I want.
+
+The next time a team lead asks about Copilot pricing, you can answer honestly: "I'm good."
+
+---
+
+*Want to try it yourself? The model is on [HuggingFace](https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B), the server is [llama.cpp](https://github.com/ggml-org/llama.cpp), and Minuet AI is on [GitHub](https://github.com/milanglacier/minuet-ai.nvim). All open source, all free.*
