@@ -4,14 +4,14 @@ author: "Dipankar Das"
 date: 2026-06-06
 description: "Using Qwen2.5-Coder-1.5B with llama.cpp and Minuet AI to get Fill-in-the-Middle code completions in Neovim — no subscription, no telemetry, running on a laptop GPU."
 tags: ["neovim", "llm", "local-ai", "fim", "gguf", "llama-cpp", "code-completion", "qwen", "minuet-ai"]
-cover: "/img/blogs/copilot-neovim-localllm-fim-cover.webp"
-draft: true
+cover: "/img/blogs/copilot-neovim-localllm-fim.webp"
+draft: false
 ---
 import Callout from '../../components/Callout.astro';
 
 I've been using GitHub Copilot since it launched. The inline completions — ghost text that predicts your next few lines — are genuinely useful. But in 2026, the landscape around it has shifted.
 
-The Copilot **Free** tier caps at 2,000 code completions per month — roughly 66 per day, assuming you code every day. Go over that and you hit a wall until next month. The **Pro** tier ($10/month) moved to usage-based billing in June 2026, with 1,500 AI credits included per month and additional consumption billed after that. **Pro+** ($39/month) and **Max** ($100/month) exist for higher credit allowances, but **new sign-ups for all paid plans have been paused since April 2026**. If you don't already have a subscription, you can't get one.
+The Copilot **Free** tier caps at 2,000 code completions per month — roughly 66 per day, assuming you code every day. Go over that and you hit a wall until next month. The **Pro** tier (USD 10/month) moved to usage-based billing in June 2026, with 1,500 AI credits included per month and additional consumption billed after that. **Pro+** (USD 39/month) and **Max** (USD 100/month) exist for higher credit allowances, but **new sign-ups for all paid plans have been paused since April 2026**. If you don't already have a subscription, you can't get one.
 
 Beyond pricing: every completion and chat query is sent to Microsoft's servers. There's no offline mode. Your code, context, and edits leave your machine on every keystroke.
 
@@ -63,21 +63,25 @@ The conversion script is part of the llama.cpp repository at `convert_hf_to_gguf
 
 ```bash
 # The converter requires transformers, torch, and sentencepiece
-uv venv ~/ws/vllm/.gguf-env
-source ~/ws/vllm/.gguf-env/bin/activate
+MODEL_DIR="$HOME/models/Qwen2.5-Coder-1.5B"
+GGUF_OUT="$HOME/models/Qwen2.5-Coder-1.5B.gguf"
+CONVERT_ENV="$HOME/.venvs/gguf-convert"
+
+uv venv "$CONVERT_ENV"
+source "$CONVERT_ENV/bin/activate"
 uv pip install transformers torch sentencepiece protobuf
 
 # Run the conversion
-cd ~/llama.cpp
-python convert_hf_to_gguf.py ~/ws/vllm/Qwen2.5-Coder-1.5B \
-  --outfile ~/ws/vllm/Qwen2.5-Coder-1.5B.gguf \
+cd "$HOME/llama.cpp"
+python convert_hf_to_gguf.py "$MODEL_DIR" \
+  --outfile "$GGUF_OUT" \
   --outtype f16
 ```
 
 The converter loaded the model architecture (Qwen2ForCausalLM), exported 338 tensors, and wrote a 3.09 GB GGUF file. The output confirmed the model has 28 layers, 12 heads, a 32,768 context window, and a 151,936-token vocabulary (BPE via SentencePiece).
 
 ```
-INFO:hf-to-gguf:Model successfully exported to /home/dipankardas/ws/vllm/Qwen2.5-Coder-1.5B.gguf
+INFO:hf-to-gguf:Model successfully exported to ~/models/Qwen2.5-Coder-1.5B.gguf
 Writing: 100% | 3.09G/3.09G [00:04<00:00, 684Mbyte/s]
 ```
 
@@ -91,16 +95,20 @@ The write took approximately 4 seconds. Preceding steps (model loading, metadata
 
 ## Serving the Model: llama.cpp Server
 
-llama.cpp ships with a built-in HTTP server (`llama-server`) that exposes OpenAI-compatible endpoints. I started it with:
+llama.cpp ships with a built-in HTTP server (`llama-server`) that exposes OpenAI-compatible endpoints. I wrapped the server command in a small bash helper so I can start the local completion backend with one command: `copilot`.
 
 ```bash
-/home/dipankardas/llama.cpp/build/bin/llama-server \
-  -m ~/ws/vllm/Qwen2.5-Coder-1.5B.gguf \
-  --port 6969 \
-  --host 127.0.0.1 \
-  -c 8192 \
-  -ngl all \
-  --parallel 4
+# ~/.bashrc
+copilot() {
+    "$HOME/llama.cpp/build/bin/llama-server" \
+     -m "$HOME/models/Qwen2.5-Coder-1.5B.gguf" \
+     --port 6969 \
+     --host 127.0.0.1 \
+     -c 8192 \
+     -ngl all \
+     --metrics \
+     --parallel 4
+}
 ```
 
 The server loaded the model on my RTX 4060 (7,805 MiB total, 7,562 MiB free at startup) and created 4 slots with 2,048 tokens each (8,192 total context divided by 4 parallel slots).
@@ -160,7 +168,11 @@ require("minuet").setup({
     request_timeout = 3,
     throttle = 300,
     debounce = 150,
-    context_window = 8192,
+    -- Minuet uses characters here, not tokens.
+    -- 6000 chars is roughly ~1500 tokens for typical code.
+    -- This keeps FIM requests under the 2048-token slot limit from -c 8192 --parallel 4.
+    context_window = 6000,
+    context_ratio = 0.75,
     provider_options = {
         openai_fim_compatible = {
             api_key = "TERM",              -- llama.cpp doesn't require auth
@@ -199,6 +211,7 @@ Key configuration details:
 - **`stop`** — Qwen2.5-Coder uses `<|im_end|>` and `<|endoftext|>` as end-of-sequence markers. Without stop tokens, the model may continue generating past the useful completion.
 - **`max_tokens = 64`** — caps generation length. Longer completions from a 1.5B model tend to degrade in quality.
 - **`throttle = 300`** — waits 300ms after the last keystroke before requesting a completion.
+- **`context_window = 6000`** — this is the large-file fix. Minuet measures this in characters, not tokens. With the server running `-c 8192 --parallel 4`, each request gets 2,048 tokens. A previous `context_window = 8192` sent a 2,072-token request on a large file and llama.cpp rejected it. Reducing the character window keeps the request under the slot limit while still giving the model useful local context.
 
 For chat interactions, I use CodeCompanion pointed at the same server's `/v1/chat/completions` endpoint. Both plugins share the same llama.cpp instance.
 
@@ -219,6 +232,11 @@ These are the numbers from a single test run on the described hardware:
 
 Hardware: NVIDIA GeForce RTX 4060 Laptop GPU, AMD Ryzen AI 9 HX 370, llama.cpp compiled with CUDA support.
 
+<figure>
+  <img src="/img/blogs/copilot-alternative-local-tps.webp" alt="llama.cpp local Qwen2.5-Coder completion benchmark showing prompt and generation throughput for the Neovim Copilot alternative" />
+  <figcaption>The local completion backend in action — Qwen2.5-Coder-1.5B served through llama.cpp, showing prompt processing and generation throughput on the laptop GPU.</figcaption>
+</figure>
+
 At 49 tok/s, a 64-token completion takes approximately 1.3 seconds from request to full response. The 300ms throttle means the model isn't queried until you stop typing for at least 300ms, so the user-perceived latency is the throttle time plus generation time for the first few tokens (streamed).
 
 ---
@@ -235,18 +253,16 @@ At 49 tok/s, a 64-token completion takes approximately 1.3 seconds from request 
 - Multi-line completions beyond roughly 5-8 lines — quality degrades noticeably
 - Understanding project-wide context or conventions — the model only sees the current buffer
 - Rare or domain-specific APIs — a 1.5B model doesn't memorize long-tail library functions
-- Real-time responsiveness compared to cloud Copilot — 49 tok/s is usable but not instant
-
-**Comparison with GitHub Copilot:**
+- No cloud-side retrieval or project-wide indexing — this setup uses the local context that Minuet sends to llama.cpp
 
 **Comparison with GitHub Copilot:**
 
 | Aspect | GitHub Copilot | This setup |
 |--------|---------------|------------|
 | Cost | Free tier: 2,000 completions/mo | Free (electricity only) |
-| | Pro: $10/mo (usage-based billing) | |
-| | Pro+: $39/mo | |
-| | Max: $100/mo | |
+| | Pro: USD 10/mo (usage-based billing) | |
+| | Pro+: USD 39/mo | |
+| | Max: USD 100/mo | |
 | New sign-ups | Paused since April 2026 (paid plans) | No sign-up needed |
 | Internet required | Yes | No |
 | Code leaves your machine | Yes (sent to Microsoft servers) | No |
@@ -291,10 +307,10 @@ The same server handles both endpoints. Minuet AI uses `/v1/completions` with pr
 
 ## Caveats and Open Questions
 
-- **Context splitting with parallel slots**: `--parallel 4` with `-c 8192` gives each slot 2,048 tokens. For inline completion this is sufficient, but if you increase the context, adjust the slot count or total context accordingly.
+- **Context splitting with parallel slots**: `--parallel 4` with `-c 8192` gives each slot 2,048 tokens. The setup works because Minuet is capped at `context_window = 6000` characters, which keeps typical FIM requests below that slot limit. If you increase Minuet's context window, also increase llama.cpp context or reduce parallel slots.
+- **Large files need context budgeting**: Copilot handles this silently. With a local stack, you have to configure it. The important lesson was that Minuet's context window is character-based while llama.cpp's error is token-based.
 - **KV cache management**: llama.cpp allocated a prompt cache of 8,192 MiB. The `--cache-idle-slots` option requires `--kv-unified` and was disabled automatically. This is a default behavior worth knowing about.
 - **Single model limitation**: You can run only one model per llama-server instance. Serving both FIM completions and chat from the same model means neither is ideal for its task. Running a second instance with a larger instruct model on another port is the natural next step.
-- **No speculative decoding**: llama.cpp supports draft models for speculative decoding, but I didn't configure it. A 0.5B draft model could potentially increase generation throughput by 1.5-2x.
 
 ---
 
