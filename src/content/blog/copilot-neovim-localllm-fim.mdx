@@ -305,6 +305,31 @@ The same server handles both endpoints. Minuet AI uses `/v1/completions` with pr
 
 ---
 
+## What About VS Code Users?
+
+This post is Neovim-focused because that's my editor, but the approach is not Neovim-only. VS Code users have local FIM autocomplete options too.
+
+The closest equivalent is [`llama-vscode`](https://marketplace.visualstudio.com/items?itemName=ggml-org.llama-vscode) from ggml-org. It is built around llama.cpp, supports local FIM completions, and can run Qwen Coder models directly through `llama-server`.
+
+For low-VRAM machines, the extension documents a Qwen2.5-Coder 1.5B FIM preset:
+
+```bash
+llama-server --fim-qwen-1.5b-default
+```
+
+For users who want more configuration, [Twinny](https://github.com/Decentralised-AI/twinny-AI-Code) is another VS Code option. It supports FIM completions, chat, llama.cpp, LM Studio, OpenAI-compatible APIs, and separate endpoints for completion and chat.
+
+The core idea stays the same across editors:
+
+1. Use a FIM-capable code model
+2. Serve it locally
+3. Use an editor extension that sends prefix + suffix context
+4. Keep the context window under the server's token limit
+
+Neovim uses Minuet AI for that in my setup. VS Code users can get similar behavior with llama-vscode or Twinny.
+
+---
+
 ## Caveats and Open Questions
 
 - **Context splitting with parallel slots**: `--parallel 4` with `-c 8192` gives each slot 2,048 tokens. The setup works because Minuet is capped at `context_window = 6000` characters, which keeps typical FIM requests below that slot limit. If you increase Minuet's context window, also increase llama.cpp context or reduce parallel slots.
