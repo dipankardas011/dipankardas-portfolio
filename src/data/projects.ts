@@ -12,14 +12,14 @@ export const projects: Project[] = [
   {
     title: "kubmin",
     description:
-      "Per-workload cost and efficiency tracking for Kubernetes. Detects idle resources, compares deployments across versions, and surfaces SCI/SEE sustainability scores — the missing layer between your workloads and your bill. Powered by Kepler (CNCF) and aligned with the Green Software Foundation.",
+      "OpenTelemetry-native workload intelligence for Kubernetes. Per-image-version cost and efficiency profiling, release-over-release diff, workload classification, and Quick Wins ranked by savings with ready-to-use kubectl commands. Guided Observability wires metrics, logs, traces, and Kepler energy data through an OTel Collector bridge — bring your own Prometheus/Tempo/Loki/Grafana or let Kubmin deploy them. Supports existing cluster import (EKS, AKS, GKE Standard, kubeconfig). Powered by Kepler (CNCF) and aligned with the Green Software Foundation.",
     image: "https://ksctl.com/kubmin-logo.svg",
     links: [
       { label: "Website", url: "https://ksctl.com/product/kubmin" },
       { label: "Try It", url: "https://kubmin.ksctl.com" },
     ],
     category: "Products",
-    tags: ["Go", "Kubernetes", "FinOps", "Sustainability", "Kepler", "CNCF"],
+    tags: ["Go", "Kubernetes", "FinOps", "Sustainability", "Kepler", "CNCF", "OpenTelemetry", "Guided Observability"],
     featured: true,
   },
   {

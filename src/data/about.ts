@@ -82,8 +82,8 @@ export const experiences: Experience[] = [
       {
         title: "Workload Intelligence & Cost Tracking",
         why: "Teams had no per-workload visibility into what each deploy actually costs in money, energy, and compute — waste compounded silently with every release.",
-        what: "Built a per-workload cost and efficiency tracking engine powered by Kepler (CNCF) with SCI/SEE sustainability scoring aligned to the Green Software Foundation.",
-        how: "Surfaces idle workloads, overprovisioned containers, and efficiency regressions between deployment versions — with dollar amounts and ready-to-use kubectl commands to fix them. Compares workload costs across regions and instance types.",
+        what: "Built a per-workload cost and efficiency tracking engine powered by Kepler (CNCF) with SCI/SEE sustainability scoring aligned to the Green Software Foundation. Includes per-image-version deep profiling (hourly SCI, energy, CPU, memory, cost per image tag) and release-over-release efficiency diff.",
+        how: "Surfaces idle workloads, overprovisioned containers, and efficiency regressions between deployment versions — with dollar amounts and ready-to-use kubectl commands to fix them. Classifies each workload as CPU-bound, memory-bound, general, or resource-starved from runtime behavior. Compares workload costs across regions and instance types.",
       },
       {
         title: "AI-Agents Orchestration",
@@ -92,9 +92,21 @@ export const experiences: Experience[] = [
         how: "Leveraged agentic patterns — task decomposition, tool use, and iterative feedback loops — to boost team productivity by 40% while maintaining high code quality and architectural consistency.",
       },
       {
+        title: "Guided Observability",
+        why: "Teams had monitoring stacks but no automated way to wire telemetry (metrics, logs, traces, energy) into workload cost and efficiency decisions. The gap between existing observability and actionable cost intelligence was manual glue work.",
+        what: "Designed an OpenTelemetry-native Guided Observability system for Kubmin — deploy missing backends or connect to existing Prometheus, Tempo, Loki, and Grafana stacks. Configures an in-cluster OTel Collector bridge for OTLP gRPC/HTTP alongside Kepler for energy attribution.",
+        how: "Built a setup workflow during cluster create/import that always installs the Kubmin agent, Kepler, Gateway API, and OTel Collector — while optionally deploying or connecting to existing monitoring backends. Wires telemetry into Kubmin's cost and efficiency ledger automatically, so metrics, logs, traces, and energy data support the same workload decisions.",
+      },
+      {
+        title: "Existing Cluster Import",
+        why: "Teams running existing Kubernetes clusters (EKS, AKS, GKE, self-managed) couldn't add Kubmin's workload intelligence without migrating to a new cluster.",
+        what: "Built cluster import support for EKS, AKS, GKE Standard, and kubeconfig-based self-managed clusters — installing Gateway API CRDs, Kubmin agent, Kepler, and OTel Collector during the automated import workflow.",
+        how: "Implemented cloud-provider discovery for managed clusters (by cloud and region) and kubeconfig-based auth for self-managed clusters. The import workflow installs all required components programmatically, preserving the existing infrastructure ownership while adding workload intelligence on top.",
+      },
+      {
         title: "Workload Recommendation Engine",
         why: "Teams had no structured way to understand the true profile of their running workloads — efficiency waste, energy consumption, and resource behaviour were all invisible.",
-        what: "Developed a recommendation system that detects idle workloads, overprovisioned containers, and temporal waste patterns — each with dollar amounts attached.",
+        what: "Developed a recommendation system that detects idle workloads, overprovisioned containers, and temporal waste patterns — each with dollar amounts attached. Quick Wins are ranked by estimated monthly savings and ship with copy-paste kubectl commands.",
         how: "Built profiling pipelines that compare workload efficiency across deployment versions (cost, energy, CPU, memory, SCI score), surface regional cost optimization opportunities, and generate ready-to-use kubectl commands for immediate savings.",
       },
     ],
