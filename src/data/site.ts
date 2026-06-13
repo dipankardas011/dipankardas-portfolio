@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Dipankar Das",
-  title: "Dipankar Das — Systems Engineer & Problem Solver",
+  title: "Dipankar Das — Platform Engineer & Problem Solver",
   description:
     "Bridging the gap between application code and infrastructure. Building sustainable platforms and sharing technical deep-dives on DevOps, Kubernetes, and System Design.",
   url: "https://dipankar-das.com",
