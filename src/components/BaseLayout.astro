@@ -67,6 +67,7 @@ const articleSchema = blogPost && publishedDate
 <html lang="en" data-blog={blogPost ? "true" : null} data-light="true">
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>document.documentElement.classList.add("js");</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="author" content={author} />
@@ -141,6 +142,30 @@ const articleSchema = blogPost && publishedDate
     </main>
     <Footer />
     <VimMotions />
+
+    <!-- Scroll-triggered reveals (respects prefers-reduced-motion via CSS gate) -->
+    <script is:inline>
+      (function () {
+        var els = document.querySelectorAll("[data-reveal]");
+        if (!els.length) return;
+        if (!("IntersectionObserver" in window)) {
+          els.forEach(function (el) { el.classList.add("is-revealed"); });
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
+        );
+        els.forEach(function (el) { io.observe(el); });
+      })();
+    </script>
 
     {blogPost && (
       <>

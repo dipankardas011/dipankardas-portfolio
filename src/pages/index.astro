@@ -10,16 +10,17 @@ import { services } from "../data/services";
 import { projects } from "../data/projects";
 import { testimonials } from "../data/testimonials";
 
-const featuredProjects = projects.filter((p) => p.featured);
+const spotlight = projects.find((p) => p.title === "kubmin");
+const featuredProjects = projects.filter((p) => p.featured && p.title !== "kubmin");
 ---
 
 <BaseLayout>
   <Hero />
 
-  <!-- Services -->
-  <section class="py-16 lg:py-24 border-t border-app-ink-line">
+  <!-- 01 · Services -->
+  <section id="services" class="py-20 lg:py-28 border-t border-app-ink-line">
     <div class="container mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10 lg:mb-14">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 lg:mb-16">
         <div class="lg:col-span-6">
           <SectionHeader
             title="What I do"
@@ -28,23 +29,23 @@ const featuredProjects = projects.filter((p) => p.featured);
             className="mb-0"
           />
         </div>
-        <div class="lg:col-span-6 lg:pt-12">
+        <div class="lg:col-span-6 lg:pt-12" data-reveal>
           <p class="text-base lg:text-lg leading-[1.55] text-app-gray-500 max-w-xl">
             Consulting and engineering for modern infrastructure — Software Development,
             DevOps, cloud-native systems, and sustainable computing.
           </p>
         </div>
       </div>
-      <ul class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 animate-stagger">
-        {services.map((s) => (
-          <li>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        {services.map((s, i) => (
+          <li data-reveal style={`--reveal-delay: ${i % 2}`}>
             <ServiceCard
               title={s.title}
               abbreviation={s.abbreviation}
               icon={s.icon}
               description={s.description}
               skills={s.skills}
-              color={s.color}
+              index={i + 1}
             />
           </li>
         ))}
@@ -52,38 +53,123 @@ const featuredProjects = projects.filter((p) => p.featured);
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <Testimonials testimonials={testimonials} />
+  <!-- 02 · Featured spotlight — Kubmin, on ink -->
+  {spotlight && (
+    <section id="spotlight" class="ink-section py-20 lg:py-28 border-t border-app-ink-line">
+      <div class="container mx-auto">
+        <div class="sys-strip mb-12 lg:mb-16" data-reveal>
+          <span class="sys-key">~/spotlight</span>
+          <span class="sys-dot">●</span>
+          <span class="sys-value">flagship product</span>
+          <span class="sys-dot hidden sm:inline">●</span>
+          <span class="sys-value hidden sm:inline">status: shipping</span>
+          <span class="sys-value ml-auto">fig.02</span>
+        </div>
 
-  <!-- Featured Projects -->
-  <section class="py-16 lg:py-24 border-t border-app-ink-line">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          <div class="lg:col-span-7 relative" data-reveal>
+            <span class="ghost-index" aria-hidden="true">02</span>
+
+            <div class="kicker mb-5">featured project · oss</div>
+            <h2 class="relative z-10 font-display font-medium text-[clamp(2.6rem,6vw,5rem)] leading-[0.98] tracking-[-0.03em] text-app-on-ink">
+              {spotlight.title}<span class="text-app-accent">.</span><br/>
+              <span class="font-serif italic font-normal text-app-accent text-[0.62em] leading-[1.1]">
+                workload intelligence for Kubernetes
+              </span>
+            </h2>
+
+            <p class="relative z-10 mt-7 max-w-2xl text-base lg:text-lg leading-[1.6] text-app-on-ink-muted">
+              {spotlight.description}
+            </p>
+
+            <ul class="relative z-10 mt-7 flex flex-wrap gap-1.5">
+              {spotlight.tags.map((t) => (
+                <li class="inline-flex items-center px-2.5 py-1 border border-app-ink-border font-mono text-[10px] uppercase tracking-[0.12em] text-app-on-ink-muted">
+                  {t}
+                </li>
+              ))}
+            </ul>
+
+            <div class="relative z-10 mt-9 flex flex-wrap gap-3">
+              {spotlight.links.map((link, i) => (
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener"
+                  class:list={[
+                    "inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono text-[11px] uppercase tracking-[0.12em] font-semibold transition-colors duration-300",
+                    i === 0
+                      ? "bg-app-accent text-app-ink hover:bg-app-body hover:text-app-ink"
+                      : "border border-app-ink-border text-app-on-ink hover:border-app-body",
+                  ]}
+                >
+                  <span>{link.label}</span>
+                  <span>↗</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div class="lg:col-span-5" data-reveal style="--reveal-delay: 2">
+            <div class="relative border border-app-ink-border bg-app-ink-soft p-10 lg:p-14 flex items-center justify-center aspect-[4/3]">
+              {spotlight.image && (
+                <img
+                  src={spotlight.image}
+                  alt={spotlight.title}
+                  class="max-w-[70%] max-h-[70%] object-contain"
+                  loading="lazy"
+                />
+              )}
+              <!-- corner crosshairs -->
+              <span class="absolute top-2.5 left-2.5 w-3.5 h-3.5 border-l border-t border-app-accent"></span>
+              <span class="absolute top-2.5 right-2.5 w-3.5 h-3.5 border-r border-t border-app-accent"></span>
+              <span class="absolute bottom-2.5 left-2.5 w-3.5 h-3.5 border-l border-b border-app-accent"></span>
+              <span class="absolute bottom-2.5 right-2.5 w-3.5 h-3.5 border-r border-b border-app-accent"></span>
+            </div>
+            <div class="mt-3 pt-2 border-t border-app-ink-border flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-app-on-ink-muted">
+              <span>fig.02 / kubmin</span>
+              <span class="text-app-accent">cncf-aligned</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 03 · Featured Projects -->
+  <section id="projects" class="py-20 lg:py-28 border-t border-app-ink-line">
     <div class="container mx-auto">
-      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 lg:mb-12">
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12 lg:mb-16">
         <SectionHeader
           title="Featured projects"
           kicker="oss · tools"
-          index={2}
+          index={3}
           subtitle="Open-source tools and systems I've built and shipped."
           className="mb-0"
         />
-        <a href="/projects/" class="btn-ghost shrink-0">
+        <a href="/projects/" class="btn-ghost shrink-0 relative z-10">
           <span class="font-mono text-[11px] uppercase tracking-[0.12em]">View all</span>
           <span>→</span>
         </a>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 animate-stagger">
-        {featuredProjects.map((p) => (
-          <ProjectCard
-            title={p.title}
-            description={p.description}
-            image={p.image}
-            links={p.links}
-            tags={p.tags}
-          />
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {featuredProjects.map((p, i) => (
+          <div data-reveal style={`--reveal-delay: ${i % 3}`}>
+            <ProjectCard
+              title={p.title}
+              description={p.description}
+              image={p.image}
+              links={p.links}
+              tags={p.tags}
+            />
+          </div>
         ))}
       </div>
     </div>
   </section>
+
+  <!-- 04 · Testimonials -->
+  <Testimonials testimonials={testimonials} index={4} />
 
   <ContactSection />
 </BaseLayout>

@@ -23,8 +23,8 @@ export default defineConfig({
     rehypePlugins: [rehypeKatex],
     shikiConfig: {
       themes: {
-        light: "rose-pine-dawn",
-        dark: "rose-pine-dawn",
+        light: "rose-pine-moon",
+        dark: "rose-pine-moon",
       },
       wrap: true,
     },

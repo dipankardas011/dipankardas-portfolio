@@ -50,16 +50,18 @@ import { siteConfig } from "../data/site";
         </aside>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-20 lg:mb-28 animate-stagger">
-        {services.map((s) => (
-          <ServiceCard
-            title={s.title}
-            abbreviation={s.abbreviation}
-            icon={s.icon}
-            description={s.description}
-            skills={s.skills}
-            color={s.color}
-          />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-20 lg:mb-28">
+        {services.map((s, i) => (
+          <div data-reveal style={`--reveal-delay: ${i % 2}`}>
+            <ServiceCard
+              title={s.title}
+              abbreviation={s.abbreviation}
+              icon={s.icon}
+              description={s.description}
+              skills={s.skills}
+              index={i + 1}
+            />
+          </div>
         ))}
       </div>
 
