@@ -1,11 +1,7 @@
 ---
 import BaseLayout from "../components/BaseLayout.astro";
-import AnimatedTitle from "../components/AnimatedTitle.astro";
-import ServiceCard from "../components/ServiceCard.astro";
-import CertBadge from "../components/CertBadge.astro";
 import ContactSection from "../components/ContactSection.astro";
 import DirectBooking from "../components/DirectBooking.astro";
-import SectionHeader from "../components/SectionHeader.astro";
 import { services, certifications } from "../data/services";
 import { siteConfig } from "../data/site";
 ---
@@ -13,73 +9,197 @@ import { siteConfig } from "../data/site";
 <BaseLayout
   title="Services - Dipankar Das"
   description="DevOps consulting, Kubernetes expertise, Go development, and sustainability engineering."
+  bodyClass="services-field-manual"
 >
-  <AnimatedTitle title="Services" kicker="/services · how i can help" />
-
-  <section class="py-10 lg:py-16 animate-fade-in">
-    <div class="container mx-auto">
-
-      <div class="sys-strip mb-10 lg:mb-14">
-        <span class="sys-key">~/services</span>
-        <span class="sys-dot">●</span>
-        <span class="sys-value">{services.length} core offerings</span>
-        <span class="sys-dot">●</span>
-        <span class="sys-value">availability: open</span>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 lg:mb-24">
-        <div class="lg:col-span-8">
-          <h2 class="font-display text-3xl md:text-5xl lg:text-6xl text-app-text tracking-tight leading-[1.02]">
-            I help teams<br/>
-            <span class="font-serif italic font-normal text-app-accent">{siteConfig.tagline.toLowerCase()}</span>.
-          </h2>
-          <p class="mt-8 max-w-xl text-base lg:text-lg text-app-gray-500 leading-[1.55]">
-            From Software Development and System Design to DevOps and Cloud-Native
-            infrastructure — a focused suite of services to elevate the layer your
-            business runs on.
-          </p>
+  <div>
+    <section class="services-hero">
+      <div class="container mx-auto">
+        <div class="status-line reveal" style="--delay: 0">
+          <span>SERVICE MANUAL / REV.01</span>
+          <span>{services.length} CORE OFFERINGS</span>
+          <span class="available"><i></i> AVAILABILITY / OPEN</span>
         </div>
-        <aside class="lg:col-span-4 lg:pl-8 lg:border-l border-app-border flex flex-col justify-end">
-          <div class="kicker mb-3">/engagement modes</div>
-          <ul class="space-y-2 font-mono text-[11px] uppercase tracking-[0.14em] text-app-gray-500">
-            <li class="flex items-baseline gap-2"><span class="text-app-accent">●</span> hourly consult</li>
-            <li class="flex items-baseline gap-2"><span class="text-app-accent">●</span> fixed-scope project</li>
-            <li class="flex items-baseline gap-2"><span class="text-app-accent">●</span> retainer / fractional</li>
-            <li class="flex items-baseline gap-2"><span class="text-app-accent">●</span> one-shot audit</li>
-          </ul>
-        </aside>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-20 lg:mb-28 animate-stagger">
-        {services.map((s) => (
-          <ServiceCard
-            title={s.title}
-            abbreviation={s.abbreviation}
-            icon={s.icon}
-            description={s.description}
-            skills={s.skills}
-            color={s.color}
-          />
-        ))}
-      </div>
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow reveal" style="--delay: 1">/services · how i can help</p>
+            <h1 aria-label="Services built for steady state">
+              <span class="reveal" style="--delay: 2">BUILD FOR</span>
+              <span class="shift reveal" style="--delay: 3"><i>STEADY</i> STATE.</span>
+            </h1>
+            <div class="hero-intro reveal" style="--delay: 5">
+              <span>01 / MANDATE</span>
+              <div>
+                <h2>I help teams <i>{siteConfig.tagline.toLowerCase()}</i>.</h2>
+                <p>From Software Development and System Design to DevOps and Cloud-Native infrastructure — a focused suite of services to elevate the layer your business runs on.</p>
+              </div>
+            </div>
+          </div>
 
-      <div class="border-t border-app-ink-line pt-14 lg:pt-20">
-        <SectionHeader
-          title="Certifications & badges"
-          kicker="credentials"
-          index={services.length + 1}
-          subtitle="Industry-recognized proof of work backing the practice."
-          className="mb-10 lg:mb-12"
-        />
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-5">
-          {certifications.map((cert) => (
-            <CertBadge name={cert.name} badgeImage={cert.badgeImage} link={cert.link} />
+          <aside class="engagement-panel reveal" style="--delay: 4">
+            <div><span>ENGAGEMENT MODES</span><span>04 / AVAILABLE</span></div>
+            <ol>
+              {[
+                "hourly consult",
+                "fixed-scope project",
+                "retainer / fractional",
+                "one-shot audit",
+              ].map((mode, index) => <li><span>{String(index + 1).padStart(2, "0")}</span>{mode}</li>)}
+            </ol>
+            <p>SELECT FORMAT<br />DEFINE OUTCOME<br />SHIP THE SYSTEM</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="service-section">
+      <div class="container mx-auto">
+        <header class="section-heading">
+          <div><span class="section-index">02</span><span class="section-label">OPERATING RANGE</span></div>
+          <h2>Four disciplines.<br /><i>One system.</i></h2>
+          <p>Each engagement is scoped around an operational result, not a stack of deliverables.</p>
+        </header>
+
+        <ol class="service-ledger">
+          {services.map((service, index) => (
+            <li>
+              <div class="service-code">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{service.abbreviation}</strong>
+              </div>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+              <div class="stack-list">
+                <span>STACK / {String(service.skills.length).padStart(2, "0")}</span>
+                <ul>{service.skills.map((skill) => <li>{skill}</li>)}</ul>
+              </div>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="credentials-section">
+      <div class="container mx-auto credentials-grid">
+        <header>
+          <div><span class="section-index">03</span><span class="section-label">CREDENTIALS</span></div>
+          <h2>Proof, indexed<br />and <i>verifiable.</i></h2>
+          <p>Industry-recognized proof of work backing the practice.</p>
+          <span class="record-count">{String(certifications.length).padStart(2, "0")} RECORDS / EXTERNAL</span>
+        </header>
+
+        <ol class="credential-ledger">
+          {certifications.map((certification, index) => (
+            <li>
+              <a href={certification.link} target="_blank" rel="noopener">
+                <span class="credential-number">C{String(index + 1).padStart(2, "0")}</span>
+                <span class="badge-cell">
+                  {certification.badgeImage ? (
+                    <img src={certification.badgeImage} alt="" loading="lazy" />
+                  ) : (
+                    <span aria-hidden="true">{certification.name.charAt(0)}</span>
+                  )}
+                </span>
+                <strong>{certification.name}</strong>
+                <span class="verify">VERIFY ↗</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  </div>
 
   <DirectBooking />
   <ContactSection />
 </BaseLayout>
+
+<style>
+  :global(.services-field-manual footer.mt-16) { margin-top: 0; }
+  .services-hero { padding-top: 1.25rem; }
+  .status-line { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; padding: .7rem .85rem; border: 1px solid var(--color-app-ink-line); color: var(--color-app-gray-400); font: .62rem/1 var(--font-mono); letter-spacing: .12em; }
+  .status-line > span:nth-child(2) { color: var(--color-app-accent); }
+  .status-line > span:last-child { text-align: right; }
+  .available i { display: inline-block; width: .45rem; height: .45rem; margin-right: .5rem; border-radius: 50%; background: var(--color-app-accent); animation: pulse 2s infinite; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(18rem, .55fr); min-height: 680px; border-inline: 1px solid var(--color-app-ink-line); border-bottom: 1px solid var(--color-app-ink-line); }
+  .hero-copy { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 4.5rem clamp(1.25rem, 4vw, 4rem); border-right: 1px solid var(--color-app-ink-line); }
+  .eyebrow, .section-label { color: var(--color-app-accent); font: .66rem/1 var(--font-mono); letter-spacing: .17em; text-transform: uppercase; }
+  .eyebrow::before { content: ""; display: inline-block; width: 2.5rem; height: 1px; margin-right: .7rem; vertical-align: middle; background: currentColor; }
+  h1 { margin: 1.75rem 0 3.5rem; font: 750 clamp(4rem, 9.3vw, 9rem)/.76 var(--font-display); letter-spacing: -.065em; }
+  h1 > span { display: block; }
+  h1 .shift { padding-left: clamp(0rem, 4vw, 4rem); }
+  h1 i, .hero-intro h2 i, .section-heading h2 i, .credentials-section h2 i { color: var(--color-app-accent); font-family: var(--font-serif); font-weight: 400; }
+  .hero-intro { display: grid; grid-template-columns: 5rem minmax(0, 36rem); gap: 1.5rem; margin-left: auto; }
+  .hero-intro > span { padding-top: .45rem; border-top: 1px solid var(--color-app-accent); color: var(--color-app-accent); font: .6rem/1.2 var(--font-mono); }
+  .hero-intro h2 { margin-bottom: 1rem; font: 560 clamp(1.4rem, 2.3vw, 2.3rem)/1.1 var(--font-display); letter-spacing: -.035em; }
+  .hero-intro p { color: var(--color-app-gray-500); font-size: .9rem; line-height: 1.6; }
+  .engagement-panel { display: flex; flex-direction: column; justify-content: space-between; padding: 1.25rem; background: var(--color-app-surface); }
+  .engagement-panel > div { display: flex; justify-content: space-between; color: var(--color-app-gray-400); font: .57rem/1 var(--font-mono); letter-spacing: .1em; }
+  .engagement-panel > div span:first-child { color: var(--color-app-accent); }
+  .engagement-panel ol { border-top: 2px solid var(--color-app-text); }
+  .engagement-panel li { display: grid; grid-template-columns: 2rem 1fr; padding: 1.25rem .25rem; border-bottom: 1px solid var(--color-app-border); font: 540 clamp(1rem, 1.7vw, 1.35rem)/1.1 var(--font-display); text-transform: uppercase; }
+  .engagement-panel li span, .engagement-panel > p { color: var(--color-app-gray-400); font: .58rem/1.6 var(--font-mono); letter-spacing: .08em; }
+  .engagement-panel li span { color: var(--color-app-accent); }
+  .service-section { padding: clamp(5rem, 10vw, 9rem) 0; }
+  .section-heading { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 2rem; align-items: start; margin-bottom: 4rem; }
+  .section-heading > div, .credentials-section header > div { display: flex; gap: 1rem; align-items: center; }
+  .section-index { display: grid; place-items: center; width: 2rem; height: 2rem; color: var(--color-app-accent-ink); background: var(--color-app-accent); font: .68rem/1 var(--font-mono); }
+  .section-heading h2, .credentials-section h2 { font: 650 clamp(2.8rem, 5.8vw, 6rem)/.88 var(--font-display); letter-spacing: -.055em; }
+  .section-heading > p, .credentials-section header > p { max-width: 18rem; color: var(--color-app-gray-400); font-size: .88rem; line-height: 1.55; }
+  .service-ledger { border-top: 2px solid var(--color-app-text); }
+  .service-ledger > li { display: grid; grid-template-columns: 5rem 1.05fr 1.2fr .9fr; gap: 2rem; padding: 2.2rem .5rem; border-bottom: 1px solid var(--color-app-border); transition: background .2s, padding .2s; }
+  .service-ledger > li:hover { padding-inline: 1rem; background: var(--color-app-surface); }
+  .service-code { display: flex; flex-direction: column; justify-content: space-between; min-height: 5rem; }
+  .service-code span { color: var(--color-app-accent); font: .62rem/1 var(--font-mono); }
+  .service-code strong { color: var(--color-app-gray-300); font: 650 1.8rem/1 var(--font-display); }
+  .service-ledger h3 { max-width: 19rem; font: 600 clamp(1.45rem, 2.8vw, 2.6rem)/.98 var(--font-display); letter-spacing: -.045em; }
+  .service-ledger > li > p { color: var(--color-app-gray-500); font-size: .86rem; line-height: 1.6; }
+  .stack-list > span { display: block; margin-bottom: .8rem; color: var(--color-app-gray-400); font: .56rem/1 var(--font-mono); letter-spacing: .1em; }
+  .stack-list ul { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .stack-list li { padding: .35rem .5rem; border: 1px solid var(--color-app-border); color: var(--color-app-gray-500); font: .56rem/1 var(--font-mono); text-transform: uppercase; }
+  .credentials-section { padding: clamp(5rem, 10vw, 9rem) 0; color: var(--color-app-inverse-text); background: var(--color-app-inverse); }
+  .credentials-grid { display: grid; grid-template-columns: .75fr 1.45fr; gap: clamp(3rem, 8vw, 8rem); }
+  .credentials-section .section-index { color: var(--color-app-accent); background: var(--color-app-inverse-text); }
+  .credentials-section .section-label, .credentials-section h2 i { color: var(--color-app-inverse-accent); }
+  .credentials-section h2 { margin: 3rem 0 1.5rem; }
+  .credentials-section header > p { color: var(--color-app-inverse-muted); }
+  .record-count { display: block; margin-top: 3rem; padding-top: .8rem; border-top: 1px solid var(--color-app-inverse-line); color: var(--color-app-inverse-muted); font: .58rem/1 var(--font-mono); letter-spacing: .1em; }
+  .credential-ledger { border-top: 2px solid var(--color-app-inverse-text); }
+  .credential-ledger a { display: grid; grid-template-columns: 2.5rem 3rem 1fr auto; gap: 1rem; align-items: center; min-height: 5rem; padding: .65rem .25rem; border-bottom: 1px solid var(--color-app-inverse-line); transition: padding .2s, background .2s; }
+  .credential-ledger a:hover { padding-inline: .75rem; background: color-mix(in srgb, var(--color-app-inverse-text) 6%, var(--color-app-inverse)); }
+  .credential-number, .verify { color: var(--color-app-inverse-muted); font: .55rem/1 var(--font-mono); letter-spacing: .08em; }
+  .credential-number { color: var(--color-app-inverse-accent); }
+  .badge-cell { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border: 1px solid var(--color-app-inverse-line); }
+  .badge-cell img { width: 2rem; height: 2rem; object-fit: contain; }
+  .badge-cell > span { color: var(--color-app-inverse-accent); font: 650 1.2rem/1 var(--font-display); }
+  .credential-ledger strong { font: 540 clamp(.9rem, 1.5vw, 1.15rem)/1.2 var(--font-display); }
+  .reveal { opacity: 0; animation: reveal .75s cubic-bezier(.16,1,.3,1) forwards; animation-delay: calc(var(--delay) * 90ms + 100ms); }
+  @keyframes reveal { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes pulse { 50% { opacity: .4; } }
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-copy { border-right: 0; border-bottom: 1px solid var(--color-app-ink-line); }
+    .engagement-panel { min-height: 28rem; }
+    .section-heading { grid-template-columns: 1fr 2fr; }
+    .section-heading > p { grid-column: 2; }
+    .service-ledger > li { grid-template-columns: 4rem 1fr 1.2fr; }
+    .stack-list { grid-column: 2 / -1; }
+    .credentials-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .status-line { grid-template-columns: 1fr auto; }
+    .status-line > span:nth-child(2) { display: none; }
+    .hero-grid { min-height: auto; }
+    .hero-copy { padding: 3.5rem 1rem; }
+    h1 { font-size: clamp(3.4rem, 17vw, 5.7rem); }
+    h1 .shift { padding-left: 0; }
+    .hero-intro { grid-template-columns: 1fr; margin: 0; }
+    .hero-intro > span { width: 5rem; }
+    .section-heading { display: flex; flex-direction: column; }
+    .service-ledger > li { grid-template-columns: 3rem 1fr; gap: 1rem; }
+    .service-ledger > li > p, .stack-list { grid-column: 2; }
+    .credential-ledger a { grid-template-columns: 2rem 2.8rem 1fr; }
+    .verify { grid-column: 3; }
+  }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; animation: none; } .available i { animation: none; } }
+</style>

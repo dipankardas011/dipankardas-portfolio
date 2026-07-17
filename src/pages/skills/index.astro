@@ -1,361 +1,243 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
-import AnimatedTitle from "../../components/AnimatedTitle.astro";
-import TopGradient from "../../components/TopGradient.astro";
 import { Code } from "astro:components";
 import { getCollection } from "astro:content";
 
 const allSkills = await getCollection("agent-skills");
 const sortedSkills = allSkills.sort((a, b) => a.data.title.localeCompare(b.data.title));
+const categoryCount = new Set(sortedSkills.map((skill) => skill.data.category)).size;
+const tools = [
+  { label: "Claude Code", cmd: "ln -s .agents/skills .claude/skills" },
+  { label: "OpenCode", cmd: "ln -s .agents/skills .opencode/skills" },
+  { label: "Cursor", cmd: "ln -s .agents/skills .cursor/rules" },
+  { label: "Windsurf", cmd: "ln -s .agents/skills .windsurf/rules" },
+  { label: "Gemini CLI", cmd: "ln -s .agents/skills .gemini/skills" },
+];
 ---
 
 <BaseLayout
   title="Agent Library - Dipankar Das"
   description="A collection of specialized AI Agent skill modules (SKILLS.md) for automated engineering workflows."
   blogPost={true}
+  bodyClass="skills-registry"
 >
-  <AnimatedTitle title="Agent Library" kicker="/skills · agent-readable" />
-
-  <section class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20 lg:pb-24">
-
-    <div class="sys-strip mb-12 lg:mb-16">
-      <span class="sys-key">~/agent-library</span>
-      <span class="sys-dot">●</span>
-      <span class="sys-value">{sortedSkills.length} skills</span>
-      <span class="sys-dot">●</span>
-      <span class="sys-value">format: SKILLS.md</span>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16 lg:mb-20">
-      <div class="lg:col-span-8">
-        <h2 class="font-display text-3xl md:text-5xl lg:text-6xl text-app-text tracking-tight leading-[1.02]">
-          Teaching AI to think<br/>
-          like a <span class="font-serif italic font-normal text-app-accent">systems engineer</span>.
-        </h2>
-        <p class="mt-8 max-w-xl text-base lg:text-lg text-app-gray-500 leading-[1.55]">
-          High-context modules I write for coding agents — encoded as
-          <code class="px-1.5 py-0.5 rounded text-app-accent-2 bg-app-surface border border-app-border font-mono text-[0.9em]">SKILLS.md</code>
-          files. Each captures the inspiration, logic, and rules so agents
-          can compose them into real workflows.
-        </p>
+  <div class="registry-shell">
+    <section class="registry-intake container mx-auto">
+      <div class="status-rail reveal" style="--delay: 0">
+        <span>SYS / AGENT MODULE REGISTRY</span>
+        <span class="live"><i></i> PUBLIC INDEX</span>
+        <span>REV / 01.7</span>
       </div>
-    </div>
 
-    <!-- Setup guide -->
-    <div class="mb-16 max-w-2xl">
-      <p class="text-[10px] font-mono font-bold uppercase tracking-widest text-app-accent mb-4">Platform-agnostic setup</p>
-
-      <ol class="flex flex-col gap-6">
-        <!-- Step 1 -->
-        <li class="flex gap-4">
-          <span class="flex-shrink-0 w-5 h-5 rounded-full border border-app-gray-200 flex items-center justify-center text-[10px] font-mono text-app-accent mt-0.5">1</span>
-          <div class="flex flex-col gap-2 min-w-0">
-            <p class="text-sm text-app-gray-400">Store skills in one canonical location in your project:</p>
-            <code class="block text-xs font-mono text-app-accent bg-app-surface border border-app-gray-200 rounded-lg px-4 py-3 break-all">
-              .agents/skills/&lt;skill-name&gt;/SKILLS.md
-            </code>
+      <div class="intake-grid">
+        <header class="registry-heading">
+          <p class="kicker-line reveal" style="--delay: 1">Agent-readable field library</p>
+          <h1 class="reveal" style="--delay: 2">SYSTEM<br /><span>MANIFEST.</span></h1>
+          <div class="heading-note reveal" style="--delay: 3">
+            <span>00</span>
+            <p>High-context operating modules that teach coding agents how to reason, decide, and execute like systems engineers.</p>
           </div>
-        </li>
+        </header>
 
-        <!-- Step 2 -->
-        <li class="flex gap-4">
-          <span class="flex-shrink-0 w-5 h-5 rounded-full border border-app-gray-200 flex items-center justify-center text-[10px] font-mono text-app-accent mt-0.5">2</span>
-          <div class="flex flex-col gap-2 min-w-0 w-full">
-            <p class="text-sm text-app-gray-400">Symlink into each tool's expected path — no duplication:</p>
+        <aside class="intake-telemetry reveal" style="--delay: 4" aria-label="Registry telemetry">
+          <div class="telemetry-mark">A/<br />SK</div>
+          <dl>
+            <div><dt>Modules online</dt><dd>{String(sortedSkills.length).padStart(2, "0")}</dd></div>
+            <div><dt>Operational classes</dt><dd>{String(categoryCount).padStart(2, "0")}</dd></div>
+            <div><dt>Source format</dt><dd>SKILL.md</dd></div>
+            <div><dt>Interface</dt><dd>.well-known</dd></div>
+          </dl>
+          <span class="telemetry-caption">FIG 01 / CAPABILITY BUS</span>
+        </aside>
+      </div>
+    </section>
 
-            <!-- Tool toggle -->
-            <div class="flex flex-wrap gap-2">
-              {[
-                { id: "claude",   label: "Claude Code", cmd: "ln -s .agents/skills .claude/skills"    },
-                { id: "opencode", label: "OpenCode",     cmd: "ln -s .agents/skills .opencode/skills"  },
-                { id: "cursor",   label: "Cursor",       cmd: "ln -s .agents/skills .cursor/rules"     },
-                { id: "windsurf", label: "Windsurf",     cmd: "ln -s .agents/skills .windsurf/rules"   },
-                { id: "gemini",   label: "Gemini CLI",   cmd: "ln -s .agents/skills .gemini/skills"    },
-              ].map((tool, i) => (
-                <button
-                  class="tool-tab text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded border transition-colors"
-                  class:list={[
-                    i === 0
-                      ? "bg-app-surface border-app-accent text-app-accent"
-                      : "bg-app-surface-alt border-app-gray-200 text-app-gray-400 hover:text-app-accent hover:border-app-accent/50"
-                  ]}
-                  data-cmd={tool.cmd}
-                >
-                  {tool.label}
-                </button>
-              ))}
+    <section class="protocol-section">
+      <div class="container mx-auto protocol-grid">
+        <header>
+          <div class="section-code"><span>01</span> LOAD PROTOCOL</div>
+          <h2>One source.<br /><i>Every agent.</i></h2>
+          <p>Keep the instruction set canonical. Route each runtime to it without cloning or drift.</p>
+        </header>
+
+        <ol class="protocol-ledger">
+          <li>
+            <span class="step-no">01 / STORE</span>
+            <div>
+              <p>Place each module at the canonical project path.</p>
+              <code>.agents/skills/&lt;skill-name&gt;/SKILL.md</code>
             </div>
-
-            <!-- Single code block -->
-            <div class="rounded-lg overflow-hidden border border-app-gray-200">
-              <code id="tool-cmd" class="block text-xs font-mono text-app-accent bg-app-surface px-4 py-3 break-all">
-                ln -s .agents/skills .claude/skills
-              </code>
+          </li>
+          <li>
+            <span class="step-no">02 / ROUTE</span>
+            <div class="route-control">
+              <p>Select an agent interface and generate its symbolic route.</p>
+              <div class="tool-switch" aria-label="Agent tool selection">
+                {tools.map((tool, index) => (
+                  <button class:list={["tool-tab", { "is-active": index === 0 }]} data-cmd={tool.cmd} aria-pressed={index === 0 ? "true" : "false"}>
+                    {String(index + 1).padStart(2, "0")} {tool.label}
+                  </button>
+                ))}
+              </div>
+              <code id="tool-cmd">ln -s .agents/skills .claude/skills</code>
             </div>
-          </div>
-        </li>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="manifest-section container mx-auto">
+      <header class="manifest-head">
+        <div class="section-code"><span>02</span> ACTIVE MODULES</div>
+        <h2>Capability<br /><i>ledger.</i></h2>
+        <div class="manifest-key">
+          <span>SELECT ROW TO INSPECT</span>
+          <span>↓ {sortedSkills.length} RECORDS</span>
+        </div>
+      </header>
+
+      <div class="ledger-labels" aria-hidden="true">
+        <span>REC</span><span>MODULE / PURPOSE</span><span>CLASS</span><span>REV</span><span>SIGNAL</span>
+      </div>
+      <ol class="module-ledger">
+        {sortedSkills.map((skill, index) => (
+          <li>
+            <button
+              class="skill-card"
+              data-skill-id={skill.id}
+              data-skill-title={skill.data.title}
+              data-skill-description={skill.data.description}
+              data-skill-category={skill.data.category}
+              data-skill-version={skill.data.version ?? ""}
+              data-skill-inspiration={skill.data.inspiration ?? ""}
+              data-skill-why={skill.data.why ?? ""}
+              data-skill-body={skill.body}
+            >
+              <span class="record-no">M{String(index + 1).padStart(2, "0")}</span>
+              <span class="module-primary"><strong>{skill.data.title}</strong><small>{skill.data.description}</small></span>
+              <span class="module-category">{skill.data.category}</span>
+              <span class="module-version">{skill.data.version ? `v${skill.data.version}` : "UNVER."}</span>
+              <span class="module-signal"><i></i> INSPECT <b>↗</b></span>
+            </button>
+          </li>
+        ))}
       </ol>
+
+      <footer class="registry-support">
+        <span>FIELD LIBRARY / OPEN ACCESS</span>
+        <p>These modules are free to use. If they save time or sharpen a workflow, support continued fieldwork.</p>
+        <a href="https://github.com/sponsors/dipankardas011" target="_blank" rel="noopener noreferrer">SPONSOR THE REGISTRY <span>↗</span></a>
+      </footer>
+    </section>
+  </div>
+
+  <dialog id="skill-dialog" class="inspection-dialog">
+    <div class="dialog-bar">
+      <div><span>MODULE INSPECTION</span><b id="dialog-category"></b><span id="dialog-version"></span></div>
+      <button id="dialog-close" aria-label="Close module inspection">CLOSE [×]</button>
     </div>
 
-    <!-- Sponsor callout -->
-    <div class="mb-16 max-w-2xl flex items-start gap-4 p-5 rounded-2xl border border-app-gray-200 bg-app-surface">
-      <svg class="w-5 h-5 text-app-accent shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-      </svg>
-      <div class="flex-1 min-w-0">
-        <p class="text-sm text-app-gray-400 leading-relaxed">
-          These skills are free to use. If they save you time or spark ideas,
-          <a
-            href="https://github.com/sponsors/dipankardas011"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-app-accent hover:underline font-medium"
-          >sponsoring</a> helps me keep building more.
-        </p>
-      </div>
-    </div>
-
-    <!-- Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-12">
-      {sortedSkills.map((skill) => (
-        <button
-          class="skill-card text-left group flex flex-col p-6 rounded-2xl border border-app-gray-200 bg-app-surface transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-app-accent/30"
-          data-skill-id={skill.id}
-          data-skill-title={skill.data.title}
-          data-skill-description={skill.data.description}
-          data-skill-category={skill.data.category}
-          data-skill-version={skill.data.version ?? ""}
-          data-skill-inspiration={skill.data.inspiration ?? ""}
-          data-skill-why={skill.data.why ?? ""}
-          data-skill-body={skill.body}
-        >
-          <div class="flex items-center justify-between mb-4 w-full">
-            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-1 bg-app-surface-alt rounded text-app-gray-400 border border-app-gray-200">
-              {skill.data.category}
-            </span>
-            {skill.data.version && (
-              <span class="text-[10px] font-mono text-app-gray-400">v{skill.data.version}</span>
-            )}
-          </div>
-
-          <div class="flex-1">
-            <h3 class="font-display text-xl text-app-text mb-3 tracking-tight group-hover:text-app-accent transition-colors">
-              {skill.data.title}
-            </h3>
-            <p class="text-sm text-app-gray-400 leading-relaxed line-clamp-3">
-              {skill.data.description}
-            </p>
-          </div>
-
-          <div class="mt-6 flex items-center justify-between pt-4 border-t border-app-gray-200 w-full">
-            <span class="text-xs font-semibold text-app-accent group-hover:tracking-wider transition-all">
-              VIEW SKILL
-            </span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-app-gray-400 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"></path>
-              <path d="m12 5 7 7-7 7"></path>
-            </svg>
-          </div>
-        </button>
-      ))}
-    </div>
-  </section>
-
-  <!-- Dialog -->
-  <dialog
-    id="skill-dialog"
-    class="fixed inset-0 m-auto w-[calc(100%-2rem)] max-w-5xl max-h-[calc(100svh-2rem)] rounded-3xl border border-app-gray-200 bg-app-body shadow-2xl backdrop:bg-black/70 backdrop:backdrop-blur-sm overflow-hidden p-0"
-  >
-    <!-- Single top bar -->
-    <div class="flex items-center justify-between px-6 py-4 border-b border-app-gray-200">
-      <div class="flex items-center gap-2">
-        <span id="dialog-category" class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-app-surface border border-app-gray-200 text-app-accent"></span>
-        <span id="dialog-version" class="text-[10px] font-mono text-app-gray-400"></span>
-      </div>
-      <button
-        id="dialog-close"
-        class="p-1.5 rounded-lg text-app-gray-400 hover:text-app-text hover:bg-app-surface transition-colors"
-        aria-label="Close"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-
-    <!-- Body: CSS grid, single scroll container -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 overflow-y-auto max-h-[calc(100svh-2rem-57px)]">
-
-      <!-- LEFT: description -->
-      <div class="flex flex-col gap-6 p-6 lg:p-10 lg:border-r border-app-gray-200 min-w-0 overflow-hidden">
-        <div class="min-w-0">
-          <h2 id="dialog-title" class="font-display text-2xl lg:text-3xl text-app-text tracking-tight mb-3 break-words"></h2>
-          <p id="dialog-description" class="text-app-gray-400 leading-relaxed text-sm lg:text-base break-words"></p>
+    <div class="dialog-grid">
+      <section class="dialog-brief">
+        <span class="pane-label">01 / OPERATING BRIEF</span>
+        <h2 id="dialog-title"></h2>
+        <p id="dialog-description" class="dialog-description"></p>
+        <div id="dialog-inspiration-wrap" class="brief-note hidden">
+          <span>ORIGIN SIGNAL</span><p id="dialog-inspiration"></p>
         </div>
-
-        <div id="dialog-inspiration-wrap" class="hidden border-l-2 border-app-accent/50 pl-4 min-w-0">
-          <p class="text-[10px] font-mono text-app-gray-400 uppercase tracking-widest mb-1.5">Inspiration</p>
-          <p id="dialog-inspiration" class="text-app-gray-500 italic text-sm leading-relaxed break-words"></p>
+        <div id="dialog-why-wrap" class="brief-note hidden">
+          <span>DESIGN LOGIC</span><p id="dialog-why"></p>
         </div>
+      </section>
 
-        <div id="dialog-why-wrap" class="hidden border-l-2 border-app-gray-200 pl-4 min-w-0">
-          <p class="text-[10px] font-mono text-app-gray-400 uppercase tracking-widest mb-1.5">The Logic</p>
-          <p id="dialog-why" class="text-app-gray-500 text-sm leading-relaxed break-words"></p>
-        </div>
-      </div>
-
-      <!-- Mobile-only star divider -->
-      <div class="flex items-center gap-3 px-6 text-app-accent opacity-40 lg:hidden" aria-hidden="true">
-        <span class="flex-1 h-px" style="background: linear-gradient(to right, transparent, var(--color-app-accent))"></span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2L9.09 8.26L2 9.27L7 14.14L5.82 21.02L12 17.77L18.18 21.02L17 14.14L22 9.27L14.91 8.26L12 2Z"/>
-        </svg>
-        <span class="flex-1 h-px" style="background: linear-gradient(to left, transparent, var(--color-app-accent))"></span>
-      </div>
-
-      <!-- RIGHT: raw markdown -->
-      <div class="flex flex-col p-6 lg:p-10 gap-4">
-        <!-- Label + actions -->
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] font-mono text-app-gray-400 tracking-widest">SKILLS.md</span>
-          <div class="flex items-center gap-1">
-            <button
-              id="btn-copy"
-              class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-app-gray-400 hover:text-app-accent hover:bg-app-surface transition-colors"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-              <span id="copy-label">Copy</span>
-            </button>
-            <button
-              id="btn-share"
-              class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-app-gray-400 hover:text-app-accent hover:bg-app-surface transition-colors"
-              title="Copy .well-known URL"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-              <span id="share-label">URL</span>
-            </button>
-            <button
-              id="btn-download"
-              class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-app-gray-400 hover:text-app-accent hover:bg-app-surface transition-colors"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-              Download
-            </button>
+      <section class="dialog-source">
+        <div class="source-controls">
+          <span class="pane-label">02 / RAW DIRECTIVE · SKILL.md</span>
+          <div>
+            <button id="btn-copy"><span id="copy-label">COPY</span></button>
+            <button id="btn-share" title="Copy .well-known URL"><span id="share-label">URL</span></button>
+            <button id="btn-download">DOWNLOAD</button>
           </div>
         </div>
-
-        <!-- Well-known URL -->
-        <a
-          id="dialog-skill-url"
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex items-center gap-2 px-3 py-2 rounded-lg border border-app-gray-200 bg-app-surface-alt hover:border-app-accent/50 transition-colors group"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-app-gray-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          <code id="dialog-skill-url-text" class="text-[10px] font-mono text-app-gray-400 group-hover:text-app-accent transition-colors truncate"></code>
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-app-gray-400 shrink-0 ml-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+        <a id="dialog-skill-url" href="#" target="_blank" rel="noopener noreferrer" class="source-route">
+          <span>PUBLIC ROUTE</span><code id="dialog-skill-url-text"></code><b>↗</b>
         </a>
-
-        <!-- Shiki-highlighted code block, scrollable with fade hint -->
-        <div class="relative rounded-xl overflow-hidden">
-          <div
-            id="dialog-code"
-            class="max-h-[320px] overflow-hidden [&_pre]:!rounded-none [&_pre]:!text-xs [&_pre]:!m-0 [&_pre]:!p-4 [&_pre]:!whitespace-pre-wrap [&_pre]:!break-words [&_code]:!whitespace-pre-wrap [&_code]:!break-words"
-          ></div>
-
-          <!-- Gradient fade + line count hint -->
-          <div id="code-fade" class="absolute bottom-0 left-0 right-0 h-14 flex items-end justify-center pb-2 pointer-events-none" style="background: linear-gradient(to bottom, transparent, var(--color-app-body) 90%);">
-            <span id="more-lines-label" class="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-app-surface border border-app-gray-200 text-app-accent">↓ scroll for more</span>
-          </div>
+        <div class="code-vault">
+          <div id="dialog-code"></div>
+          <div id="code-fade"><span id="more-lines-label">↓ SCROLL FOR MORE</span></div>
         </div>
-      </div>
-
+      </section>
     </div>
   </dialog>
 
-  <!-- Hidden Shiki-rendered skill code blocks -->
   <div class="hidden" aria-hidden="true">
     {sortedSkills.map((skill) => (
-      <div id={`code-${skill.id}`}>
-        <Code code={skill.body} lang="markdown" themes={{ light: "github-light", dark: "everforest-dark" }} />
-      </div>
+      <div id={`code-${skill.id}`}><Code code={skill.body} lang="markdown" theme="everforest-dark" /></div>
     ))}
   </div>
 </BaseLayout>
 
 <script>
   const dialog = document.getElementById('skill-dialog') as HTMLDialogElement | null;
-
-  const titleEl   = document.getElementById('dialog-title');
-  const descEl    = document.getElementById('dialog-description');
-  const catEl     = document.getElementById('dialog-category');
-  const verEl     = document.getElementById('dialog-version');
-  const inspWrap  = document.getElementById('dialog-inspiration-wrap');
-  const inspEl    = document.getElementById('dialog-inspiration');
-  const whyWrap   = document.getElementById('dialog-why-wrap');
-  const whyEl     = document.getElementById('dialog-why');
-  const codeEl         = document.getElementById('dialog-code');
-  const codeFade       = document.getElementById('code-fade');
+  const titleEl = document.getElementById('dialog-title');
+  const descEl = document.getElementById('dialog-description');
+  const catEl = document.getElementById('dialog-category');
+  const verEl = document.getElementById('dialog-version');
+  const inspWrap = document.getElementById('dialog-inspiration-wrap');
+  const inspEl = document.getElementById('dialog-inspiration');
+  const whyWrap = document.getElementById('dialog-why-wrap');
+  const whyEl = document.getElementById('dialog-why');
+  const codeEl = document.getElementById('dialog-code');
+  const codeFade = document.getElementById('code-fade');
   const moreLinesLabel = document.getElementById('more-lines-label');
-  const btnCopy        = document.getElementById('btn-copy');
-  const btnShare       = document.getElementById('btn-share');
-  const btnDl          = document.getElementById('btn-download');
-  const copyLabel      = document.getElementById('copy-label');
-  const shareLabel     = document.getElementById('share-label');
-  const skillUrlEl     = document.getElementById('dialog-skill-url') as HTMLAnchorElement | null;
-  const skillUrlText   = document.getElementById('dialog-skill-url-text');
-
+  const btnCopy = document.getElementById('btn-copy');
+  const btnShare = document.getElementById('btn-share');
+  const btnDl = document.getElementById('btn-download');
+  const copyLabel = document.getElementById('copy-label');
+  const shareLabel = document.getElementById('share-label');
+  const skillUrlEl = document.getElementById('dialog-skill-url') as HTMLAnchorElement | null;
+  const skillUrlText = document.getElementById('dialog-skill-url-text');
   let currentBody = '';
-  let currentId   = '';
+  let currentId = '';
 
   function resetCodeFade() {
     if (!codeEl || !codeFade) return;
-    if (codeEl) codeEl.scrollTop = 0;
+    codeEl.scrollTop = 0;
     requestAnimationFrame(() => {
       if (!codeEl || !codeFade) return;
       const overflows = codeEl.scrollHeight > codeEl.clientHeight + 4;
       codeFade.style.display = overflows ? '' : 'none';
       if (overflows && moreLinesLabel) {
-        const lineHeight = 19; // ~text-xs leading-relaxed
-        const hiddenPx   = codeEl.scrollHeight - codeEl.clientHeight;
-        const hiddenLines = Math.round(hiddenPx / lineHeight);
-        moreLinesLabel.textContent = `↓ ${hiddenLines} more line${hiddenLines !== 1 ? 's' : ''}`;
+        const hiddenLines = Math.round((codeEl.scrollHeight - codeEl.clientHeight) / 19);
+        moreLinesLabel.textContent = `↓ ${hiddenLines} MORE LINE${hiddenLines !== 1 ? 'S' : ''}`;
       }
     });
   }
 
-
   function open(btn: HTMLElement) {
     if (!dialog) return;
     currentBody = btn.dataset.skillBody ?? '';
-    currentId   = btn.dataset.skillId   ?? '';
-
-    if (titleEl)  titleEl.textContent  = btn.dataset.skillTitle ?? '';
-    if (descEl)   descEl.textContent   = btn.dataset.skillDescription ?? '';
-    if (catEl)    catEl.textContent    = btn.dataset.skillCategory ?? '';
-    if (verEl)    verEl.textContent    = btn.dataset.skillVersion ? `v${btn.dataset.skillVersion}` : '';
-
+    currentId = btn.dataset.skillId ?? '';
+    if (titleEl) titleEl.textContent = btn.dataset.skillTitle ?? '';
+    if (descEl) descEl.textContent = btn.dataset.skillDescription ?? '';
+    if (catEl) catEl.textContent = btn.dataset.skillCategory ?? '';
+    if (verEl) verEl.textContent = btn.dataset.skillVersion ? `REV / ${btn.dataset.skillVersion}` : 'REV / UNVERIFIED';
     if (codeEl) {
       const source = document.getElementById(`code-${currentId}`);
-      codeEl.innerHTML = source ? source.innerHTML : `<pre class="p-4 text-xs font-mono text-app-gray-400">${currentBody}</pre>`;
+      codeEl.innerHTML = source ? source.innerHTML : `<pre>${currentBody}</pre>`;
       resetCodeFade();
     }
-
-    const insp = btn.dataset.skillInspiration ?? '';
+    const inspiration = btn.dataset.skillInspiration ?? '';
     if (inspEl && inspWrap) {
-      inspWrap.classList.toggle('hidden', !insp);
-      if (insp) inspEl.textContent = `"${insp}"`;
+      inspWrap.classList.toggle('hidden', !inspiration);
+      if (inspiration) inspEl.textContent = `“${inspiration}”`;
     }
-
     const why = btn.dataset.skillWhy ?? '';
     if (whyEl && whyWrap) {
       whyWrap.classList.toggle('hidden', !why);
       if (why) whyEl.textContent = why;
     }
-
-    if (copyLabel) copyLabel.textContent = 'Copy';
+    if (copyLabel) copyLabel.textContent = 'COPY';
     if (shareLabel) shareLabel.textContent = 'URL';
     const skillUrl = `https://dipankar-das.com/.well-known/agent-skills/${currentId}/SKILL.md`;
     if (skillUrlEl) skillUrlEl.href = skillUrl;
@@ -369,45 +251,194 @@ const sortedSkills = allSkills.sort((a, b) => a.data.title.localeCompare(b.data.
     document.body.style.overflow = '';
   }
 
-  // Tool tab toggle
-  const toolCmd  = document.getElementById('tool-cmd');
+  const toolCmd = document.getElementById('tool-cmd');
   const toolTabs = document.querySelectorAll<HTMLElement>('.tool-tab');
-  toolTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      toolTabs.forEach(t => {
-        t.classList.remove('bg-app-surface', 'border-app-accent', 'text-app-accent');
-        t.classList.add('bg-app-surface-alt', 'border-app-gray-200', 'text-app-gray-400');
-      });
-      tab.classList.remove('bg-app-surface-alt', 'border-app-gray-200', 'text-app-gray-400');
-      tab.classList.add('bg-app-surface', 'border-app-accent', 'text-app-accent');
-      if (toolCmd) toolCmd.textContent = tab.dataset.cmd ?? '';
+  toolTabs.forEach((tab) => tab.addEventListener('click', () => {
+    toolTabs.forEach((item) => {
+      item.classList.remove('is-active');
+      item.setAttribute('aria-pressed', 'false');
     });
-  });
+    tab.classList.add('is-active');
+    tab.setAttribute('aria-pressed', 'true');
+    if (toolCmd) toolCmd.textContent = tab.dataset.cmd ?? '';
+  }));
 
-  document.querySelectorAll<HTMLElement>('.skill-card').forEach(c => c.addEventListener('click', () => open(c)));
+  document.querySelectorAll<HTMLElement>('.skill-card').forEach((card) => card.addEventListener('click', () => open(card)));
   document.getElementById('dialog-close')?.addEventListener('click', close);
-  dialog?.addEventListener('click', e => { if (e.target === dialog) close(); });
-  window.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
-
+  dialog?.addEventListener('click', (event) => { if (event.target === dialog) close(); });
+  window.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
   btnCopy?.addEventListener('click', async () => {
     await navigator.clipboard.writeText(currentBody);
-    if (copyLabel) copyLabel.textContent = 'Copied!';
-    setTimeout(() => { if (copyLabel) copyLabel.textContent = 'Copy'; }, 2000);
+    if (copyLabel) copyLabel.textContent = 'COPIED';
+    setTimeout(() => { if (copyLabel) copyLabel.textContent = 'COPY'; }, 2000);
   });
-
   btnShare?.addEventListener('click', async () => {
     const url = skillUrlEl?.href ?? `https://dipankar-das.com/.well-known/agent-skills/${currentId}/SKILL.md`;
     await navigator.clipboard.writeText(url);
-    if (shareLabel) shareLabel.textContent = 'Copied!';
+    if (shareLabel) shareLabel.textContent = 'COPIED';
     setTimeout(() => { if (shareLabel) shareLabel.textContent = 'URL'; }, 2000);
   });
-
   btnDl?.addEventListener('click', () => {
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([currentBody], { type: 'text/markdown' }));
-    a.download = `${currentId}.md`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const anchor = document.createElement('a');
+    anchor.href = URL.createObjectURL(new Blob([currentBody], { type: 'text/markdown' }));
+    anchor.download = `${currentId}.md`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
   });
 </script>
+
+<style>
+  :global(.skills-registry footer.mt-16) { margin-top: 0; }
+  .registry-shell { overflow: hidden; }
+  .registry-intake { padding-top: 1.25rem; }
+  .status-rail { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; padding: .72rem .85rem; border: 1px solid var(--color-app-ink-line); color: var(--color-app-gray-400); font: .6rem/1 var(--font-mono); letter-spacing: .12em; }
+  .status-rail > :last-child { text-align: right; }
+  .live { color: var(--color-app-text); }
+  .live i, .module-signal i { display: inline-block; width: .42rem; height: .42rem; margin-right: .45rem; border-radius: 50%; background: var(--color-app-accent); box-shadow: 0 0 0 .22rem color-mix(in srgb, var(--color-app-accent) 10%, transparent); animation: pulse 2s infinite; }
+  .intake-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(18rem, .6fr); min-height: 610px; border-inline: 1px solid var(--color-app-ink-line); }
+  .registry-heading { display: flex; flex-direction: column; justify-content: center; padding: 4.5rem clamp(1.25rem, 5vw, 5rem); border-right: 1px solid var(--color-app-ink-line); }
+  .kicker-line, .section-code, .pane-label { color: var(--color-app-accent); font: .64rem/1 var(--font-mono); letter-spacing: .16em; text-transform: uppercase; }
+  .kicker-line::before { content: ""; display: inline-block; width: 2.5rem; height: 1px; margin-right: .7rem; vertical-align: middle; background: currentColor; }
+  .registry-heading h1 { margin: 2rem 0 2.5rem; font: 750 clamp(4.6rem, 11vw, 10.5rem)/.73 var(--font-display); letter-spacing: -.07em; }
+  .registry-heading h1 span, .protocol-section h2 i, .manifest-head h2 i { color: var(--color-app-accent); font-family: var(--font-serif); font-weight: 400; }
+  .heading-note { display: grid; grid-template-columns: 2rem minmax(0, 35rem); gap: 1rem; max-width: 42rem; margin-left: auto; }
+  .heading-note span { padding-top: .4rem; border-top: 1px solid var(--color-app-accent); color: var(--color-app-accent); font: .62rem/1 var(--font-mono); }
+  .heading-note p { color: var(--color-app-gray-500); font-size: clamp(.95rem, 1.35vw, 1.15rem); line-height: 1.55; }
+  .intake-telemetry { display: flex; flex-direction: column; justify-content: space-between; padding: 1rem; background: var(--color-app-surface); }
+  .telemetry-mark { padding: 1.5rem; color: var(--color-app-accent); background: var(--color-app-body); font: 700 clamp(4rem, 7vw, 7rem)/.72 var(--font-display); letter-spacing: -.08em; clip-path: polygon(0 0, 84% 0, 100% 14%, 100% 100%, 0 100%); }
+  .intake-telemetry dl { border-top: 1px solid var(--color-app-ink-line); }
+  .intake-telemetry dl div { display: flex; justify-content: space-between; gap: 1rem; padding: .85rem 0; border-bottom: 1px solid var(--color-app-border); }
+  .intake-telemetry dt, .intake-telemetry dd, .telemetry-caption { font: .57rem/1.3 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .intake-telemetry dt, .telemetry-caption { color: var(--color-app-gray-400); }
+  .intake-telemetry dd { color: var(--color-app-text); }
+  .telemetry-caption { display: flex; justify-content: space-between; }
+  .telemetry-caption::after { content: "READY"; color: var(--color-app-accent); }
+
+  .protocol-section { padding: clamp(5rem, 9vw, 8rem) 0; color: var(--color-app-inverse-text); background: var(--color-app-inverse); }
+  .protocol-grid { display: grid; grid-template-columns: .7fr 1.45fr; gap: clamp(3rem, 8vw, 8rem); }
+  .section-code { display: flex; align-items: center; gap: .8rem; }
+  .section-code span { display: grid; place-items: center; width: 2rem; height: 2rem; color: var(--color-app-accent-ink); background: var(--color-app-accent); }
+  .protocol-section .section-code { color: var(--color-app-inverse-accent); }
+  .protocol-section .section-code span { color: var(--color-app-inverse-text); background: var(--color-app-inverse-accent); }
+  .protocol-section h2, .manifest-head h2 { margin: 2.5rem 0 1.5rem; font: 650 clamp(2.8rem, 5.5vw, 5.8rem)/.86 var(--font-display); letter-spacing: -.055em; }
+  .protocol-section h2 i { color: var(--color-app-inverse-accent); }
+  .protocol-section header > p { max-width: 22rem; color: var(--color-app-inverse-muted); font-size: .9rem; line-height: 1.55; }
+  .protocol-ledger { border-top: 2px solid var(--color-app-inverse-text); }
+  .protocol-ledger > li { display: grid; grid-template-columns: 7rem 1fr; gap: 1.5rem; padding: 1.6rem 0; border-bottom: 1px solid var(--color-app-inverse-line); }
+  .step-no { color: var(--color-app-inverse-accent); font: .6rem/1 var(--font-mono); letter-spacing: .08em; }
+  .protocol-ledger p { margin-bottom: 1rem; font-size: .86rem; }
+  .protocol-ledger code { display: block; padding: .9rem 1rem; border-left: 4px solid var(--color-app-inverse-accent); color: var(--color-app-inverse-text); background: color-mix(in srgb, var(--color-app-inverse-text) 7%, transparent); font: .68rem/1.5 var(--font-mono); overflow-wrap: anywhere; }
+  .tool-switch { display: flex; flex-wrap: wrap; border-top: 1px solid var(--color-app-inverse-line); border-left: 1px solid var(--color-app-inverse-line); }
+  .tool-tab { padding: .7rem .8rem; border-right: 1px solid var(--color-app-inverse-line); border-bottom: 1px solid var(--color-app-inverse-line); color: var(--color-app-inverse-muted); font: .57rem/1 var(--font-mono); text-transform: uppercase; transition: color .2s, background .2s; }
+  .tool-tab:hover, .tool-tab.is-active { color: var(--color-app-inverse); background: var(--color-app-inverse-text); }
+  .route-control #tool-cmd { margin-top: .8rem; }
+
+  .manifest-section { padding-block: clamp(5rem, 10vw, 9rem); }
+  .manifest-head { display: grid; grid-template-columns: .75fr 1.4fr .7fr; gap: 2rem; align-items: end; margin-bottom: 4rem; }
+  .manifest-head h2 { margin: 0; }
+  .manifest-key { display: flex; flex-direction: column; gap: .75rem; padding-left: 1rem; border-left: 1px solid var(--color-app-ink-line); color: var(--color-app-gray-400); font: .58rem/1 var(--font-mono); letter-spacing: .08em; }
+  .manifest-key span:last-child { color: var(--color-app-accent); }
+  .ledger-labels, .skill-card { display: grid; grid-template-columns: 4rem minmax(0, 1.5fr) minmax(7rem, .55fr) 5rem 7rem; gap: 1.5rem; }
+  .ledger-labels { padding: .7rem .5rem; border-block: 1px solid var(--color-app-ink-line); color: var(--color-app-gray-400); font: .55rem/1 var(--font-mono); letter-spacing: .1em; }
+  .module-ledger { counter-reset: modules; }
+  .module-ledger li { border-bottom: 1px solid var(--color-app-border); }
+  .skill-card { width: 100%; align-items: start; padding: 1.75rem .5rem; text-align: left; transition: padding .22s, background .22s; }
+  .skill-card:hover, .skill-card:focus-visible { padding-inline: 1rem; background: var(--color-app-surface); outline: none; }
+  .record-no, .module-category, .module-version, .module-signal { color: var(--color-app-gray-400); font: .58rem/1.35 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+  .record-no { color: var(--color-app-accent); }
+  .module-primary { display: flex; flex-direction: column; gap: .65rem; }
+  .module-primary strong { font: 600 clamp(1.35rem, 2.3vw, 2.3rem)/.95 var(--font-display); letter-spacing: -.035em; transition: color .2s; }
+  .module-primary small { max-width: 38rem; color: var(--color-app-gray-400); font-size: .78rem; line-height: 1.5; }
+  .skill-card:hover .module-primary strong { color: var(--color-app-accent); }
+  .module-category { padding: .35rem .45rem; border: 1px solid var(--color-app-border); }
+  .module-signal { color: var(--color-app-text); text-align: right; }
+  .module-signal i { animation: none; }
+  .module-signal b { display: inline-block; margin-left: .3rem; color: var(--color-app-accent); transition: transform .2s; }
+  .skill-card:hover .module-signal b { transform: translate(.2rem, -.2rem); }
+  .registry-support { display: grid; grid-template-columns: .7fr 1.3fr auto; gap: 2rem; align-items: center; margin-top: 4rem; padding: 1.5rem; border: 1px solid var(--color-app-accent); }
+  .registry-support > span, .registry-support a { color: var(--color-app-accent); font: .6rem/1.4 var(--font-mono); letter-spacing: .09em; }
+  .registry-support p { color: var(--color-app-gray-400); font-size: .82rem; line-height: 1.5; }
+  .registry-support a { padding-bottom: .3rem; border-bottom: 1px solid; }
+
+  .inspection-dialog { width: min(76rem, calc(100% - 2rem)); max-height: calc(100svh - 2rem); margin: auto; padding: 0; border: 1px solid var(--color-app-ink-line); color: var(--color-app-text); background: var(--color-app-body); box-shadow: .7rem .7rem 0 var(--color-app-accent); overflow: hidden; }
+  .inspection-dialog::backdrop { background: color-mix(in srgb, var(--color-app-body) 88%, transparent); backdrop-filter: blur(5px); }
+  .dialog-bar { display: flex; justify-content: space-between; align-items: center; min-height: 3.4rem; padding: .7rem 1rem; border-bottom: 1px solid var(--color-app-ink-line); font: .57rem/1 var(--font-mono); letter-spacing: .09em; }
+  .dialog-bar > div { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+  .dialog-bar b { padding: .35rem .45rem; color: var(--color-app-accent); border: 1px solid var(--color-app-border); font-weight: 400; }
+  .dialog-bar span { color: var(--color-app-gray-400); }
+  .dialog-bar button { padding: .5rem; color: var(--color-app-gray-400); transition: color .2s, background .2s; }
+  .dialog-bar button:hover { color: var(--color-app-accent-ink); background: var(--color-app-accent); }
+  .dialog-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); max-height: calc(100svh - 5.4rem); overflow-y: auto; }
+  .dialog-brief, .dialog-source { min-width: 0; padding: clamp(1.4rem, 3vw, 2.8rem); }
+  .dialog-brief { border-right: 1px solid var(--color-app-ink-line); }
+  .dialog-brief h2 { margin: 2.2rem 0 1rem; font: 650 clamp(2.2rem, 4.5vw, 4.8rem)/.86 var(--font-display); letter-spacing: -.055em; overflow-wrap: anywhere; }
+  .dialog-description { color: var(--color-app-gray-500); font-size: .92rem; line-height: 1.6; }
+  .brief-note { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-app-border); }
+  .brief-note span { color: var(--color-app-accent); font: .55rem/1 var(--font-mono); letter-spacing: .12em; }
+  .brief-note p { margin-top: .7rem; color: var(--color-app-gray-400); font-size: .78rem; line-height: 1.55; overflow-wrap: anywhere; }
+  .brief-note.hidden { display: none; }
+  .source-controls { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+  .source-controls > div { display: flex; border: 1px solid var(--color-app-border); }
+  .source-controls button { padding: .55rem .65rem; border-left: 1px solid var(--color-app-border); color: var(--color-app-gray-400); font: .55rem/1 var(--font-mono); }
+  .source-controls button:first-child { border-left: 0; }
+  .source-controls button:hover { color: var(--color-app-accent-ink); background: var(--color-app-accent); }
+  .source-route { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .8rem; align-items: center; margin: 1.2rem 0; padding: .75rem; border: 1px solid var(--color-app-border); background: var(--color-app-surface); }
+  .source-route span { color: var(--color-app-gray-400); font: .5rem/1 var(--font-mono); }
+  .source-route code { overflow: hidden; color: var(--color-app-gray-400); font: .55rem/1 var(--font-mono); text-overflow: ellipsis; white-space: nowrap; }
+  .source-route b { color: var(--color-app-accent); }
+  .code-vault { position: relative; overflow: hidden; border: 1px solid var(--color-app-border); }
+  #dialog-code { max-height: 350px; overflow-y: auto; }
+  #dialog-code :global(pre) { margin: 0 !important; padding: 1rem !important; border-radius: 0 !important; font-size: .68rem !important; white-space: pre-wrap !important; overflow-wrap: anywhere; }
+  #code-fade { position: absolute; right: 0; bottom: 0; left: 0; display: flex; justify-content: center; align-items: end; height: 4rem; padding-bottom: .6rem; pointer-events: none; background: linear-gradient(to bottom, transparent, var(--color-app-body)); }
+  #code-fade span { padding: .4rem .55rem; border: 1px solid var(--color-app-border); color: var(--color-app-accent); background: var(--color-app-surface); font: .52rem/1 var(--font-mono); }
+
+  .reveal { opacity: 0; animation: reveal .75s cubic-bezier(.16,1,.3,1) forwards; animation-delay: calc(var(--delay) * 90ms + 100ms); }
+  @keyframes reveal { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes pulse { 50% { opacity: .45; } }
+
+  @media (max-width: 900px) {
+    .intake-grid, .protocol-grid { grid-template-columns: 1fr; }
+    .registry-heading { min-height: 530px; border-right: 0; border-bottom: 1px solid var(--color-app-ink-line); }
+    .intake-telemetry { min-height: 420px; }
+    .manifest-head { grid-template-columns: 1fr 1.5fr; }
+    .manifest-key { grid-column: 2; }
+    .ledger-labels, .skill-card { grid-template-columns: 3rem minmax(0, 1fr) 7rem 5rem; }
+    .ledger-labels span:last-child, .module-signal { display: none; }
+    .registry-support { grid-template-columns: 1fr 1.5fr; }
+    .registry-support a { grid-column: 2; justify-self: start; }
+    .dialog-grid { grid-template-columns: 1fr; }
+    .dialog-brief { border-right: 0; border-bottom: 1px solid var(--color-app-ink-line); }
+  }
+
+  @media (max-width: 640px) {
+    .status-rail { grid-template-columns: 1fr auto; }
+    .status-rail > :last-child { display: none; }
+    .registry-heading { min-height: 480px; padding: 3rem 1rem; }
+    .registry-heading h1 { font-size: clamp(3.8rem, 21vw, 6rem); }
+    .heading-note { margin-left: 0; }
+    .protocol-ledger > li { grid-template-columns: 1fr; gap: .8rem; }
+    .manifest-head { display: flex; flex-direction: column; align-items: flex-start; }
+    .manifest-key { width: 100%; }
+    .ledger-labels { display: none; }
+    .skill-card { grid-template-columns: 2.5rem 1fr auto; gap: 1rem; }
+    .module-category { grid-column: 2; justify-self: start; }
+    .module-version { grid-column: 3; grid-row: 1; }
+    .module-signal { display: none; }
+    .registry-support { grid-template-columns: 1fr; }
+    .registry-support a { grid-column: auto; }
+    .inspection-dialog { width: calc(100% - 1rem); max-height: calc(100svh - 1rem); box-shadow: .35rem .35rem 0 var(--color-app-accent); }
+    .dialog-grid { max-height: calc(100svh - 4.4rem); }
+    .dialog-bar > div > span:first-child { display: none; }
+    .source-controls { align-items: flex-start; flex-direction: column; }
+    .source-controls > div { width: 100%; }
+    .source-controls button { flex: 1; }
+    .source-route { grid-template-columns: minmax(0, 1fr) auto; }
+    .source-route span { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; animation: none; }
+    .live i { animation: none; }
+  }
+</style>

@@ -42,41 +42,49 @@
 }
 
 /* ============================================
-   DESIGN TOKENS — Editorial Engineer (Light)
-   Cream paper · Indigo load-bearing · Terracotta sharp accent
+   DESIGN TOKENS — Night-shift field manual
+   Graphite substrate · phosphor signal · paper inversion
    ============================================ */
 @theme {
-  /* Core palette — cream paper · ink · terracotta only */
-  --color-app-accent:        #FF6B35;   /* terracotta — load-bearing */
-  --color-app-accent-2:      #C24A1B;   /* deep terracotta — hover/punctuation */
-  --color-app-body:          #FAF7F0;   /* warm cream */
-  --color-app-bg:            #FAF7F0;
-  --color-app-text:          #1A1A1A;   /* near-black ink */
+  --color-app-accent: #d8ff3e;
+  --color-app-accent-2: #d8ff3e;
+  --color-app-accent-ink: #10120f;
+  --color-app-body: #10120f;
+  --color-app-bg: #10120f;
+  --color-app-text: #f1f4df;
 
-  /* Grayscale (warm-tinted) */
-  --color-app-gray-100: #ECE7DA;
-  --color-app-gray-200: #D8D2C2;
-  --color-app-gray-300: #9A9285;
-  --color-app-gray-400: #6E665A;
-  --color-app-gray-500: #4D4639;
-  --color-app-gray-600: #2A241B;
+  --color-app-gray-100: #282b25;
+  --color-app-gray-200: #3b3f36;
+  --color-app-gray-300: #73796a;
+  --color-app-gray-400: #969d89;
+  --color-app-gray-500: #bcc2ad;
+  --color-app-gray-600: #e1e5d1;
 
-  /* Surfaces */
-  --color-app-surface:       #F2EDE0;   /* paper darker */
-  --color-app-surface-alt:   #EFE8D8;
-  --color-app-border:        #D8D2C2;
-  --color-app-ink-line:      #1A1A1A;   /* hard rule color */
+  --color-app-surface: #181b17;
+  --color-app-surface-alt: #20231d;
+  --color-app-code: #0b0d0a;
+  --color-app-border: #34382f;
+  --color-app-ink-line: #555b4d;
 
-  /* Decorative blur */
-  --color-blur-purple: #FF6B35;
-  --color-blur-yellow: #FFBF4B;
-  --color-blur-terra:  #FF6B35;
+  --color-app-inverse: #f0f0dc;
+  --color-app-inverse-text: #12140f;
+  --color-app-inverse-muted: #4f5347;
+  --color-app-inverse-accent: #557000;
+  --color-app-inverse-line: #a5a895;
+  --color-app-warning: #f59e0b;
+  --color-app-danger: #ef4444;
+  --color-brand-upwork: #14a800;
+  --color-brand-paypal: #ffd140;
+
+  --color-blur-purple: #d8ff3e;
+  --color-blur-yellow: #d8ff3e;
+  --color-blur-terra: #d8ff3e;
 
   /* Typography */
-  --font-display: "Helvetica", -apple-system, "Arial", sans-serif;
+  --font-display: "Anybody", "Helvetica", sans-serif;
   --font-serif:   "Instrument Serif", "Cambria", Georgia, serif;
-  --font-sans:    "Inter", -apple-system, system-ui, sans-serif;
-  --font-mono:    "JetBrains Mono", "Courier New", monospace;
+  --font-sans:    "Onest", "Helvetica", sans-serif;
+  --font-mono:    "Fragment Mono", "Courier New", monospace;
 
   --tracking-tight: -0.41px;
 
@@ -86,12 +94,14 @@
   --font-family-mono:    var(--font-mono);
 }
 
-/* Replace old gradient util with cream-paper bg + soft glow */
+/* Atmospheric substrate for shared banners and legacy decorations. */
 .bg-app-accent-glow {
   background:
-    radial-gradient(900px 480px at 12% -10%, rgba(255,107,53,0.12), transparent 60%),
-    radial-gradient(800px 420px at 90% 110%, rgba(255,191,75,0.10), transparent 60%),
+    radial-gradient(900px 480px at 12% -10%, rgba(216,255,62,0.08), transparent 60%),
+    linear-gradient(rgba(216,255,62,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(216,255,62,0.025) 1px, transparent 1px),
     var(--color-app-body);
+  background-size: auto, 40px 40px, 40px 40px, auto;
 }
 
 /* ============================================
@@ -105,6 +115,7 @@ html {
   scroll-behavior: auto;
 
   overflow-x: clip;
+  color-scheme: dark;
 }
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
@@ -120,8 +131,7 @@ body {
   overflow-x: clip;
 }
 
-/* Decorative paper layer — fixed, painted once, never scrolled.
-   Avoids the jank of `background-attachment: fixed` on a long body. */
+/* Fixed engineering grid, painted once to avoid scroll jank. */
 body::before {
   content: "";
   position: fixed;
@@ -130,9 +140,10 @@ body::before {
   pointer-events: none;
   background-color: var(--color-app-body);
   background-image:
-    radial-gradient(900px 500px at 8% 0%, rgba(255,107,53,0.07), transparent 55%),
-    radial-gradient(800px 460px at 100% 100%, rgba(255,191,75,0.06), transparent 60%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.09 0 0 0 0 0.07 0 0 0 0.045 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+    linear-gradient(rgba(216, 255, 62, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(216, 255, 62, 0.035) 1px, transparent 1px),
+    radial-gradient(800px 560px at 88% 5%, rgba(216, 255, 62, 0.08), transparent 62%);
+  background-size: 40px 40px, 40px 40px, auto;
   will-change: transform;
 }
 
@@ -212,7 +223,7 @@ body::before {
   background: var(--color-app-text);
   color: var(--color-app-body);
   border: 1px solid var(--color-app-text);
-  border-radius: 999px;
+  border-radius: 0;
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: var(--tracking-tight);
@@ -220,7 +231,7 @@ body::before {
 }
 .btn-primary:hover {
   background: var(--color-app-accent);
-  color: #fff;
+  color: var(--color-app-accent-ink);
   border-color: var(--color-app-accent);
   transform: translateY(-1px);
 }
@@ -232,7 +243,7 @@ body::before {
   background: transparent;
   color: var(--color-app-gray-500);
   border: 1px solid var(--color-app-border);
-  border-radius: 999px;
+  border-radius: 0;
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: var(--tracking-tight);
@@ -329,10 +340,10 @@ body::before {
 .prose code { font-family: var(--font-mono); font-size: 0.875em; }
 .prose code::before, .prose code::after { content: none; }
 .prose :not(pre) > code {
-  background-color: rgba(255,107,53,0.08);
-  color: var(--color-app-accent-2);
-  border: 1px solid rgba(255,107,53,0.20);
-  border-radius: 0.3em;
+  background-color: var(--color-app-surface-alt);
+  color: var(--color-app-accent);
+  border: 1px solid var(--color-app-border);
+  border-radius: 0;
   padding: 0.15em 0.45em;
   font-size: 0.85em;
   white-space: normal;
@@ -340,13 +351,13 @@ body::before {
   word-break: break-word;
 }
 .prose pre {
-  background-color: #FAF4ED !important; /* rose-pine-dawn surface */
+  background-color: var(--color-app-code) !important;
   border: 1px solid var(--color-app-border);
-  border-radius: 0.4rem;
+  border-radius: 0;
   padding: 1rem 1.1rem;
   font-size: 0.86em;
   line-height: 1.55;
-  box-shadow: 0 1px 0 var(--color-app-border), 0 8px 18px -10px rgba(26,26,26,0.10);
+  box-shadow: inset 3px 0 0 var(--color-app-accent);
   overflow-x: auto;
 }
 .prose pre code {
@@ -376,9 +387,9 @@ body::before {
 .prose ul ul, .prose ol ul, .prose ul ol, .prose ol ol { margin: 0.75rem 0; }
 
 .prose img {
-  border-radius: 0.5rem;
+  border-radius: 0;
   margin: 2.5rem auto;
-  box-shadow: 0 14px 30px -12px rgba(26,26,26,0.18);
+  box-shadow: 10px 10px 0 var(--color-app-surface-alt);
   border: 1px solid var(--color-app-border);
 }
 
@@ -421,25 +432,25 @@ body::before {
 /* Callouts */
 .prose .callout {
   padding: 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: 0;
   margin: 2rem 0;
   border-left: 4px solid;
   background: var(--color-app-surface);
 }
-.prose .callout-info     { border-color: var(--color-app-accent);  background: rgba(255,107,53,0.05); }
-.prose .callout-warning  { border-color: #C57E1A;                  background: rgba(197,126,26,0.06); }
+.prose .callout-info     { border-color: var(--color-app-accent); background: var(--color-app-surface); }
+.prose .callout-warning  { border-color: var(--color-app-warning); background: var(--color-app-surface); }
 .prose .callout-warning::before { content: '⚠ '; font-size: 1.25rem; margin-right: 0.5rem; }
-.prose .callout-success  { border-color: #2E7D5B;                  background: rgba(46,125,91,0.05); }
-.prose .callout-success::before { content: '✓ '; font-size: 1.25rem; margin-right: 0.5rem; color: #2E7D5B; }
-.prose .callout-danger   { border-color: var(--color-app-accent-2); background: rgba(255,107,53,0.06); }
+.prose .callout-success  { border-color: var(--color-app-accent); background: var(--color-app-surface); }
+.prose .callout-success::before { content: '✓ '; font-size: 1.25rem; margin-right: 0.5rem; color: var(--color-app-accent); }
+.prose .callout-danger   { border-color: var(--color-app-danger); background: var(--color-app-surface); }
 .prose .callout-danger::before  { content: '⚠ '; font-size: 1.25rem; margin-right: 0.5rem; color: var(--color-app-accent-2); }
-.prose .callout-tip      { border-color: var(--color-app-accent);  background: rgba(255,107,53,0.05); }
+.prose .callout-tip      { border-color: var(--color-app-accent); background: var(--color-app-surface); }
 .prose .callout-tip::before     { content: '✦ '; font-size: 1.25rem; margin-right: 0.5rem; }
 
 .callout-block {
   border: 1px solid var(--cc);
   background: var(--cb);
-  border-radius: 0.5rem;
+  border-radius: 0;
   padding: 1rem 1.25rem;
   margin: 1.75rem 0;
 }
@@ -507,7 +518,7 @@ body::before {
 }
 
 .prose mark {
-  background: linear-gradient(120deg, rgba(255,107,53,0.18) 0%, rgba(255,107,53,0.32) 100%);
+  background: rgba(216,255,62,0.2);
   padding: 0.1em 0.2em;
   border-radius: 0.2rem;
   color: var(--color-app-text);
@@ -517,7 +528,7 @@ body::before {
 
 .prose details {
   border: 1px solid var(--color-app-gray-200);
-  border-radius: 0.5rem;
+  border-radius: 0;
   padding: 1rem;
   margin: 1.5rem 0;
   background: var(--color-app-surface);
@@ -629,7 +640,7 @@ body::before {
   padding: 0.625rem 1rem;
   background: var(--color-app-surface);
   border: 1px solid var(--color-app-border);
-  border-radius: 0.5rem;
+  border-radius: 0;
   font-family: var(--font-display);
   font-size: 0.8125rem;
   font-weight: 600;
@@ -653,7 +664,7 @@ body::before {
   padding: 0.5rem 0.75rem;
   background: var(--color-app-surface);
   border: 1px solid var(--color-app-border);
-  border-radius: 0.5rem;
+  border-radius: 0;
 }
 .toc-mobile-nav .toc-link {
   padding-top: 0.35rem;
@@ -806,7 +817,7 @@ html[data-blog="true"] .prose pre[data-lang]::before {
   gap: 0.25rem;
   padding: 0.2rem 0.6rem;
   border: 1px solid var(--color-app-accent-2);
-  border-radius: 9999px;
+  border-radius: 0;
   color: var(--color-app-accent-2) !important;
   font-size: 0.65rem;
   font-weight: 600;
@@ -963,7 +974,7 @@ html[data-blog="true"] .prose pre[data-lang]::before {
 .card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 28px -10px rgba(26,26,26,0.18);
+  box-shadow: 8px 8px 0 var(--color-app-accent);
   border-color: var(--color-app-text);
 }
 
@@ -997,4 +1008,8 @@ html[data-blog="true"] .prose pre[data-lang]::before {
   letter-spacing: -0.04em;
   line-height: 0.9;
   color: var(--color-app-text);
+}
+
+body.portfolio-home .footer-cta {
+  display: none;
 }

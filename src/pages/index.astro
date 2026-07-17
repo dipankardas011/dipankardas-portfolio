@@ -1,89 +1,337 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../components/BaseLayout.astro";
-import Hero from "../components/Hero.astro";
-import ServiceCard from "../components/ServiceCard.astro";
-import ProjectCard from "../components/ProjectCard.astro";
-import ContactSection from "../components/ContactSection.astro";
-import SectionHeader from "../components/SectionHeader.astro";
-import Testimonials from "../components/Testimonials.astro";
-import { services } from "../data/services";
 import { projects } from "../data/projects";
+import { services } from "../data/services";
 import { testimonials } from "../data/testimonials";
+import { siteConfig, socialLinks } from "../data/site";
 
-const featuredProjects = projects.filter((p) => p.featured);
+const featuredProjects = projects.filter((project) => project.featured).slice(0, 4);
+const latestPosts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+const recommendation = testimonials[1];
+const year = new Date().getFullYear();
 ---
 
-<BaseLayout>
-  <Hero />
-
-  <!-- Services -->
-  <section class="py-16 lg:py-24 border-t border-app-ink-line">
+<BaseLayout bodyClass="portfolio-home">
+  <section class="hero-shell">
     <div class="container mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10 lg:mb-14">
-        <div class="lg:col-span-6">
-          <SectionHeader
-            title="What I do"
-            kicker="services"
-            index={1}
-            className="mb-0"
-          />
-        </div>
-        <div class="lg:col-span-6 lg:pt-12">
-          <p class="text-base lg:text-lg leading-[1.55] text-app-gray-500 max-w-xl">
-            Consulting and engineering for modern infrastructure — Software Development,
-            DevOps, cloud-native systems, and sustainable computing.
-          </p>
-        </div>
+      <div class="hero-status reveal" style="--delay: 0">
+        <span>FIELD LOG / {year}</span>
+        <span class="status-live"><i></i> AVAILABLE FOR SELECT PROJECTS</span>
+        <span class="status-coords">20.2961 N / 85.8245 E</span>
       </div>
-      <ul class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 animate-stagger">
-        {services.map((s) => (
+
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow reveal" style="--delay: 1">Platform engineer / systems builder</p>
+          <h1 class="hero-title" aria-label="Systems that hold">
+            <span class="title-line reveal" style="--delay: 2">SYSTEMS</span>
+            <span class="title-line title-shift reveal" style="--delay: 3">THAT <em>HOLD.</em></span>
+          </h1>
+          <div class="hero-intro reveal" style="--delay: 5">
+            <span class="intro-marker">01</span>
+            <p>
+              I design the layer between code and consequence: reliable platforms,
+              observable services, and cloud infrastructure that stays efficient under pressure.
+            </p>
+          </div>
+          <div class="hero-actions reveal" style="--delay: 6">
+            <a href="/projects/" class="signal-button">Inspect the work <span>↗</span></a>
+            <a href={`mailto:${siteConfig.email}`} class="text-link">Start a conversation <span>→</span></a>
+          </div>
+        </div>
+
+        <aside class="hero-visual reveal" style="--delay: 4" aria-label="Portrait of Dipankar Das">
+          <div class="portrait-frame">
+            <img src="/img/profile_bw.webp" alt={siteConfig.name} loading="eager" />
+            <div class="scan-line"></div>
+            <span class="portrait-code">DD / 011</span>
+            <span class="portrait-role">PLATFORM<br />ENGINEER</span>
+          </div>
+          <div class="visual-caption">
+            <span>FIG 01. OPERATOR</span>
+            <span>INDIA / REMOTE</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="ticker" aria-label="Core technologies">
+      <div class="ticker-track">
+        <span>KUBERNETES</span><b>✳</b><span>GOLANG</span><b>✳</b><span>OPENTELEMETRY</span><b>✳</b><span>DISTRIBUTED SYSTEMS</span><b>✳</b><span>GREEN SOFTWARE</span><b>✳</b>
+        <span aria-hidden="true">KUBERNETES</span><b aria-hidden="true">✳</b><span aria-hidden="true">GOLANG</span><b aria-hidden="true">✳</b><span aria-hidden="true">OPENTELEMETRY</span><b aria-hidden="true">✳</b><span aria-hidden="true">DISTRIBUTED SYSTEMS</span><b aria-hidden="true">✳</b><span aria-hidden="true">GREEN SOFTWARE</span><b aria-hidden="true">✳</b>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-block capabilities">
+    <div class="container mx-auto">
+      <header class="section-heading">
+        <div><span class="section-index">02</span><span class="section-label">OPERATING RANGE</span></div>
+        <h2>From first request<br />to <i>steady state.</i></h2>
+        <p>I work across the full system, not around its boundaries.</p>
+      </header>
+
+      <ol class="capability-list">
+        {services.map((service, index) => (
           <li>
-            <ServiceCard
-              title={s.title}
-              abbreviation={s.abbreviation}
-              icon={s.icon}
-              description={s.description}
-              skills={s.skills}
-              color={s.color}
-            />
+            <span class="cap-number">{String(index + 1).padStart(2, "0")}</span>
+            <h3>{service.title}</h3>
+            <p>{service.description}</p>
+            <ul aria-label={`${service.title} technologies`}>
+              {service.skills.slice(0, 4).map((skill) => <li>{skill}</li>)}
+            </ul>
           </li>
         ))}
-      </ul>
+      </ol>
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <Testimonials testimonials={testimonials} />
-
-  <!-- Featured Projects -->
-  <section class="py-16 lg:py-24 border-t border-app-ink-line">
+  <section class="section-block work-section">
     <div class="container mx-auto">
-      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 lg:mb-12">
-        <SectionHeader
-          title="Featured projects"
-          kicker="oss · tools"
-          index={2}
-          subtitle="Open-source tools and systems I've built and shipped."
-          className="mb-0"
-        />
-        <a href="/projects/" class="btn-ghost shrink-0">
-          <span class="font-mono text-[11px] uppercase tracking-[0.12em]">View all</span>
-          <span>→</span>
-        </a>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 animate-stagger">
-        {featuredProjects.map((p) => (
-          <ProjectCard
-            title={p.title}
-            description={p.description}
-            image={p.image}
-            links={p.links}
-            tags={p.tags}
-          />
+      <header class="section-heading work-heading">
+        <div><span class="section-index">03</span><span class="section-label">SELECTED DEPLOYMENTS</span></div>
+        <h2>Proof over<br /><i>promises.</i></h2>
+        <a href="/projects/" class="text-link">All projects <span>↗</span></a>
+      </header>
+
+      <div class="project-list">
+        {featuredProjects.map((project, index) => (
+          <article class="project-row">
+            <div class="project-meta">
+              <span>CASE / {String(index + 1).padStart(2, "0")}</span>
+              <span>{project.category}</span>
+            </div>
+            <div class="project-main">
+              <h3>{project.title}</h3>
+              <p>{project.description}</p>
+            </div>
+            <ul class="project-tags">
+              {project.tags.slice(0, 4).map((tag) => <li>{tag}</li>)}
+            </ul>
+            <div class="project-links">
+              {project.links.map((link) => (
+                <a href={link.url} target="_blank" rel="noopener">{link.label} ↗</a>
+              ))}
+            </div>
+          </article>
         ))}
       </div>
     </div>
   </section>
 
-  <ContactSection />
+  <section class="section-block notes-section">
+    <div class="container mx-auto notes-grid">
+      <header class="section-heading notes-heading">
+        <div><span class="section-index">04</span><span class="section-label">FIELD NOTES</span></div>
+        <h2>Writing from<br />inside the <i>system.</i></h2>
+        <p>Postmortems, experiments, and the engineering details that usually get edited out.</p>
+        <a href="/blog/" class="signal-button">Open the notebook <span>↗</span></a>
+      </header>
+
+      <ol class="notes-list">
+        {latestPosts.map((post, index) => (
+          <li>
+            <a href={`/blog/${post.id}/`}>
+              <span class="note-number">N{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <time datetime={post.data.date.toISOString()}>{post.data.date.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" })}</time>
+                <h3>{post.data.title}</h3>
+                <p>{post.data.description}</p>
+              </div>
+              <span class="note-arrow">↗</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="recommendation">
+    <div class="container mx-auto recommendation-grid">
+      <div class="recommendation-mark">“</div>
+      <blockquote>
+        <p>{recommendation.content.split("\n")[0]}</p>
+        <footer>
+          <img src={recommendation.photo} alt="" loading="lazy" />
+          <div>
+            <cite>{recommendation.name}</cite>
+            <span>{recommendation.role} / {recommendation.company}</span>
+          </div>
+        </footer>
+      </blockquote>
+      <div class="recommendation-side">
+        <span>PEER SIGNAL / 01</span>
+        <a href={recommendation.linkedinUrl} target="_blank" rel="noopener">Read recommendations ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="container mx-auto closing-grid">
+      <p>HAVE A HARD SYSTEM<br />PROBLEM?</p>
+      <h2>Let’s make it<br /><i>boringly reliable.</i></h2>
+      <div>
+        <a href={`mailto:${siteConfig.email}`} class="signal-button">Send the brief <span>→</span></a>
+        <a href={socialLinks.linkedin} target="_blank" rel="noopener" class="text-link">LinkedIn ↗</a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  :global(.portfolio-home footer.mt-16) { margin-top: 0; }
+
+  .hero-shell { padding-top: 1.25rem; overflow: hidden; }
+  .hero-status { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; border: 1px solid var(--color-app-ink-line); padding: .7rem .85rem; font: .62rem/1 var(--font-mono); letter-spacing: .12em; color: var(--color-app-gray-400); }
+  .status-live { color: var(--color-app-text); }
+  .status-live i { display: inline-block; width: .45rem; height: .45rem; margin-right: .5rem; border-radius: 50%; background: var(--color-app-accent); box-shadow: 0 0 0 .25rem color-mix(in srgb, var(--color-app-accent) 10%, transparent); animation: pulse 2s infinite; }
+  .status-coords { text-align: right; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(17rem, .55fr); min-height: 690px; border-inline: 1px solid var(--color-app-ink-line); }
+  .hero-copy { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 5rem clamp(1.25rem, 4vw, 4rem) 4rem; border-right: 1px solid var(--color-app-ink-line); }
+  .eyebrow, .section-label { font: .66rem/1 var(--font-mono); letter-spacing: .17em; color: var(--color-app-accent); text-transform: uppercase; }
+  .eyebrow::before { content: ""; display: inline-block; width: 2.5rem; height: 1px; margin-right: .7rem; vertical-align: middle; background: currentColor; }
+  .hero-title { margin: 1.75rem 0 2.5rem; font-family: var(--font-display); font-size: clamp(4.2rem, 10.4vw, 10rem); font-stretch: 115%; font-weight: 750; line-height: .73; letter-spacing: -.065em; }
+  .title-line { display: block; }
+  .title-shift { padding-left: clamp(0rem, 7vw, 7rem); }
+  .hero-title em, .section-heading i, .closing i { color: var(--color-app-accent); font-family: var(--font-serif); font-weight: 400; }
+  .hero-intro { display: grid; grid-template-columns: 2rem minmax(0, 35rem); gap: 1rem; max-width: 43rem; margin-left: auto; }
+  .intro-marker { font: .65rem/1 var(--font-mono); color: var(--color-app-accent); padding-top: .4rem; border-top: 1px solid var(--color-app-accent); }
+  .hero-intro p { font-size: clamp(1rem, 1.5vw, 1.25rem); line-height: 1.55; color: var(--color-app-gray-500); }
+  .hero-actions { display: flex; align-items: center; gap: 1.75rem; margin: 2.25rem 0 0 auto; width: min(100%, 40rem); }
+  .signal-button { display: inline-flex; align-items: center; justify-content: space-between; gap: 2rem; min-width: 13rem; padding: .9rem 1rem; color: var(--color-app-accent-ink); background: var(--color-app-accent); border: 1px solid var(--color-app-accent); font: .7rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; transition: color .2s, background .2s, transform .2s; }
+  .signal-button:hover { color: var(--color-app-accent); background: transparent; transform: translateY(-2px); }
+  .text-link { display: inline-flex; gap: 1.2rem; padding-bottom: .35rem; border-bottom: 1px solid currentColor; font: .7rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .text-link span { color: var(--color-app-accent); transition: transform .2s; }
+  .text-link:hover span { transform: translateX(.25rem); }
+  .hero-visual { display: flex; flex-direction: column; justify-content: flex-end; padding: 1rem; }
+  .portrait-frame { position: relative; aspect-ratio: 3 / 4.4; overflow: hidden; background: var(--color-app-surface); clip-path: polygon(0 0, 88% 0, 100% 9%, 100% 100%, 0 100%); }
+  .portrait-frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, color-mix(in srgb, var(--color-app-body) 88%, transparent)); }
+  .portrait-frame img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.08); transition: filter .5s, transform .7s; }
+  .portrait-frame:hover img { filter: grayscale(.15) contrast(1.05); transform: scale(1.025); }
+  .scan-line { position: absolute; z-index: 2; inset-inline: 0; top: 30%; height: 1px; background: var(--color-app-accent); box-shadow: 0 0 12px var(--color-app-accent); opacity: .7; }
+  .portrait-code, .portrait-role { position: absolute; z-index: 3; font-family: var(--font-mono); }
+  .portrait-code { top: 1rem; left: 1rem; font-size: .65rem; color: var(--color-app-accent); }
+  .portrait-role { right: 1rem; bottom: 1rem; text-align: right; font-size: clamp(1rem, 2vw, 1.6rem); line-height: .95; letter-spacing: -.05em; }
+  .visual-caption { display: flex; justify-content: space-between; margin-top: .7rem; font: .57rem/1 var(--font-mono); letter-spacing: .1em; color: var(--color-app-gray-400); }
+  .ticker { border-block: 1px solid var(--color-app-accent); overflow: hidden; color: var(--color-app-accent-ink); background: var(--color-app-accent); }
+  .ticker-track { display: flex; width: max-content; align-items: center; gap: 1.8rem; padding: .72rem 0; animation: ticker 30s linear infinite; font: 700 .76rem/1 var(--font-display); letter-spacing: .06em; }
+  .ticker-track b { font-weight: 400; }
+
+  .section-block { padding: clamp(5rem, 10vw, 9rem) 0; border-top: 1px solid var(--color-app-ink-line); }
+  .section-heading { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 2rem; align-items: start; margin-bottom: 4rem; }
+  .section-heading > div { display: flex; gap: 1rem; align-items: center; }
+  .section-index { display: grid; place-items: center; width: 2rem; height: 2rem; color: var(--color-app-accent-ink); background: var(--color-app-accent); font: .68rem/1 var(--font-mono); }
+  .section-heading h2 { font: 650 clamp(2.8rem, 5.8vw, 6rem)/.88 var(--font-display); letter-spacing: -.055em; }
+  .section-heading > p { max-width: 17rem; color: var(--color-app-gray-400); font-size: .9rem; line-height: 1.55; }
+  .capability-list { border-top: 1px solid var(--color-app-ink-line); }
+  .capability-list > li { display: grid; grid-template-columns: 4rem 1.15fr 1.2fr .8fr; gap: 2rem; align-items: start; padding: 2rem .5rem; border-bottom: 1px solid var(--color-app-border); transition: background .25s, padding .25s; }
+  .capability-list > li:hover { padding-inline: 1rem; background: var(--color-app-surface); }
+  .cap-number { color: var(--color-app-accent); font: .68rem/1 var(--font-mono); }
+  .capability-list h3 { max-width: 17rem; font: 560 clamp(1.35rem, 2vw, 2rem)/1 var(--font-display); letter-spacing: -.03em; }
+  .capability-list p { color: var(--color-app-gray-400); font-size: .88rem; line-height: 1.55; }
+  .capability-list ul { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .capability-list ul li, .project-tags li { padding: .35rem .5rem; border: 1px solid var(--color-app-border); color: var(--color-app-gray-500); font: .57rem/1 var(--font-mono); text-transform: uppercase; }
+
+  .work-section { background: var(--color-app-inverse); color: var(--color-app-inverse-text); }
+  .work-section .section-label, .work-section .section-heading i, .work-section .text-link span, .project-meta span:first-child { color: var(--color-app-inverse-accent); }
+  .work-section .section-index { background: var(--color-app-inverse-text); color: var(--color-app-accent); }
+  .work-heading { align-items: end; }
+  .work-heading .text-link { justify-self: end; }
+  .project-list { border-top: 2px solid var(--color-app-inverse-text); }
+  .project-row { display: grid; grid-template-columns: .65fr 1.55fr .8fr .45fr; gap: 2rem; padding: 2.5rem 0; border-bottom: 1px solid var(--color-app-inverse-line); }
+  .project-meta { display: flex; flex-direction: column; gap: .5rem; font: .58rem/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .project-main h3 { margin-bottom: .8rem; font: 650 clamp(2rem, 3.7vw, 4rem)/.9 var(--font-display); letter-spacing: -.05em; }
+  .project-main p { display: -webkit-box; overflow: hidden; max-width: 40rem; color: var(--color-app-inverse-muted); font-size: .86rem; line-height: 1.55; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+  .project-tags { display: flex; align-content: flex-start; flex-wrap: wrap; gap: .35rem; }
+  .project-tags li { border-color: var(--color-app-inverse-line); color: var(--color-app-inverse-muted); }
+  .project-links { display: flex; flex-direction: column; align-items: flex-end; gap: .7rem; font: .62rem/1 var(--font-mono); text-transform: uppercase; }
+  .project-links a { border-bottom: 1px solid; padding-bottom: .2rem; }
+
+  .notes-grid { display: grid; grid-template-columns: .85fr 1.4fr; gap: clamp(3rem, 9vw, 9rem); }
+  .notes-heading { display: flex; flex-direction: column; margin: 0; }
+  .notes-heading h2 { margin: 3rem 0 1.5rem; }
+  .notes-heading > p { margin-bottom: 2.5rem; }
+  .notes-heading .signal-button { align-self: flex-start; }
+  .notes-list { border-top: 1px solid var(--color-app-ink-line); }
+  .notes-list a { display: grid; grid-template-columns: 2.5rem 1fr auto; gap: 1rem; padding: 2rem 0; border-bottom: 1px solid var(--color-app-border); transition: padding .2s, color .2s; }
+  .notes-list a:hover { padding-inline: .8rem; color: var(--color-app-accent); }
+  .note-number, .notes-list time { color: var(--color-app-gray-400); font: .58rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .notes-list h3 { margin: .75rem 0; font: 560 clamp(1.25rem, 2.2vw, 2rem)/1.08 var(--font-display); letter-spacing: -.03em; }
+  .notes-list p { display: -webkit-box; overflow: hidden; color: var(--color-app-gray-400); font-size: .82rem; line-height: 1.5; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .note-arrow { color: var(--color-app-accent); }
+
+  .recommendation { padding: 5rem 0; color: var(--color-app-accent-ink); background: var(--color-app-accent); }
+  .recommendation-grid { display: grid; grid-template-columns: .4fr 2fr .7fr; gap: 3rem; }
+  .recommendation-mark { font: 8rem/.7 var(--font-serif); }
+  blockquote > p { max-width: 58rem; font: 500 clamp(1.5rem, 2.8vw, 2.7rem)/1.18 var(--font-display); letter-spacing: -.035em; }
+  blockquote footer { display: flex; align-items: center; gap: .8rem; margin-top: 2rem; }
+  blockquote img { width: 2.8rem; height: 2.8rem; border-radius: 50%; filter: grayscale(1); }
+  blockquote cite { display: block; font: 650 .78rem/1.3 var(--font-display); }
+  blockquote footer span, .recommendation-side { font: .58rem/1.5 var(--font-mono); letter-spacing: .07em; text-transform: uppercase; }
+  .recommendation-side { display: flex; flex-direction: column; justify-content: space-between; border-left: 1px solid color-mix(in srgb, var(--color-app-accent-ink) 35%, transparent); padding-left: 1.2rem; }
+  .recommendation-side a { text-decoration: underline; text-underline-offset: .3rem; }
+
+  .closing { padding: 7rem 0 3rem; }
+  .closing-grid { display: grid; grid-template-columns: .65fr 1.6fr .7fr; gap: 2rem; align-items: end; }
+  .closing p { color: var(--color-app-accent); font: .65rem/1.5 var(--font-mono); letter-spacing: .12em; }
+  .closing h2 { font: 650 clamp(3.2rem, 7vw, 7rem)/.85 var(--font-display); letter-spacing: -.06em; }
+  .closing-grid > div { display: flex; flex-direction: column; gap: 1.3rem; align-items: flex-start; }
+
+  .reveal { opacity: 0; animation: reveal .75s cubic-bezier(.16,1,.3,1) forwards; animation-delay: calc(var(--delay) * 90ms + 100ms); }
+  @keyframes reveal { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes pulse { 50% { opacity: .45; } }
+  @keyframes ticker { to { transform: translateX(-50%); } }
+
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-copy { border-right: 0; border-bottom: 1px solid var(--color-app-ink-line); padding-block: 4rem; }
+    .hero-visual { max-width: 32rem; width: 100%; margin: auto; }
+    .section-heading { grid-template-columns: 1fr 2fr; }
+    .section-heading > p { grid-column: 2; }
+    .capability-list > li { grid-template-columns: 3rem 1fr 1.2fr; }
+    .capability-list > li > ul { grid-column: 2 / -1; }
+    .project-row { grid-template-columns: .5fr 1.5fr .8fr; }
+    .project-links { grid-column: 2 / -1; flex-direction: row; align-items: flex-start; }
+    .notes-grid { grid-template-columns: 1fr; }
+    .recommendation-grid { grid-template-columns: .25fr 1.75fr; }
+    .recommendation-side { grid-column: 2; min-height: 5rem; }
+    .closing-grid { grid-template-columns: 1fr 2fr; }
+    .closing-grid > div { grid-column: 2; flex-direction: row; }
+  }
+
+  @media (max-width: 640px) {
+    .hero-status { grid-template-columns: 1fr auto; }
+    .status-coords { display: none; }
+    .hero-grid { min-height: auto; }
+    .hero-copy { padding: 3.5rem 1rem; }
+    .hero-title { font-size: clamp(3.6rem, 20vw, 6rem); line-height: .78; }
+    .title-shift { padding-left: 0; }
+    .hero-intro { margin-left: 0; }
+    .hero-actions { align-items: flex-start; flex-direction: column; margin-left: 0; }
+    .hero-visual { padding: .75rem; }
+    .section-heading { display: flex; flex-direction: column; }
+    .section-heading h2 { margin-top: .75rem; }
+    .section-heading > p { margin-top: 0; }
+    .capability-list > li { grid-template-columns: 2rem 1fr; gap: 1rem; }
+    .capability-list > li > p, .capability-list > li > ul { grid-column: 2; }
+    .work-heading .text-link { align-self: flex-start; }
+    .project-row { grid-template-columns: 1fr; gap: 1.25rem; }
+    .project-links { grid-column: auto; align-items: flex-start; }
+    .notes-list a { grid-template-columns: 2rem 1fr; }
+    .note-arrow { display: none; }
+    .recommendation-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .recommendation-mark { font-size: 5rem; }
+    .recommendation-side { grid-column: auto; border-top: 1px solid color-mix(in srgb, var(--color-app-accent-ink) 35%, transparent); border-left: 0; padding: 1rem 0 0; gap: 2rem; }
+    .closing-grid { grid-template-columns: 1fr; }
+    .closing-grid > div { grid-column: auto; flex-direction: column; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; animation: none; }
+    .ticker-track, .status-live i { animation: none; }
+    .portrait-frame img { transition: none; }
+  }
+</style>

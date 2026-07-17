@@ -7,11 +7,6 @@ interface Props {
 
 const { variant = 'purple', position = 'top-left', className = '' } = Astro.props;
 
-const bgColor =
-  variant === 'purple' ? 'bg-[#3A437E]' :
-  variant === 'terra'  ? 'bg-[#FF6B35]' :
-                          'bg-[#FFBF4B]';
-
 const positionClasses = {
   'top-left':     'top-0 left-0 -translate-x-1/3 -translate-y-1/3',
   'top-right':    'top-0 right-0 translate-x-1/3 -translate-y-1/3',
@@ -21,6 +16,7 @@ const positionClasses = {
 ---
 
 <div
-  class={`absolute w-[180px] h-[180px] md:w-[260px] md:h-[260px] lg:w-[300px] lg:h-[300px] ${bgColor} opacity-25 blur-[70px] md:blur-[90px] lg:blur-[100px] pointer-events-none transform-gpu ${positionClasses[position]} ${className}`}
+  class={`absolute w-[180px] h-[180px] md:w-[260px] md:h-[260px] lg:w-[300px] lg:h-[300px] bg-app-accent opacity-10 blur-[70px] md:blur-[90px] lg:blur-[100px] pointer-events-none transform-gpu ${positionClasses[position]} ${className}`}
+  data-variant={variant}
   aria-hidden="true"
 ></div>

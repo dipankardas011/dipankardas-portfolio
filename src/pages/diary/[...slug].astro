@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
-import TopGradient from "../../components/TopGradient.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -32,131 +31,126 @@ const prevEntry = currentIndex < allEntries.length - 1 ? allEntries[currentIndex
 <BaseLayout
   title={`${entry.data.title} - Dipankar Das`}
   description={entry.data.description}
+  bodyClass="diary-record"
 >
-  <article class="animate-fade-in">
-    <div class="relative pt-10 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16">
-      <TopGradient />
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto">
-          <!-- Back Link -->
-          <a
-            href="/diary/"
-            class="inline-flex items-center text-sm lg:text-base text-app-accent hover:text-app-accent transition-colors tracking-[var(--tracking-tight)] group"
-          >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              class="w-4 h-4 lg:w-5 lg:h-5 mr-2 transition-transform group-hover:-translate-x-1" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              stroke-width="2" 
-              stroke-linecap="round" 
-              stroke-linejoin="round"
-            >
-              <path d="M19 12H5"></path>
-              <path d="m12 19-7-7 7-7"></path>
-            </svg>
-            Back to diary
-          </a>
-
-          <!-- Header -->
-          <div class="mt-8 lg:mt-12 mb-8 lg:mb-12">
-            <time class="block text-sm lg:text-xl text-app-gray-400 mb-2.5 lg:mb-5 tracking-[var(--tracking-tight)] uppercase">
-              {formattedDate}
-            </time>
-            <h1 class="text-2xl md:text-4xl lg:text-[56px] font-display text-app-text leading-none tracking-[var(--tracking-tight)]">
-              {entry.data.title}
-            </h1>
-            {entry.data.description && (
-              <p class="mt-4 lg:mt-6 text-base lg:text-lg text-app-gray-500 tracking-[var(--tracking-tight)]">
-                {entry.data.description}
-              </p>
-            )}
-          </div>
-
-          <!-- Content -->
-          <div class="prose prose-lg max-w-none">
-            <Content />
-          </div>
-
-          <!-- Navigation -->
-          <div class="mt-12 lg:mt-16 pt-8 lg:pt-12 border-t border-app-gray-200">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-              <!-- Previous Entry -->
-              {prevEntry ? (
-                <a
-                  href={`/diary/${prevEntry.id}/`}
-                  class="group flex items-start gap-3 p-4 lg:p-5 bg-app-surface border border-app-gray-200 rounded-2xl transition-all duration-300 hover:border-app-accent hover:shadow-md"
-                >
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    class="w-5 h-5 lg:w-6 lg:h-6 text-app-gray-400 flex-shrink-0 mt-0.5 transition-all group-hover:text-app-accent group-hover:-translate-x-1" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    stroke-width="2" 
-                    stroke-linecap="round" 
-                    stroke-linejoin="round"
-                  >
-                    <path d="M19 12H5"></path>
-                    <path d="m12 19-7-7 7-7"></path>
-                  </svg>
-                  <div class="flex-1 min-w-0">
-                    <div class="text-xs lg:text-sm text-app-gray-400 mb-1 tracking-[var(--tracking-tight)] uppercase">
-                      Previous
-                    </div>
-                    <div class="text-sm lg:text-base font-display text-app-text tracking-[var(--tracking-tight)] group-hover:text-app-accent transition-colors line-clamp-2">
-                      {prevEntry.data.title}
-                    </div>
-                  </div>
-                </a>
-              ) : (
-                <div></div>
-              )}
-
-              <!-- Next Entry -->
-              {nextEntry && (
-                <a
-                  href={`/diary/${nextEntry.id}/`}
-                  class="group flex items-start gap-3 p-4 lg:p-5 bg-app-surface border border-app-gray-200 rounded-2xl transition-all duration-300 hover:border-app-accent hover:shadow-md md:ml-auto md:text-right"
-                >
-                  <div class="flex-1 min-w-0 md:order-1">
-                    <div class="text-xs lg:text-sm text-app-gray-400 mb-1 tracking-[var(--tracking-tight)] uppercase">
-                      Next
-                    </div>
-                    <div class="text-sm lg:text-base font-display text-app-text tracking-[var(--tracking-tight)] group-hover:text-app-accent transition-colors line-clamp-2">
-                      {nextEntry.data.title}
-                    </div>
-                  </div>
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    class="w-5 h-5 lg:w-6 lg:h-6 text-app-gray-400 flex-shrink-0 mt-0.5 transition-all group-hover:text-app-accent group-hover:translate-x-1 md:order-2" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    stroke-width="2" 
-                    stroke-linecap="round" 
-                    stroke-linejoin="round"
-                  >
-                    <path d="M5 12h14"></path>
-                    <path d="m12 5 7 7-7 7"></path>
-                  </svg>
-                </a>
-              )}
-            </div>
-
-            <!-- Back to Diary Link -->
-            <div class="mt-6 lg:mt-8 text-center">
-              <a
-                href="/diary/"
-                class="inline-flex items-center px-4 py-2.5 lg:px-6 lg:py-3 bg-app-accent rounded-[32px] text-white text-sm lg:text-base tracking-[var(--tracking-tight)] hover:bg-opacity-90 transition-all duration-300"
-              >
-                View all entries
-              </a>
-            </div>
-          </div>
+  <article>
+    <header class="record-header">
+      <div class="container mx-auto">
+        <div class="document-line">
+          <a href="/diary/">← MONTHLY LOG</a>
+          <span>DOCUMENT / {entry.id.toUpperCase()}</span>
+          <span>STATUS / FILED</span>
         </div>
+        <div class="header-grid">
+          <div class="title-block">
+            <span class="kicker">OPERATOR DIARY / MONTHLY</span>
+            <time datetime={entry.data.date.toISOString()}>{formattedDate}</time>
+            <h1>{entry.data.title}</h1>
+            {entry.data.description && <p>{entry.data.description}</p>}
+          </div>
+          <aside aria-label="Entry metadata">
+            <span class="index">01</span>
+            <dl>
+              <div><dt>Record class</dt><dd>Monthly log</dd></div>
+              <div><dt>Sequence</dt><dd>{String(allEntries.length - currentIndex).padStart(2, "0")}</dd></div>
+              <div><dt>Filed</dt><dd>{formattedDate}</dd></div>
+              <div><dt>Access</dt><dd>Public</dd></div>
+            </dl>
+          </aside>
+        </div>
+      </div>
+    </header>
+
+    <div class="content-grid container mx-auto">
+      <aside class="margin-note" aria-hidden="true">
+        <span>02 / RECORD</span>
+        <i></i>
+        <p>START<br />OF FILE</p>
+      </aside>
+      <div class="reading-column">
+        <div class="entry-rule" aria-hidden="true"><span>BEGIN LOG</span><i></i></div>
+        <div class="prose prose-lg"><Content /></div>
+
+        <nav class="record-nav" aria-label="Diary entry navigation">
+          <div class="nav-heading"><span>03 / ADJACENT FILES</span><a href="/diary/">View full ledger →</a></div>
+          <div class="nav-grid">
+            {prevEntry ? (
+              <a href={`/diary/${prevEntry.id}/`} class="nav-card previous">
+                <span>← Previous record</span>
+                <time datetime={prevEntry.data.date.toISOString()}>{prevEntry.data.date.toLocaleDateString("en-US", { month: "long", year: "numeric" })}</time>
+                <h2>{prevEntry.data.title}</h2>
+              </a>
+            ) : <div class="nav-card unavailable"><span>← Previous record</span><p>END OF ARCHIVE</p></div>}
+            {nextEntry ? (
+              <a href={`/diary/${nextEntry.id}/`} class="nav-card next">
+                <span>Next record →</span>
+                <time datetime={nextEntry.data.date.toISOString()}>{nextEntry.data.date.toLocaleDateString("en-US", { month: "long", year: "numeric" })}</time>
+                <h2>{nextEntry.data.title}</h2>
+              </a>
+            ) : <div class="nav-card unavailable next"><span>Next record →</span><p>CURRENT EDGE</p></div>}
+          </div>
+        </nav>
       </div>
     </div>
   </article>
 </BaseLayout>
+
+<style>
+  :global(.diary-record footer.mt-16) { margin-top: 0; }
+  .record-header { padding-top: 1.25rem; }
+  .document-line { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; padding: .7rem .85rem; border: 1px solid var(--color-app-ink-line); color: var(--color-app-gray-400); font: .58rem/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+  .document-line a { color: var(--color-app-text); }
+  .document-line span:last-child { color: var(--color-app-accent); text-align: right; }
+  .header-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(18rem, .55fr); border-inline: 1px solid var(--color-app-ink-line); border-bottom: 1px solid var(--color-app-ink-line); }
+  .title-block { display: flex; flex-direction: column; justify-content: center; min-height: 34rem; padding: clamp(3rem, 7vw, 7rem) clamp(1rem, 4vw, 4rem); border-right: 1px solid var(--color-app-ink-line); }
+  .kicker { color: var(--color-app-accent); font: .62rem/1 var(--font-mono); letter-spacing: .16em; }
+  .title-block > time { margin: 2rem 0 .8rem; color: var(--color-app-gray-400); font: .7rem/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; }
+  h1 { max-width: 65rem; overflow-wrap: anywhere; font: 700 clamp(3.2rem, 7.4vw, 7.5rem)/.84 var(--font-display); letter-spacing: -.065em; }
+  .title-block > p { max-width: 44rem; margin-top: 1.8rem; color: var(--color-app-gray-500); font: 400 clamp(1.05rem, 1.7vw, 1.35rem)/1.5 var(--font-serif); }
+  .header-grid > aside { display: flex; flex-direction: column; justify-content: flex-end; padding: 1.25rem; background: var(--color-app-surface); }
+  .index { display: grid; place-items: center; width: 2rem; height: 2rem; margin-bottom: auto; color: var(--color-app-accent-ink); background: var(--color-app-accent); font: .62rem/1 var(--font-mono); }
+  dl { margin-top: 3rem; border-top: 1px solid var(--color-app-ink-line); }
+  dl div { display: flex; justify-content: space-between; gap: 1rem; padding: .78rem 0; border-bottom: 1px solid var(--color-app-border); font: .58rem/1.3 var(--font-mono); letter-spacing: .07em; text-transform: uppercase; }
+  dt { color: var(--color-app-gray-400); }
+  dd { text-align: right; }
+  .content-grid { display: grid; grid-template-columns: 11rem minmax(0, 48rem) 1fr; gap: clamp(2rem, 5vw, 5rem); padding-top: clamp(4rem, 8vw, 8rem); padding-bottom: clamp(5rem, 10vw, 9rem); }
+  .margin-note { display: flex; flex-direction: column; align-items: flex-start; color: var(--color-app-gray-400); font: .56rem/1.5 var(--font-mono); letter-spacing: .1em; }
+  .margin-note > span { color: var(--color-app-accent); }
+  .margin-note i { width: 100%; height: 1px; margin: 1rem 0; background: var(--color-app-ink-line); }
+  .reading-column { min-width: 0; }
+  .entry-rule { display: flex; align-items: center; gap: 1rem; margin-bottom: 3rem; color: var(--color-app-gray-400); font: .57rem/1 var(--font-mono); letter-spacing: .12em; }
+  .entry-rule i { flex: 1; height: 1px; background: var(--color-app-ink-line); }
+  .reading-column :global(.prose) { font-size: clamp(1rem, 1.2vw, 1.125rem); line-height: 1.75; }
+  .record-nav { margin-top: 5rem; padding-top: 1rem; border-top: 2px solid var(--color-app-text); }
+  .nav-heading { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; color: var(--color-app-gray-400); font: .57rem/1 var(--font-mono); letter-spacing: .1em; }
+  .nav-heading a { color: var(--color-app-accent); }
+  .nav-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .nav-card { min-height: 11rem; padding: 1.2rem; border: 1px solid var(--color-app-border); background: var(--color-app-surface); transition: border-color .2s, background .2s; }
+  .nav-card + .nav-card { border-left: 0; }
+  .nav-card:hover { border-color: var(--color-app-accent); background: transparent; }
+  .nav-card > span, .nav-card time { display: block; color: var(--color-app-gray-400); font: .56rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .nav-card time { margin-top: 2rem; color: var(--color-app-accent); }
+  .nav-card h2 { margin-top: .65rem; font: 620 clamp(1.1rem, 2vw, 1.6rem)/1.05 var(--font-display); letter-spacing: -.03em; }
+  .nav-card.next { text-align: right; }
+  .unavailable { color: var(--color-app-gray-400); background: transparent; }
+  .unavailable p { margin-top: 3rem; font: .58rem/1 var(--font-mono); }
+  @media (max-width: 1000px) {
+    .content-grid { grid-template-columns: minmax(0, 48rem); justify-content: center; }
+    .margin-note { display: none; }
+  }
+  @media (max-width: 900px) {
+    .header-grid { grid-template-columns: 1fr; }
+    .title-block { min-height: 28rem; border-right: 0; border-bottom: 1px solid var(--color-app-ink-line); }
+    .header-grid > aside { min-height: 17rem; }
+  }
+  @media (max-width: 640px) {
+    .document-line { grid-template-columns: 1fr auto; }
+    .document-line span:nth-child(2) { display: none; }
+    .title-block { min-height: 24rem; padding-inline: 1rem; }
+    h1 { font-size: clamp(3rem, 15vw, 4.8rem); }
+    .nav-grid { grid-template-columns: 1fr; }
+    .nav-card + .nav-card { border-top: 0; border-left: 1px solid var(--color-app-border); }
+    .nav-card.next { text-align: left; }
+  }
+  @media (prefers-reduced-motion: reduce) { .nav-card { transition: none; } }
+</style>

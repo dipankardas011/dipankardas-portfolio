@@ -1,169 +1,242 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
-import TopGradient from "../../components/TopGradient.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
   const skills = await getCollection("agent-skills");
-  return skills.map((skill) => ({
+  return skills.map((skill, index) => ({
     params: { slug: skill.id },
-    props: { skill },
+    props: { skill, index, total: skills.length },
   }));
 }
 
-const { skill } = Astro.props;
+const { skill, index, total } = Astro.props;
 const { Content } = await render(skill);
+const publicUrl = `https://dipankar-das.com/.well-known/agent-skills/${skill.id}/SKILL.md`;
+const lineCount = skill.body.split("\n").length;
 ---
 
 <BaseLayout
   title={`${skill.data.title} - Agent Library`}
   description={skill.data.description}
   blogPost={true}
+  bodyClass="skill-dossier"
 >
-  <!-- Reading progress bar -->
   <div id="reading-progress"></div>
 
-  <article class="animate-fade-in">
-    <div class="relative pt-10 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16">
-      <TopGradient />
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+  <article class="dossier-shell">
+    <header class="dossier-header container mx-auto">
+      <div class="status-rail">
+        <a href="/skills">← RETURN / REGISTRY</a>
+        <span class="live"><i></i> MODULE ONLINE</span>
+        <span>REC {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
+      </div>
 
-        <!-- Back link -->
-        <a
-          href="/skills"
-          class="inline-flex items-center gap-2 text-sm text-app-gray-400 hover:text-app-accent transition-colors mb-8 group"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 12H5"></path>
-            <path d="m12 19-7-7 7-7"></path>
-          </svg>
-          Agent Library
-        </a>
+      <div class="header-grid">
+        <div class="title-block">
+          <p class="kicker-line">Agent module / operating dossier</p>
+          <h1>{skill.data.title}</h1>
+          <p class="module-lede">{skill.data.description}</p>
+        </div>
 
-        <div class="mb-10 md:mb-14">
-          <!-- Category + version badges -->
-          <div class="flex flex-wrap items-center gap-3 mb-5">
-            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-app-surface rounded text-app-accent border border-app-gray-200">
-              {skill.data.category}
-            </span>
-            {skill.data.version && (
-              <span class="text-[10px] font-mono text-app-gray-400 bg-app-surface px-2.5 py-1 rounded border border-app-gray-200">
-                v{skill.data.version}
-              </span>
-            )}
-          </div>
+        <aside class="module-stamp" aria-label="Module metadata">
+          <div class="stamp-code">M{String(index + 1).padStart(2, "0")}</div>
+          <dl>
+            <div><dt>Class</dt><dd>{skill.data.category}</dd></div>
+            <div><dt>Revision</dt><dd>{skill.data.version ? `v${skill.data.version}` : "Unverified"}</dd></div>
+            <div><dt>Payload</dt><dd>{lineCount} lines</dd></div>
+            <div><dt>Format</dt><dd>SKILL.md</dd></div>
+          </dl>
+        </aside>
+      </div>
 
-          <h1 class="text-3xl md:text-5xl font-display text-app-text leading-tight tracking-tight mb-4">
-            {skill.data.title}
-          </h1>
-
-          <p class="blog-lede mb-6">
-            {skill.data.description}
-          </p>
-
-          <!-- Inspiration + Why -->
-          {(skill.data.inspiration || skill.data.why) && (
-            <div class="flex flex-col gap-4 max-w-2xl">
-              {skill.data.inspiration && (
-                <div class="border-l-2 border-app-accent/50 pl-4">
-                  <p class="text-xs font-mono text-app-gray-400 uppercase tracking-widest mb-1">Inspiration</p>
-                  <p class="text-app-gray-500 italic text-sm leading-relaxed">"{skill.data.inspiration}"</p>
-                </div>
-              )}
-              {skill.data.why && (
-                <div class="border-l-2 border-app-gray-200 pl-4">
-                  <p class="text-xs font-mono text-app-gray-400 uppercase tracking-widest mb-1">The Logic</p>
-                  <p class="text-app-gray-500 text-sm leading-relaxed">{skill.data.why}</p>
-                </div>
-              )}
-            </div>
+      {(skill.data.inspiration || skill.data.why) && (
+        <div class="rationale-ledger">
+          {skill.data.inspiration && (
+            <div><span>01 / ORIGIN SIGNAL</span><p>“{skill.data.inspiration}”</p></div>
+          )}
+          {skill.data.why && (
+            <div><span>02 / DESIGN LOGIC</span><p>{skill.data.why}</p></div>
           )}
         </div>
+      )}
+    </header>
 
-        <!-- Content -->
-        <div class="max-w-4xl">
-          <div class="blog-entry-divider" aria-hidden="true">
-            <span></span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L9.09 8.26L2 9.27L7 14.14L5.82 21.02L12 17.77L18.18 21.02L17 14.14L22 9.27L14.91 8.26L12 2Z"/>
-            </svg>
-            <span></span>
+    <section class="directive-section">
+      <div class="container mx-auto directive-grid">
+        <aside class="directive-sidebar">
+          <div class="section-code"><span>01</span> DIRECTIVE BODY</div>
+          <p>Rendered instruction payload. Section numbering follows execution order.</p>
+          <dl>
+            <div><dt>State</dt><dd>Readable</dd></div>
+            <div><dt>Transport</dt><dd>Markdown</dd></div>
+            <div><dt>Access</dt><dd>Public</dd></div>
+          </dl>
+        </aside>
+
+        <div class="directive-body">
+          <div class="body-rule"><span>BEGIN / SKILL.md</span><span>{lineCount} LINES</span></div>
+          <div class="prose prose-lg"><Content /></div>
+          <div class="body-rule end"><span>END / PAYLOAD</span><span>EOF</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="distribution-section">
+      <div class="container mx-auto distribution-grid">
+        <header>
+          <div class="section-code"><span>02</span> DISTRIBUTION</div>
+          <h2>Deploy the<br /><i>directive.</i></h2>
+        </header>
+
+        <div class="distribution-console">
+          <div class="route-line">
+            <span>PUBLIC ROUTE</span>
+            <a href={publicUrl} target="_blank" rel="noopener noreferrer">{publicUrl} <b>↗</b></a>
           </div>
-
-          <div class="prose prose-lg">
-            <Content />
+          <div class="signal-actions">
+            <button id="btn-copy"><span>01</span><strong id="copy-label">COPY SKILL.md</strong><b>→</b></button>
+            <button id="btn-share"><span>02</span><strong id="share-label">COPY PUBLIC URL</strong><b>→</b></button>
+            <button id="btn-download"><span>03</span><strong>DOWNLOAD SOURCE</strong><b>↓</b></button>
           </div>
-
-          <!-- Sponsor callout -->
-          <div class="mt-10 flex items-start gap-4 p-5 rounded-2xl border border-app-gray-200 bg-app-surface max-w-xl">
-            <svg class="w-5 h-5 text-app-accent shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-            </svg>
-            <p class="text-sm text-app-gray-400 leading-relaxed">
-              Found this skill useful?
-              <a
-                href="https://github.com/sponsors/dipankardas011"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-app-accent hover:underline font-medium"
-              >Sponsor me on GitHub</a> to support more skills like this.
-            </p>
-          </div>
-
-          <!-- Copy / Download raw SKILLS.md -->
-          <div class="mt-6 flex flex-wrap gap-3">
-            <button
-              id="btn-copy"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-app-gray-200 bg-app-surface text-sm text-app-gray-400 hover:text-app-accent hover:border-app-accent/50 transition-all"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-              <span id="copy-label">Copy SKILLS.md</span>
-            </button>
-            <button
-              id="btn-download"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-app-gray-200 bg-app-surface text-sm text-app-gray-400 hover:text-app-accent hover:border-app-accent/50 transition-all"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-              Download
-            </button>
+          <div class="support-line">
+            <p>Useful in the field? Fund the next module and keep the registry open.</p>
+            <a href="https://github.com/sponsors/dipankardas011" target="_blank" rel="noopener noreferrer">SPONSOR FIELDWORK ↗</a>
           </div>
         </div>
-
       </div>
-    </div>
+    </section>
   </article>
 </BaseLayout>
 
-<script define:vars={{ body: skill.body, id: skill.id }}>
+<script define:vars={{ body: skill.body, id: skill.id, publicUrl }}>
   const btnCopy = document.getElementById('btn-copy');
+  const btnShare = document.getElementById('btn-share');
   const btnDownload = document.getElementById('btn-download');
   const copyLabel = document.getElementById('copy-label');
+  const shareLabel = document.getElementById('share-label');
 
   btnCopy?.addEventListener('click', async () => {
     await navigator.clipboard.writeText(body);
-    if (copyLabel) copyLabel.textContent = 'Copied!';
-    setTimeout(() => {
-      if (copyLabel) copyLabel.textContent = 'Copy SKILLS.md';
-    }, 2000);
+    if (copyLabel) copyLabel.textContent = 'COPIED';
+    setTimeout(() => { if (copyLabel) copyLabel.textContent = 'COPY SKILL.md'; }, 2000);
   });
-
+  btnShare?.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(publicUrl);
+    if (shareLabel) shareLabel.textContent = 'URL COPIED';
+    setTimeout(() => { if (shareLabel) shareLabel.textContent = 'COPY PUBLIC URL'; }, 2000);
+  });
   btnDownload?.addEventListener('click', () => {
-    const el = document.createElement('a');
-    el.href = URL.createObjectURL(new Blob([body], { type: 'text/markdown' }));
-    el.download = `${id}.md`;
-    document.body.appendChild(el);
-    el.click();
-    document.body.removeChild(el);
+    const anchor = document.createElement('a');
+    anchor.href = URL.createObjectURL(new Blob([body], { type: 'text/markdown' }));
+    anchor.download = `${id}.md`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
   });
 
-  // Reading progress
   const progressBar = document.getElementById('reading-progress');
   if (progressBar) {
     const update = () => {
       const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-      progressBar.style.width = Math.min((scrollTop / (scrollHeight - clientHeight)) * 100, 100) + '%';
+      const available = scrollHeight - clientHeight;
+      progressBar.style.width = (available > 0 ? Math.min((scrollTop / available) * 100, 100) : 0) + '%';
     };
     window.addEventListener('scroll', update, { passive: true });
     update();
   }
 </script>
+
+<style>
+  :global(.skill-dossier footer.mt-16) { margin-top: 0; }
+  .dossier-shell { overflow: hidden; }
+  .dossier-header { padding-top: 1.25rem; }
+  .status-rail { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; padding: .72rem .85rem; border: 1px solid var(--color-app-ink-line); color: var(--color-app-gray-400); font: .6rem/1 var(--font-mono); letter-spacing: .12em; }
+  .status-rail > :last-child { text-align: right; }
+  .status-rail a { transition: color .2s; }
+  .status-rail a:hover { color: var(--color-app-accent); }
+  .live { color: var(--color-app-text); }
+  .live i { display: inline-block; width: .42rem; height: .42rem; margin-right: .45rem; border-radius: 50%; background: var(--color-app-accent); box-shadow: 0 0 0 .22rem color-mix(in srgb, var(--color-app-accent) 10%, transparent); animation: pulse 2s infinite; }
+  .header-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(17rem, .55fr); min-height: 560px; border-inline: 1px solid var(--color-app-ink-line); }
+  .title-block { display: flex; flex-direction: column; justify-content: center; padding: clamp(3rem, 7vw, 7rem) clamp(1.25rem, 5vw, 5rem); border-right: 1px solid var(--color-app-ink-line); }
+  .kicker-line, .section-code { color: var(--color-app-accent); font: .64rem/1 var(--font-mono); letter-spacing: .16em; text-transform: uppercase; }
+  .kicker-line::before { content: ""; display: inline-block; width: 2.5rem; height: 1px; margin-right: .7rem; vertical-align: middle; background: currentColor; }
+  .title-block h1 { max-width: 14ch; margin: 2.2rem 0 2rem; font: 720 clamp(3.8rem, 8.5vw, 8.5rem)/.78 var(--font-display); letter-spacing: -.065em; overflow-wrap: anywhere; }
+  .module-lede { max-width: 44rem; margin-left: auto; padding-left: 1rem; border-left: 1px solid var(--color-app-accent); color: var(--color-app-gray-500); font-size: clamp(.95rem, 1.35vw, 1.15rem); line-height: 1.55; }
+  .module-stamp { display: flex; flex-direction: column; justify-content: space-between; padding: 1rem; background: var(--color-app-surface); }
+  .stamp-code { display: grid; place-items: center; aspect-ratio: 1; color: var(--color-app-accent-ink); background: var(--color-app-accent); font: 750 clamp(5rem, 8vw, 8rem)/1 var(--font-display); letter-spacing: -.08em; clip-path: polygon(0 0, 84% 0, 100% 16%, 100% 100%, 0 100%); }
+  .module-stamp dl { border-top: 1px solid var(--color-app-ink-line); }
+  .module-stamp dl div, .directive-sidebar dl div { display: flex; justify-content: space-between; gap: 1rem; padding: .85rem 0; border-bottom: 1px solid var(--color-app-border); }
+  .module-stamp dt, .module-stamp dd, .directive-sidebar dt, .directive-sidebar dd { font: .57rem/1.3 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .module-stamp dt, .directive-sidebar dt { color: var(--color-app-gray-400); }
+  .module-stamp dd, .directive-sidebar dd { color: var(--color-app-text); text-align: right; }
+  .rationale-ledger { display: grid; grid-template-columns: 1fr 1.5fr; border: 1px solid var(--color-app-ink-line); border-top: 0; }
+  .rationale-ledger > div { display: grid; grid-template-columns: 8rem 1fr; gap: 1.5rem; padding: 1.5rem; }
+  .rationale-ledger > div + div { border-left: 1px solid var(--color-app-ink-line); }
+  .rationale-ledger span { color: var(--color-app-accent); font: .57rem/1.4 var(--font-mono); letter-spacing: .08em; }
+  .rationale-ledger p { color: var(--color-app-gray-400); font-size: .8rem; line-height: 1.55; }
+
+  .directive-section { padding: clamp(5rem, 10vw, 9rem) 0; border-top: 1px solid var(--color-app-ink-line); }
+  .directive-grid { display: grid; grid-template-columns: minmax(13rem, .48fr) minmax(0, 1.45fr); gap: clamp(3rem, 8vw, 8rem); align-items: start; }
+  .section-code { display: flex; align-items: center; gap: .8rem; }
+  .section-code span { display: grid; place-items: center; width: 2rem; height: 2rem; color: var(--color-app-accent-ink); background: var(--color-app-accent); }
+  .directive-sidebar { position: sticky; top: 5rem; }
+  .directive-sidebar > p { max-width: 18rem; margin: 2rem 0 3rem; color: var(--color-app-gray-400); font-size: .82rem; line-height: 1.55; }
+  .directive-sidebar dl { border-top: 1px solid var(--color-app-ink-line); }
+  .body-rule { display: flex; justify-content: space-between; padding: .7rem 0; border-block: 2px solid var(--color-app-text); color: var(--color-app-gray-400); font: .57rem/1 var(--font-mono); letter-spacing: .1em; }
+  .body-rule.end { margin-top: 4rem; border-width: 1px; }
+  .directive-body :global(.prose) { padding-top: 1.5rem; }
+  .directive-body :global(.prose > p:first-of-type::first-letter) { float: none; margin: 0; color: inherit; font: inherit; }
+  .directive-body :global(.prose h1) { font-size: clamp(2.6rem, 5vw, 5rem); line-height: .9; letter-spacing: -.05em; }
+  .directive-body :global(.prose h2) { padding-top: 1.4rem; border-top: 1px solid var(--color-app-ink-line); }
+
+  .distribution-section { padding: clamp(5rem, 9vw, 8rem) 0; color: var(--color-app-inverse-text); background: var(--color-app-inverse); }
+  .distribution-grid { display: grid; grid-template-columns: .7fr 1.45fr; gap: clamp(3rem, 8vw, 8rem); }
+  .distribution-section .section-code { color: var(--color-app-inverse-accent); }
+  .distribution-section .section-code span { color: var(--color-app-inverse-text); background: var(--color-app-inverse-accent); }
+  .distribution-section h2 { margin-top: 2.5rem; font: 650 clamp(2.8rem, 5.5vw, 5.8rem)/.86 var(--font-display); letter-spacing: -.055em; }
+  .distribution-section h2 i { color: var(--color-app-inverse-accent); font-family: var(--font-serif); font-weight: 400; }
+  .distribution-console { border-top: 2px solid var(--color-app-inverse-text); }
+  .route-line { display: grid; grid-template-columns: 8rem 1fr; gap: 1rem; padding: 1.4rem 0; border-bottom: 1px solid var(--color-app-inverse-line); }
+  .route-line span { color: var(--color-app-inverse-accent); font: .57rem/1 var(--font-mono); letter-spacing: .08em; }
+  .route-line a { font: .68rem/1.5 var(--font-mono); overflow-wrap: anywhere; }
+  .route-line b { color: var(--color-app-inverse-accent); }
+  .signal-actions { border-bottom: 1px solid var(--color-app-inverse-line); }
+  .signal-actions button { display: grid; grid-template-columns: 3rem 1fr auto; gap: 1rem; width: 100%; padding: 1.2rem 0; border-bottom: 1px solid var(--color-app-inverse-line); text-align: left; transition: padding .2s, color .2s, background .2s; }
+  .signal-actions button:last-child { border-bottom: 0; }
+  .signal-actions button:hover { padding-inline: 1rem; color: var(--color-app-inverse); background: var(--color-app-inverse-text); }
+  .signal-actions span, .signal-actions strong, .signal-actions b { font: .62rem/1 var(--font-mono); letter-spacing: .08em; }
+  .signal-actions span, .signal-actions b { color: var(--color-app-inverse-accent); }
+  .support-line { display: flex; justify-content: space-between; gap: 2rem; padding-top: 1.5rem; }
+  .support-line p { max-width: 26rem; color: var(--color-app-inverse-muted); font-size: .78rem; line-height: 1.5; }
+  .support-line a { color: var(--color-app-inverse-accent); font: .6rem/1 var(--font-mono); border-bottom: 1px solid; }
+  @keyframes pulse { 50% { opacity: .45; } }
+
+  @media (max-width: 900px) {
+    .header-grid { grid-template-columns: 1fr; }
+    .title-block { min-height: 520px; border-right: 0; border-bottom: 1px solid var(--color-app-ink-line); }
+    .module-stamp { display: grid; grid-template-columns: 15rem 1fr; gap: 2rem; }
+    .rationale-ledger, .directive-grid, .distribution-grid { grid-template-columns: 1fr; }
+    .directive-sidebar { position: static; }
+  }
+
+  @media (max-width: 640px) {
+    .status-rail { grid-template-columns: 1fr auto; }
+    .status-rail > :last-child { display: none; }
+    .title-block { min-height: 470px; padding: 3rem 1rem; }
+    .title-block h1 { font-size: clamp(3.5rem, 18vw, 5.5rem); }
+    .module-lede { margin-left: 0; }
+    .module-stamp { grid-template-columns: 1fr; }
+    .stamp-code { aspect-ratio: 2 / 1; }
+    .rationale-ledger { display: block; }
+    .rationale-ledger > div { grid-template-columns: 1fr; gap: .8rem; }
+    .rationale-ledger > div + div { border-top: 1px solid var(--color-app-ink-line); border-left: 0; }
+    .route-line { grid-template-columns: 1fr; }
+    .support-line { flex-direction: column; }
+    .support-line a { align-self: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live i { animation: none; }
+  }
+</style>

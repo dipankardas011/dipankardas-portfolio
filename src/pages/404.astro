@@ -1,76 +1,136 @@
 ---
 import BaseLayout from "../components/BaseLayout.astro";
+
+const routes = [
+  { label: "Home", href: "/" },
+  { label: "Blog", href: "/blog/" },
+  { label: "Skills", href: "/skills/" },
+  { label: "Projects", href: "/projects/" },
+  { label: "Services", href: "/services/" },
+  { label: "About", href: "/about/" },
+];
 ---
 
-<BaseLayout title="404 — Page Not Found" noindex={true}>
-  <section class="py-16 lg:py-24 animate-fade-in">
-    <div class="container mx-auto">
-
-      <div class="sys-strip mb-12 lg:mb-16">
-        <span class="sys-key">~/404</span>
-        <span class="sys-dot">●</span>
-        <span class="sys-value">status: not_found</span>
-        <span class="sys-dot">●</span>
-        <span class="sys-value">code: 0x194</span>
-        <span class="sys-dot">●</span>
-        <span class="sys-value ml-auto">retry: manual</span>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-end mb-16 lg:mb-24">
-        <div class="lg:col-span-7">
-          <div class="kicker mb-6">/error · stack underflow</div>
-          <h1 class="marquee-title text-[28vw] sm:text-[24vw] md:text-[20vw] lg:text-[18vw] leading-[0.85]">
-            <span class="text-app-text">4</span><span class="text-app-accent">0</span><span class="text-app-text">4</span><span class="text-app-accent-2">.</span>
-          </h1>
+<BaseLayout title="404 — Page Not Found" noindex={true} bodyClass="error-field-manual">
+  <div>
+    <section class="error-shell">
+      <div class="container mx-auto">
+        <div class="status-line reveal" style="--delay: 0">
+          <span>INCIDENT REPORT / 0X194</span>
+          <span class="fault"><i></i> STATUS / NOT_FOUND</span>
+          <span>RETRY / MANUAL</span>
         </div>
-        <div class="lg:col-span-5">
-          <h2 class="font-display text-2xl md:text-3xl lg:text-4xl text-app-text tracking-tight leading-[1.1] mb-4">
-            This page is<br/>
-            <span class="font-serif italic font-normal text-app-accent">not in the index</span>.
-          </h2>
-          <p class="text-base lg:text-lg text-app-gray-500 leading-[1.55] max-w-md mb-8">
-            Either the URL is wrong, the page moved, or it never existed. No
-            backtrace to follow — just turn back.
-          </p>
-          <div class="flex flex-wrap gap-3">
-            <a href="/" class="btn-primary">
-              <span>Back to home</span>
-              <span class="font-mono text-xs">←</span>
-            </a>
-            <a href="/blog/" class="btn-ghost">
-              <span class="font-mono text-[11px] uppercase tracking-[0.12em]">Read the blog</span>
-              <span>↘</span>
-            </a>
+
+        <div class="error-grid">
+          <div class="error-code" aria-hidden="true">
+            <span class="reveal" style="--delay: 1">4</span>
+            <span class="signal reveal" style="--delay: 2">0</span>
+            <span class="reveal" style="--delay: 3">4</span>
+            <i class="reveal" style="--delay: 4">.</i>
           </div>
+
+          <div class="error-copy reveal" style="--delay: 5">
+            <span class="eyebrow">/error · stack underflow</span>
+            <h1>This page is<br /><i>not in the index.</i></h1>
+            <p>Either the URL is wrong, the page moved, or it never existed. No backtrace to follow — just turn back.</p>
+            <div class="actions">
+              <a href="/" class="signal-button">Back to home <span>←</span></a>
+              <a href="/blog/" class="text-link">Read the blog <span>↘</span></a>
+            </div>
+          </div>
+
+          <aside class="diagnostic reveal" style="--delay: 6" aria-label="Error diagnostic">
+            <div><span>DIAGNOSTIC TRACE</span><span>FAILED</span></div>
+            <dl>
+              <div><dt>REQUEST</dt><dd>UNRESOLVED</dd></div>
+              <div><dt>ROUTE</dt><dd>ABSENT</dd></div>
+              <div><dt>BACKTRACE</dt><dd>EMPTY</dd></div>
+              <div><dt>NEXT ACTION</dt><dd>REINDEX</dd></div>
+            </dl>
+          </aside>
         </div>
       </div>
+    </section>
 
-      <!-- Helpful map -->
-      <div class="border-t border-app-ink-line pt-10">
-        <div class="kicker mb-6">/sitemap · try one of these</div>
-        <ul class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-app-border border border-app-border">
-          {[
-            { label: "Home", href: "/" },
-            { label: "Blog", href: "/blog/" },
-            { label: "Skills", href: "/skills/" },
-            { label: "Projects", href: "/projects/" },
-            { label: "Services", href: "/services/" },
-            { label: "About", href: "/about/" },
-          ].map((l, i) => (
+    <nav class="route-section" aria-labelledby="route-heading">
+      <div class="container mx-auto route-grid">
+        <header>
+          <span>02 / RECOVERY MAP</span>
+          <h2 id="route-heading">Known<br /><i>routes.</i></h2>
+          <p>Try one of these indexed locations.</p>
+        </header>
+        <ol>
+          {routes.map((route, index) => (
             <li>
-              <a
-                href={l.href}
-                class="group bg-app-body hover:bg-app-text hover:text-app-body transition-colors duration-300 px-5 py-5 flex flex-col justify-between min-h-[88px]"
-              >
-                <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-accent group-hover:text-app-accent-2">
-                  /{String(i + 1).padStart(2, "0")} ↗
-                </span>
-                <span class="font-display text-base font-medium tracking-tight">{l.label}</span>
+              <a href={route.href}>
+                <span>/{String(index + 1).padStart(2, "0")}</span>
+                <strong>{route.label}</strong>
+                <span>↗</span>
               </a>
             </li>
           ))}
-        </ul>
+        </ol>
       </div>
-    </div>
-  </section>
+    </nav>
+  </div>
 </BaseLayout>
+
+<style>
+  :global(.error-field-manual footer.mt-16) { margin-top: 0; }
+  .error-shell { padding-top: 1.25rem; }
+  .status-line { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; padding: .7rem .85rem; border: 1px solid var(--color-app-ink-line); color: var(--color-app-gray-400); font: .62rem/1 var(--font-mono); letter-spacing: .12em; }
+  .status-line span:last-child { text-align: right; }
+  .fault { color: var(--color-app-accent); }
+  .fault i { display: inline-block; width: .45rem; height: .45rem; margin-right: .5rem; background: var(--color-app-accent); animation: pulse 1.5s infinite; }
+  .error-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(16rem, .65fr); border-inline: 1px solid var(--color-app-ink-line); border-bottom: 1px solid var(--color-app-ink-line); }
+  .error-code { display: flex; align-items: center; grid-column: 1 / -1; min-width: 0; overflow: hidden; padding: clamp(2rem, 5vw, 5rem) clamp(1rem, 3vw, 3rem) 0; border-bottom: 1px solid var(--color-app-ink-line); font: 780 clamp(9rem, 27vw, 28rem)/.62 var(--font-display); letter-spacing: -.09em; }
+  .error-code span { display: block; }
+  .error-code .signal, .error-code i { color: var(--color-app-accent); }
+  .error-code i { align-self: flex-end; padding-bottom: .02em; font-family: var(--font-serif); font-weight: 400; }
+  .error-copy { padding: clamp(2.5rem, 6vw, 6rem); border-right: 1px solid var(--color-app-ink-line); }
+  .eyebrow { color: var(--color-app-accent); font: .65rem/1 var(--font-mono); letter-spacing: .16em; text-transform: uppercase; }
+  .eyebrow::before { content: ""; display: inline-block; width: 2.5rem; height: 1px; margin-right: .7rem; vertical-align: middle; background: currentColor; }
+  h1 { margin: 2rem 0 1.5rem; font: 650 clamp(2.7rem, 6vw, 6rem)/.88 var(--font-display); letter-spacing: -.055em; }
+  h1 i, .route-section h2 i { color: var(--color-app-accent); font-family: var(--font-serif); font-weight: 400; }
+  .error-copy > p { max-width: 35rem; color: var(--color-app-gray-500); font-size: .95rem; line-height: 1.6; }
+  .actions { display: flex; align-items: center; gap: 1.5rem; margin-top: 2.2rem; }
+  .signal-button { display: inline-flex; align-items: center; justify-content: space-between; gap: 2rem; min-width: 13rem; padding: .9rem 1rem; color: var(--color-app-accent-ink); background: var(--color-app-accent); border: 1px solid var(--color-app-accent); font: .68rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; transition: color .2s, background .2s, transform .2s; }
+  .signal-button:hover { color: var(--color-app-accent); background: transparent; transform: translateY(-2px); }
+  .text-link { display: inline-flex; gap: 1.2rem; padding-bottom: .35rem; border-bottom: 1px solid currentColor; font: .68rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .text-link span { color: var(--color-app-accent); }
+  .diagnostic { display: flex; flex-direction: column; justify-content: space-between; padding: 1.25rem; background: var(--color-app-surface); }
+  .diagnostic > div { display: flex; justify-content: space-between; color: var(--color-app-gray-400); font: .56rem/1 var(--font-mono); letter-spacing: .1em; }
+  .diagnostic > div span:last-child { color: var(--color-app-accent); }
+  .diagnostic dl { border-top: 2px solid var(--color-app-text); }
+  .diagnostic dl > div { display: grid; grid-template-columns: 1fr auto; gap: 1rem; padding: 1.1rem .25rem; border-bottom: 1px solid var(--color-app-border); font: .58rem/1 var(--font-mono); letter-spacing: .07em; }
+  .diagnostic dt { color: var(--color-app-gray-400); }
+  .diagnostic dd { color: var(--color-app-text); }
+  .route-section { padding: clamp(5rem, 9vw, 8rem) 0; color: var(--color-app-inverse-text); background: var(--color-app-inverse); }
+  .route-grid { display: grid; grid-template-columns: .7fr 1.5fr; gap: clamp(3rem, 9vw, 9rem); }
+  .route-section header > span { color: var(--color-app-inverse-accent); font: .62rem/1 var(--font-mono); letter-spacing: .12em; }
+  .route-section h2 { margin: 2.5rem 0 1.2rem; font: 650 clamp(3rem, 6vw, 6rem)/.85 var(--font-display); letter-spacing: -.06em; }
+  .route-section h2 i { color: var(--color-app-inverse-accent); }
+  .route-section header p { color: var(--color-app-inverse-muted); font-size: .86rem; }
+  .route-section ol { border-top: 2px solid var(--color-app-inverse-text); }
+  .route-section a { display: grid; grid-template-columns: 3rem 1fr auto; gap: 1rem; align-items: center; padding: 1.25rem .25rem; border-bottom: 1px solid var(--color-app-inverse-line); transition: padding .2s, background .2s; }
+  .route-section a:hover { padding-inline: .8rem; background: color-mix(in srgb, var(--color-app-inverse-text) 6%, var(--color-app-inverse)); }
+  .route-section a span { color: var(--color-app-inverse-accent); font: .58rem/1 var(--font-mono); }
+  .route-section a strong { font: 580 clamp(1.35rem, 2.8vw, 2.5rem)/1 var(--font-display); letter-spacing: -.035em; text-transform: uppercase; }
+  .reveal { opacity: 0; animation: reveal .75s cubic-bezier(.16,1,.3,1) forwards; animation-delay: calc(var(--delay) * 90ms + 100ms); }
+  @keyframes reveal { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes pulse { 50% { opacity: .35; } }
+  @media (max-width: 900px) {
+    .error-grid { grid-template-columns: 1fr; }
+    .error-copy { border-right: 0; border-bottom: 1px solid var(--color-app-ink-line); }
+    .diagnostic { min-height: 24rem; }
+  }
+  @media (max-width: 640px) {
+    .status-line { grid-template-columns: 1fr auto; }
+    .status-line span:last-child { display: none; }
+    .error-code { font-size: clamp(8rem, 38vw, 13rem); }
+    .error-copy { padding: 3rem 1rem; }
+    .actions { align-items: flex-start; flex-direction: column; }
+    .route-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; animation: none; } .fault i { animation: none; } }
+</style>

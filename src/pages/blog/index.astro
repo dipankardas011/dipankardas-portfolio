@@ -1,8 +1,5 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
-import BlogPostCard from "../../components/BlogPostCard.astro";
-import BlogList from "../../components/BlogList.astro";
-import AnimatedTitle from "../../components/AnimatedTitle.astro";
 import { getCollection } from "astro:content";
 import { externalBlogs } from "../../data/external-blogs";
 
@@ -12,14 +9,6 @@ const blogPosts = allPosts
   .filter((p) => p.id !== "external-blogs")
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const serializedPosts = blogPosts.map(post => ({
-  id: post.id,
-  title: post.data.title,
-  date: post.data.date.toISOString(),
-  description: post.data.description,
-  cover: post.data.cover,
-}));
-
 const latest = blogPosts[0];
 const latestDate = latest?.data.date;
 ---
@@ -27,91 +16,197 @@ const latestDate = latest?.data.date;
 <BaseLayout
   title="Blog - Dipankar Das"
   description="Technical articles on DevOps, Kubernetes, Go, and cloud-native development."
+  bodyClass="archive-page"
 >
-  <AnimatedTitle title="Blog" kicker="/blog · long-form notes" />
-
-  <section class="py-10 lg:py-16 animate-fade-in">
+  <header class="archive-hero">
     <div class="container mx-auto">
-
-      <div class="sys-strip mb-12 lg:mb-16">
-        <span class="sys-key">~/blog</span>
-        <span class="sys-dot">●</span>
-        <span class="sys-value">{blogPosts.length} posts</span>
-        <span class="sys-dot">●</span>
-        <span class="sys-value">{externalBlogs.length} external</span>
-        {latestDate && (
-          <>
-            <span class="sys-dot">●</span>
-            <span class="sys-value ml-auto">last shipped: {latestDate.toISOString().slice(0, 10)}</span>
-          </>
-        )}
+      <div class="status-line">
+        <span>FIELD MANUAL / LONG-FORM</span>
+        <span>FILE: BLOG-011</span>
+        <span class="status-right">STATUS / ACTIVE</span>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16 lg:mb-20">
-        <div class="lg:col-span-8">
-          <h2 class="font-display text-3xl md:text-5xl lg:text-6xl text-app-text tracking-tight leading-[1.02]">
-            Notes from the<br/>
-            <span class="font-serif italic font-normal text-app-accent">control plane</span>.
-          </h2>
-          <p class="mt-8 max-w-xl text-base lg:text-lg text-app-gray-500 leading-[1.55]">
-            Deep-dives on DevOps, Kubernetes, Go, and the unglamorous parts of running
-            real systems. Written when I have something genuinely useful to say.
-          </p>
+      <div class="hero-grid">
+        <div class="hero-main">
+          <p class="eyebrow">Technical dispatches</p>
+          <h1>FIELD<br /><i>NOTES.</i></h1>
         </div>
-        {latest && (
-          <a href={`/blog/${latest.id}/`} class="lg:col-span-4 group block lg:pl-8 lg:border-l border-app-border">
-            <div class="kicker mb-3">/latest</div>
-            <p class="font-mono text-[11px] uppercase tracking-[0.16em] text-app-accent-2 mb-2">
-              {latestDate?.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }).toUpperCase()}
-            </p>
-            <h3 class="font-display text-xl lg:text-2xl text-app-text leading-[1.15] tracking-tight group-hover:text-app-accent transition-colors">
-              {latest.data.title}
-            </h3>
-            {latest.data.description && (
-              <p class="mt-3 text-sm text-app-gray-500 line-clamp-3 leading-[1.5]">
-                {latest.data.description}
-              </p>
-            )}
-            <span class="inline-flex items-center gap-2 mt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-app-text group-hover:text-app-accent transition-colors">
-              Read post <span>→</span>
-            </span>
+        <div class="hero-brief">
+          <span class="brief-number">01</span>
+          <p>Deep dives from inside the control plane: infrastructure, runtime behavior, and the unglamorous work of keeping real systems alive.</p>
+          <dl>
+            <div><dt>Records</dt><dd>{String(blogPosts.length).padStart(2, "0")}</dd></div>
+            <div><dt>External</dt><dd>{String(externalBlogs.length).padStart(2, "0")}</dd></div>
+            <div><dt>Last shipped</dt><dd>{latestDate?.toISOString().slice(0, 10) ?? "--"}</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {latest && (
+    <section class="latest-record" aria-labelledby="latest-heading">
+      <div class="container mx-auto latest-grid">
+        <div class="latest-label">
+          <span>02 / PRIORITY RECORD</span>
+          <span>NEWEST ENTRY</span>
+        </div>
+        <a href={`/blog/${latest.id}/`} class="latest-copy">
+          <time datetime={latest.data.date.toISOString()}>
+            {latest.data.date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" }).toUpperCase()}
+          </time>
+          <h2 id="latest-heading">{latest.data.title}</h2>
+          <p>{latest.data.description}</p>
+          <span class="inspect">Inspect record <b>↗</b></span>
+        </a>
+        {latest.data.cover && (
+          <a href={`/blog/${latest.id}/`} class="latest-visual" tabindex="-1" aria-hidden="true">
+            <img src={latest.data.cover} alt="" loading="eager" />
+            <span>FIG / 01</span>
           </a>
         )}
       </div>
+    </section>
+  )}
+
+  <section class="records" aria-labelledby="records-heading">
+    <div class="container mx-auto">
+      <header class="section-head">
+        <div><span>03</span><p>INTERNAL ARCHIVE</p></div>
+        <h2 id="records-heading">All operational<br /><i>records.</i></h2>
+        <p>Ordered by deployment date.<br />Open files / no redactions.</p>
+      </header>
+
+      <ol class="record-list">
+        {blogPosts.map((post, index) => (
+          <li>
+            <a href={`/blog/${post.id}/`}>
+              <span class="record-number">R-{String(index + 1).padStart(3, "0")}</span>
+              <time datetime={post.data.date.toISOString()}>
+                {post.data.date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" }).toUpperCase()}
+              </time>
+              <div class="record-copy">
+                <h3>{post.data.title}</h3>
+                {post.data.description && <p>{post.data.description}</p>}
+              </div>
+              <span class="record-arrow">↗</span>
+            </a>
+          </li>
+        ))}
+      </ol>
     </div>
   </section>
 
-  <BlogList posts={serializedPosts} />
-
-  <!-- External blogs -->
-  <section class="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-20 lg:pb-24">
-    <div class="border-t border-app-ink-line pt-14 lg:pt-20">
-      <div class="flex items-end justify-between gap-4 mb-10 lg:mb-12">
-        <div>
-          <div class="kicker mb-2">/external · syndicated</div>
-          <h2 class="font-display text-2xl md:text-3xl lg:text-4xl text-app-text tracking-tight">
-            Posts elsewhere
-          </h2>
-          <p class="mt-3 text-sm lg:text-base text-app-gray-400 max-w-md">
-            Articles published on Hashnode, WordPress, and Kubesimplify.
-          </p>
-        </div>
-        <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-gray-400 hidden sm:inline">
-          [{String(externalBlogs.length).padStart(2, "0")} entries]
-        </span>
-      </div>
-      <div class="grid grid-cols-1 auto-rows-fr gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-        {externalBlogs.map((blog) => (
-          <BlogPostCard
-            title={blog.title}
-            date={new Date("2024-01-01")}
-            description={blog.description}
-            cover={blog.image}
-            href={blog.url}
-            showIcon={true}
-          />
+  <section class="external" aria-labelledby="external-heading">
+    <div class="container mx-auto external-grid">
+      <header>
+        <span>04 / SYNDICATED SIGNALS</span>
+        <h2 id="external-heading">Filed<br /><i>elsewhere.</i></h2>
+        <p>Dispatches originally transmitted through Hashnode, WordPress, and Kubesimplify.</p>
+      </header>
+      <ol>
+        {externalBlogs.map((blog, index) => (
+          <li>
+            <a href={blog.url} target="_blank" rel="noopener">
+              <span>E-{String(index + 1).padStart(2, "0")}</span>
+              <div><h3>{blog.title}</h3><p>{blog.description}</p></div>
+              <b aria-hidden="true">↗</b>
+            </a>
+          </li>
         ))}
-      </div>
+      </ol>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  :global(.archive-page footer.mt-16) { margin-top: 0; }
+  .archive-hero { padding-top: 1.25rem; }
+  .status-line { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; padding: .7rem .85rem; border: 1px solid var(--color-app-ink-line); color: var(--color-app-gray-400); font: .6rem/1 var(--font-mono); letter-spacing: .12em; }
+  .status-line span:first-child { color: var(--color-app-text); }
+  .status-right { text-align: right; color: var(--color-app-accent); }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(18rem, .65fr); min-height: 36rem; border-inline: 1px solid var(--color-app-ink-line); }
+  .hero-main { display: flex; flex-direction: column; justify-content: center; padding: clamp(3rem, 7vw, 7rem) clamp(1rem, 4vw, 4rem); border-right: 1px solid var(--color-app-ink-line); overflow: hidden; }
+  .eyebrow, .external header > span { color: var(--color-app-accent); font: .65rem/1 var(--font-mono); letter-spacing: .17em; text-transform: uppercase; }
+  .eyebrow::before { content: ""; display: inline-block; width: 2.5rem; height: 1px; margin-right: .7rem; vertical-align: middle; background: currentColor; }
+  h1 { margin-top: 2.2rem; font: 750 clamp(5rem, 13vw, 12rem)/.7 var(--font-display); letter-spacing: -.07em; }
+  h1 i, .section-head i, .external h2 i { color: var(--color-app-accent); font-family: var(--font-serif); font-weight: 400; }
+  .hero-brief { display: flex; flex-direction: column; justify-content: flex-end; padding: 1.25rem; background: var(--color-app-surface); }
+  .brief-number { display: grid; place-items: center; width: 2rem; height: 2rem; margin-bottom: auto; color: var(--color-app-accent-ink); background: var(--color-app-accent); font: .65rem/1 var(--font-mono); }
+  .hero-brief > p { max-width: 24rem; color: var(--color-app-gray-500); font-size: 1rem; line-height: 1.6; }
+  .hero-brief dl { margin-top: 2.5rem; border-top: 1px solid var(--color-app-ink-line); }
+  .hero-brief dl div { display: flex; justify-content: space-between; gap: 1rem; padding: .8rem 0; border-bottom: 1px solid var(--color-app-border); font: .58rem/1.2 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+  .hero-brief dt { color: var(--color-app-gray-400); }
+  .hero-brief dd { color: var(--color-app-text); text-align: right; }
+  .latest-record { color: var(--color-app-inverse-text); background: var(--color-app-inverse); border-block: 1px solid var(--color-app-inverse-line); }
+  .latest-grid { display: grid; grid-template-columns: .45fr 1.2fr .85fr; min-height: 27rem; }
+  .latest-label { display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem 1rem 1.5rem 0; border-right: 1px solid var(--color-app-inverse-line); color: var(--color-app-inverse-muted); font: .58rem/1.3 var(--font-mono); letter-spacing: .1em; }
+  .latest-copy { display: flex; flex-direction: column; justify-content: center; padding: 3rem clamp(1.5rem, 4vw, 4rem); border-right: 1px solid var(--color-app-inverse-line); }
+  .latest-copy time { color: var(--color-app-inverse-accent); font: .64rem/1 var(--font-mono); letter-spacing: .13em; }
+  .latest-copy h2 { margin: 1.2rem 0; font: 680 clamp(2.2rem, 4.5vw, 4.8rem)/.9 var(--font-display); letter-spacing: -.055em; transition: color .2s; }
+  .latest-copy:hover h2 { color: var(--color-app-inverse-accent); }
+  .latest-copy p { max-width: 40rem; color: var(--color-app-inverse-muted); font-size: .9rem; line-height: 1.55; }
+  .inspect { display: flex; justify-content: space-between; max-width: 11rem; margin-top: 2rem; padding-bottom: .4rem; border-bottom: 1px solid currentColor; font: .62rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .latest-visual { position: relative; margin: 1rem 0 1rem 1rem; overflow: hidden; background: var(--color-app-inverse-line); clip-path: polygon(0 0, 91% 0, 100% 10%, 100% 100%, 0 100%); }
+  .latest-visual img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05); transition: filter .4s, transform .6s; }
+  .latest-grid:hover .latest-visual img { filter: grayscale(.25); transform: scale(1.02); }
+  .latest-visual span { position: absolute; right: 1rem; bottom: 1rem; padding: .4rem .5rem; color: var(--color-app-accent-ink); background: var(--color-app-accent); font: .57rem/1 var(--font-mono); }
+  .records { padding: clamp(5rem, 10vw, 9rem) 0; }
+  .section-head { display: grid; grid-template-columns: .65fr 1.5fr .6fr; gap: 2rem; align-items: start; margin-bottom: 4rem; }
+  .section-head > div { display: flex; align-items: center; gap: 1rem; }
+  .section-head > div span { display: grid; place-items: center; width: 2rem; height: 2rem; color: var(--color-app-accent-ink); background: var(--color-app-accent); font: .65rem/1 var(--font-mono); }
+  .section-head > div p { color: var(--color-app-accent); font: .62rem/1.3 var(--font-mono); letter-spacing: .12em; }
+  .section-head h2, .external h2 { font: 680 clamp(3rem, 6vw, 6rem)/.85 var(--font-display); letter-spacing: -.06em; }
+  .section-head > p, .external header > p { color: var(--color-app-gray-400); font-size: .8rem; line-height: 1.55; }
+  .record-list { border-top: 2px solid var(--color-app-text); }
+  .record-list a { display: grid; grid-template-columns: 5rem 8rem minmax(0, 1fr) auto; gap: 1.5rem; align-items: start; padding: 2rem .5rem; border-bottom: 1px solid var(--color-app-border); transition: padding .2s, background .2s; }
+  .record-list a:hover, .record-list a:focus-visible { padding-inline: 1rem; background: var(--color-app-surface); }
+  .record-number, .record-list time { padding-top: .25rem; color: var(--color-app-gray-400); font: .58rem/1.2 var(--font-mono); letter-spacing: .08em; }
+  .record-number { color: var(--color-app-accent); }
+  .record-copy h3 { max-width: 58rem; font: 620 clamp(1.45rem, 2.8vw, 2.8rem)/1 var(--font-display); letter-spacing: -.04em; transition: color .2s; }
+  .record-list a:hover h3 { color: var(--color-app-accent); }
+  .record-copy p { max-width: 48rem; margin-top: .7rem; color: var(--color-app-gray-400); font-size: .78rem; line-height: 1.5; }
+  .record-arrow { color: var(--color-app-accent); transition: transform .2s; }
+  .record-list a:hover .record-arrow { transform: translate(.2rem, -.2rem); }
+  .external { padding: clamp(5rem, 9vw, 8rem) 0; color: var(--color-app-inverse-text); background: var(--color-app-inverse); }
+  .external-grid { display: grid; grid-template-columns: .7fr 1.3fr; gap: clamp(3rem, 8vw, 8rem); }
+  .external header { display: flex; flex-direction: column; align-items: flex-start; }
+  .external h2 { margin: 2rem 0 1.5rem; }
+  .external header > span { color: var(--color-app-inverse-accent); }
+  .external header > p { max-width: 22rem; color: var(--color-app-inverse-muted); }
+  .external ol { border-top: 2px solid var(--color-app-inverse-text); }
+  .external li a { display: grid; grid-template-columns: 3rem 1fr auto; gap: 1rem; padding: 1.5rem .4rem; border-bottom: 1px solid var(--color-app-inverse-line); }
+  .external li span { color: var(--color-app-inverse-accent); font: .6rem/1 var(--font-mono); }
+  .external li h3 { font: 620 clamp(1.15rem, 2vw, 1.8rem)/1.05 var(--font-display); letter-spacing: -.03em; }
+  .external li p { display: -webkit-box; overflow: hidden; margin-top: .45rem; color: var(--color-app-inverse-muted); font-size: .75rem; line-height: 1.45; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .external li b { color: var(--color-app-inverse-accent); font-weight: 400; }
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-main { min-height: 27rem; border-right: 0; border-bottom: 1px solid var(--color-app-ink-line); }
+    .hero-brief { min-height: 20rem; }
+    .latest-grid { grid-template-columns: 1fr 1.8fr; }
+    .latest-visual { grid-column: 1 / -1; height: 21rem; margin: 0 0 1rem; }
+    .section-head { grid-template-columns: .7fr 1.4fr; }
+    .section-head > p { grid-column: 2; }
+    .external-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .status-line { grid-template-columns: 1fr auto; }
+    .status-line span:nth-child(2) { display: none; }
+    .hero-main { min-height: 23rem; }
+    h1 { font-size: clamp(4.3rem, 24vw, 7rem); }
+    .latest-grid { grid-template-columns: 1fr; }
+    .latest-label { min-height: 5rem; padding-right: 0; border-right: 0; border-bottom: 1px solid var(--color-app-inverse-line); }
+    .latest-copy { padding: 3rem 0; border-right: 0; }
+    .latest-visual { height: 16rem; }
+    .section-head { display: flex; flex-direction: column; }
+    .record-list a { grid-template-columns: 3.5rem 1fr auto; gap: .8rem; }
+    .record-list time { grid-column: 2; grid-row: 1; }
+    .record-copy { grid-column: 2; }
+    .record-arrow { grid-column: 3; grid-row: 1; }
+    .external li a { grid-template-columns: 2.5rem 1fr auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .latest-visual img, .record-list a, .record-arrow { transition: none; }
+  }
+</style>

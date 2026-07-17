@@ -4,7 +4,6 @@ export interface Service {
   icon: string;
   description: string;
   skills: string[];
-  color: string;
 }
 
 export const services: Service[] = [
@@ -12,7 +11,6 @@ export const services: Service[] = [
     title: "Golang & System Design",
     abbreviation: "SD",
     icon: "mdi:language-go",
-    color: "#88C63A33",
     description:
       "High-performance Go services, distributed systems (Raft consensus, actor model), gRPC APIs, and event-driven architectures with NATS messaging.",
     skills: [
@@ -28,7 +26,6 @@ export const services: Service[] = [
     title: "DevOps & Platform Engineering",
     abbreviation: "DE",
     icon: "mdi:cloud-cog",
-    color: "#3B00D033",
     description:
       "CI/CD pipelines, infrastructure automation, deployment dashboards, and self-hosted runner architectures. From GitHub Actions to ArgoCD GitOps workflows.",
     skills: [
@@ -44,7 +41,6 @@ export const services: Service[] = [
     title: "Kubernetes & Cloud Infrastructure",
     abbreviation: "KI",
     icon: "mdi:kubernetes",
-    color: "#EE713C33",
     description:
       "Multi-cloud Kubernetes deployments (EKS, GKE, AKS, K3s), cluster lifecycle management, Helm charts, and production-grade infrastructure with Terraform.",
     skills: [
@@ -60,7 +56,6 @@ export const services: Service[] = [
     title: "Sustainability & Observability",
     abbreviation: "SO",
     icon: "mdi:leaf",
-    color: "#0048D033",
     description:
       "Carbon-aware provisioning, cost optimization, OpenTelemetry instrumentation, Prometheus/Grafana monitoring, and resource-efficient cloud workloads.",
     skills: [

@@ -7,10 +7,9 @@ interface Props {
   icon: string;
   description: string;
   skills: string[];
-  color: string;
 }
 
-const { title, abbreviation, icon, description, skills, color } = Astro.props;
+const { title, abbreviation, icon, description, skills } = Astro.props;
 ---
 
 <article class="group relative bg-app-body border border-app-border p-6 lg:p-7 card-hover overflow-hidden">
@@ -19,10 +18,7 @@ const { title, abbreviation, icon, description, skills, color } = Astro.props;
   <span class="absolute top-0 left-0 h-px bg-app-accent-2 w-0 group-hover:w-full transition-[width] duration-500"></span>
 
   <div class="flex items-start justify-between mb-6">
-    <div
-      class="w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center border border-app-border bg-app-surface"
-      style={`box-shadow: inset 0 0 0 4px ${color}`}
-    >
+    <div class="w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center border border-app-accent bg-app-surface shadow-[inset_4px_0_0_var(--color-app-accent)]">
       <Icon name={icon} class="w-6 h-6 lg:w-7 lg:h-7 text-app-text" />
     </div>
     {abbreviation && (

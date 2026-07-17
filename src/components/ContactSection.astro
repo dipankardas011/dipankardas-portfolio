@@ -2,34 +2,47 @@
 import { siteConfig, socialLinks } from "../data/site";
 ---
 
-<section class="relative py-16 lg:py-24 border-t border-app-ink-line">
-  <div class="container mx-auto">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-      <div class="lg:col-span-7">
-        <div class="kicker mb-6">/cta · the next move</div>
-        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl text-app-text tracking-tight leading-[0.98]">
-          Pick a thread.<br/>
-          <span class="font-serif italic font-normal text-app-accent">Let's pull on it</span> together.
-        </h2>
-        <p class="mt-6 lg:mt-8 max-w-xl text-base lg:text-lg text-app-gray-500 leading-[1.55]">
-          DevOps consulting, Kubernetes audits, Go service design, or just a 30-minute
-          sanity-check on your platform — start with whatever feels right.
-        </p>
-      </div>
-      <div class="lg:col-span-5 flex flex-col gap-3 justify-end">
-        <a href={`mailto:${siteConfig.email}`} class="btn-primary justify-between">
-          <span class="font-mono text-[11px] uppercase tracking-[0.12em]">Send a brief</span>
-          <span>→</span>
-        </a>
-        <a href={socialLinks.linkedin} target="_blank" rel="noopener" class="btn-ghost justify-between">
-          <span class="font-mono text-[11px] uppercase tracking-[0.12em]">LinkedIn</span>
-          <span>↗</span>
-        </a>
-        <a href={siteConfig.resumeUrl} target="_blank" rel="noopener" class="btn-ghost justify-between">
-          <span class="font-mono text-[11px] uppercase tracking-[0.12em]">Resume PDF</span>
-          <span>↗</span>
-        </a>
-      </div>
+<section class="contact-transmission">
+  <div class="container mx-auto transmission-grid">
+    <div class="transmission-code">
+      <span>CONTACT / TX-01</span>
+      <p>DEVOPS · KUBERNETES · GO<br />PLATFORM SYSTEMS</p>
+    </div>
+    <div class="transmission-main">
+      <p>THE NEXT MOVE</p>
+      <h2>Bring the hard<br /><i>problem.</i></h2>
+      <span>Audits, system design, focused implementation, or one honest sanity check before the next deployment.</span>
+    </div>
+    <div class="transmission-actions">
+      <a href={`mailto:${siteConfig.email}`} class="primary"><span>TRANSMIT BRIEF</span><b>→</b></a>
+      <a href={socialLinks.linkedin} target="_blank" rel="noopener"><span>LINKEDIN</span><b>↗</b></a>
+      <a href={siteConfig.resumeUrl} target="_blank" rel="noopener"><span>RESUME / PDF</span><b>↗</b></a>
     </div>
   </div>
 </section>
+
+<style>
+  .contact-transmission { padding: clamp(4rem, 8vw, 7rem) 0; color: var(--color-app-inverse-text); background: var(--color-app-inverse); border-block: 1px solid var(--color-app-inverse-line); }
+  .transmission-grid { display: grid; grid-template-columns: .45fr 1.45fr .65fr; gap: clamp(2rem, 5vw, 5rem); align-items: end; }
+  .transmission-code { align-self: stretch; display: flex; flex-direction: column; justify-content: space-between; padding-top: .5rem; border-top: 2px solid var(--color-app-inverse-text); color: var(--color-app-inverse-muted); font: .58rem/1.5 var(--font-mono); letter-spacing: .1em; }
+  .transmission-code span, .transmission-main > p { color: var(--color-app-inverse-accent); }
+  .transmission-main > p { font: .62rem/1 var(--font-mono); letter-spacing: .15em; }
+  .transmission-main h2 { margin: 1.5rem 0; font: 680 clamp(3.4rem, 7vw, 7rem)/.82 var(--font-display); letter-spacing: -.06em; }
+  .transmission-main h2 i { color: var(--color-app-inverse-accent); font-family: var(--font-serif); font-weight: 400; }
+  .transmission-main > span { display: block; max-width: 38rem; color: var(--color-app-inverse-muted); font-size: .85rem; line-height: 1.6; }
+  .transmission-actions { border-top: 1px solid var(--color-app-inverse-line); }
+  .transmission-actions a { display: flex; justify-content: space-between; padding: 1rem .25rem; border-bottom: 1px solid var(--color-app-inverse-line); color: var(--color-app-inverse-muted); font: .58rem/1 var(--font-mono); letter-spacing: .08em; }
+  .transmission-actions b { color: var(--color-app-inverse-accent); font-weight: 400; }
+  .transmission-actions .primary { padding: 1rem; color: var(--color-app-accent-ink); background: var(--color-app-accent); border-color: var(--color-app-accent); }
+  .transmission-actions .primary b { color: inherit; }
+  .transmission-actions a:hover { padding-inline: .7rem; color: var(--color-app-inverse-accent); }
+  @media (max-width: 900px) {
+    .transmission-grid { grid-template-columns: .45fr 1.55fr; }
+    .transmission-actions { grid-column: 2; }
+  }
+  @media (max-width: 640px) {
+    .transmission-grid { grid-template-columns: 1fr; }
+    .transmission-code { min-height: 5rem; }
+    .transmission-actions { grid-column: auto; }
+  }
+</style>

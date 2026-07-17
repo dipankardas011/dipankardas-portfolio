@@ -2,78 +2,88 @@
 import { socialLinks, siteConfig } from "../data/site";
 
 const year = new Date().getFullYear();
-
 const socials = [
-  { label: "GitHub",   href: socialLinks.github },
-  { label: "Twitter",  href: socialLinks.twitter },
-  { label: "GitLab",   href: socialLinks.gitlab },
-  { label: "LinkedIn", href: socialLinks.linkedin },
-  { label: "Upwork",   href: socialLinks.upwork },
-  { label: "Fiverr",   href: socialLinks.fiverr },
+  { label: "GitHub", href: socialLinks.github, code: "GH" },
+  { label: "LinkedIn", href: socialLinks.linkedin, code: "LI" },
+  { label: "Twitter", href: socialLinks.twitter, code: "X" },
+  { label: "GitLab", href: socialLinks.gitlab, code: "GL" },
+  { label: "Upwork", href: socialLinks.upwork, code: "UW" },
+  { label: "RSS", href: "/rss.xml", code: "XML" },
 ];
 ---
 
-<footer class="border-t border-app-ink-line mt-16 lg:mt-24">
-  <div class="container mx-auto py-12 lg:py-16">
-
-    <!-- CTA block -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-10 lg:pb-14 border-b border-app-border">
-      <div class="lg:col-span-7">
-        <p class="kicker mb-4">/contact · open to work</p>
-        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl text-app-text leading-[0.95] tracking-tight">
-          Let's build the<br/>
-          <span class="font-serif italic font-normal text-app-accent">infrastructure</span>
-          your team deserves.
-        </h2>
+<footer class="site-footer mt-16 lg:mt-24">
+  <div class="container mx-auto">
+    <section class="footer-cta">
+      <div class="footer-status"><span>FINAL TRANSMISSION</span><span>CHANNEL / OPEN</span></div>
+      <div class="footer-grid">
+        <div class="footer-index"><span>END / 011</span><p>HAVE A SYSTEM<br />THAT MUST HOLD?</p></div>
+        <h2>BUILD WHAT<br /><i>LASTS.</i></h2>
+        <div class="footer-actions">
+          <a href={`mailto:${siteConfig.email}`} class="email-link"><span>SEND A BRIEF</span><b>→</b></a>
+          <a href={socialLinks.linkedin} target="_blank" rel="noopener"><span>LINKEDIN</span><b>↗</b></a>
+          <a href={siteConfig.resumeUrl} target="_blank" rel="noopener"><span>RESUME / PDF</span><b>↗</b></a>
+        </div>
       </div>
-      <div class="lg:col-span-5 flex flex-col justify-end gap-3">
-        <a
-          href={`mailto:${siteConfig.email}`}
-          class="btn-primary justify-between w-full lg:max-w-md"
-        >
-          <span class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-              <rect width="20" height="16" x="2" y="4" rx="2"/>
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-            </svg>
-            <span class="font-mono text-[11px] uppercase tracking-[0.12em]">{siteConfig.email}</span>
-          </span>
-          <span class="font-mono text-xs">→</span>
-        </a>
-        <a
-          href={socialLinks.linkedin}
-          target="_blank"
-          rel="noopener"
-          class="btn-ghost justify-between w-full lg:max-w-md"
-        >
-          <span class="font-mono text-[11px] uppercase tracking-[0.12em]">Connect on LinkedIn</span>
-          <span class="font-mono text-xs">↗</span>
-        </a>
-      </div>
-    </div>
+    </section>
 
-    <!-- Socials grid -->
-    <div class="pt-10 lg:pt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-app-border border border-app-border">
-      {socials.map((s) => (
-        <a
-          href={s.href}
-          target="_blank"
-          rel="noopener"
-          class="group bg-app-body hover:bg-app-text hover:text-app-body transition-colors duration-300 px-5 py-5 flex flex-col justify-between min-h-[88px]"
-        >
-          <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-accent-2 group-hover:text-app-accent">
-            ↗
-          </span>
-          <span class="font-display text-base font-medium tracking-tight">{s.label}</span>
+    <nav class="social-ledger" aria-label="Social links">
+      {socials.map((social, index) => (
+        <a href={social.href} target={social.href.startsWith("http") ? "_blank" : undefined} rel={social.href.startsWith("http") ? "noopener" : undefined}>
+          <span>{String(index + 1).padStart(2, "0")} / {social.code}</span>
+          <strong>{social.label}</strong>
+          <b>↗</b>
         </a>
       ))}
-    </div>
+    </nav>
 
-    <!-- Bottom row -->
-    <div class="pt-8 lg:pt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-app-gray-400">
-      <span>&copy; {year} · {siteConfig.name}</span>
-      <span>built with astro · hosted with care</span>
-      <a href="/rss.xml" class="hover:text-app-text transition-colors">RSS</a>
+    <div class="footer-base">
+      <span>© {year} / {siteConfig.name}</span>
+      <span>ASTRO / STATIC / LOW-OVERHEAD</span>
+      <a href="#top" aria-label="Back to top">RETURN TO 00 ↑</a>
     </div>
   </div>
 </footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--color-app-ink-line); }
+  .footer-cta { padding: clamp(4rem, 8vw, 8rem) 0; }
+  .footer-status { display: flex; justify-content: space-between; padding-bottom: 1rem; border-bottom: 1px solid var(--color-app-ink-line); color: var(--color-app-gray-400); font: .58rem/1 var(--font-mono); letter-spacing: .12em; }
+  .footer-status span:last-child { color: var(--color-app-accent); }
+  .footer-grid { display: grid; grid-template-columns: .45fr 1.55fr .65fr; gap: 2rem; align-items: end; padding-top: 3rem; }
+  .footer-index { align-self: stretch; display: flex; flex-direction: column; justify-content: space-between; color: var(--color-app-gray-400); font: .58rem/1.5 var(--font-mono); letter-spacing: .1em; }
+  .footer-index span { color: var(--color-app-accent); }
+  .footer-grid h2 { font: 720 clamp(4rem, 9vw, 9rem)/.72 var(--font-display); letter-spacing: -.07em; }
+  .footer-grid h2 i { color: var(--color-app-accent); font-family: var(--font-serif); font-weight: 400; }
+  .footer-actions { border-top: 1px solid var(--color-app-ink-line); }
+  .footer-actions a { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem .25rem; border-bottom: 1px solid var(--color-app-border); color: var(--color-app-gray-500); font: .58rem/1 var(--font-mono); letter-spacing: .08em; }
+  .footer-actions a b { color: var(--color-app-accent); font-weight: 400; }
+  .footer-actions a:hover { color: var(--color-app-accent); padding-inline: .6rem; }
+  .footer-actions .email-link { padding: 1rem; color: var(--color-app-accent-ink); background: var(--color-app-accent); border-color: var(--color-app-accent); }
+  .footer-actions .email-link b { color: inherit; }
+  .social-ledger { display: grid; grid-template-columns: repeat(6, 1fr); border-block: 1px solid var(--color-app-ink-line); border-left: 1px solid var(--color-app-ink-line); }
+  .social-ledger a { display: grid; grid-template-columns: 1fr auto; min-height: 7rem; padding: 1rem; border-right: 1px solid var(--color-app-ink-line); transition: color .2s, background .2s; }
+  .social-ledger span { color: var(--color-app-gray-400); font: .52rem/1 var(--font-mono); letter-spacing: .1em; }
+  .social-ledger strong { grid-column: 1; align-self: end; font: 580 1.05rem/1 var(--font-display); }
+  .social-ledger b { grid-column: 2; grid-row: 1 / 3; align-self: end; color: var(--color-app-accent); font-weight: 400; }
+  .social-ledger a:hover { color: var(--color-app-accent-ink); background: var(--color-app-accent); }
+  .social-ledger a:hover span, .social-ledger a:hover b { color: inherit; }
+  .footer-base { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; padding: 1.5rem 0; color: var(--color-app-gray-400); font: .52rem/1 var(--font-mono); letter-spacing: .1em; }
+  .footer-base a { text-align: right; }
+  .footer-base a:hover { color: var(--color-app-accent); }
+  @media (max-width: 900px) {
+    .footer-grid { grid-template-columns: .4fr 1.6fr; }
+    .footer-actions { grid-column: 2; }
+    .social-ledger { grid-template-columns: repeat(3, 1fr); }
+    .social-ledger a { border-bottom: 1px solid var(--color-app-ink-line); }
+  }
+  @media (max-width: 640px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-index { min-height: 5rem; }
+    .footer-grid h2 { font-size: clamp(3.7rem, 20vw, 6rem); }
+    .footer-actions { grid-column: auto; }
+    .social-ledger { grid-template-columns: repeat(2, 1fr); }
+    .footer-base { grid-template-columns: 1fr; line-height: 1.4; }
+    .footer-base a { text-align: left; }
+  }
+</style>
