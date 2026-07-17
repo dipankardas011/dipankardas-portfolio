@@ -18,7 +18,7 @@ const featuredProjects = projects.filter((p) => p.featured && p.title !== "kubmi
   <Hero />
 
   <!-- 01 · Services -->
-  <section class="py-20 lg:py-28 border-t border-app-ink-line">
+  <section id="services" class="py-20 lg:py-28 border-t border-app-ink-line">
     <div class="container mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 lg:mb-16">
         <div class="lg:col-span-6">
@@ -55,7 +55,7 @@ const featuredProjects = projects.filter((p) => p.featured && p.title !== "kubmi
 
   <!-- 02 · Featured spotlight — Kubmin, on ink -->
   {spotlight && (
-    <section class="ink-section py-20 lg:py-28 border-t border-app-ink-line">
+    <section id="spotlight" class="ink-section py-20 lg:py-28 border-t border-app-ink-line">
       <div class="container mx-auto">
         <div class="sys-strip mb-12 lg:mb-16" data-reveal>
           <span class="sys-key">~/spotlight</span>
@@ -137,7 +137,7 @@ const featuredProjects = projects.filter((p) => p.featured && p.title !== "kubmi
   )}
 
   <!-- 03 · Featured Projects -->
-  <section class="py-20 lg:py-28 border-t border-app-ink-line">
+  <section id="projects" class="py-20 lg:py-28 border-t border-app-ink-line">
     <div class="container mx-auto">
       <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12 lg:mb-16">
         <SectionHeader

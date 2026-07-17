@@ -9,11 +9,18 @@ interface Props {
 
 const { testimonials, index } = Astro.props;
 
-/** Split stored content into paragraphs for editorial layout */
-const entries = testimonials.map((t) => ({
-  ...t,
-  paragraphs: t.content.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
-}));
+/** Split stored content into paragraphs for editorial layout.
+ * Long recommendations are excerpted to the first two paragraphs —
+ * the full text lives on LinkedIn, linked in the attribution. */
+const MAX_PARAGRAPHS = 2;
+const entries = testimonials.map((t) => {
+  const paragraphs = t.content.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+  return {
+    ...t,
+    paragraphs: paragraphs.slice(0, MAX_PARAGRAPHS),
+    excerpted: paragraphs.length > MAX_PARAGRAPHS,
+  };
+});
 ---
 
 <section class="py-20 lg:py-28 border-t border-app-ink-line">
@@ -50,6 +57,17 @@ const entries = testimonials.map((t) => ({
           >
             <div class:list={["pullquote-body", item.content.length > 600 && "pullquote-body--long"]}>
               {item.paragraphs.map((p) => <p>{p}</p>)}
+              {item.excerpted && item.linkedinUrl && (
+                <p class="font-serif italic text-[0.8em] text-app-gray-400">
+                  — excerpted ·{" "}
+                  <a
+                    href={item.linkedinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-app-accent-2 hover:text-app-accent transition-colors"
+                  >full recommendation on LinkedIn ↗</a>
+                </p>
+              )}
             </div>
           </blockquote>
 
