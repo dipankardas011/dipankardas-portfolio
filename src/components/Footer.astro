@@ -13,14 +13,14 @@ const socials = [
 ];
 ---
 
-<footer class="border-t border-app-ink-line mt-16 lg:mt-24">
-  <div class="container mx-auto py-12 lg:py-16">
+<footer class="ink-section mt-20 lg:mt-28 border-t border-app-ink-line">
+  <div class="container mx-auto py-16 lg:py-20">
 
     <!-- CTA block -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-10 lg:pb-14 border-b border-app-border">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-12 lg:pb-16 border-b border-app-ink-border">
       <div class="lg:col-span-7">
-        <p class="kicker mb-4">/contact · open to work</p>
-        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl text-app-text leading-[0.95] tracking-tight">
+        <p class="kicker mb-5">/contact · open to work</p>
+        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl text-app-on-ink leading-[0.95] tracking-tight">
           Let's build the<br/>
           <span class="font-serif italic font-normal text-app-accent">infrastructure</span>
           your team deserves.
@@ -29,39 +29,39 @@ const socials = [
       <div class="lg:col-span-5 flex flex-col justify-end gap-3">
         <a
           href={`mailto:${siteConfig.email}`}
-          class="btn-primary justify-between w-full lg:max-w-md"
+          class="inline-flex items-center justify-between gap-2 w-full lg:max-w-md px-6 py-3 rounded-full bg-app-body text-app-ink border border-app-body font-mono text-[11px] uppercase tracking-[0.12em] font-semibold hover:bg-app-accent hover:border-app-accent hover:text-app-ink transition-colors duration-300"
         >
           <span class="flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
               <rect width="20" height="16" x="2" y="4" rx="2"/>
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
             </svg>
-            <span class="font-mono text-[11px] uppercase tracking-[0.12em]">{siteConfig.email}</span>
+            <span>{siteConfig.email}</span>
           </span>
-          <span class="font-mono text-xs">→</span>
+          <span>→</span>
         </a>
         <a
           href={socialLinks.linkedin}
           target="_blank"
           rel="noopener"
-          class="btn-ghost justify-between w-full lg:max-w-md"
+          class="inline-flex items-center justify-between gap-2 w-full lg:max-w-md px-6 py-3 rounded-full border border-app-ink-border text-app-on-ink font-mono text-[11px] uppercase tracking-[0.12em] font-medium hover:border-app-body transition-colors duration-300"
         >
-          <span class="font-mono text-[11px] uppercase tracking-[0.12em]">Connect on LinkedIn</span>
-          <span class="font-mono text-xs">↗</span>
+          <span>Connect on LinkedIn</span>
+          <span>↗</span>
         </a>
       </div>
     </div>
 
     <!-- Socials grid -->
-    <div class="pt-10 lg:pt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-app-border border border-app-border">
+    <div class="mt-12 lg:mt-14 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-app-ink-border border border-app-ink-border">
       {socials.map((s) => (
         <a
           href={s.href}
           target="_blank"
           rel="noopener"
-          class="group bg-app-body hover:bg-app-text hover:text-app-body transition-colors duration-300 px-5 py-5 flex flex-col justify-between min-h-[88px]"
+          class="group bg-app-ink hover:bg-app-body hover:text-app-ink text-app-on-ink transition-colors duration-300 px-5 py-5 flex flex-col justify-between min-h-[88px]"
         >
-          <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-accent-2 group-hover:text-app-accent">
+          <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-accent">
             ↗
           </span>
           <span class="font-display text-base font-medium tracking-tight">{s.label}</span>
@@ -69,11 +69,21 @@ const socials = [
       ))}
     </div>
 
+    <!-- Sign-off -->
+    <div class="pt-14 lg:pt-16 flex items-end justify-between gap-6">
+      <p class="font-serif italic text-[clamp(2rem,5vw,3.75rem)] leading-[1.05] text-app-on-ink tracking-[-0.01em]">
+        — <span class="text-app-accent">{siteConfig.name}</span>
+      </p>
+      <span class="hidden sm:block font-mono text-[10px] uppercase tracking-[0.18em] text-app-on-ink-muted pb-2">
+        fin.
+      </span>
+    </div>
+
     <!-- Bottom row -->
-    <div class="pt-8 lg:pt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-app-gray-400">
+    <div class="mt-10 pt-6 border-t border-app-ink-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-app-on-ink-muted">
       <span>&copy; {year} · {siteConfig.name}</span>
       <span>built with astro · hosted with care</span>
-      <a href="/rss.xml" class="hover:text-app-text transition-colors">RSS</a>
+      <a href="/rss.xml" class="hover:text-app-on-ink transition-colors">RSS</a>
     </div>
   </div>
 </footer>

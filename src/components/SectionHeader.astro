@@ -4,28 +4,40 @@ interface Props {
   subtitle?: string;
   kicker?: string;
   index?: number | string;
+  /** Render the oversized ghost outline numeral behind the header */
+  ghost?: boolean;
   className?: string;
 }
 
-const { title, subtitle, kicker, index, className = '' } = Astro.props;
+const { title, subtitle, kicker, index, ghost = true, className = '' } = Astro.props;
+
+const indexLabel =
+  index !== undefined
+    ? typeof index === "number"
+      ? String(index).padStart(2, "0")
+      : index
+    : undefined;
 ---
 
-<div class={`mb-8 lg:mb-12 ${className}`}>
-  {(kicker || index !== undefined) && (
-    <div class="flex items-center gap-3 mb-3">
-      {index !== undefined && (
+<div class={`relative mb-8 lg:mb-12 ${className}`}>
+  {ghost && indexLabel && (
+    <span class="ghost-index" aria-hidden="true">{indexLabel}</span>
+  )}
+  {(kicker || indexLabel) && (
+    <div class="relative z-10 flex items-center gap-3 mb-3">
+      {indexLabel && (
         <span class="font-mono text-[11px] tracking-[0.18em] font-semibold text-app-accent-2">
-          {typeof index === "number" ? String(index).padStart(2, "0") : index}
+          {indexLabel}
         </span>
       )}
       {kicker && <span class="kicker">{kicker}</span>}
     </div>
   )}
-  <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-app-text tracking-tight leading-[1.05] max-w-3xl">
+  <h2 class="relative z-10 font-display text-3xl md:text-4xl lg:text-5xl text-app-text tracking-tight leading-[1.05] max-w-3xl">
     {title}
   </h2>
   {subtitle && (
-    <p class="mt-4 text-base lg:text-lg text-app-gray-400 leading-[1.5] max-w-2xl">
+    <p class="relative z-10 mt-4 text-base lg:text-lg text-app-gray-400 leading-[1.5] max-w-2xl">
       {subtitle}
     </p>
   )}

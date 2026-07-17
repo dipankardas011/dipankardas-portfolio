@@ -2,10 +2,10 @@
 import { siteConfig, socialLinks } from "../data/site";
 ---
 
-<section class="relative py-16 lg:py-24 border-t border-app-ink-line">
+<section class="relative py-20 lg:py-28 border-t border-app-ink-line">
   <div class="container mx-auto">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-      <div class="lg:col-span-7">
+      <div class="lg:col-span-7" data-reveal>
         <div class="kicker mb-6">/cta · the next move</div>
         <h2 class="font-display text-4xl md:text-5xl lg:text-6xl text-app-text tracking-tight leading-[0.98]">
           Pick a thread.<br/>
@@ -16,7 +16,7 @@ import { siteConfig, socialLinks } from "../data/site";
           sanity-check on your platform — start with whatever feels right.
         </p>
       </div>
-      <div class="lg:col-span-5 flex flex-col gap-3 justify-end">
+      <div class="lg:col-span-5 flex flex-col gap-3 justify-end" data-reveal style="--reveal-delay: 1">
         <a href={`mailto:${siteConfig.email}`} class="btn-primary justify-between">
           <span class="font-mono text-[11px] uppercase tracking-[0.12em]">Send a brief</span>
           <span>→</span>

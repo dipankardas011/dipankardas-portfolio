@@ -67,6 +67,13 @@
   --color-app-border:        #D8D2C2;
   --color-app-ink-line:      #1A1A1A;   /* hard rule color */
 
+  /* Ink surface — dark editorial anchors (spotlight, footer, code) */
+  --color-app-ink:           #1A1A1A;   /* full-bleed dark surface */
+  --color-app-ink-soft:      #262220;   /* raised panel on ink */
+  --color-app-ink-border:    #3A3530;   /* hairline on ink */
+  --color-app-on-ink:        #FAF7F0;   /* cream text on ink */
+  --color-app-on-ink-muted:  #A89E8F;   /* warm-gray text on ink */
+
   /* Decorative blur */
   --color-blur-purple: #FF6B35;
   --color-blur-yellow: #FFBF4B;
@@ -185,6 +192,196 @@ body::before {
   height: 1px;
   background: var(--color-app-accent);
   display: inline-block;
+}
+
+/* Kicker on ink surfaces */
+.ink-section .kicker { color: var(--color-app-accent); }
+.ink-section .kicker::before { background: var(--color-app-accent); }
+
+/* ============================================
+   INK SECTION — full-bleed dark editorial anchor
+   Same token system, inverted surface. Use sparingly:
+   homepage spotlight, footer, code blocks.
+   ============================================ */
+.ink-section {
+  background-color: var(--color-app-ink);
+  color: var(--color-app-on-ink);
+  position: relative;
+}
+/* faint paper grain on ink too — keeps the print feel */
+.ink-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.98 0 0 0 0 0.97 0 0 0 0 0.94 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.ink-section > * { position: relative; }
+
+.ink-section .sys-strip {
+  color: var(--color-app-on-ink-muted);
+  border-color: var(--color-app-ink-border);
+}
+.ink-section .sys-strip .sys-key { color: var(--color-app-on-ink); }
+.ink-section .sys-strip .sys-value { color: var(--color-app-on-ink-muted); }
+
+/* ============================================
+   GHOST INDEX — oversized outline numeral behind section headers
+   ============================================ */
+.ghost-index {
+  position: absolute;
+  top: -0.18em;
+  right: 0;
+  z-index: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(5rem, 14vw, 11rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-app-gray-200);
+  pointer-events: none;
+  user-select: none;
+}
+.ink-section .ghost-index {
+  -webkit-text-stroke: 1px var(--color-app-ink-border);
+}
+@media (max-width: 640px) {
+  .ghost-index { font-size: 4.5rem; top: -0.1em; }
+}
+
+/* ============================================
+   SCROLL REVEAL — IntersectionObserver fade-up
+   Hidden state only applies when JS is running (html.js)
+   and the user hasn't asked for reduced motion.
+   ============================================ */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal] {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(var(--reveal-delay, 0) * 90ms);
+  }
+  html.js [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================
+   EDITORIAL CARD SYSTEM
+   Cream surface · 1px warm-gray border · hard ink border + lift on hover
+   ============================================ */
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--color-app-border);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-app-gray-500);
+  background: transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+.group:hover .tag-chip { border-color: var(--color-app-gray-300); }
+
+/* ============================================
+   PULL QUOTE — editorial testimonial spread
+   ============================================ */
+.pullquote {
+  position: relative;
+  padding-top: 2.5rem;
+}
+.pullquote::before {
+  content: "\201C";
+  position: absolute;
+  top: -0.4rem;
+  left: -0.35rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 5.5rem;
+  line-height: 1;
+  color: var(--color-app-accent);
+  opacity: 0.9;
+  pointer-events: none;
+}
+.pullquote-body {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--color-app-text);
+  font-size: clamp(1.15rem, 1.05rem + 0.6vw, 1.5rem);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+}
+.pullquote-body p + p { margin-top: 0.9em; }
+/* long quotes step down a size so the spread stays balanced */
+.pullquote-body--long {
+  font-size: clamp(1.05rem, 1rem + 0.4vw, 1.3rem);
+  line-height: 1.55;
+}
+
+/* ============================================
+   PORTRAIT — duotone / warm-tint hover
+   ============================================ */
+.portrait-duotone img {
+  filter: grayscale(1) contrast(1.02);
+  transition: filter 0.6s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.portrait-duotone:hover img {
+  filter: grayscale(1) sepia(0.35) saturate(1.6) hue-rotate(-18deg) contrast(1.02);
+  transform: scale(1.025);
+}
+@media (prefers-reduced-motion: reduce) {
+  .portrait-duotone img, .portrait-duotone:hover img { transition: none; transform: none; }
+}
+
+/* ============================================
+   SERIF SIGNATURE — hand-drawn underline stroke
+   Wrap the brand serif-italic word:
+   <span class="serif-sig">word<svg …/></span>
+   ============================================ */
+.serif-sig {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.06em;
+  color: var(--color-app-accent);
+  padding: 0 0.02em;
+}
+.serif-sig .sig-stroke {
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: -0.12em;
+  width: 104%;
+  height: 0.22em;
+  overflow: visible;
+  pointer-events: none;
+}
+.serif-sig .sig-stroke path {
+  fill: none;
+  stroke: var(--color-app-accent);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .serif-sig .sig-stroke path {
+    stroke-dasharray: 120;
+    stroke-dashoffset: 120;
+    animation: sig-draw 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.9s forwards;
+  }
+  @keyframes sig-draw {
+    to { stroke-dashoffset: 0; }
+  }
 }
 
 /* Hard rule */
@@ -313,14 +510,14 @@ body::before {
   font-style: italic;
   font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 1.15em;
+  font-size: 1.3em;
   color: var(--color-app-text);
   border-left: 3px solid var(--color-app-accent-2);
-  padding: 0.5rem 0 0.5rem 1.5rem;
-  margin: 2rem 0;
+  padding: 0.6rem 0 0.6rem 1.75rem;
+  margin: 2.5rem 0;
   background: transparent;
   border-radius: 0;
-  line-height: 1.55;
+  line-height: 1.5;
 }
 .prose blockquote p { margin: 0.5rem 0; }
 .prose blockquote p:first-child { margin-top: 0; }
@@ -340,13 +537,13 @@ body::before {
   word-break: break-word;
 }
 .prose pre {
-  background-color: #FAF4ED !important; /* rose-pine-dawn surface */
-  border: 1px solid var(--color-app-border);
+  background-color: var(--color-app-ink) !important; /* dark ink anchor */
+  border: 1px solid var(--color-app-ink);
   border-radius: 0.4rem;
   padding: 1rem 1.1rem;
   font-size: 0.86em;
   line-height: 1.55;
-  box-shadow: 0 1px 0 var(--color-app-border), 0 8px 18px -10px rgba(26,26,26,0.10);
+  box-shadow: 0 10px 24px -12px rgba(26,26,26,0.35);
   overflow-x: auto;
 }
 .prose pre code {
@@ -472,7 +669,7 @@ body::before {
 .prose blockquote + p:has(> img) { margin-top: 0; }
 
 .prose .pull-quote {
-  font-size: 1.625rem;
+  font-size: 1.875rem;
   font-weight: 400;
   font-family: var(--font-serif);
   font-style: italic;
@@ -759,8 +956,8 @@ html[data-blog="true"] .prose pre[data-lang]::before {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-app-accent);
-  background: var(--color-app-surface-alt);
-  border-bottom: 1px solid var(--color-app-border);
+  background: var(--color-app-ink-soft);
+  border-bottom: 1px solid var(--color-app-ink-border);
 }
 
 .author-card {
@@ -960,11 +1157,19 @@ html[data-blog="true"] .prose pre[data-lang]::before {
 .animate-heartbeat { animation: heartbeat 0.8s ease-in-out; }
 .group:hover .group-hover\:animate-heartbeat { animation: heartbeat 0.8s ease-in-out; }
 
-.card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+.card-hover {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s ease;
+}
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 28px -10px rgba(26,26,26,0.18);
-  border-color: var(--color-app-text);
+  box-shadow: 4px 4px 0 0 var(--color-app-ink-line), 0 16px 30px -14px rgba(26,26,26,0.22);
+  border-color: var(--color-app-ink-line);
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-hover, .card-hover:hover { transition: none; transform: none; }
 }
 
 .link-underline { position: relative; text-decoration: none; }
