@@ -25,7 +25,7 @@ export const projects: Project[] = [
   {
     title: "kli",
     description:
-      "Cloud-agnostic Kubernetes management tool supporting multi-cloud clusters (EKS, GKE, AKS, K3s, kubeadm). Features carbon-aware provisioning and cost-optimized region selection.",
+      "Cloud-agnostic Kubernetes management tool built through hands-on integration with AWS, Azure, and Civo cloud providers. Supports managed and self-managed targets including EKS, GKE, AKS, K3s, and kubeadm, with carbon-aware provisioning and cost-optimized region selection. Maintained with fuzz, unit, and end-to-end test suites.",
     image: "https://ksctl.com/kli-logo.svg",
     links: [
       { label: "GitHub", url: "https://github.com/ksctl/kli" },
@@ -51,7 +51,7 @@ export const projects: Project[] = [
   {
     title: "InfAI",
     description:
-      "Zero-management launch templates for llama.cpp. Auto-detects GGUF models, saves named profiles in SQLite, and launches llama-server with live logs and real-time metrics — no flag soup. Supports 11+ themes on macOS and Linux.",
+      "Zero-management launch templates for llama.cpp and vLLM. Auto-detects GGUF and safetensors models, saves named profiles in SQLite, and launches model servers with live logs and real-time metrics — no flag soup. Supports 11+ themes on macOS and Linux.",
     image: "https://github.com/dipankardas011/infai/blob/main/cover.webp?raw=true",
     links: [
       { label: "Website", url: "https://infai.dipankar-das.com/" },
