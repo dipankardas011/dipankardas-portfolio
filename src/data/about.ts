@@ -29,6 +29,18 @@ export const experiences: Experience[] = [
         how: "Established a multi-environment GitOps workflow with a rigorous Plan-Review-Apply SOP, eliminating click-ops and achieving consistent, repeatable infrastructure across prod, dev, and staging.",
       },
       {
+        title: "Internal Server and Site Log reporting",
+        why: "More than 10 servers hosting over 200 WordPress, Frappe, and custom sites lacked centralized log collection and actionable reporting, increasing the risk of missing fatal errors and production issues.",
+        what: "Built a centralized log intelligence pipeline using Fluent Bit, OpenTelemetry Collector, Loki, Grafana, and an AI agent harness. The system normalizes logs from multiple sources, deduplicates routine noise such as rate-limit events, and produces hourly summaries of application problems.",
+        how: "Standardized incoming logs into a common OpenTelemetry schema before storing them in Loki, then connected the data to an MCP-enabled AI agent for reporting. Reduced unnecessary tool calls and token usage by downloading and deduplicating logs only when needed, while delegating log processing to efficient UNIX command-line workflows. This made analysis nearly 2x faster and reduced token usage by 70%, giving developers a single view of active incidents including credential leaks, OOM kills, and fatal application errors. Connected Loki to Grafana through a Cloudflare Tunnel.",
+      },
+      {
+        title: "Internal CI/CD with GitHub ARC Runners",
+        why: "Server-hosted GitHub runners polluted host environments, introduced dependency and networking conflicts, and required brittle custom scripts for workflows such as wp-env and Docker Compose. The setup also lacked runner-based autoscaling and cost control.",
+        what: "Migrated the self-hosted runner platform to Kubernetes-based GitHub Actions Runner ScaleSets with monitoring and autoscaling support.",
+        how: "Gradually shifted private repositories to the new runner platform with zero CI/CD downtime, updating the necessary GitHub Actions workflows to simplify execution. The migration reduced unexplained pipeline failures, improved maintainability, and brought the developer experience closer to GitHub-hosted ubuntu-latest runners.",
+      },
+      {
         title: "Cloud-Native Scaling & Observability — Global FinTech",
         why: "A monolithic Frappe/ERPNext platform was buckling under high-concurrency traffic with no visibility into where production bottlenecks occurred.",
         what: "Migrated the platform to a distributed Kubernetes cluster and implemented full-stack OpenTelemetry instrumentation.",
@@ -61,6 +73,18 @@ export const experiences: Experience[] = [
     logo: "/img/experience/kubmin-logo.webp",
     link: "https://ksctl.com/product/kubmin/",
     contributions: [
+      {
+        title: "SCI for OpenTelemetry Assembly",
+        why: "The OpenTelemetry and green software communities needed a shared, consensus-based approach for representing the Software Carbon Intensity (SCI) specification, an ISO standard, in OpenTelemetry semantic conventions.",
+        what: "Represented ksctl/Kubmin as one of 40 practitioners, maintainers, and researchers contributing to the SCI for OpenTelemetry blueprint. The assembly is defining the design decisions needed to turn SCI into draft semantic conventions for review by the OpenTelemetry Semantic Conventions SIG.",
+        how: "Participated in the assembly's Discover, Deliberate, and Decide process, contributing a platform-builder perspective to the proposed standard for software carbon telemetry.",
+      },
+      {
+        title: "Research on Software Sustainability Metrics",
+        why: "Kubmin's workload intelligence required defensible choices about data sources, aggregation windows, formulas, algorithms, and the provenance of sustainability measurements.",
+        what: "Researched the scope, calculation methods, configuration model, and provenance requirements for Software Carbon Intensity, embodied carbon, and carbon intensity measurements.",
+        how: "Evaluated the underlying assumptions and measurement pipeline so Kubmin's sustainability scores and recommendations can be explained, reproduced, and connected to their source data.",
+      },
       {
         title: "Distributed Orchestration Engine",
         why: "Managing Kubernetes cluster lifecycles across AWS and Azure required a reliable, cloud-agnostic solution without heavy infrastructure overhead.",
