@@ -110,6 +110,12 @@ export const experiences: Experience[] = [
         how: "Surfaces idle workloads, overprovisioned containers, and efficiency regressions between deployment versions — with dollar amounts and ready-to-use kubectl commands to fix them. Classifies each workload as CPU-bound, memory-bound, general, or resource-starved from runtime behavior. Compares workload costs across regions and instance types.",
       },
       {
+        title: "Durable Workload Intelligence & Carbon Accounting",
+        why: "Workload cost, energy, and carbon metrics needed to remain queryable and comparable after the active observation window ended. Cache-based accumulation was not sufficient for reliable historical analysis.",
+        what: "Redesigned Kubmin's workload analysis pipeline around durable hourly records and snapshot finalization, adding operational and embodied carbon completeness tracking, provenance, retention controls, and image-level workload analysis.",
+        how: "Built a database-backed snapshot workflow using NATS and scheduled finalization, migrated analysis to relational records, added transactional updates and retry handling, and extended the frontend with workload detail, energy insight, and container/image views.",
+      },
+      {
         title: "AI-Agents Orchestration",
         why: "Platform delivery velocity needed to scale without proportionally growing the team.",
         what: "Orchestrated AI agents (Claude Code, Gemini CLI) into the core development workflow to autonomously handle well-scoped engineering tasks.",
