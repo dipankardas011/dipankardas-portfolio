@@ -3,13 +3,13 @@ import BaseLayout from "../components/BaseLayout.astro";
 import AnimatedTitle from "../components/AnimatedTitle.astro";
 import Timeline from "../components/Timeline.astro";
 import ContactSection from "../components/ContactSection.astro";
-import { experiences, achievements } from "../data/about";
+import { experiences, achievements, workingPrinciples, writingProfile } from "../data/about";
 import { siteConfig } from "../data/site";
 ---
 
 <BaseLayout
   title="About - Dipankar Das"
-  description="Platform engineer passionate about DevOps, Kubernetes, and sustainable computing."
+  description="Platform engineer focused on system design, developer infrastructure, Kubernetes, observability, and sustainable computing."
 >
   <AnimatedTitle title="About" kicker="/about · the long version" />
 
@@ -51,16 +51,18 @@ import { siteConfig } from "../data/site";
           <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-app-text tracking-tight leading-[1.05] mb-6">
             {siteConfig.name},<br/>
             <span class="font-serif italic font-normal text-app-accent">platform engineer</span>
-            who treats infrastructure like a product.
+            who designs systems people can depend on.
           </h2>
           <p class="text-base lg:text-lg text-app-gray-500 leading-[1.6] mb-4">
-            {siteConfig.tagline}. I build sustainable platforms and write deep-dives
-            on Software Development, DevOps, Kubernetes, and System Design.
+            {siteConfig.tagline}. I work at the boundary between application code and
+            infrastructure, with a focus on developer platforms, CI/CD, Kubernetes,
+            observability, and system design.
           </p>
           <p class="text-base lg:text-lg text-app-gray-500 leading-[1.6]">
-            Most of my work lives at the seam between application code and the
-            infrastructure that runs it — eliminating the "it works on my machine"
-            class of problems for everyone, permanently.
+            Most of my work is about reducing cognitive load for the engineers who
+            depend on a platform: removing host-level surprises, making deployments
+            boring, designing systems that fail predictably, and giving teams enough
+            telemetry to understand a problem before they reach for a workaround.
           </p>
 
           <!-- Education chip row -->
@@ -95,6 +97,31 @@ import { siteConfig } from "../data/site";
           </span>
         </div>
         <Timeline experiences={experiences} />
+      </div>
+    </div>
+
+    <!-- Working principles -->
+    <div class="container mx-auto mb-16 lg:mb-24">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
+        <div class="lg:col-span-4">
+          <div class="kicker mb-3">/how-i-work</div>
+          <h2 class="font-display text-3xl md:text-4xl text-app-text tracking-tight leading-[1.05]">
+            Good systems reduce cognitive load.
+          </h2>
+        </div>
+        <div class="lg:col-span-8 border-t border-app-ink-line">
+          {workingPrinciples.map((principle, i) => (
+            <article class="grid grid-cols-[auto_1fr] gap-4 lg:gap-6 py-5 border-b border-app-border">
+              <span class="font-mono text-xs text-app-accent-2 tracking-[0.14em] font-semibold">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h3 class="font-display text-lg text-app-text tracking-tight mb-1">{principle.title}</h3>
+                <p class="text-sm lg:text-base text-app-gray-500 leading-[1.55]">{principle.description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </div>
 
@@ -135,6 +162,21 @@ import { siteConfig } from "../data/site";
           </li>
         ))}
       </ul>
+    </div>
+
+    <!-- Writing -->
+    <div class="container mx-auto mt-16 lg:mt-24">
+      <div class="border border-app-ink-line bg-app-surface p-6 lg:p-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+        <div class="max-w-2xl">
+          <div class="kicker mb-3">/writing</div>
+          <h2 class="font-display text-3xl md:text-4xl text-app-text tracking-tight mb-4">{writingProfile.title}</h2>
+          <p class="text-base text-app-gray-500 leading-[1.6]">{writingProfile.description}</p>
+        </div>
+        <a href={writingProfile.url} class="btn-ghost shrink-0" target="_blank" rel="noopener">
+          <span>Browse the collection</span>
+          <span class="font-mono text-xs">↗</span>
+        </a>
+      </div>
     </div>
   </section>
 

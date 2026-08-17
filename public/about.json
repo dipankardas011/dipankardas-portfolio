@@ -4,14 +4,15 @@
         "email": "dipankar@dipankar-das.com",
         "country": "India",
         "born": "Oct 2001",
-        "description": "I am a platform engineer with a passion for open-source software and cloud-native technologies. I am a self-taught developer and have been working in the tech industry for the past 2 years. I am a quick learner and love to work on challenging projects. I am a strong believer in the power of community and always try to give back to the community through my work.",
-        "domains": ["DevOps", "Operating Systems", "Cloud Computing", "Distributed Systems", "Sustanable Computing"]
+        "description": "I am a platform engineer building sustainable and efficient platforms while sharing technical deep-dives on DevOps, Kubernetes, and System Design.",
+        "domains": ["Platform Engineering", "DevOps", "Kubernetes", "Observability", "System Design", "Distributed Systems", "Sustainable Computing"]
     },
     "social_links": {
         "github": "dipankardas011",
         "gitlab": "dipankardas011",
         "linkedin": "dipankar-das-1324b6206",
-        "twitter": "DipanakarDas011"
+        "twitter": "DipanakarDas011",
+        "youtube": "techwithdipankardas"
     },
     "timezone": "UTC+5:30",
     "tech_skills": {
@@ -44,6 +45,6 @@
             "rq": "in"
         }
     },
-    "blogs": "https://dipankar-das.com/posts/blogs/",
-    "projects": "https://dipankar-das.com/posts/projects/"
+    "blogs": "https://dipankar-das.com/blog/",
+    "projects": "https://dipankar-das.com/projects/"
 }

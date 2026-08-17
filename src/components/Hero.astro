@@ -20,34 +20,30 @@ const today = new Date().toISOString().slice(0, 10);
     </div>
 
     <!-- Hero grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
 
       <!-- LEFT: copy block (8 cols) -->
       <div class="lg:col-span-8">
         <div class="kicker mb-5 hero-reveal" style="--reveal-d:1">Platform Engineer · Problem Solver</div>
 
-        <h1 class="font-display font-medium text-[clamp(2.6rem,7vw,6.5rem)] leading-[1.0] tracking-[-0.035em] text-app-text hero-reveal" style="--reveal-d:2">
-          Hi, I'm
-          <span class="serif-sig">Dipankar<svg class="sig-stroke" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7.2 C 18 4.4, 42 3.2, 62 4.6 C 76 5.6, 88 6.4, 98 5.2" pathLength="120"/></svg></span> —
-          I build systems that
-          <span class="relative inline-block">
-            work
-            <span class="absolute left-0 right-0 bottom-[0.06em] h-[0.14em] bg-app-accent-2/30 -z-10"></span>
-          </span>.
+        <h1 class="hero-title font-display font-medium text-[clamp(2.8rem,5.4vw,5.6rem)] leading-[0.94] tracking-[-0.035em] text-app-text hero-reveal" style="--reveal-d:2">
+          <span class="hero-line">Hi, I'm <span class="serif-sig">Dipankar<svg class="sig-stroke" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7.2 C 18 4.4, 42 3.2, 62 4.6 C 76 5.6, 88 6.4, 98 5.2" pathLength="120"/></svg></span> —</span>
+          <span class="hero-line">I build systems</span>
+          <span class="hero-line"><span class="hero-highlight">without firefighting.</span></span>
         </h1>
 
         <p class="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[12px] tracking-[0.04em] text-app-gray-500 hero-reveal" style="--reveal-d:3">
           <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-app-gray-400">principles —</span>
-          <span class="text-app-text">don't fail</span>
+          <span class="text-app-text">fail predictably</span>
           <span class="text-app-accent-2 font-bold">+</span>
-          <span class="text-app-text">run effortless</span>
+          <span class="text-app-text">run effortlessly</span>
           <span class="text-app-accent-2 font-bold">+</span>
           <span class="text-app-text">stay efficient</span>
         </p>
 
         <p class="mt-6 lg:mt-8 max-w-xl text-base lg:text-lg leading-[1.55] text-app-gray-500 hero-reveal" style="--reveal-d:4">
-          Kubernetes, Go, OpenTelemetry. Deep-dives on DevOps and distributed
-          systems — efficiency is the goal, not an afterthought.
+          Kubernetes, Go, OpenTelemetry, and system design. Deep-dives on DevOps and
+          distributed systems — efficiency is the goal, not an afterthought.
         </p>
 
         <!-- CTAs -->
@@ -71,12 +67,12 @@ const today = new Date().toISOString().slice(0, 10);
           <li><a href={socialLinks.github} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">github ↗</a></li>
           <li><a href={socialLinks.linkedin} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">linkedin ↗</a></li>
           <li><a href={socialLinks.twitter} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">twitter ↗</a></li>
-          <li><a href={socialLinks.hashnode} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">hashnode ↗</a></li>
+          <li><a href={socialLinks.youtube} target="_blank" rel="noopener" class="hover:text-app-text transition-colors">youtube ↗</a></li>
         </ul>
       </div>
 
       <!-- RIGHT: portrait card (4 cols) -->
-      <div class="lg:col-span-4 hero-reveal" style="--reveal-d:3">
+      <div class="lg:col-span-4 lg:pt-16 hero-reveal" style="--reveal-d:3">
         <div class="relative">
           <BlurDecoration variant="purple" position="top-right" />
           <BlurDecoration variant="terra"  position="bottom-left" />
@@ -115,7 +111,34 @@ const today = new Date().toISOString().slice(0, 10);
    * it grows naturally instead of clipping.
    */
   .hero-section {
-    min-height: min(calc(100svh - 5rem), 52rem); /* 5rem ≈ header + border */
+    min-height: min(calc(100svh - 5rem), 46rem); /* 5rem ≈ header + border */
+  }
+
+  .hero-line {
+    display: block;
+  }
+
+  .hero-highlight {
+    position: relative;
+    display: inline-block;
+    z-index: 0;
+  }
+
+  .hero-highlight::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: -0.03em;
+    right: -0.03em;
+    bottom: 0.02em;
+    height: 0.13em;
+    background: color-mix(in srgb, var(--color-app-accent-2) 28%, transparent);
+  }
+
+  @media (max-width: 639px) {
+    .hero-title {
+      font-size: clamp(2.7rem, 12vw, 4.6rem);
+    }
   }
 
   /* Staggered reveal animation for hero elements */

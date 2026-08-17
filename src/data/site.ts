@@ -2,10 +2,10 @@ export const siteConfig = {
   name: "Dipankar Das",
   title: "Dipankar Das — Platform Engineer & Problem Solver",
   description:
-    "Bridging the gap between application code and infrastructure. Building sustainable platforms and sharing technical deep-dives on DevOps, Kubernetes, and System Design.",
+    "Building sustainable and efficient platforms while sharing technical deep-dives on DevOps, Kubernetes, and System Design.",
   url: "https://dipankar-das.com",
   email: "dipankar@dipankar-das.com",
-  tagline: "Designing & Building Scalable, Reliable Systems",
+  tagline: "Building sustainable and efficient platforms without firefighting",
   profileImage: "/img/profile_v2.webp",
   resumeUrl:
     "https://raw.githubusercontent.com/dipankardas011/dipankardas011/main/Resume.pdf",
@@ -16,7 +16,7 @@ export const socialLinks = {
   gitlab: "https://gitlab.com/dipankardas011",
   linkedin: "https://linkedin.com/in/dipankar-das-1324b6206",
   twitter: "https://twitter.com/DipanakarDas011",
-  hashnode: "https://dipankardas011.hashnode.dev/",
+  youtube: "https://youtube.com/@techwithdipankardas",
   upwork: "https://www.upwork.com/freelancers/~0171342e36ce285d8c?mp_source=share",
   fiverr: "https://www.fiverr.com/s/38WVy79",
   sponsor: "https://github.com/sponsors/dipankardas011",

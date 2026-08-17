@@ -14,6 +14,36 @@ export interface Experience {
   contributions: Contribution[];
 }
 
+export interface WorkingPrinciple {
+  title: string;
+  description: string;
+}
+
+export const workingPrinciples: WorkingPrinciple[] = [
+  {
+    title: "Lead with the outcome",
+    description:
+      "Start with the user problem and the impact, then explain the system design, architecture, and trade-offs. Technical depth is most useful when it helps people make better decisions.",
+  },
+  {
+    title: "Make the reliable path the easy path",
+    description:
+      "Good system design removes repeated judgment calls: boring deployments, observable services, simple CI/CD, and automation that behaves predictably.",
+  },
+  {
+    title: "Use AI with a human in the loop",
+    description:
+      "AI is a strong research and thinking partner when it can see the right telemetry and context. High-stakes changes still require human review, explicit boundaries, and ownership.",
+  },
+];
+
+export const writingProfile = {
+  title: "Learning in public",
+  description:
+    "I write from experiments rather than certainty: starting with a question, trying something unfamiliar, then going deep on what actually happened. The collection spans system design, AI, Kubernetes, databases, Kubmin, home-server experiments, and quantum computing.",
+  url: "https://dipankar-das.com/blog/",
+};
+
 export const experiences: Experience[] = [
   {
     company: "rtCamp",
