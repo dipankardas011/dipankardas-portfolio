@@ -1,0 +1,45 @@
+---
+title: "Reimagined how AI agent Harness session storage can be Efficient"
+author: "Dipankar Das"
+date: 2026-08-24
+description: "Building the Infai agent harness where building a complete solution and no gaps or hacks proper thinking out how a session storage can be made"
+tags: ["infai", "ai", "system-design", "ai-agents", "sustainable", "agent-harness", "opencode", "pi", "claudecode"]
+cover: "/img/blogs/kubmin-ai-agent-era-cover.webp"
+draft: true
+---
+
+Past one week was busy creating a AI agent harness. You might ask **why?** its not that I love to build software but I see there is a clear gap of substandard harnesses. Over the past 1+ years I have used Opencode, Pi, Claude Code, Google ADK, Julies, and the list goes on and on the thing was the UX lacked and the bad quality of system resources and over packed features and Yes I liked Pi ai agent But after using it and trying to add some features using as recommended approach of asking the pi agent to help with building tools and extensions like getting custom permission thing (faced problem with flickering screen on height of screen < attention popup for human approval) then comes subagents become a nice attack surface as I have see a lot of times  be it opencode, claudecode, pi you are blind interms of subagent permission sometimes it doesn't even apply and tries to fall back to full access..., and the multi agent starts becomes weird weird management and eval scopes and leaky integration with the main session_chat and many more things which can be done on the harness+agent level which is properly missing most likely people start building proper tools like for example of all of them claim to say they have sdk like thing by which you can customize but I noticed its same TUI customization and not the lowlevel agent/harness loop hooks its completely missing and you are left fighting the TUI nonsense and then comes Typescript (Its a great language for web) why use this for everything use peoper tools like compiled languages where you can load on any lowend system and get the agent working without needing another annoying bun/pnpm/npm runtime when there is option of geting it in Rust/Go .... why doing this to yourself.
+
+At the end yes I want to gain experience as well to get better and make it such that I can integrate in every place I possibly can as LLM are great tools when proper control is setup with error based mindset not like the happy paths make the system working.
+
+
+---
+
+## TL;DR
+
+This blog I will cover how the most integral part of the harness and agent is its short term memory (ActiveSession) and how to better manage it. and why its important and avoiding it is disasterious
+
+from Models capable of handling crazy ContextWindows and also optimizing the User in thinking of savepoints like a Timeline for a session like a Git branch which the agent can use to better manage its memory without over complicating system.
+
+<figure>
+  <img src="/img/blogs/blog-post-kubmin.webp" alt="Kubmin product visual showing workload cost, energy, and efficiency insights" />
+  <figcaption>Kubmin in practice — connecting workload cost, energy, and efficiency into one product view.</figcaption>
+</figure>
+
+## What is Session Chat and what role it plays interms of Audit and Branching Timeline
+
+It is the central part which allows users to plain the branch and efficiently move between the short term memory and also ai agent getting proper rich history. But also we need to think interms of underlaying system handing the session storage Durability and fault tolerant and Efficiency.
+
+So in this next sections we will move in steps which helped me with incremental improvements to reach the final destination
+
+## Iter 1: What is exactly Does LLM Adapator respond?
+
+In simple terms we recieve a JSON payload which contains a few basic things
+- `Role`
+- `Content`
+- `Usage`
+- `Reasoning`
+
+and based on that for each interation with `resp <- provider.Generate()` so then we get `{...}`. which is a individual event and we need to manage the session context over a given Period of Events...
+
+The choice of everyone is `*.jsonl` for storing on your local hardware system.
