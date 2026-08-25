@@ -32,7 +32,7 @@ It is the central part which allows users to plain the branch and efficiently mo
 
 So in this next sections we will move in steps which helped me with incremental improvements to reach the final destination
 
-## Iter 1: What is exactly Does LLM Adapator respond?
+## Iter 1: What is exactly Does LLM Adapator respond? And how we store it.
 
 In simple terms we recieve a JSON payload which contains a few basic things
 - `Role`
@@ -43,3 +43,214 @@ In simple terms we recieve a JSON payload which contains a few basic things
 and based on that for each interation with `resp <- provider.Generate()` so then we get `{...}`. which is a individual event and we need to manage the session context over a given Period of Events...
 
 The choice of everyone is `*.jsonl` for storing on your local hardware system.
+
+So I decided to add the meta:
+- `last_used_model`
+- `session_name`
+- `session_uid`
+- `working_dir`
+- `created_at`
+- `updated_at`
+
+and system prompt after that only we added the conversation event. I want you to take note about this as it will be later important.
+
+```jsonl
+{
+  "kind": "meta",
+  "role": "",
+  "id": "xxxx-aaa-bbb-cccc",
+  "session_id": "xxxx-aaa-bbb-cccc",
+  "record": {}
+}
+{
+  "kind": "message",
+  "role": "system",
+  "record": {}
+}
+{
+  "kind": "message",
+  "role": "user",
+  "record": {}
+}
+{
+  "kind": "message",
+  "role": "assistant",
+  "record": {}
+}
+```
+
+and everything into a single file `~/.config/infai/harness/sessions/${uuidv7}/events.jsonl`
+
+## Iter 2: Ability to Branch from the main conversation
+
+The first instinct is to create a **Tree** Datastructure for which you are correct. and yes we can represent it even better the classical old linkedlist approach alsoo works but then there is a classical problem. also we cannot use simple tree but a B-Tree as for any given event as a Node we can have N different childreen events as Nodes
+
+**Storage**
+with linkedlist approach its possible but not we want to optimize the pointer space as well as It seems unncessary.
+
+**Fetch**
+the access pattern should be close to be O(1) as when we do look for a event in the search space.
+
+So at the we wanted array but for any array we have indexes only as O(1) accesspattern and insertion as well which is in this case append only. only problem we need to deal with is Mapping of eventID -> index in the eventID.
+
+once that is decided we can make changes in our events to be
+
+```jsonl
+{
+  "id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
+  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
+  "kind": "message",
+  "role": "user",
+  "record": {}
+}
+{
+  "id": "01a02f3f-cb65-73b7-a632-1d948274475f",
+  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
+  "kind": "message",
+  "role": "assistant",
+  "record": {}
+}
+```
+
+we also need to identify whether a child->parent was a branch or not to avoid the case of each child identified as a branch. for which we added a new field `branch_from`
+
+```jsonl
+{
+  "id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
+  "branch_from": null,
+  "parent_id": "00000000-0000-0000-0000-000000000000",
+  "record": {}
+}
+{
+  "id": "01a02f3f-cb65-73b7-a632-1d948274475f",
+  "branch_from": null,
+  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
+  "record": {}
+}
+{
+  "id": "01a02f54-b76b-7808-a895-3069dcca66f6",
+  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
+  "branch_from": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
+  "record": {}
+}
+```
+
+and yes we needed `index.jsonl` as we need to store the mappings
+
+```jsonl
+{
+  "id": "01a039f0-e016-7dd2-aac4-669467e8d7e4",
+  "parent_id": "00000000-0000-0000-0000-000000000000",
+  "timestamp": "2026-08-25T17:21:22.454897183Z"
+}
+```
+
+## Iter 3: we need HEAD where we are
+
+Just like what Git does for identifying where it is we are doing to use the HEAD. so that when the session actually moves we can store the eventId and that gives us the latest event of a timeline.
+which means if we have head we can traverse towards the parent which means `id == uuid.Nil` with proper crash recovery.
+
+
+## Iter 4: then we noticed we can move session meta to seperate file
+
+as we need the session meta like:
+- last_used_model
+- session_name
+- session_uid
+- working_dir
+- created_at
+- updated_at
+
+which can update last_used_model when the user SwitchModel. and we didn't use the context as Its depend on what user configured as.
+
+
+```
+sessions/<session-id>/
+  events.jsonl
+  index.jsonl
+  session.jsonl
+  HEAD
+```
+
+## Iter 5: HUGE events.jsonl
+
+for that we revisited some of the concepts of logrotate and git how it handles a lot of changes. So got the chunks folder for us to get the benefits of it. so we don't need to open all but a subset of events we just need to open chunks on demand not always.
+
+```
+sessions/<session-id>/
+  chunks/
+    000000.jsonl
+    000001.jsonl
+  index.jsonl
+  session.jsonl
+  HEAD
+```
+
+We can specify any specific threshold on which we want to rotate and the index file now follows the location to get only a subset of the files to get more efficient read a pos+offset+limit.
+
+```jsonl
+{
+  "id": "01a039f0-e016-7dd2-aac4-669467e8d7e4",
+  "parent_id": "00000000-0000-0000-0000-000000000000",
+  "timestamp": "2026-08-25T17:21:22.454897183Z",
+  "location": {
+    "chunk": 0,
+    "offset": 0,
+    "length": 226
+  }
+}
+```
+
+## Iter 6: Some ToolCalls Result or ToolRequests can get pretty large.
+
+as the event store is for storing the events what happened when so we don't always need to load all the heavy content[0].Message blobs so instead use a lazy approach where if doing ListSession, ListSessionTimeline we don't bother to resolve it and only do during the LoadActiveSession to get the history based on current HEAD.
+
+and yes we used Digest field to help us out here
+
+`chunks/###.jsonl`
+
+```jsonl
+{
+  "id": "01a02f3f-cb65-73b7-a632-1d948274475f",
+  "branch_from": null,
+  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
+  "role": "assistant",
+  "digest": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+  "record": null,
+}
+```
+
+it saves both compute to load on memory and also cpu cycles.
+
+## Iter 7: Compaction
+
+we needed to mark that it by adding a `kind=compaction` in the `chunks/###.jsonl`
+
+```jsonl
+{
+  "id": "01a02f3f-cb65-73b7-a632-1d948274475f",
+  "branch_from": null,
+  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
+  "kind": "compaction",
+  "role": "assistant",
+  "digest": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+  "record": null,
+}
+```
+
+so then the termination of a active Timeline becomes for the AI agent becomes
+HEAD >>> parent(where parent_id==uuid.Nil or kind==compaction)
+
+so the iteration to reconstruction for a branch in the entire timeline becomes just a O(N)+O(1) where N is the no of items to retrive.
+
+> AI bro please add the space and time complexity for Avg, Best case, Worst case.
+
+
+## Conclusion 
+
+we got this.
+
+<figure>
+  <img src="/img/blogs/mariadb-pitr-timeline.svg" alt="PITR timeline: snapshot interval plus binlog replay to a target instant" />
+  <figcaption>Two snapshots and a target — snap_T0 is the state base, snap_T1 is the binlog donor, replay carries you to T_target.</figcaption>
+</figure>
