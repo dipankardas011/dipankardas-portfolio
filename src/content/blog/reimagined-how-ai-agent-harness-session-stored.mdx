@@ -79,6 +79,11 @@ and system prompt after that only we added the conversation event. I want you to
 }
 ```
 
+<figure>
+  <img src="/img/blogs/infai-harness-session-1.webp" alt="session primitive events in jsonl" />
+  <figcaption>How Events stored on Disk</figcaption>
+</figure>
+
 and everything into a single file `~/.config/infai/harness/sessions/${uuidv7}/events.jsonl`
 
 ## Iter 2: Ability to Branch from the main conversation
@@ -135,7 +140,12 @@ we also need to identify whether a child->parent was a branch or not to avoid th
 }
 ```
 
-and yes we needed `index.jsonl` as we need to store the mappings
+<figure>
+  <img src="/img/blogs/infai-harness-session-2i.webp" alt="todo" />
+  <figcaption>todo</figcaption>
+</figure>
+
+and yes we needed `index.jsonl` as we need to store the mappings. Simpler datastructure was choice of array in a tree with a eventId -> array index resolver as a HashMap.
 
 ```jsonl
 {
@@ -145,21 +155,24 @@ and yes we needed `index.jsonl` as we need to store the mappings
 }
 ```
 
+<figure>
+  <img src="/img/blogs/infai-harness-session-2ii.webp" alt="todo" />
+  <figcaption>todo</figcaption>
+</figure>
+
 ## Iter 3: we need HEAD where we are
 
 Just like what Git does for identifying where it is we are doing to use the HEAD. so that when the session actually moves we can store the eventId and that gives us the latest event of a timeline.
-which means if we have head we can traverse towards the parent which means `id == uuid.Nil` with proper crash recovery.
+Given, HEAD we can traverse towards the parent which means `id == uuid.Nil` with proper crash recovery.
 
+<figure>
+  <img src="/img/blogs/infai-harness-session-3.webp" alt="todo" />
+  <figcaption>todo</figcaption>
+</figure>
 
 ## Iter 4: then we noticed we can move session meta to seperate file
 
-as we need the session meta like:
-- last_used_model
-- session_name
-- session_uid
-- working_dir
-- created_at
-- updated_at
+We saw we have to hack around to just get a sessionmetadata as well as need to load the events.json thus decided to make it a seperate file
 
 which can update last_used_model when the user SwitchModel. and we didn't use the context as Its depend on what user configured as.
 
@@ -168,9 +181,18 @@ which can update last_used_model when the user SwitchModel. and we didn't use th
 sessions/<session-id>/
   events.jsonl
   index.jsonl
-  session.jsonl
+  session.json
   HEAD
 ```
+
+and also we made the decision of systemPrompt as its a per agent so better to keep it in the agent loop as a dynamic entity and without adding it in the session becomes true events.
+Giving us flexibility later of per model basis system prompt 😉
+
+<figure>
+  <img src="/img/blogs/infai-harness-session-4.webp" alt="todo" />
+  <figcaption>todo</figcaption>
+</figure>
+
 
 ## Iter 5: HUGE events.jsonl
 
@@ -182,7 +204,7 @@ sessions/<session-id>/
     000000.jsonl
     000001.jsonl
   index.jsonl
-  session.jsonl
+  session.json
   HEAD
 ```
 
@@ -200,6 +222,11 @@ We can specify any specific threshold on which we want to rotate and the index f
   }
 }
 ```
+
+<figure>
+  <img src="/img/blogs/infai-harness-session-5.webp" alt="todo" />
+  <figcaption>todo</figcaption>
+</figure>
 
 ## Iter 6: Some ToolCalls Result or ToolRequests can get pretty large.
 
@@ -219,6 +246,11 @@ and yes we used Digest field to help us out here
   "record": null,
 }
 ```
+
+<figure>
+  <img src="/img/blogs/infai-harness-session-6.webp" alt="todo" />
+  <figcaption>todo</figcaption>
+</figure>
 
 it saves both compute to load on memory and also cpu cycles.
 
@@ -241,16 +273,23 @@ we needed to mark that it by adding a `kind=compaction` in the `chunks/###.jsonl
 so then the termination of a active Timeline becomes for the AI agent becomes
 HEAD >>> parent(where parent_id==uuid.Nil or kind==compaction)
 
+<figure>
+  <img src="/img/blogs/infai-harness-session-7.webp" alt="todo" />
+  <figcaption>todo</figcaption>
+</figure>
+
 so the iteration to reconstruction for a branch in the entire timeline becomes just a O(N)+O(1) where N is the no of items to retrive.
 
 > AI bro please add the space and time complexity for Avg, Best case, Worst case.
 
+## Iter 8: Final simplification and we got to this.
+
+<figure>
+  <img src="/img/blogs/infai-harness-session-8.webp" alt="todo" />
+  <figcaption>todo</figcaption>
+</figure>
+
 
 ## Conclusion 
 
-we got this.
 
-<figure>
-  <img src="/img/blogs/mariadb-pitr-timeline.svg" alt="PITR timeline: snapshot interval plus binlog replay to a target instant" />
-  <figcaption>Two snapshots and a target — snap_T0 is the state base, snap_T1 is the binlog donor, replay carries you to T_target.</figcaption>
-</figure>
