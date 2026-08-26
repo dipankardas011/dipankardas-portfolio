@@ -1,183 +1,123 @@
 ---
-title: "Reimagined how AI agent Harness session storage can be Efficient"
+title: "Why an AI Agent Session Is More Than a JSONL File"
 author: "Dipankar Das"
 date: 2026-08-24
-description: "Building the Infai agent harness where building a complete solution and no gaps or hacks proper thinking out how a session storage can be made"
+description: "How Infai evolved its AI agent session store from a simple JSONL log into a durable, branchable, lazy-loaded, and compactable timeline."
 tags: ["infai", "ai", "system-design", "ai-agents", "sustainable", "agent-harness", "opencode", "pi", "claudecode"]
 cover: "/img/blogs/kubmin-ai-agent-era-cover.webp"
-draft: true
+draft: false
 ---
 
-Past one week was busy creating a AI agent harness. You might ask **why?** its not that I love to build software but I see there is a clear gap of substandard harnesses. Over the past 1+ years I have used Opencode, Pi, Claude Code, Google ADK, Julies, and the list goes on and on the thing was the UX lacked and the bad quality of system resources and over packed features and Yes I liked Pi ai agent But after using it and trying to add some features using as recommended approach of asking the pi agent to help with building tools and extensions like getting custom permission thing (faced problem with flickering screen on height of screen < attention popup for human approval) then comes subagents become a nice attack surface as I have see a lot of times  be it opencode, claudecode, pi you are blind interms of subagent permission sometimes it doesn't even apply and tries to fall back to full access..., and the multi agent starts becomes weird weird management and eval scopes and leaky integration with the main session_chat and many more things which can be done on the harness+agent level which is properly missing most likely people start building proper tools like for example of all of them claim to say they have sdk like thing by which you can customize but I noticed its same TUI customization and not the lowlevel agent/harness loop hooks its completely missing and you are left fighting the TUI nonsense and then comes Typescript (Its a great language for web) why use this for everything use peoper tools like compiled languages where you can load on any lowend system and get the agent working without needing another annoying bun/pnpm/npm runtime when there is option of geting it in Rust/Go .... why doing this to yourself.
+You can use an AI coding agent for a few minutes and never think about its session storage. Use one for a full day, branch the work, recover from a crash, and return to it tomorrow, and storage becomes part of the product.
 
-At the end yes I want to gain experience as well to get better and make it such that I can integrate in every place I possibly can as LLM are great tools when proper control is setup with error based mindset not like the happy paths make the system working.
+That was the problem I kept running into while using agent tools. Over the past year, I have used OpenCode, Pi, Claude Code, Google ADK, Jules, and others. Many of them are useful, but the experience often becomes awkward when you move beyond the happy path: custom approval screens flicker on small terminals, subagent permissions are difficult to reason about, and multi-agent state can leak into the main session.
 
+The tools often expose an SDK, but the SDK is sometimes another layer of TUI customization. What I wanted was lower-level control over the harness and agent loop: permissions, branching, recovery, persistence, and the rules that decide what context reaches the model.
 
----
+That is why I started building Infai. Part of the motivation was to learn, but the larger goal was to build an agent harness that treats failure as a normal operating condition instead of designing only for the successful path.
 
 ## TL;DR
 
-This blog I will cover how the most integral part of the harness and agent is its short term memory (ActiveSession) and how to better manage it. and why its important and avoiding it is disasterious
+- An agent session is not just chat history. It is a durable, navigable event timeline.
+- Branching, `HEAD`, chunked logs, lazy payloads, and compaction reduce the work needed to rebuild active context.
+- The best optimization is often deciding what not to load, not adding another feature to the interface.
 
-from Models capable of handling crazy ContextWindows and also optimizing the User in thinking of savepoints like a Timeline for a session like a Git branch which the agent can use to better manage its memory without over complicating system.
+## The Session Is the Agent's Working Memory
 
-<figure>
-  <img src="/img/blogs/blog-post-kubmin.webp" alt="Kubmin product visual showing workload cost, energy, and efficiency insights" />
-  <figcaption>Kubmin in practice — connecting workload cost, energy, and efficiency into one product view.</figcaption>
-</figure>
+An agent has several kinds of state, and they do not all have the same lifetime. The model needs a working context for the next request. The harness needs runtime state such as permissions and in-flight tool calls. The user needs a durable record that can be inspected, resumed, or branched.
 
-## What is Session Chat and what role it plays interms of Audit and Branching Timeline
+I call the model-facing part of that working context the `ActiveSession`. It is short-term memory, but it is not disposable. If it cannot be reconstructed after a restart, a process crash, or a branch switch, the harness cannot be trusted with long-running work.
 
-It is the central part which allows users to plain the branch and efficiently move between the short term memory and also ai agent getting proper rich history. But also we need to think interms of underlaying system handing the session storage Durability and fault tolerant and Efficiency.
+The design question therefore became more specific:
 
-So in this next sections we will move in steps which helped me with incremental improvements to reach the final destination
+> How do we store enough history to reconstruct the active timeline without loading every byte of every previous tool result on every turn?
 
-## Iter 1: What is exactly Does LLM Adapator respond? And how we store it.
+The answer emerged through eight iterations.
 
-In simple terms we recieve a JSON payload which contains a few basic things
-- `Role`
-- `Content`
-- `Usage`
-- `Reasoning`
+## Iteration 1: Start With Durable Events
 
-and based on that for each interation with `resp <- provider.Generate()` so then we get `{...}`. which is a individual event and we need to manage the session context over a given Period of Events...
+The first step was to understand what an LLM provider actually returns. A response is not one plain string. Depending on the provider and the operation, it can contain roles, content, reasoning, tool calls, tool results, usage, and provider-specific metadata.
 
-The choice of everyone is `*.jsonl` for storing on your local hardware system.
-
-So I decided to add the meta:
-- `last_used_model`
-- `session_name`
-- `session_uid`
-- `working_dir`
-- `created_at`
-- `updated_at`
-
-and system prompt after that only we added the conversation event. I want you to take note about this as it will be later important.
+The first useful abstraction was an event. Each interaction became an append-only record, with session metadata stored before the conversation began.
 
 ```jsonl
-{
-  "kind": "meta",
-  "role": "",
-  "id": "xxxx-aaa-bbb-cccc",
-  "session_id": "xxxx-aaa-bbb-cccc",
-  "record": {}
-}
-{
-  "kind": "message",
-  "role": "system",
-  "record": {}
-}
-{
-  "kind": "message",
-  "role": "user",
-  "record": {}
-}
-{
-  "kind": "message",
-  "role": "assistant",
-  "record": {}
-}
+{"kind":"meta","role":"","id":"xxxx-aaa-bbb-cccc","session_id":"xxxx-aaa-bbb-cccc","record":{"last_used_model":"model-name","session_name":"example","working_dir":"/workspace","created_at":"2026-08-25T17:21:22Z","updated_at":"2026-08-25T17:21:22Z"}}
+{"kind":"message","role":"system","record":{"content":"..."}}
+{"kind":"message","role":"user","record":{"content":"Build the feature."}}
+{"kind":"message","role":"assistant","record":{"content":"I will inspect the repository first."}}
 ```
 
+JSONL was a reasonable first choice for local storage. It is easy to append, easy to inspect, and naturally supports replay. The initial layout was intentionally boring:
+
+```text
+~/.config/infai/harness/sessions/<session-id>/events.jsonl
+```
+
+The important decision was not JSONL itself. It was treating the session as a sequence of facts rather than repeatedly rewriting one large mutable object.
+
 <figure>
-  <img src="/img/blogs/infai-harness-session-1.webp" alt="session primitive events in jsonl" />
-  <figcaption>How Events stored on Disk</figcaption>
+  <img src="/img/blogs/infai-harness-session-1.webp" alt="Primitive agent session events stored as JSONL" />
+  <figcaption>The first session primitive: append events to a durable log.</figcaption>
 </figure>
 
-and everything into a single file `~/.config/infai/harness/sessions/${uuidv7}/events.jsonl`
+## Iteration 2: Add Branching Without Duplicating History
 
-## Iter 2: Ability to Branch from the main conversation
+The moment a user can revisit an earlier point and try a different approach, a session stops being a list. It becomes a tree.
 
-The first instinct is to create a **Tree** Datastructure for which you are correct. and yes we can represent it even better the classical old linkedlist approach alsoo works but then there is a classical problem. also we cannot use simple tree but a B-Tree as for any given event as a Node we can have N different childreen events as Nodes
-
-**Storage**
-with linkedlist approach its possible but not we want to optimize the pointer space as well as It seems unncessary.
-
-**Fetch**
-the access pattern should be close to be O(1) as when we do look for a event in the search space.
-
-So at the we wanted array but for any array we have indexes only as O(1) accesspattern and insertion as well which is in this case append only. only problem we need to deal with is Mapping of eventID -> index in the eventID.
-
-once that is decided we can make changes in our events to be
+The simplest representation is an event with a pointer to its parent. A new response normally points to the current event. A response created from an older event points to that event instead, creating a branch.
 
 ```jsonl
-{
-  "id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
-  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
-  "kind": "message",
-  "role": "user",
-  "record": {}
-}
-{
-  "id": "01a02f3f-cb65-73b7-a632-1d948274475f",
-  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
-  "kind": "message",
-  "role": "assistant",
-  "record": {}
-}
+{"id":"01a02f3f-a89d-7d25-b4ac-ac89a183258d","parent_id":"00000000-0000-0000-0000-000000000000","branch_from":null,"kind":"message","role":"user","record":{"content":"Try approach A."}}
+{"id":"01a02f3f-cb65-73b7-a632-1d948274475f","parent_id":"01a02f3f-a89d-7d25-b4ac-ac89a183258d","branch_from":null,"kind":"message","role":"assistant","record":{"content":"Approach A has a problem."}}
+{"id":"01a02f54-b76b-7808-a895-3069dcca66f6","parent_id":"01a02f3f-a89d-7d25-b4ac-ac89a183258d","branch_from":"01a02f3f-a89d-7d25-b4ac-ac89a183258d","kind":"message","role":"user","record":{"content":"Try approach B instead."}}
 ```
 
-we also need to identify whether a child->parent was a branch or not to avoid the case of each child identified as a branch. for which we added a new field `branch_from`
+`parent_id` tells us how to walk backward. `branch_from` tells us that this event begins a deliberate alternate path instead of being an ordinary child. That distinction matters when rendering a timeline and when summarizing work from an abandoned branch.
+
+For the local representation, I chose an append-only array of events and a hash map from event ID to array index. The map avoids scanning the whole log to locate a parent.
+
+- Event lookup is average-case `O(1)` and worst-case `O(n)` if a hash table degenerates.
+- Appending is amortized `O(1)`.
+- Reconstructing a path is `O(k)`, where `k` is the number of events on that path.
+
+This does not require a B-tree. A B-tree could be useful for a different storage backend or query pattern, but the session's primary operation is append plus parent traversal. Keeping the representation small was itself an optimization.
+
+<figure>
+  <img src="/img/blogs/infai-harness-session-2i.webp" alt="Agent session events forming a branchable tree" />
+  <figcaption>Parent links let one session contain multiple timelines.</figcaption>
+</figure>
+
+The index stores enough information to locate an event without reading every event first:
 
 ```jsonl
-{
-  "id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
-  "branch_from": null,
-  "parent_id": "00000000-0000-0000-0000-000000000000",
-  "record": {}
-}
-{
-  "id": "01a02f3f-cb65-73b7-a632-1d948274475f",
-  "branch_from": null,
-  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
-  "record": {}
-}
-{
-  "id": "01a02f54-b76b-7808-a895-3069dcca66f6",
-  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
-  "branch_from": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
-  "record": {}
-}
+{"id":"01a039f0-e016-7dd2-aac4-669467e8d7e4","parent_id":"00000000-0000-0000-0000-000000000000","timestamp":"2026-08-25T17:21:22.454897183Z"}
 ```
 
 <figure>
-  <img src="/img/blogs/infai-harness-session-2i.webp" alt="todo" />
-  <figcaption>todo</figcaption>
+  <img src="/img/blogs/infai-harness-session-2ii.webp" alt="Event ID to parent and index mapping" />
+  <figcaption>The index gives the harness a fast route to event locations.</figcaption>
 </figure>
 
-and yes we needed `index.jsonl` as we need to store the mappings. Simpler datastructure was choice of array in a tree with a eventId -> array index resolver as a HashMap.
+## Iteration 3: Add `HEAD`
 
-```jsonl
-{
-  "id": "01a039f0-e016-7dd2-aac4-669467e8d7e4",
-  "parent_id": "00000000-0000-0000-0000-000000000000",
-  "timestamp": "2026-08-25T17:21:22.454897183Z"
-}
-```
+Branching gives us many possible paths, but the harness still needs to know which path is active. Git solves this with `HEAD`, and the same idea works here.
+
+`HEAD` stores the ID of the latest event on the active timeline. To rebuild the current context, the harness starts at `HEAD` and follows `parent_id` until it reaches the root or a compaction boundary.
+
+The pointer must be updated carefully. A crash between writing an event and updating `HEAD` should leave us with a valid older session, not a pointer to an event that was never fully persisted. On startup, the harness can validate the pointer and recover to the newest valid event when necessary.
 
 <figure>
-  <img src="/img/blogs/infai-harness-session-2ii.webp" alt="todo" />
-  <figcaption>todo</figcaption>
+  <img src="/img/blogs/infai-harness-session-3.webp" alt="HEAD pointing to the active agent session timeline" />
+  <figcaption>`HEAD` identifies the timeline the agent should continue.</figcaption>
 </figure>
 
-## Iter 3: we need HEAD where we are
+## Iteration 4: Move Session Metadata Out of the Event Log
 
-Just like what Git does for identifying where it is we are doing to use the HEAD. so that when the session actually moves we can store the eventId and that gives us the latest event of a timeline.
-Given, HEAD we can traverse towards the parent which means `id == uuid.Nil` with proper crash recovery.
+The first design put metadata and conversation events in the same file. It worked, but it forced simple operations such as listing sessions or changing the selected model to understand the event log.
 
-<figure>
-  <img src="/img/blogs/infai-harness-session-3.webp" alt="todo" />
-  <figcaption>todo</figcaption>
-</figure>
+The next layout separated stable session metadata from the event stream:
 
-## Iter 4: then we noticed we can move session meta to seperate file
-
-We saw we have to hack around to just get a sessionmetadata as well as need to load the events.json thus decided to make it a seperate file
-
-which can update last_used_model when the user SwitchModel. and we didn't use the context as Its depend on what user configured as.
-
-
-```
+```text
 sessions/<session-id>/
   events.jsonl
   index.jsonl
@@ -185,20 +125,24 @@ sessions/<session-id>/
   HEAD
 ```
 
-and also we made the decision of systemPrompt as its a per agent so better to keep it in the agent loop as a dynamic entity and without adding it in the session becomes true events.
-Giving us flexibility later of per model basis system prompt 😉
+`session.json` can hold the session name, working directory, selected model, and timestamps. The event log can remain focused on what happened.
+
+I also removed the system prompt from the durable conversation events. The system prompt belongs to the agent configuration and can change with the active model or agent. Keeping it in the loop as a dynamic input gives the harness more flexibility without pretending that every generated prompt is a user-visible event.
+
+This separation is useful beyond storage. It distinguishes **session facts** from **context assembly**. The session records what happened; the agent loop decides which instructions and events should be sent to the model now.
 
 <figure>
-  <img src="/img/blogs/infai-harness-session-4.webp" alt="todo" />
-  <figcaption>todo</figcaption>
+  <img src="/img/blogs/infai-harness-session-4.webp" alt="Session metadata separated from the event stream" />
+  <figcaption>Metadata and conversation events have different responsibilities.</figcaption>
 </figure>
 
+## Iteration 5: Chunk a Growing Event Log
 
-## Iter 5: HUGE events.jsonl
+One `events.jsonl` file is convenient until a session becomes large. Listing a session should not require opening a multi-gigabyte tool history, and loading the current branch should not require scanning unrelated branches.
 
-for that we revisited some of the concepts of logrotate and git how it handles a lot of changes. So got the chunks folder for us to get the benefits of it. so we don't need to open all but a subset of events we just need to open chunks on demand not always.
+The next step was chunk rotation:
 
-```
+```text
 sessions/<session-id>/
   chunks/
     000000.jsonl
@@ -208,88 +152,105 @@ sessions/<session-id>/
   HEAD
 ```
 
-We can specify any specific threshold on which we want to rotate and the index file now follows the location to get only a subset of the files to get more efficient read a pos+offset+limit.
+The index now records the physical location of each event:
 
 ```jsonl
-{
-  "id": "01a039f0-e016-7dd2-aac4-669467e8d7e4",
-  "parent_id": "00000000-0000-0000-0000-000000000000",
-  "timestamp": "2026-08-25T17:21:22.454897183Z",
-  "location": {
-    "chunk": 0,
-    "offset": 0,
-    "length": 226
-  }
-}
+{"id":"01a039f0-e016-7dd2-aac4-669467e8d7e4","parent_id":"00000000-0000-0000-0000-000000000000","timestamp":"2026-08-25T17:21:22.454897183Z","location":{"chunk":0,"offset":0,"length":226}}
 ```
 
+The harness can read only the chunks needed for a timeline or a bounded range. The exact rotation threshold is a policy choice. Smaller chunks make targeted reads cheaper but increase file and index overhead; larger chunks reduce metadata overhead but increase the amount of data read during recovery.
+
+This is the same kind of trade-off found in log rotation and write-ahead storage: bounded work matters more than a perfect universal chunk size.
+
 <figure>
-  <img src="/img/blogs/infai-harness-session-5.webp" alt="todo" />
-  <figcaption>todo</figcaption>
+  <img src="/img/blogs/infai-harness-session-5.webp" alt="Chunked event files with an indexed event location" />
+  <figcaption>Chunking bounds the amount of history a read must touch.</figcaption>
 </figure>
 
-## Iter 6: Some ToolCalls Result or ToolRequests can get pretty large.
+## Iteration 6: Load Large Tool Results Lazily
 
-as the event store is for storing the events what happened when so we don't always need to load all the heavy content[0].Message blobs so instead use a lazy approach where if doing ListSession, ListSessionTimeline we don't bother to resolve it and only do during the LoadActiveSession to get the history based on current HEAD.
+Tool calls and tool results can be much larger than ordinary messages. A compiler output, a test log, or a file read can consume more memory than the conversation around it.
 
-and yes we used Digest field to help us out here
+The event store still needs to preserve those payloads, but every operation does not need them. A session list needs a name and timestamp. A timeline view needs event types and short summaries. Only active-session reconstruction may need the full content.
 
-`chunks/###.jsonl`
+That led to a lazy-loading rule: keep metadata and a digest in the index or lightweight event record, then resolve the large payload only when the caller asks for it.
 
 ```jsonl
-{
-  "id": "01a02f3f-cb65-73b7-a632-1d948274475f",
-  "branch_from": null,
-  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
-  "role": "assistant",
-  "digest": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
-  "record": null,
-}
+{"id":"01a02f3f-cb65-73b7-a632-1d948274475f","branch_from":null,"parent_id":"01a02f3f-a89d-7d25-b4ac-ac89a183258d","kind":"message","role":"assistant","digest":"sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824","record":null}
 ```
 
+The digest gives us an integrity check and a stable reference for a payload that is not loaded yet. This saves memory during browsing and avoids unnecessary CPU and disk work during session listing.
+
 <figure>
-  <img src="/img/blogs/infai-harness-session-6.webp" alt="todo" />
-  <figcaption>todo</figcaption>
+  <img src="/img/blogs/infai-harness-session-6.webp" alt="Large tool result payloads resolved lazily from session storage" />
+  <figcaption>Heavy content is available when needed, not loaded by default.</figcaption>
 </figure>
 
-it saves both compute to load on memory and also cpu cycles.
+## Iteration 7: Make Compaction a First-Class Event
 
-## Iter 7: Compaction
+Even a large model context window is finite. More importantly, sending the entire history on every request increases latency and cost long before the model reaches its hard limit.
 
-we needed to mark that it by adding a `kind=compaction` in the `chunks/###.jsonl`
+Compaction is the point where storage design and model behavior meet. Instead of deleting old events, the harness records a compaction event that summarizes a bounded portion of the timeline. The original events remain available for audit, debugging, or a future policy that needs them.
 
 ```jsonl
-{
-  "id": "01a02f3f-cb65-73b7-a632-1d948274475f",
-  "branch_from": null,
-  "parent_id": "01a02f3f-a89d-7d25-b4ac-ac89a183258d",
-  "kind": "compaction",
-  "role": "assistant",
-  "digest": "sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
-  "record": null,
-}
+{"id":"01a02f3f-cb65-73b7-a632-1d948274475f","branch_from":null,"parent_id":"01a02f3f-a89d-7d25-b4ac-ac89a183258d","kind":"compaction","role":"assistant","digest":"sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824","record":{"summary":"The agent inspected the repository, chose the chunked event design, and left the migration test unfinished."}}
 ```
 
-so then the termination of a active Timeline becomes for the AI agent becomes
-HEAD >>> parent(where parent_id==uuid.Nil or kind==compaction)
+The active timeline can now stop at the root or at the relevant compaction boundary:
+
+```text
+HEAD -> parent -> parent -> compaction
+                         or root
+```
+
+For a path with `N` events, reconstruction is `O(N)` when walking the parent links. Each indexed event lookup is average-case `O(1)`, so the combined path walk is approximately `O(N)` with `O(1)` lookup per step. The best case is `O(1)` when `HEAD` is itself a compaction boundary or the requested context contains one event. The worst case remains `O(N)` when the active path has no useful boundary and every event must be visited.
+
+Compaction is lossy, so the summary must preserve more than a vague paragraph. At minimum, it should retain goals, constraints, decisions, files changed, unresolved work, and facts that would be expensive or dangerous to rediscover. Important identifiers should live in durable artifacts as well, because no summary is guaranteed to preserve every detail.
+
+This is also why compaction should be a harness-level operation. It needs a trigger policy, a boundary policy, failure handling, and a way to retry without corrupting the session. It is not only a button in the TUI.
 
 <figure>
-  <img src="/img/blogs/infai-harness-session-7.webp" alt="todo" />
-  <figcaption>todo</figcaption>
+  <img src="/img/blogs/infai-harness-session-7.webp" alt="Compaction event creating a shorter active session path" />
+  <figcaption>Compaction shortens the active path without erasing the original history.</figcaption>
 </figure>
 
-so the iteration to reconstruction for a branch in the entire timeline becomes just a O(N)+O(1) where N is the no of items to retrive.
+## Iteration 8: The Simplified Design
 
-> AI bro please add the space and time complexity for Avg, Best case, Worst case.
+After these iterations, the design became less about adding features and more about assigning each responsibility to the right layer:
 
-## Iter 8: Final simplification and we got to this.
+```text
+sessions/<session-id>/
+  chunks/
+    000000.jsonl
+    000001.jsonl
+  index.jsonl
+  session.json
+  HEAD
+```
+
+The event stream is append-only. Parent links provide the tree. `HEAD` selects the active branch. The index makes event locations discoverable. Chunks bound disk reads. Digests and lazy payloads keep lightweight operations lightweight. Compaction gives long-running sessions a deliberate context boundary.
+
+The final system is not optimized because it uses a clever data structure. It is optimized because each operation reads only the state it needs.
 
 <figure>
-  <img src="/img/blogs/infai-harness-session-8.webp" alt="todo" />
-  <figcaption>todo</figcaption>
+  <img src="/img/blogs/infai-harness-session-8.webp" alt="Final Infai agent session storage design" />
+  <figcaption>The final design combines durable events, branches, chunks, lazy payloads, and compaction.</figcaption>
 </figure>
 
+## What This Changed About My View of Agent Harnesses
 
-## Conclusion 
+I started with a frustration about agent tools: the visible interface often looked more customizable than the underlying loop really was. I wanted better permissions, better subagent boundaries, and fewer surprises when a session became complicated.
 
+The session store turned out to be a central part of that problem. If the harness cannot identify the active branch, recover after a crash, load a bounded context, or explain where a tool result came from, then higher-level controls will always feel unreliable.
 
+The broader lesson is that agent context needs the same engineering discipline as any other stateful system. Durability, indexing, concurrency, lazy loading, and recovery are not distractions from the intelligence of the agent. They determine whether that intelligence remains useful after the first successful demo.
+
+We began with a JSONL file because it was easy. We ended with a timeline because the agent needs to remember not only **what** happened, but also **which version of what happened** it is continuing.
+
+That is the difference between storing a transcript and building a session.
+
+## Further Reading
+
+- [OpenAI Agents SDK sessions](https://openai.github.io/openai-agents-js/guides/sessions/)
+- [Pi compaction and branch summaries](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/compaction.md)
+- [SQLite write-ahead logging](https://www.sqlite.org/wal.html)
