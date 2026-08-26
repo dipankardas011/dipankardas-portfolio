@@ -38,7 +38,7 @@ The answer emerged through eight iterations.
 
 The first step was to understand what an LLM provider actually returns. A response is not one plain string. Depending on the provider and the operation, it can contain roles, content, reasoning, tool calls, tool results, usage, and provider-specific metadata.
 
-The first useful abstraction was an event. Each interaction became an append-only record, with session metadata stored before the conversation began.
+The first useful abstraction was an event. Each interaction became an append-only record, with session metadata stored before the conversation began. Infai uses UUIDv7 event IDs, which carry creation-time ordering while remaining globally unique.
 
 ```jsonl
 {"kind":"meta","role":"","id":"xxxx-aaa-bbb-cccc","session_id":"xxxx-aaa-bbb-cccc","record":{"last_used_model":"model-name","session_name":"example","working_dir":"/workspace","created_at":"2026-08-25T17:21:22Z","updated_at":"2026-08-25T17:21:22Z"}}
@@ -54,6 +54,8 @@ JSONL was a reasonable first choice for local storage. It is easy to append, eas
 ```
 
 The important decision was not JSONL itself. It was treating the session as a sequence of facts rather than repeatedly rewriting one large mutable object.
+
+There is one important distinction in the implementation: streamed deltas are live-only. They fan out through the session event hub for the TUI or SSE client, but the settled message is what becomes durable history. Persisting every token would make the event log noisy without improving session recovery.
 
 <figure>
   <img src="/img/blogs/infai-harness-session-1.webp" alt="Primitive agent session events stored as JSONL" />
@@ -82,6 +84,8 @@ For the local representation, I chose an append-only array of events and a hash 
 
 This does not require a B-tree. A B-tree could be useful for a different storage backend or query pattern, but the session's primary operation is append plus parent traversal. Keeping the representation small was itself an optimization.
 
+Branch selection is intentionally two-phase. Selecting an older event changes a pending in-memory parent, not the persisted `HEAD`. The old active branch remains current until the user submits a new prompt. Only then does the harness append the new event and move `HEAD` to the new branch.
+
 <figure>
   <img src="/img/blogs/infai-harness-session-2i.webp" alt="Agent session events forming a branchable tree" />
   <figcaption>Parent links let one session contain multiple timelines.</figcaption>
@@ -104,7 +108,9 @@ Branching gives us many possible paths, but the harness still needs to know whic
 
 `HEAD` stores the ID of the latest event on the active timeline. To rebuild the current context, the harness starts at `HEAD` and follows `parent_id` until it reaches the root or a compaction boundary.
 
-The pointer must be updated carefully. A crash between writing an event and updating `HEAD` should leave us with a valid older session, not a pointer to an event that was never fully persisted. On startup, the harness can validate the pointer and recover to the newest valid event when necessary.
+The pointer must be updated carefully. A crash between writing an event and updating `HEAD` should leave us with a valid older session, not a pointer to an event that was never fully persisted. On startup, the harness validates the pointer and can finish an interrupted temporary `HEAD` update when the referenced event is already indexed.
+
+The current write sequence is deliberately conservative: sync the chunk, write and sync a temporary `HEAD`, append and sync the index entry, then atomically rename the temporary `HEAD` and sync the session directory. If the process dies after the chunk is synced but before the index is, startup reconciliation rebuilds missing index entries from the chunks. A torn final JSONL line is truncated; a complete but invalid line is treated as corruption instead of being silently ignored.
 
 <figure>
   <img src="/img/blogs/infai-harness-session-3.webp" alt="HEAD pointing to the active agent session timeline" />
@@ -147,10 +153,13 @@ sessions/<session-id>/
   chunks/
     000000.jsonl
     000001.jsonl
+  blobs/
   index.jsonl
   session.json
   HEAD
 ```
+
+The chunk and blob thresholds are configuration choices, not properties of the data model. The threshold can be tuned for different storage characteristics: chunks bound event-log reads, while sufficiently large serialized records move to the `blobs/` directory.
 
 The index now records the physical location of each event:
 
@@ -171,7 +180,7 @@ This is the same kind of trade-off found in log rotation and write-ahead storage
 
 Tool calls and tool results can be much larger than ordinary messages. A compiler output, a test log, or a file read can consume more memory than the conversation around it.
 
-The event store still needs to preserve those payloads, but every operation does not need them. A session list needs a name and timestamp. A timeline view needs event types and short summaries. Only active-session reconstruction may need the full content.
+The event store still needs to preserve those payloads, but every operation does not need them. A session list needs a name and timestamp. A timeline view needs event types and short summaries. Only active-session reconstruction may need the full content. In the current implementation, `ToolCallRecord` and `ToolResultRecord` define the durable shape, but the tool loop has not yet been wired to emit those records. The storage layer is ready; the integration is still future work.
 
 That led to a lazy-loading rule: keep metadata and a digest in the index or lightweight event record, then resolve the large payload only when the caller asks for it.
 
@@ -180,6 +189,8 @@ That led to a lazy-loading rule: keep metadata and a digest in the index or ligh
 ```
 
 The digest gives us an integrity check and a stable reference for a payload that is not loaded yet. This saves memory during browsing and avoids unnecessary CPU and disk work during session listing.
+
+Blob files are content-addressed by the SHA-256 digest of the serialized record. The same payload therefore does not need to be written twice, and loading a blob verifies its digest before decoding it. `LoadEvent` keeps the blob unresolved; the engine resolves it only when rebuilding chat history.
 
 <figure>
   <img src="/img/blogs/infai-harness-session-6.webp" alt="Large tool result payloads resolved lazily from session storage" />
@@ -190,7 +201,7 @@ The digest gives us an integrity check and a stable reference for a payload that
 
 Even a large model context window is finite. More importantly, sending the entire history on every request increases latency and cost long before the model reaches its hard limit.
 
-Compaction is the point where storage design and model behavior meet. Instead of deleting old events, the harness records a compaction event that summarizes a bounded portion of the timeline. The original events remain available for audit, debugging, or a future policy that needs them.
+Compaction is the point where storage design and model behavior meet. Instead of deleting old events, the harness records a compaction event that summarizes a bounded portion of the timeline. The original events remain available for audit, debugging, or a future policy that needs them. Infai currently triggers automatic compaction when reported token usage reaches 80% of the configured model context window, and also exposes manual compaction.
 
 ```jsonl
 {"id":"01a02f3f-cb65-73b7-a632-1d948274475f","branch_from":null,"parent_id":"01a02f3f-a89d-7d25-b4ac-ac89a183258d","kind":"compaction","role":"assistant","digest":"sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824","record":{"summary":"The agent inspected the repository, chose the chunked event design, and left the migration test unfinished."}}
@@ -223,6 +234,7 @@ sessions/<session-id>/
   chunks/
     000000.jsonl
     000001.jsonl
+  blobs/
   index.jsonl
   session.json
   HEAD
@@ -231,6 +243,8 @@ sessions/<session-id>/
 The event stream is append-only. Parent links provide the tree. `HEAD` selects the active branch. The index makes event locations discoverable. Chunks bound disk reads. Digests and lazy payloads keep lightweight operations lightweight. Compaction gives long-running sessions a deliberate context boundary.
 
 The final system is not optimized because it uses a clever data structure. It is optimized because each operation reads only the state it needs.
+
+There is an operational boundary worth calling out. A user message is persisted before model generation begins, so a hard crash does not lose what the user typed. The assistant's settled response is persisted when the turn completes; an interrupted response is the part that can be lost. That is a reasonable first durability contract for an interactive harness, but it should be explicit.
 
 <figure>
   <img src="/img/blogs/infai-harness-session-8.webp" alt="Final Infai agent session storage design" />
