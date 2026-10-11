@@ -77,25 +77,15 @@ const today = new Date().toISOString().slice(0, 10);
           <BlurDecoration variant="purple" position="top-right" />
           <BlurDecoration variant="terra"  position="bottom-left" />
 
-          <div class="portrait-duotone relative aspect-[3/4] overflow-hidden border border-app-ink-line bg-app-surface">
+          <div class="portrait-duotone relative aspect-3/4">
             <img
-              src="/img/profile_bw.webp"
+                src="/img/profile_bw_hero.webp"
               alt={siteConfig.name}
               class="w-full h-full object-cover"
               loading="eager"
             />
-            <!-- corner crosshairs -->
-            <span class="absolute top-2.5 left-2.5 w-3.5 h-3.5 border-l border-t border-app-accent-2"></span>
-            <span class="absolute top-2.5 right-2.5 w-3.5 h-3.5 border-r border-t border-app-accent-2"></span>
-            <span class="absolute bottom-2.5 left-2.5 w-3.5 h-3.5 border-l border-b border-app-accent-2"></span>
-            <span class="absolute bottom-2.5 right-2.5 w-3.5 h-3.5 border-r border-b border-app-accent-2"></span>
           </div>
 
-          <!-- caption strip -->
-          <div class="mt-3 pt-2 border-t border-app-border flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-app-gray-400">
-            <span>fig.01 / portrait</span>
-            <span class="text-app-accent">live</span>
-          </div>
         </div>
       </div>
 
