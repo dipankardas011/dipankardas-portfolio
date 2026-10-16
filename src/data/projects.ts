@@ -49,16 +49,31 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    title: "InfAI",
+    title: "infai",
     description:
-      "Zero-management launch templates for llama.cpp and vLLM. Auto-detects GGUF and safetensors models, saves named profiles in SQLite, and launches model servers with live logs and real-time metrics — no flag soup. Supports 11+ themes on macOS and Linux.",
-    image: "https://github.com/dipankardas011/infai/blob/main/cover.webp?raw=true",
+      "A terminal control plane for local LLM inference. One profile shape — model + engine + config — for llama.cpp and vLLM, so every launch is a keypress instead of flag soup. Runs many models at once with live tokens/sec and CPU, RAM, and VRAM telemetry, downloads GGUF quantizations from Hugging Face, and checks hardware fit before launch. Single Go binary for macOS and Linux.",
+    image: "https://github.com/dipankardas011/infai/blob/main/cover-infai.webp?raw=true",
     links: [
       { label: "Website", url: "https://infai.dipankar-das.com/" },
       { label: "GitHub", url: "https://github.com/dipankardas011/infai" },
     ],
     category: "AI/ML",
-    tags: ["Go", "TUI", "llama.cpp", "LLM", "SQLite"],
+    tags: ["Go", "TUI", "llama.cpp", "vLLM", "Local LLM", "Hugging Face"],
+    featured: true,
+  },
+  {
+    title: "infaiw",
+    description:
+      "An agent harness that works with you, not around you. Runs as a background service, so sessions keep going after you close the terminal and several clients can attach to the same one. Sidecar loops delegate work to subagents that must pass an acceptance check, sessions live on durable branching timelines, and approvals wait for you. MCP, skills, and evals built in. Built in public, one post a day.",
+    image: "https://github.com/dipankardas011/infai/blob/main/cover-infaiw.webp?raw=true",
+    links: [
+      { label: "Website", url: "https://infai.dipankar-das.com/infaiw/" },
+      { label: "GitHub", url: "https://github.com/dipankardas011/infai" },
+      { label: "Build log", url: "https://infai.dipankar-das.com/infaiw/#buildlog" },
+      { label: "Blog", url: "https://dipankar-das.com/blog/reimagined-how-ai-agent-harness-session-stored" },
+    ],
+    category: "AI/ML",
+    tags: ["Go", "AI Agents", "Agent Harness", "MCP", "Human-in-the-loop", "TUI"],
     featured: true,
   },
   {

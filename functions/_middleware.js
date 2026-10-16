@@ -19,7 +19,8 @@ const SITE_CONTEXT =
   '(3) Distributed Systems — Raft consensus datastores, actor model, gRPC, NATS event-driven architectures in Go; ' +
   '(4) Sustainable Computing — CNCF TAG Green contributor, carbon-aware provisioning, energy measurement via Kepler, Green Software Foundation alignment; ' +
   '(5) AI & Local LLM Infrastructure — builds tooling for AI agents and local inference: ' +
-  'InfAI (zero-management launcher for llama.cpp with GGUF auto-detection and live metrics), ' +
+  'infai (a terminal control plane for local inference: launch profiles for llama.cpp and vLLM, many models at once, live telemetry, Hugging Face downloads), ' +
+  'infaiw (a daemon-based AI agent harness with sidecar loops that must pass acceptance checks, durable branching session timelines, MCP, and human-in-the-loop approvals, built in public), ' +
   'AI Agent Evals (security-focused benchmarks testing agents on real-world incident response), ' +
   'and an AI Agents Skill Library for modular agent capability composition. ' +
   'Notable open-source products: kubmin (FinOps and SCI/SEE sustainability scoring for Kubernetes workloads), ' +
