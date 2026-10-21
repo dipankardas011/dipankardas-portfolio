@@ -179,6 +179,36 @@ export const experiences: Experience[] = [
         what: "Optimized GitHub Self-Hosted Runners across the organization.",
         how: "Applied resource-aware labeling and multi-container environments, drastically reducing CI/CD wait times and improving overall build reliability.",
       },
+      {
+        title: "MariaDB Operations & Disaster Recovery",
+        why: "Database maintenance and recovery required coordinated procedures for replication, backups, and safe service transitions.",
+        what: "Contributed MariaDB operational automation and runbooks covering primary/replica setup on Azure, disk snapshots, an independent prepared mariadb-backup recovery path, monitoring, binlog handling, and audit logging.",
+        how: "Documented replication-aware maintenance and GTID-aligned recovery procedures, including read-only transitions, query draining, replica-lag checks, ordered shutdown/startup, and post-change health verification.",
+      },
+      {
+        title: "Cross-Platform Access-Offboarding Automation",
+        why: "Departing-user access spanned infrastructure and application platforms, making manual cleanup repetitive and easy to miss.",
+        what: "Contributed Python automation for cloud-server discovery, SSH-key removal, WordPress role removal, and membership cleanup across GitHub, managed WordPress, and Cloudflare.",
+        how: "Implemented dry-run support, atomic SSH-file updates, and post-change verification, while preserving WordPress user accounts and their content during role removal.",
+      },
+      {
+        title: "GitHub Actions Runner Governance",
+        why: "Runner-selection policy across private repositories needed repeatable checks rather than manual workflow reviews.",
+        what: "Contributed scheduled workflow scanning, approved runner-label validation, automated remediation pull requests, and notifications for eligible private repositories.",
+        how: "Scoped scans to non-archived, non-mirror private repositories and documented runner selection and failure-safe cleanup. Supported multiple approved runner labels rather than enforcing a single runner type.",
+      },
+      {
+        title: "Email Delivery & Transport-Encryption Observability",
+        why: "Email operations needed visibility into delivery problems, failed encryption sessions, and transport-policy reporting gaps.",
+        what: "Contributed scheduled TLS-RPT processing with Gmail API retrieval, compressed JSON attachment parsing, deterministic aggregation, and conditional alerts for encryption failures and reporting anomalies.",
+        how: "Added SES bounce and complaint reporting with validated AI summaries and a data-only fallback, keeping authoritative counts separate from model-generated interpretation.",
+      },
+      {
+        title: "Scheduled Object-Storage-to-Loki Log Ingestion",
+        why: "Managed WordPress edge and origin logs stored in S3 needed to be accessible through the existing Grafana/Loki investigation workflow.",
+        what: "Contributed scheduled S3-to-Loki ingestion with manual date and log-type selection, site-based processing, and structured source metadata.",
+        how: "Preserved source timestamps and stable stream labels, with batching, retries, temporary-file cleanup, and non-zero exit status on ingestion failure. Retained a scheduled workflow rather than adding a more complex event-driven service.",
+      },
     ],
   },
 
