@@ -46,56 +46,21 @@ export const writingProfile = {
 
 export const experiences: Experience[] = [
   {
-    company: "rtCamp",
-    role: "DevOps Engineer",
-    tenure: "Jan 2024 - Present",
-    logo: "/img/experience/rtcamp.webp",
-    link: "https://rtcamp.com",
+    company: "Green Software Foundation",
+    role: "Assembly Participant - OpenTelemetry SCI",
+    tenure: "Jul 2026 - Present",
+    logo: "/img/experience/green-software-foundation.webp",
+    link: "https://greensoftware.foundation/",
     contributions: [
       {
-        title: "Enterprise IaC & Migration — Cox Automotive",
-        why: "S3 buckets, CloudFront distributions, and WAF policies for prod, dev, and staging environments were created manually via aws console and have some legacy settings",
-        what: "Migrated and standardized S3, CloudFront, and WAF configurations across all three environments into Terraform. with 0 drift terraform drift and 0 downtime.",
-        how: "Established a multi-environment GitOps workflow with a rigorous Plan-Review-Apply SOP, eliminating click-ops and achieving consistent, repeatable infrastructure across prod, dev, and staging.",
-      },
-      {
-        title: "Internal Server and Site Log reporting",
-        why: "More than 10 servers hosting over 200 WordPress, Frappe, and custom sites lacked centralized log collection and actionable reporting, increasing the risk of missing fatal errors and production issues.",
-        what: "Built a centralized log intelligence pipeline using Fluent Bit, OpenTelemetry Collector, Loki, Grafana, and an AI agent harness. The system normalizes logs from multiple sources, deduplicates routine noise such as rate-limit events, and produces hourly summaries of application problems.",
-        how: "Standardized incoming logs into a common OpenTelemetry schema before storing them in Loki, then connected the data to an MCP-enabled AI agent for reporting. Reduced unnecessary tool calls and token usage by downloading and deduplicating logs only when needed, while delegating log processing to efficient UNIX command-line workflows. This made analysis nearly 2x faster and reduced token usage by 70%, giving developers a single view of active incidents including credential leaks, OOM kills, and fatal application errors. Connected Loki to Grafana through a Cloudflare Tunnel.",
-      },
-      {
-        title: "Internal CI/CD with GitHub ARC Runners",
-        why: "Server-hosted GitHub runners polluted host environments, introduced dependency and networking conflicts, and required brittle custom scripts for workflows such as wp-env and Docker Compose. The setup also lacked runner-based autoscaling and cost control.",
-        what: "Migrated the self-hosted runner platform to Kubernetes-based GitHub Actions Runner ScaleSets with monitoring and autoscaling support.",
-        how: "Gradually shifted private repositories to the new runner platform with zero CI/CD downtime, updating the necessary GitHub Actions workflows to simplify execution. The migration reduced unexplained pipeline failures, improved maintainability, and brought the developer experience closer to GitHub-hosted ubuntu-latest runners.",
-      },
-      {
-        title: "Cloud-Native Scaling & Observability — Global FinTech",
-        why: "A monolithic Frappe/ERPNext platform was buckling under high-concurrency traffic with no visibility into where production bottlenecks occurred.",
-        what: "Migrated the platform to a distributed Kubernetes cluster and implemented full-stack OpenTelemetry instrumentation.",
-        how: "Decomposed the monolith into individual services and migrated to Kubernetes — gaining autohealing, rolling deployments, and the broader ecosystem benefits. Layered OTel logs, traces, and metrics across the stack while deliberately keeping the architecture as simple as possible to reduce operational overhead.",
-      },
-      {
-        title: "Cloud FinOps & Cost Engineering",
-        why: "Memory-intensive background jobs and cron workloads were running on always-on instances, inflating cloud spend without any performance benefit.",
-        what: "Achieved a 20% reduction in cloud OpEx across Kubernetes compute.",
-        how: "Engineered specialized Node Groups with Spot Instances and implemented scale-to-zero logic for background and cron workloads, eliminating idle resource waste while maintaining throughput.",
-      },
-      {
-        title: "Product Engineering — EasyDash / EasyEngine",
-        why: "Manual WordPress/PHP deployment processes were slow and error-prone, blocking a commercial product launch.",
-        what: "Co-developed a high-scale Cloud Provisioning Engine for dash.easyengine.io.",
-        how: "Built the automated backend with Python, Terraform, and Ansible — enabling rapid deployments that generated $200+ in subscription revenue within 60 days of launch.",
-      },
-      {
-        title: "Developer Experience & CI Optimization",
-        why: "Shared CI runners were creating queue bottlenecks and long wait times that disrupted engineering flow across teams.",
-        what: "Optimized GitHub Self-Hosted Runners across the organization.",
-        how: "Applied resource-aware labeling and multi-container environments, drastically reducing CI/CD wait times and improving overall build reliability.",
+        title: "SCI for OpenTelemetry Semantic Conventions",
+        why: "The OpenTelemetry and green software communities needed a shared, consensus-based approach for representing the Software Carbon Intensity (SCI) specification, an ISO standard, in OpenTelemetry semantic conventions.",
+        what: "Represented ksctl/Kubmin as one of 40 practitioners, maintainers, and researchers contributing to the Green Software Foundation's SCI for OpenTelemetry blueprint. The Assembly is defining the design decisions needed to turn SCI into draft semantic conventions for review by the OpenTelemetry Semantic Conventions SIG. Contributed to discussions that reached consensus on Topic 1: Scope and Use Cases, including the \"Improve, Then Compare, Then Adapt\" approach, which prioritizes optimizing workloads first, followed by cross-provider comparison and real-time workload placement.",
+        how: "Participated in the Assembly's Discover, Deliberate, and Decide process, contributing a platform-builder perspective to the proposed standard for software carbon telemetry. This work is related to Kubmin's infrastructure efficiency and sustainability capabilities for Kubernetes workloads; Topics 2 and 3 are in progress.",
       },
     ],
   },
+
   {
     company: "Kubmin - Ksctl",
     role: "Founder & Principal Engineer",
@@ -103,12 +68,6 @@ export const experiences: Experience[] = [
     logo: "/img/experience/kubmin-logo.webp",
     link: "https://ksctl.com/product/kubmin/",
     contributions: [
-      {
-        title: "SCI for OpenTelemetry Assembly",
-        why: "The OpenTelemetry and green software communities needed a shared, consensus-based approach for representing the Software Carbon Intensity (SCI) specification, an ISO standard, in OpenTelemetry semantic conventions.",
-        what: "Represented ksctl/Kubmin as one of 40 practitioners, maintainers, and researchers contributing to the SCI for OpenTelemetry blueprint. The assembly is defining the design decisions needed to turn SCI into draft semantic conventions for review by the OpenTelemetry Semantic Conventions SIG.",
-        how: "Participated in the assembly's Discover, Deliberate, and Decide process, contributing a platform-builder perspective to the proposed standard for software carbon telemetry.",
-      },
       {
         title: "Research on Software Sustainability Metrics",
         why: "Kubmin's workload intelligence required defensible choices about data sources, aggregation windows, formulas, algorithms, and the provenance of sustainability measurements.",
@@ -171,6 +130,58 @@ export const experiences: Experience[] = [
       },
     ],
   },
+  {
+    company: "rtCamp",
+    role: "DevOps Engineer",
+    tenure: "Jan 2024 - Oct 2026",
+    logo: "/img/experience/rtcamp.webp",
+    link: "https://rtcamp.com",
+    contributions: [
+      {
+        title: "Enterprise IaC & Migration — Cox Automotive",
+        why: "S3 buckets, CloudFront distributions, and WAF policies for prod, dev, and staging environments were created manually via aws console and have some legacy settings",
+        what: "Migrated and standardized S3, CloudFront, and WAF configurations across all three environments into Terraform. with 0 drift terraform drift and 0 downtime.",
+        how: "Established a multi-environment GitOps workflow with a rigorous Plan-Review-Apply SOP, eliminating click-ops and achieving consistent, repeatable infrastructure across prod, dev, and staging.",
+      },
+      {
+        title: "Internal Server and Site Log reporting",
+        why: "More than 10 servers hosting over 200 WordPress, Frappe, and custom sites lacked centralized log collection and actionable reporting, increasing the risk of missing fatal errors and production issues.",
+        what: "Built a centralized log intelligence pipeline using Fluent Bit, OpenTelemetry Collector, Loki, Grafana, and an AI agent harness. The system normalizes logs from multiple sources, deduplicates routine noise such as rate-limit events, and produces hourly summaries of application problems.",
+        how: "Standardized incoming logs into a common OpenTelemetry schema before storing them in Loki, then connected the data to an MCP-enabled AI agent for reporting. Reduced unnecessary tool calls and token usage by downloading and deduplicating logs only when needed, while delegating log processing to efficient UNIX command-line workflows. This made analysis nearly 2x faster and reduced token usage by 70%, giving developers a single view of active incidents including credential leaks, OOM kills, and fatal application errors. Connected Loki to Grafana through a Cloudflare Tunnel.",
+      },
+      {
+        title: "Internal CI/CD with GitHub ARC Runners",
+        why: "Server-hosted GitHub runners polluted host environments, introduced dependency and networking conflicts, and required brittle custom scripts for workflows such as wp-env and Docker Compose. The setup also lacked runner-based autoscaling and cost control.",
+        what: "Migrated the self-hosted runner platform to Kubernetes-based GitHub Actions Runner ScaleSets with monitoring and autoscaling support.",
+        how: "Gradually shifted private repositories to the new runner platform with zero CI/CD downtime, updating the necessary GitHub Actions workflows to simplify execution. The migration reduced unexplained pipeline failures, improved maintainability, and brought the developer experience closer to GitHub-hosted ubuntu-latest runners.",
+      },
+      {
+        title: "Cloud-Native Scaling & Observability — Global FinTech",
+        why: "A monolithic Frappe/ERPNext platform was buckling under high-concurrency traffic with no visibility into where production bottlenecks occurred.",
+        what: "Migrated the platform to a distributed Kubernetes cluster and implemented full-stack OpenTelemetry instrumentation.",
+        how: "Decomposed the monolith into individual services and migrated to Kubernetes — gaining autohealing, rolling deployments, and the broader ecosystem benefits. Layered OTel logs, traces, and metrics across the stack while deliberately keeping the architecture as simple as possible to reduce operational overhead.",
+      },
+      {
+        title: "Cloud FinOps & Cost Engineering",
+        why: "Memory-intensive background jobs and cron workloads were running on always-on instances, inflating cloud spend without any performance benefit.",
+        what: "Achieved a 20% reduction in cloud OpEx across Kubernetes compute.",
+        how: "Engineered specialized Node Groups with Spot Instances and implemented scale-to-zero logic for background and cron workloads, eliminating idle resource waste while maintaining throughput.",
+      },
+      {
+        title: "Product Engineering — EasyDash / EasyEngine",
+        why: "Manual WordPress/PHP deployment processes were slow and error-prone, blocking a commercial product launch.",
+        what: "Co-developed a high-scale Cloud Provisioning Engine for dash.easyengine.io.",
+        how: "Built the automated backend with Python, Terraform, and Ansible — enabling rapid deployments that generated $200+ in subscription revenue within 60 days of launch.",
+      },
+      {
+        title: "Developer Experience & CI Optimization",
+        why: "Shared CI runners were creating queue bottlenecks and long wait times that disrupted engineering flow across teams.",
+        what: "Optimized GitHub Self-Hosted Runners across the organization.",
+        how: "Applied resource-aware labeling and multi-container environments, drastically reducing CI/CD wait times and improving overall build reliability.",
+      },
+    ],
+  },
+
   {
     company: "Viamagus",
     role: "DevSecMLOps Consultant",
