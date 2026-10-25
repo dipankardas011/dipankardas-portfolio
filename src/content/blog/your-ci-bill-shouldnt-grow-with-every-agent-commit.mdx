@@ -1,0 +1,210 @@
+---
+title: "Your CI Bill Shouldn't Grow With Every Agent Commit"
+author: "Dipankar Das"
+date: 2026-10-25
+description: "Before cutting CI checks to control GitHub Actions costs, compare ephemeral self-hosted runners. Our ARC experience, the trade-offs, and where to start."
+tags: ["github-actions", "self-hosted-runners", "platform-engineering", "ci-cd", "cost-optimization"]
+cover: "/img/blogs/github-actions-arc-runners-cover.webp"
+draft: false
+---
+import { Tweet } from '@astro-community/astro-embed-twitter';
+import ConsultationCard from '../../components/ConsultationCard.astro';
+
+**How we made private-repository CI boring with ephemeral runners, Ansible, and infrastructure we already had.**
+
+## TL;DR
+
+- Busy private-repository CI can justify buying predictable compute capacity instead of paying for every execution minute.
+- We use ephemeral ARC runners on K3s, with deployment and lifecycle operations captured in Ansible and a Makefile.
+- The decision needs your actual bill, workload benchmarks, peak concurrency, and operating costs—not a cheap-server screenshot.
+
+## More code. More pushes. The same meter running.
+
+Now a days every developer uses coding agents to speedup development time. So changes arrive faster, pull requests keep moving, and CI spends the working day building, testing, and starting again.
+
+Then Billing Manager opens the GitHub Actions bill.
+
+In an October post on X, Jan Wilmake described a GitHub CI bill that had grown from $0 to $380 per month and was heading toward $800. Coding agents were pushing around 300 times a day, and the test suite had grown fivefold. His response: stop running CI on pull requests and move full tests to nightly runs and release PRs.
+
+<Tweet id="https://x.com/janwilmake/status/2105944817884709178" />
+
+Those are their reported numbers, not our invoices. But the tension is familiar. We want faster development and fast feedback, then treat the infrastructure bill as a reason to separate the two.
+
+Cancel superseded runs. Avoid duplicated workflows. Don't rebuild everything for a documentation change. Those are sensible optimizations. But before you remove useful checks, ask a different question:
+
+**Is the problem how much feedback you need—or how you're buying the compute that provides it?**
+
+## Keep GitHub Actions. Reconsider where the jobs run.
+
+This isn't an argument for replacing your CI platform.
+
+GitHub Actions can remain where developers define workflows, review failures, and enforce required checks. The execution machines don't have to belong to GitHub. For a team with occasional builds, hosted runners are a convenient purchase. You avoid maintaining machines and pay for execution when you need it.
+
+For an organization with sustained daytime demand across private repositories, that calculation deserves another look. A pool of machines can serve many jobs over the month. Within its capacity, another commit doesn't create another server rental charge. There is still a ceiling. Fill the pool and jobs queue; need more capacity and you buy it. Predictable infrastructure spending is not unlimited compute.
+
+The audience I have in mind is specific: engineering managers and platform leads paying meaningful runner overages, with workloads that can run on Linux and an organization willing to own the execution environment. If your included minutes already cover your needs, or your workflows depend heavily on managed macOS environments, the answer may be different.
+
+## Our first runners weren't boring
+
+The earlier VM-based runner arrangement had the problems you would expect from machines repeatedly doing build work: polluted environments, memory pressure, OOM kills, and runner or host corruption. Moving a runner onto your own server doesn't make those problems disappear. It moves responsibility for them onto you.
+
+The useful change was making the execution environment disposable, then making the infrastructure reproducible. The important part isn't that Kubernetes appeared in the architecture. It's that running more jobs stopped meaning accumulating more state on long-lived runner VMs.
+
+Existing infrastructure helped our economics. It wasn't free hardware, and it isn't proof that every newly rented cluster will produce the same result.
+
+## What we automated instead of babysitting
+
+The setup uses K3s and GitHub Actions Runner Controller, or ARC. Our cloud inventory targets Hetzner or DigitalOcean.
+
+The cloud layout separates a tainted control plane from dedicated workers. Scale sets select appropriate worker capacity through scheduling configuration, including architecture and resource requirements.
+
+```text
+GitHub Actions jobs
+        |
+        v
+ARC controller + scale-set listeners
+        |
+        v
+Ephemeral runner pods on K3s workers
+        |
+        +-- Runner container
+        +-- Docker-in-Docker sidecar
+        +-- Per-pod temporary working storage
+```
+
+ARC manages runner capacity within configured minimum and maximum bounds. Kubernetes schedules the pods onto available workers. The runner template gives the runner and its Docker sidecar explicit CPU and memory requests and limits.
+
+Our working directories and Docker-related volumes use `emptyDir`: pod-scoped storage rather than a permanent workspace shared by successive runner pods. That helps prevent yesterday's build state from becoming tomorrow's mysterious dependency.
+
+### Different jobs don't need identical runners
+
+Cost isn't the only benefit. Separate runner scale sets let you match the execution environment to the job, with independent minimum and maximum runner counts. Workflow jobs can target the appropriate scale-set name through `runs-on`; runner groups control which repositories can access those pools.
+
+For example, you can design pools for:
+
+- **Linting and unit tests:** smaller runners without a Docker daemon when the jobs don't need one.
+- **Docker builds and container-based integration tests:** runners configured with Docker-in-Docker (DinD).
+- **Memory-heavy test suites:** larger memory requests and limits, scheduled onto suitable workers.
+- **Architecture-specific builds:** separate ARM64 and x64 pools for compatible workloads.
+
+DinD is a per-pool design choice, not something every CI job must inherit. A dedicated non-DinD pod template avoids starting an unnecessary Docker sidecar and granting its privileged execution. Jobs that use Docker-based actions or service containers still need a compatible execution configuration.
+
+Each scale set can grow or shrink its runner count with demand inside its configured bounds. Different pools can also have different resource budgets and scheduling constraints, so lightweight checks don't need the same runner shape as a container-heavy integration suite. § [ARC scale-set configuration](https://docs.github.com/en/actions/tutorials/use-actions-runner-controller/deploy-runner-scale-sets)
+
+This is **runner-pod autoscaling**, not automatic procurement of more servers. Pools still compete for finite worker capacity unless you deliberately separate or reserve it; the worker fleet must cover the concurrency you want.
+
+### The lifecycle is code, not someone's shell history
+
+Ansible holds the provisioning and deployment steps. A Makefile exposes the operations we need to repeat.
+
+For example, these are actual targets from our setup, not commands that work on an arbitrary fresh server:
+
+```bash
+make deps
+make cloud-configure-cp
+make cloud-k3s-cp
+make cloud-k3s-worker
+make cloud-arc-controller
+make cloud-arc-scaleset
+make cloud-k8s-check
+```
+
+The playbook separates control-plane configuration, K3s installation, worker joins, and ARC deployment. Inventories describe the target cluster and runner scale sets.
+
+That matters during handover. The next engineer shouldn't need to reconstruct a machine from terminal history to understand how it was built.
+
+### Routine upgrades have an explicit path
+
+The repository also contains System Upgrade Controller setup and K3s upgrade plans. They define a weekly window, cordon nodes, and limit upgrade concurrency to one node per plan; the agent plan waits for the server plan.
+
+That is automation for K3s upgrades—not a claim that every OS package, container image, credential, and dependency maintains itself.
+
+In our experience, the settled system needs near-zero routine manual intervention. We aren't constantly entering the cluster to nurse individual runners back into service.
+
+That is the benefit I care about: recurring work handled by controllers and documented procedures, rather than recurring attention from an engineer.
+
+## The failures are part of the evidence
+
+The low-touch experience came after solving real problems.
+
+One was Docker networking. The documented overlay path used a smaller MTU than Docker's default bridge. Nested containers could produce packets that didn't fit, causing confusing failures. Developed template explicitly configures the DinD MTU rather than leaving that mismatch implicit.
+
+Other recorded issues included memory pressure, resource-quota interactions, GitHub download limits, and architecture-specific dependency failures.
+
+These details matter because "self-healing" has boundaries. Controllers can reconcile runner resources and Kubernetes can replace failed pods when capacity and dependencies are available. Neither can repair an incorrect network design, conjure more RAM, or make an incompatible binary run on ARM.
+
+Automation removes repeated intervention. It doesn't remove engineering judgment.
+
+## Compare the whole bill—not server stickers
+
+GitHub's current documentation lists standard Linux x64 runners at **$0.006 per minute**. GitHub Enterprise Cloud includes **50,000 standard-runner minutes per month**; larger runners have separate rates and cannot use that allowance. GitHub currently describes self-hosted Actions execution as free, with maintenance costs belonging to you. § [Billing documentation](https://docs.github.com/en/billing/concepts/product-billing/github-actions) · [Runner rates](https://docs.github.com/en/billing/reference/actions-runner-pricing)
+
+Check those terms again when making a purchase decision. Pricing changes.
+
+For a deliberately simplified example, assume an Enterprise Cloud organization uses 200,000 monthly minutes entirely on standard Linux x64 runners:
+
+```text
+200,000 total minutes
+−50,000 included minutes
+=150,000 paid minutes
+
+150,000 × $0.006 = $900 execution overage
+```
+
+That is an illustration. It excludes storage and assumes the allowance is available to those jobs.
+
+Now compare that execution charge against:
+
+```text
+Workers + control plane
++ storage and network costs
++ monitoring and recovery provisions
++ recurring operator time
++ migration cost spread over your evaluation period
+```
+
+Hetzner and DigitalOcean are worth evaluating, but their smallest advertised server is not a substitute for your entire runner fleet. Shared vCPUs also aren't a guarantee of sustained build performance. § [Hetzner cloud](https://www.hetzner.com/cloud/) · [DigitalOcean Droplets](https://www.digitalocean.com/pricing/droplets)
+
+Benchmark representative jobs on the proposed hardware. Measure wall-clock duration, memory peaks, image downloads, and queue time under concurrency. A lower hourly price doesn't help if builds slow enough to erase the savings.
+
+As a sensitivity check, a **hypothetical $300 monthly all-in recurring cost** equals 50,000 paid minutes at $0.006. That is an arithmetic threshold, not evidence that $300 buys adequate capacity for your jobs. Account for the initial implementation separately.
+
+Also, moving execution doesn't automatically remove GitHub artifact or cache charges, or your GitHub subscription.
+
+The strongest candidates have paid usage beyond included allowances, repeatable workloads, and enough utilization to make owned capacity useful. The weakest have tiny bills, unusual platform requirements, or demand so uneven that idle machines dominate the comparison.
+
+## Low-touch isn't ownerless
+
+Private repositories are not automatically trusted execution environments. Workflow code, dependencies, and contributions still need a threat model.
+
+Our DinD sidecar is privileged. Ephemeral pods reduce persistent build state; they are not, by themselves, a sufficient isolation boundary for hostile jobs. Sensitive workloads and unrelated trust domains need deliberate separation, restricted runner access, and scoped credentials.
+
+Someone must still own patching, credential rotation, capacity, monitoring, and recovery. A lost control plane or exhausted worker pool is not solved by calling the system self-healing.
+
+And not every organization needs this architecture. A smaller setup or continuing with hosted runners may be the better decision. The goal is to reduce the total cost of dependable feedback—not to give every company a Kubernetes cluster.
+
+## Audit before you cut checks
+
+Start with your bill and a representative period of workflow history.
+
+Find the repositories and runner types driving paid usage. Separate execution from storage. Look at peak concurrency as well as total minutes: a fleet that finishes everything eventually can still be a bad developer experience.
+
+Then pilot a representative workload. Include its Docker behavior, architecture requirements, secrets, and required checks. Compare runtime and queue time against your current setup before moving the rest.
+
+Our experience is that self-hosted CI doesn't have to become a second full-time job. Ephemeral runners, explicit resource boundaries, reproducible deployment, and automated lifecycle operations made the difference.
+
+Before you remove a test to save runner minutes, check whether you're buying those minutes the wrong way.
+
+## Want me to build this for your team?
+
+If your GitHub Actions bill keeps growing, let's look at whether self-hosted runners would save your team money—without trading away fast feedback.
+
+<ConsultationCard />
+
+If there's a good fit, **you can hire me on a contract basis to implement it**: runner infrastructure, automation, workflow migration, validation, and documented handover. You don't have to turn this article into another project for your already-busy platform team.
+
+The goal is a lower bill and CI your team doesn't have to babysit—not another cluster to worry about.
+
+I shared the alternative approach here:
+
+<Tweet id="https://x.com/DipankarDas011/status/2114301744620744733" />
