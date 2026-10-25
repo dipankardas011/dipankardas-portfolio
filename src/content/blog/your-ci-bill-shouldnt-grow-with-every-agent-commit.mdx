@@ -24,15 +24,19 @@ Now a days every developer uses coding agents to speedup development time. So ch
 
 Then Billing Manager opens the GitHub Actions bill.
 
-In an October post on X, Jan Wilmake described a GitHub CI bill that had grown from $0 to $380 per month and was heading toward $800. Coding agents were pushing around 300 times a day, and the test suite had grown fivefold. His response: stop running CI on pull requests and move full tests to nightly runs and release PRs.
+In an October post on X, Jan Wilmake described a GitHub CI bill that had grown from USD 0 to USD 380 per month and was heading toward USD 800. Coding agents were pushing around 300 times a day, and the test suite had grown fivefold. His response: stop running CI on pull requests and move full tests to nightly runs and release PRs.
 
 <Tweet id="https://x.com/janwilmake/status/2105944817884709178" />
 
-Those are their reported numbers, not our invoices. But the tension is familiar. We want faster development and fast feedback, then treat the infrastructure bill as a reason to separate the two.
+Sanju replied that his team had been paying `$900` a month and agreed with the diagnosis.
 
-Cancel superseded runs. Avoid duplicated workflows. Don't rebuild everything for a documentation change. Those are sensible optimizations. But before you remove useful checks, ask a different question:
+<Tweet id="https://x.com/spikeysanju/status/2106273252846997623" />
 
-**Is the problem how much feedback you need—or how you're buying the compute that provides it?**
+Those are their reported numbers, not our invoices. But the pattern is familiar: the bill tracks activity, not value. Every extra push, every new test file, every agent retry adds to the meter — while the work it protects stays the same.
+
+We want faster development and fast feedback, then treat the infrastructure bill as a reason to separate the two. Cancel superseded runs. Avoid duplicated workflows. Don't rebuild everything for a documentation change. Those are sensible optimizations. But before you remove useful checks, ask a different question:
+
+**Is the problem how much feedback you need OR how you're buying the compute that provides it?**
 
 ## Keep GitHub Actions. Reconsider where the jobs run.
 
@@ -109,19 +113,30 @@ make cloud-arc-scaleset
 make cloud-k8s-check
 ```
 
-The playbook separates control-plane configuration, K3s installation, worker joins, and ARC deployment. Inventories describe the target cluster and runner scale sets.
-
-That matters during handover. The next engineer shouldn't need to reconstruct a machine from terminal history to understand how it was built.
+The playbook separates control-plane configuration, K3s installation, worker joins, and ARC deployment. Inventories describe the target cluster and runner scale sets. That matters during handover. The next engineer shouldn't need to reconstruct a machine from terminal history to understand how it was built.
 
 ### Routine upgrades have an explicit path
 
 The repository also contains System Upgrade Controller setup and K3s upgrade plans. They define a weekly window, cordon nodes, and limit upgrade concurrency to one node per plan; the agent plan waits for the server plan.
 
-That is automation for K3s upgrades—not a claim that every OS package, container image, credential, and dependency maintains itself.
-
-In our experience, the settled system needs near-zero routine manual intervention. We aren't constantly entering the cluster to nurse individual runners back into service.
+That is automation for K3s upgrades—not a claim that every OS package, container image, credential, and dependency maintains itself. In our experience, the settled system needs near-zero routine manual intervention. We aren't constantly entering the cluster to nurse individual runners back into service.
 
 That is the benefit I care about: recurring work handled by controllers and documented procedures, rather than recurring attention from an engineer.
+
+### There is nothing to back up
+
+We do not back up the CI machines, and that is a design decision rather than an omission. The nodes hold no state worth restoring: the inventory and playbook describe them, the runner images are disposable, and every job starts on a fresh pod.
+
+Recovery is bringing the Actions infrastructure back up with the same targets that built it:
+
+```bash
+make cloud-configure-cp
+make cloud-k3s-cp
+make cloud-arc-controller
+make cloud-arc-scaleset
+```
+
+Three or four commands, depending on whether the old control plane still exists. That is the RTO — not a snapshot restore, not a warm standby.
 
 ## The failures are part of the evidence
 
@@ -137,51 +152,72 @@ Automation removes repeated intervention. It doesn't remove engineering judgment
 
 ## Compare the whole bill—not server stickers
 
-GitHub's current documentation lists standard Linux x64 runners at **$0.006 per minute**. GitHub Enterprise Cloud includes **50,000 standard-runner minutes per month**; larger runners have separate rates and cannot use that allowance. GitHub currently describes self-hosted Actions execution as free, with maintenance costs belonging to you. § [Billing documentation](https://docs.github.com/en/billing/concepts/product-billing/github-actions) · [Runner rates](https://docs.github.com/en/billing/reference/actions-runner-pricing)
+GitHub's current documentation lists the standard private-repository Linux runner at **2 vCPU, 8 GB RAM, 14 GB SSD**, billed at `$0.006` per minute. Included standard-runner minutes are 2,000 on GitHub Free, 3,000 on Team, and 50,000 on Enterprise Cloud. Larger runners have separate rates and **cannot use that allowance**. Self-hosted execution is currently described as free, with maintenance costs belonging to you. § [Billing documentation](https://docs.github.com/en/billing/concepts/product-billing/github-actions) · [Runner rates](https://docs.github.com/en/billing/reference/actions-runner-pricing) · [Runner specs](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)
 
-Check those terms again when making a purchase decision. Pricing changes.
+Check those terms again before modeling anything. GitHub announced a per-minute platform charge for self-hosted runners, then postponed it; that single number can change your answer. Pricing moves.
 
-For a deliberately simplified example, assume an Enterprise Cloud organization uses 200,000 monthly minutes entirely on standard Linux x64 runners:
+Per-minute rates are easy to compare, but they hide what you are actually buying. Normalized per vCPU-hour:
 
-```text
-200,000 total minutes
-−50,000 included minutes
-=150,000 paid minutes
+| Runner (Linux) | vCPU / RAM | Per minute | Per vCPU-hour |
+| --- | --- | --- | --- |
+| Standard (private repos) | 2 / 8 GB | `$0.006` | `$0.180` |
+| Larger, 4-core | 4 / 16 GB | `$0.012` | `$0.180` |
+| Larger, 8-core | 8 / 32 GB | `$0.022` | `$0.165` |
+| Larger, 16-core | 16 / 64 GB | `$0.042` | `$0.158` |
+| Larger, 4-core arm64 | 4 / 16 GB | `$0.008` | `$0.120` |
 
-150,000 × $0.006 = $900 execution overage
-```
+Two things fall out. A bigger runner buys you less wall-clock time, not a cheaper vCPU-hour. And the per-minute rate is the only lever GitHub gives you on the bill.
 
-That is an illustration. It excludes storage and assumes the allowance is available to those jobs.
+### A realistic mix, not one runner size
 
-Now compare that execution charge against:
+The premise that every job can share the smallest instance doesn't survive contact with a monorepo. But memory alone is rarely what forces a bigger runner — the standard private-repo runner already has 8 GB. The real constraints are **2 vCPUs, a 14 GB disk, and wall-clock time**. A Docker build, a Playwright suite, or a test run across forty packages wants more of all three.
 
-```text
-Workers + control plane
-+ storage and network costs
-+ monitoring and recovery provisions
-+ recurring operator time
-+ migration cost spread over your evaluation period
-```
+So price the two pools that actually exist in a monorepo: cheap checks, and expensive builds. This section assumes x64 Linux on **GitHub Team** — 3,000 included minutes — and Hetzner EU list prices. No enterprise allowance anywhere in the numbers; on GitHub Free the allowance is 2,000, which changes the total by a few dollars.
 
-Hetzner and DigitalOcean are worth evaluating, but their smallest advertised server is not a substitute for your entire runner fleet. Shared vCPUs also aren't a guarantee of sustained build performance. § [Hetzner cloud](https://www.hetzner.com/cloud/) · [DigitalOcean Droplets](https://www.digitalocean.com/pricing/droplets)
+First, the arithmetic that makes this look bigger than it is. A month is 730 hours, or 43,800 minutes of wall clock. Concurrency means you serve more job-minutes than that: 95,000 job-minutes is about 2.2× the wall clock, or roughly seven jobs running at once during a 10-hour working day.
 
-Benchmark representative jobs on the proposed hardware. Measure wall-clock duration, memory peaks, image downloads, and queue time under concurrency. A lower hourly price doesn't help if builds slow enough to erase the savings.
+### Pool 1 — lint, typecheck, unit tests
 
-As a sensitivity check, a **hypothetical $300 monthly all-in recurring cost** equals 50,000 paid minutes at $0.006. That is an arithmetic threshold, not evidence that $300 buys adequate capacity for your jobs. Account for the initial implementation separately.
+About 10 minutes per job, 55,000 minutes a month. That is roughly 5,500 jobs. Across 22 working days and a 10-hour window, that is about 4 jobs running at once.
 
-Also, moving execution doesn't automatically remove GitHub artifact or cache charges, or your GitHub subscription.
+| Runner | Minutes | Rate | Cost |
+| --- | --- | --- | --- |
+| Standard 2 vCPU | 55,000 | `$0.006` | `$312` |
 
-The strongest candidates have paid usage beyond included allowances, repeatable workloads, and enough utilization to make owned capacity useful. The weakest have tiny bills, unusual platform requirements, or demand so uneven that idle machines dominate the comparison.
+52,000 of those minutes are billable after the 3,000-minute Team allowance.
 
-## Low-touch isn't ownerless
+### Pool 2 — Docker builds, integration, e2e
 
-Private repositories are not automatically trusted execution environments. Workflow code, dependencies, and contributions still need a threat model.
+20 to 30 minutes per job, 40,000 minutes a month. Roughly 2,000 builds at 20 minutes each. In the same window, about 3 running at once, with spikes above that.
 
-Our DinD sidecar is privileged. Ephemeral pods reduce persistent build state; they are not, by themselves, a sufficient isolation boundary for hostile jobs. Sensitive workloads and unrelated trust domains need deliberate separation, restricted runner access, and scoped credentials.
+| Runner | Minutes | Rate | Cost |
+| --- | --- | --- | --- |
+| Larger 4-core / 16 GB | 40,000 | `$0.012` | `$480` |
 
-Someone must still own patching, credential rotation, capacity, monitoring, and recovery. A lost control plane or exhausted worker pool is not solved by calling the system self-healing.
+**Total metered: `$792` on Team, `$798` on Free.** Larger runners never touch the allowance, so every build minute is billed. That asymmetry is where the bill comes from.
 
-And not every organization needs this architecture. A smaller setup or continuing with hosted runners may be the better decision. The goal is to reduce the total cost of dependable feedback—not to give every company a Kubernetes cluster.
+### Two node types, one per pool
+
+| Node | Spec | Pool | Count | EUR/month |
+| --- | --- | --- | --- | --- |
+| CPX32 | 4 vCPU, 8 GB | lint | 2 | €71.98 |
+| CPX42 | 8 vCPU, 16 GB | builds (DinD) | 2 | €139.98 |
+| **Total** | | | | **€211.96 (~USD 229)** |
+
+Eight vCPU for lint, sixteen for builds: enough for the average concurrency above, with a short queue at genuine spikes. No monitoring line, no backup line, no platform-team line — just servers.
+
+| Where CI runs | GitHub Actions bill | Infrastructure | Monthly total | Saving |
+| --- | --- | --- | --- | --- |
+| Hosted — Team (3,000 included) | `$792` | — | `$792` | — |
+| Hosted — Free (2,000 included) | `$798` | — | `$798` | — |
+| Self-hosted — buy the two node types | `$0` | **~**`$229` | **~**`$229` | `$563` (~71%) |
+| Self-hosted — reuse unutilized servers | `$0` | **~**`$0` incremental | **~**`$0` | `$792` (~100%) |
+
+**The last row is not literally free** — you are consuming headroom you might need for something else, and the hardware depreciates. But the incremental cash outlay is zero, and it is the version most teams actually have sitting in a rack.
+
+In our case: the capacity _already_ exists and is idle, the infrastructure line mostly drops out. That is our case, and it is why our numbers moved when the workload did.
+
+Hetzner and DigitalOcean are both worth evaluating. § [Hetzner cloud](https://www.hetzner.com/cloud/) · [DigitalOcean Droplets](https://www.digitalocean.com/pricing/droplets). Benchmark representative jobs on the proposed hardware before trusting any of this. Measure wall-clock duration, memory peaks, image downloads, and queue time under concurrency.
 
 ## Audit before you cut checks
 
