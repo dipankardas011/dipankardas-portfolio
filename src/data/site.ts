@@ -15,7 +15,7 @@ export const socialLinks = {
   github: "https://github.com/dipankardas011",
   gitlab: "https://gitlab.com/dipankardas011",
   linkedin: "https://linkedin.com/in/dipankar-das-1324b6206",
-  twitter: "https://twitter.com/DipanakarDas011",
+  twitter: "https://twitter.com/DipankarDas011",
   youtube: "https://youtube.com/@techwithdipankardas",
   upwork: "https://www.upwork.com/freelancers/~0171342e36ce285d8c?mp_source=share",
   fiverr: "https://www.fiverr.com/s/38WVy79",
