@@ -72,6 +72,31 @@ export const services: Service[] = [
       "New Relic",
     ],
   },
+  {
+    title: "AI & Local Inference",
+    abbreviation: "AI",
+    icon: "mdi:brain",
+    color: "#7C3AED33",
+    description:
+      "Local and private LLM deployments on llama.cpp and vLLM — hardware fit, quantization, VRAM budgeting, and throughput benchmarking so inference runs where and how you need it.",
+    skills: [
+      "llama.cpp",
+      "vLLM",
+      "Ollama",
+      "GGUF",
+      "VRAM Sizing",
+      "Benchmarking",
+    ],
+  },
+  {
+    title: "AI Agents & Harnesses",
+    abbreviation: "AG",
+    icon: "mdi:robot-outline",
+    color: "#0EA5E933",
+    description:
+      "Agent harnesses with durable session state, human-in-the-loop approvals, MCP tooling, and evaluation loops that check whether the agent actually did the job.",
+    skills: ["MCP", "Agent Harness", "Evals", "Human-in-the-loop", "NATS", "Go"],
+  },
 ];
 
 export interface Certification {

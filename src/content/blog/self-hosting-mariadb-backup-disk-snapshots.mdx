@@ -7,6 +7,7 @@ tags: ["mariadb", "azure", "self-hosting", "backup", "replication", "innodb"]
 cover: "/img/blogs/mariadb_snapshots.webp"
 ---
 import Callout from '../../components/Callout.astro';
+import ConsultationCard from '../../components/ConsultationCard.astro';
 
 Every MariaDB self-hosting guide opens the same way: install `mariadb-backup`, set up cron, write a restore runbook. I followed that script for months. Then I deleted most of it.
 
@@ -418,3 +419,10 @@ If you're staring at a checklist that says "must survive a bad day," start with 
 ---
 
 I've been wearing both the infra and the DB hat on this one, so it's entirely possible I've talked myself into a corner somewhere — a sharp edge I haven't hit yet, an assumption that doesn't hold at a different scale, a config knob I'm reading wrong. If you spot one, I'd genuinely like to hear about it — [drop a note in the discussion thread](https://github.com/dipankardas011/dipankardas-portfolio/discussions/8) and let's get into it.
+
+<ConsultationCard
+  kicker="/database reliability"
+  title="Backups you've never restored aren't backups."
+  body="I set up and validate MariaDB recovery paths: prepared backups alongside disk snapshots, an independent mariadb-backup chain, and the runbook that proves both work before you need them."
+  cta="Book a 1-on-1 Consultation"
+/>

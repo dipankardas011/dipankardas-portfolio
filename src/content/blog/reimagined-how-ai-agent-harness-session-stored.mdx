@@ -8,6 +8,8 @@ cover: "/img/blogs/infai-harness-session-cover.webp"
 draft: false
 ---
 
+import ConsultationCard from '../../components/ConsultationCard.astro';
+
 You can use an AI coding agent for a few minutes and never think about its session storage. Use one for a full day, branch the work, recover from a crash, and return to it tomorrow, and storage becomes part of the product.
 
 That was the problem I kept running into while using agent tools. Over the past year, I have used OpenCode, Pi, Claude Code, Google ADK, Jules, and others. Many of them are useful, but the experience often becomes awkward when you move beyond the happy path: custom approval screens flicker on small terminals, subagent permissions are difficult to reason about, and multi-agent state can leak into the main session.
@@ -268,3 +270,10 @@ That is the difference between storing a transcript and building a session.
 - [OpenAI Agents SDK sessions](https://openai.github.io/openai-agents-js/guides/sessions/)
 - [Pi compaction and branch summaries](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/compaction.md)
 - [SQLite write-ahead logging](https://www.sqlite.org/wal.html)
+
+<ConsultationCard
+  kicker="/agent infrastructure"
+  title="Session state is where agent harnesses break."
+  body="Long-running agents need durable timelines, resumable sessions and replayable events, or they lose the thread the moment a connection drops. I design and build that layer, the same one behind infaiw."
+  cta="Book a 1-on-1 Consultation"
+/>

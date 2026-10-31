@@ -8,6 +8,7 @@ cover: "/img/blogs/copilot-neovim-localllm-fim.webp"
 draft: false
 ---
 import Callout from '../../components/Callout.astro';
+import ConsultationCard from '../../components/ConsultationCard.astro';
 
 I've been using GitHub Copilot since it launched. The inline completions — ghost text that predicts your next few lines — are genuinely useful. But in 2026, the landscape around it has shifted.
 
@@ -342,3 +343,10 @@ Neovim uses Minuet AI for that in my setup. VS Code users can get similar behavi
 I started with a specific goal: reproduce the Copilot inline completion experience using local infrastructure. The result isn't a replacement — the quality gap is real, especially for complex suggestions. But it works for the common cases, it runs offline, and it costs nothing beyond the hardware I already own.
 
 The model is on [HuggingFace](https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B). The server is [llama.cpp](https://github.com/ggml-org/llama.cpp). Minuet AI is [on GitHub](https://github.com/milanglacier/minuet-ai.nvim). All three are open source.
+
+<ConsultationCard
+  kicker="/local code completion"
+  title="A Copilot clone that runs on the laptop."
+  body="Qwen2.5-Coder with llama.cpp and a fill-in-the-middle client in your editor: no subscription, no telemetry, nothing leaving the machine. I build the pipeline, measure the latency, and tell you where it honestly falls short of hosted Copilot."
+  cta="Book a 1-on-1 Consultation"
+/>

@@ -1,20 +1,37 @@
-<aside class="not-prose my-8 border border-app-border bg-app-surface p-6 sm:p-8" aria-label="CI cost consultation">
-  <div class="kicker mb-3">/1-on-1 consultation</div>
+---
+interface Props {
+  kicker?: string;
+  title?: string;
+  body?: string;
+  cta?: string;
+  note?: string;
+}
+
+const {
+  kicker = "/1-on-1 consultation",
+  title = "Find out what your CI should cost.",
+  body = "Bring your current Actions spend, workload requirements, and peak concurrency. We'll assess the economics and identify an appropriate setup.",
+  cta = "Book a 1-on-1 Consultation",
+  note = "Assess the fit first. Scope implementation separately.",
+} = Astro.props;
+---
+
+<aside class="not-prose my-8 border border-app-border bg-app-surface p-6 sm:p-8" aria-label="Consultation">
+  <div class="kicker mb-3">{kicker}</div>
   <div class="font-display text-2xl text-app-text leading-tight tracking-tight">
-    Find out what your CI should cost.
+    {title}
   </div>
   <div class="mt-4 mb-6 max-w-xl text-sm text-app-gray-500 leading-[1.55]">
-    Bring your current Actions spend, workload requirements, and peak concurrency.
-    We’ll assess the economics and identify an appropriate setup.
+    {body}
   </div>
   <a
     href="https://dipankar-das.com/services/"
     class="inline-flex max-w-full items-center gap-3 border border-app-border bg-app-body px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-app-accent hover:border-app-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-app-accent"
   >
-    <span>Book a 1-on-1 Consultation</span>
+    <span>{cta}</span>
     <span aria-hidden="true">→</span>
   </a>
   <div class="mt-4 font-mono text-[11px] text-app-gray-500 leading-[1.55]">
-    Assess the fit first. Scope implementation separately.
+    {note}
   </div>
 </aside>

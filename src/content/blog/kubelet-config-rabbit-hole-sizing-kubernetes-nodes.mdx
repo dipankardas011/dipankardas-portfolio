@@ -7,6 +7,7 @@ cover: "/img/blogs/k8s-sched-framework.webp"
 tags: ["kubernetes", "kubelet", "kubeadm", "k3s", "node allocatable", "kube-reserved", "system-reserved", "eviction threshold", "kubelet drop-in config", "GKE", "EKS", "AKS", "cluster management", "resource optimization"]
 ---
 import Callout from '../../components/Callout.astro';
+import ConsultationCard from '../../components/ConsultationCard.astro';
 
 ## How I Fell Into This Rabbit Hole
 
@@ -328,3 +329,10 @@ This is exactly the kind of thing I ran into while working on the instanceType f
 - [Kubelet Config Drop-in Directory GA](https://kubernetes.io/blog/2025/12/22/kubernetes-v1-35-kubelet-config-drop-in-directory-ga/)
 - [GKE Node Allocatable Resources](https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-architecture#node_allocatable)
 - [Kubernetes Reserve Compute Resources](https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/)
+
+<ConsultationCard
+  kicker="/node sizing"
+  title="Your nodes are smaller than they look."
+  body="kubeReserved, systemReserved, and eviction thresholds quietly remove capacity from every node, and it gets worse with mixed instance types. I audit node sizing and reservation config, then hand over the config that fixes it."
+  cta="Book a 1-on-1 Consultation"
+/>

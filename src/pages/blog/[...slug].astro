@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
 import BlogPostCard from "../../components/BlogPostCard.astro";
+import NewsletterSignup from "../../components/NewsletterSignup.astro";
 import TopGradient from "../../components/TopGradient.astro";
 import { getCollection, render } from "astro:content";
 import { siteConfig, socialLinks } from "../../data/site";
@@ -45,7 +46,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 ---
 
 <BaseLayout
-  title={`${post.data.title} - Dipankar Das`}
+  title={post.data.seoTitle ?? `${post.data.title} - Dipankar Das`}
   description={post.data.description}
   ogImage={post.data.cover}
   blogPost={true}
@@ -182,6 +183,8 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
             <div class="prose prose-lg">
               <Content />
             </div>
+
+            <NewsletterSignup />
 
             <!-- Author card -->
             <div class="author-card">

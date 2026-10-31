@@ -8,6 +8,7 @@ cover: "/img/blogs/copilot-neovim-localllm-vllm.webp"
 draft: false
 ---
 import Callout from '../../components/Callout.astro';
+import ConsultationCard from '../../components/ConsultationCard.astro';
 
 *This is part 2 of a series. [Part 1: I Built a Copilot Clone in Neovim With a 1.5B Model on a Laptop GPU](/blog/copilot-neovim-localllm-fim)*
 
@@ -253,3 +254,10 @@ The difference is 3.5 GB of VRAM — and whether you can spare it.
 The model is [Qwen2.5-Coder-1.5B on HuggingFace](https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B). The server is [vLLM](https://github.com/vllm-project/vllm). The Neovim client is [Minuet AI](https://github.com/milanglacier/minuet-ai.nvim). Package management by [uv](https://docs.astral.sh/uv/).
 
 *Read the first post in this series: [I Built a Copilot Clone in Neovim With a 1.5B Model on a Laptop GPU](/blog/copilot-neovim-localllm-fim)*
+
+<ConsultationCard
+  kicker="/inference engines"
+  title="The faster engine is the one that fits your VRAM."
+  body="I benchmarked vLLM against llama.cpp on a single GPU: about 50% faster completions for roughly twice the memory. Choosing between them is a VRAM question, not a benchmark question, and gpu-memory-utilization, max-model-len and batching decide whether it holds."
+  cta="Book a 1-on-1 Consultation"
+/>

@@ -8,6 +8,8 @@ cover: "/img/blogs/kubmin-ai-agent-era-cover.webp"
 draft: false
 ---
 
+import ConsultationCard from '../../components/ConsultationCard.astro';
+
 AI agents make it easy to ship faster. Faster deploys, faster PRs, faster prototypes. But something quietly changes when the codebase starts growing faster than your understanding of it. I know because I have been building [Kubmin](https://ksctl.com/product/kubmin), my first SaaS, long enough for the architecture decisions to start arguing back.
 
 Not as a weekend CRUD app. Not as a "let me try this new framework" project. Kubmin became a real SaaS control plane: users, organizations, billing, quotas, Kubernetes cluster create/import flows, workers, queues, OpenTelemetry, workload cost analysis, energy metrics, release comparisons, dashboards, and deployment automation.
@@ -559,3 +561,10 @@ If you want to see what these lessons turned into as a product, check out the [K
 - [RFC 9562: UUIDs](https://www.rfc-editor.org/rfc/rfc9562.html)
 - [OpenTelemetry Collector configuration](https://opentelemetry.io/docs/collector/configuration/)
 - [OpenAPI Specification](https://spec.openapis.org/oas/v3.1.html)
+
+<ConsultationCard
+  kicker="/agent workflows"
+  title="Agents that ship work, not noise."
+  body="Tool boundaries, task decomposition and accept-or-reject loops decide whether an agent saves you a sprint or burns one. I build the workflow alongside the evaluation that tells you which is happening."
+  cta="Book a 1-on-1 Consultation"
+/>

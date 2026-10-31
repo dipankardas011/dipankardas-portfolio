@@ -4,6 +4,7 @@ import Hero from "../components/Hero.astro";
 import ServiceCard from "../components/ServiceCard.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import ContactSection from "../components/ContactSection.astro";
+import NewsletterSignup from "../components/NewsletterSignup.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import Testimonials from "../components/Testimonials.astro";
 import { services } from "../data/services";
@@ -170,6 +171,16 @@ const featuredProjects = projects.filter((p) => p.featured && p.title !== "kubmi
 
   <!-- 04 · Testimonials -->
   <Testimonials testimonials={testimonials} index={4} />
+
+  <!-- 05 · Newsletter -->
+  <section id="newsletter" class="py-20 lg:py-28 border-t border-app-ink-line">
+    <div class="container mx-auto">
+      <NewsletterSignup
+        title="One deep-dive a month."
+        body="The numbers behind the systems I run or break myself — Kubernetes efficiency, local inference, databases, CI. No newsletter theatre."
+      />
+    </div>
+  </section>
 
   <ContactSection />
 </BaseLayout>

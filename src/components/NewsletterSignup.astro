@@ -1,0 +1,339 @@
+---
+/**
+ * Brevo hosted-form embed, same pattern as ksctl.com
+ * (~/ws/ksctl/ksctl-website/src/components/shared/AppFooter.astro): the form
+ * POSTs straight to Brevo's public `sibforms.com` endpoint, so there is no API
+ * key and no server runtime involved.
+ *
+ * Markup mirrors the HTML (not iframe) export Brevo generates, with Brevo's
+ * inline Helvetica styling stripped so the form inherits this site's type.
+ * Override the endpoint with PUBLIC_BREVO_FORM_ACTION if this ever needs its
+ * own list.
+ */
+
+interface Props {
+  title?: string;
+  body?: string;
+  note?: string;
+}
+
+const {
+  title = "Get the next teardown",
+  body = "One deep-dive a month, with the actual numbers — from systems I run or break myself.",
+  note = "I respect your privacy. Unsubscribe at any time.",
+} = Astro.props;
+
+const isProduction = import.meta.env.PROD;
+const formAction =
+  import.meta.env.PUBLIC_BREVO_FORM_ACTION ??
+  "https://9e93b949.sibforms.com/serve/MUIFAE3_hlMUsPrp3rTLPv0uhNml5l_yZfd5Qz-7PxRT2RFO7Ob_vHvHR_utD74dZgqIb300Bqd_edWNTs4Cz21cwUsnS06PHkLvjca2qVIozW-kQ_k2Igx4g2TD7FwDbQNzw5ACWHaccRV-QvMsJTBCHJY3cRVJ9d2Fw9t9jAVdKSo1emidOvWUeI0GWQVlrBE1mV5soAcMn4FosA==";
+const turnstileSitekey =
+  import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? "0x4AAAAAAFt4_mLyEXps7Z1y";
+---
+
+<md-skip>
+  <aside
+    class="not-prose my-10 border border-app-border bg-app-surface p-6 sm:p-8"
+    aria-label="Email subscribe"
+  >
+    <div class="kicker mb-3">/email</div>
+    <div class="font-display text-2xl text-app-text leading-tight tracking-tight">
+      {title}
+    </div>
+    <div class="mt-3 mb-5 max-w-xl text-sm text-app-gray-500 leading-[1.55]">
+      {body}
+    </div>
+
+    {
+      isProduction ? (
+        <div class="sib-form">
+          <div id="sib-form-container" class="sib-form-container">
+            <div id="error-message" class="sib-form-message-panel sib-panel-error">
+              <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
+                <span class="sib-form-message-panel__inner-text">
+                  Your subscription could not be saved. Please try again.
+                </span>
+              </div>
+            </div>
+
+            <div id="success-message" class="sib-form-message-panel sib-panel-success">
+              <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
+                <span class="sib-form-message-panel__inner-text">
+                  Your subscription has been successful.
+                </span>
+              </div>
+            </div>
+
+            <div id="sib-container" class="sib-container--large sib-container--vertical">
+              <form id="sib-form" method="POST" action={formAction} data-type="subscription">
+                <div class="sib-input sib-form-block">
+                  <div class="form__entry entry_block">
+                    <div class="form__label-row">
+                      <label class="entry__label" for="EMAIL">Email address</label>
+                      <div class="entry__field">
+                        <input
+                          class="input newsletter-input"
+                          type="text"
+                          id="EMAIL"
+                          name="EMAIL"
+                          autocomplete="email"
+                          value=""
+                          placeholder="you@company.com"
+                          data-required="true"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <label class="entry__error entry__error--primary"></label>
+                  </div>
+                </div>
+
+                <div class="sib-captcha sib-form-block">
+                  <div class="form__entry entry_block">
+                    <div class="form__label-row">
+                      <div
+                        class="cf-turnstile g-recaptcha"
+                        data-sitekey={turnstileSitekey}
+                        id="sib-captcha"
+                        data-callback="handleCaptchaResponse"
+                        data-language="en"
+                      >
+                      </div>
+                    </div>
+                    <label class="entry__error entry__error--primary"></label>
+                  </div>
+                </div>
+
+                <div class="sib-form-block">
+                  <button
+                    class="sib-form-block__button sib-form-block__button-with-loader newsletter-button"
+                    form="sib-form"
+                    type="submit"
+                  >
+                    <svg
+                      class="icon clickable__icon progress-indicator__icon sib-hide-loader-icon"
+                      viewBox="0 0 512 512"
+                      aria-hidden="true"
+                    >
+                      <path d="M460.116 373.846l-20.823-12.022c-5.541-3.199-7.54-10.159-4.663-15.874 30.137-59.886 28.343-131.652-5.386-189.946-33.641-58.394-94.896-95.833-161.827-99.676C261.028 55.961 256 50.751 256 44.352V20.309c0-6.904 5.808-12.337 12.703-11.982 83.556 4.306 160.163 50.864 202.11 123.677 42.063 72.696 44.079 162.316 6.031 236.832-3.14 6.148-10.75 8.461-16.728 5.01z" />
+                    </svg>
+                    <span class="sib-form-block__button-text">Subscribe</span>
+                  </button>
+                </div>
+
+                <input type="text" name="email_address_check" value="" class="input--hidden" />
+                <input type="hidden" name="locale" value="en" />
+              </form>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="flex flex-col gap-2">
+          <input type="email" placeholder="you@company.com" class="newsletter-input" disabled />
+          <button type="button" class="newsletter-button opacity-50" disabled>
+            Subscribe
+          </button>
+        </div>
+      )
+    }
+
+    <p class="mt-4 font-mono text-[11px] leading-[1.55] text-app-gray-500">
+      {note}
+    </p>
+  </aside>
+</md-skip>
+
+<script is:inline>
+  window.handleCaptchaResponse = function () {
+    // Brevo's main.js expects reCAPTCHA; Turnstile is made to stand in for it.
+    var captcha = document.getElementById("sib-captcha");
+    if (captcha) captcha.dispatchEvent(new Event("captchaChange"));
+    window.grecaptcha = window.turnstile;
+  };
+
+  window.REQUIRED_CODE_ERROR_MESSAGE = "Please choose a country code";
+  window.LOCALE = "en";
+  window.EMAIL_INVALID_MESSAGE =
+    window.SMS_INVALID_MESSAGE =
+      "The information provided is invalid. Please review the field format and try again.";
+  window.REQUIRED_ERROR_MESSAGE = "This field cannot be left blank. ";
+  window.GENERIC_INVALID_MESSAGE =
+    "The information provided is invalid. Please review the field format and try again.";
+  window.INVALID_NUMBER =
+    "The information provided is invalid. Please review the field format and try again.";
+  window.INVALID_DATE = "Please enter a valid date";
+  window.REQUIRED_MULTISELECT_MESSAGE = "Please select at least 1 option";
+  window.translation = {
+    common: {
+      selectedList: "{quantity} list selected",
+      selectedLists: "{quantity} lists selected",
+      selectedOption: "{quantity} selected",
+      selectedOptions: "{quantity} selected",
+    },
+  };
+  window.AUTOHIDE = Boolean(0);
+
+  (function loadBrevo() {
+    function inject() {
+      if (!document.getElementById("sib-form")) return;
+
+      if (!document.querySelector('script[src*="challenges.cloudflare.com/turnstile"]')) {
+        var turnstile = document.createElement("script");
+        turnstile.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+        turnstile.async = true;
+        turnstile.defer = true;
+        document.head.appendChild(turnstile);
+      }
+
+      if (!document.querySelector('script[src*="sibforms.com/forms/end-form"]')) {
+        var brevo = document.createElement("script");
+        brevo.src = "https://sibforms.com/forms/end-form/build/main.js";
+        brevo.defer = true;
+        document.body.appendChild(brevo);
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", inject);
+    } else {
+      inject();
+    }
+  })();
+</script>
+
+<style is:global>
+  md-skip {
+    display: contents;
+  }
+
+  /* Neutralise Brevo's own chrome so the form inherits the site's look. */
+  #sib-container,
+  .sib-container--large,
+  .sib-container--vertical,
+  .sib-form-container,
+  .sib-form {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    max-width: none !important;
+    text-align: left !important;
+    direction: ltr;
+  }
+
+  #sib-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 32rem;
+  }
+
+  .sib-form-block {
+    padding: 0;
+    margin: 0;
+  }
+
+  .entry__label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-app-gray-400);
+  }
+
+  .newsletter-input {
+    width: 100%;
+    border: 1px solid var(--color-app-border);
+    border-radius: 999px;
+    background: var(--color-app-body);
+    padding: 0.75rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-app-text);
+    outline: none;
+  }
+
+  .newsletter-input::placeholder {
+    color: var(--color-app-gray-400);
+  }
+
+  .newsletter-input:focus-visible {
+    outline: 2px solid var(--color-app-accent);
+    outline-offset: 2px;
+  }
+
+  .newsletter-button {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--color-app-text);
+    border-radius: 999px;
+    background: var(--color-app-text);
+    color: var(--color-app-body);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .newsletter-button:hover {
+    background: var(--color-app-accent);
+    border-color: var(--color-app-accent);
+    color: #fff;
+  }
+
+  /* Brevo's loader icon is toggled by main.js; keep it from reserving space. */
+  .sib-hide-loader-icon,
+  .progress-indicator__icon {
+    display: none;
+  }
+
+  .sib-form-message-panel {
+    border: 1px solid var(--color-app-border);
+    background: var(--color-app-body);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    max-width: none !important;
+    border-radius: 0 !important;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-align: left;
+  }
+
+  .sib-form-message-panel__text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Brevo hides these until submit; markdown/JS-disabled readers see nothing. */
+  #error-message,
+  #success-message {
+    display: none;
+    color: var(--color-app-gray-500);
+  }
+
+  .sib-panel-error {
+    border-color: #ff4949;
+  }
+
+  .sib-panel-success {
+    border-color: var(--color-app-accent);
+  }
+
+  .entry__error {
+    display: none;
+    margin-top: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #ff4949;
+  }
+</style>

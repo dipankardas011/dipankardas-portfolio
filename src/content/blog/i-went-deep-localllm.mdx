@@ -1,5 +1,6 @@
 ---
 title: "Local LLMs: I Went Deep So You Don't Have To"
+seoTitle: "Run Local LLMs: GGUF vs Safetensors, Quantization and VRAM"
 author: "Dipankar Das"
 date: 2026-04-02
 description: "GGUF vs safetensors, quantization, distillation, VRAM math, and Ollama vs vLLM vs llama.cpp — one post to save you the weekend I lost."
@@ -8,6 +9,7 @@ cover: "/img/blogs/deepdrive-localllm-cover.webp"
 draft: false
 ---
 import Callout from '../../components/Callout.astro';
+import ConsultationCard from '../../components/ConsultationCard.astro';
 
 I pulled Qwen 3.5 9B through Ollama, typed `ollama run qwen3.5:9b`, and it just worked. Decent responses, no config, no thinking. Then I opened HuggingFace to find a better model and hit a wall of acronyms — GGUF, safetensors, Q4_K_M, Q5_K_M, FP16, BF16, distilled, base, fine-tuned. Every model card reads like a spec sheet written for people who already know what they're looking at.
 
@@ -851,3 +853,10 @@ Its conclusion: *"The fundamental challenges of building reliable, scalable, sec
 If that's not the spirit of open source, I don't know what is.
 
 But seriously — a 9B model on a laptop GPU that can reason about its own limits *and* (with the right knobs turned) ship a one-line refactor matching Opus? Yeah — the rabbit hole was worth it.
+
+<ConsultationCard
+  kicker="/local inference"
+  title="Your local model is slower than your hardware."
+  body="VRAM math, quantization choice and the llama.cpp versus vLLM split decide throughput long before you buy a bigger GPU. I right-size local and private inference so you get the tokens/sec the hardware can actually deliver."
+  cta="Book a 1-on-1 Consultation"
+/>
