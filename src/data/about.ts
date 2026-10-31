@@ -96,7 +96,7 @@ export const experiences: Experience[] = [
         title: "Workload Intelligence & Cost Tracking",
         why: "Teams had no per-workload visibility into what each deploy actually costs in money, energy, and compute — waste compounded silently with every release.",
         what: "Built a per-workload cost and efficiency tracking engine powered by Kepler (CNCF) with SCI/SEE sustainability scoring aligned to the Green Software Foundation. Includes per-image-version deep profiling (hourly SCI, energy, CPU, memory, cost per image tag) and release-over-release efficiency diff.",
-        how: "Surfaces idle workloads, overprovisioned containers, and efficiency regressions between deployment versions — with dollar amounts and ready-to-use kubectl commands to fix them. Classifies each workload as CPU-bound, memory-bound, general, or resource-starved from runtime behavior. Compares workload costs across regions and instance types.",
+        how: "Surfaces idle workloads, overprovisioned containers, and efficiency regressions between deployment versions — with dollar amounts attached and the specific change that would realize each one. Classifies each workload as CPU-bound, memory-bound, general, or resource-starved from runtime behavior. Compares workload costs across regions and instance types.",
       },
       {
         title: "Durable Workload Intelligence & Carbon Accounting",
@@ -125,8 +125,8 @@ export const experiences: Experience[] = [
       {
         title: "Workload Recommendation Engine",
         why: "Teams had no structured way to understand the true profile of their running workloads — efficiency waste, energy consumption, and resource behaviour were all invisible.",
-        what: "Developed a recommendation system that detects idle workloads, overprovisioned containers, and temporal waste patterns — each with dollar amounts attached. Quick Wins are ranked by estimated monthly savings and ship with copy-paste kubectl commands.",
-        how: "Built profiling pipelines that compare workload efficiency across deployment versions (cost, energy, CPU, memory, SCI score), surface regional cost optimization opportunities, and generate ready-to-use kubectl commands for immediate savings.",
+        what: "Developed a recommendation system that detects idle workloads, overprovisioned containers, and temporal waste patterns — each with dollar amounts attached. Quick Wins are ranked by estimated monthly savings and name the specific change that would realize each one.",
+        how: "Built profiling pipelines that compare workload efficiency across deployment versions (cost, energy, CPU, memory, SCI score), and surface regional cost optimization opportunities.",
       },
     ],
   },
