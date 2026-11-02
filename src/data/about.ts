@@ -46,6 +46,15 @@ export const writingProfile = {
 
 export const experiences: Experience[] = [
   {
+    company: "Viamagus",
+    role: "Lead DevOps Engineer",
+    tenure: "Nov 2026 - Present",
+    logo: "/img/experience/viamagus.webp",
+    link: "https://viamagus.com",
+    contributions: [
+    ]
+  },
+  {
     company: "Green Software Foundation",
     role: "Assembly Participant - OpenTelemetry SCI",
     tenure: "Jul 2026 - Present",
