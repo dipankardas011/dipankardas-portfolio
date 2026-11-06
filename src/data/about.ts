@@ -52,6 +52,12 @@ export const experiences: Experience[] = [
     logo: "/img/experience/viamagus.webp",
     link: "https://viamagus.com",
     contributions: [
+      {
+        title: "Client DevOps Delivery & Standardization",
+        why: "Client engagements were being delivered with practice that varied per engineer and per project, which made handovers and quality unpredictable.",
+        what: "Leading DevOps delivery for client engagements, with ownership of standardization and the implementation of engineering best practices.",
+        how: "Standardizing delivery practice across engagements and driving adoption of those practices in day-to-day work.",
+      },
     ]
   },
   {
@@ -70,6 +76,27 @@ export const experiences: Experience[] = [
     ],
   },
 
+  {
+    company: "infai & infaiw",
+    role: "Creator & Maintainer (Open Source)",
+    tenure: "Apr 2026 - Present",
+    logo: "/img/experience/infai.svg",
+    link: "https://infai.dipankar-das.com/",
+    contributions: [
+      {
+        title: "infai — Local LLM Inference Control Plane",
+        why: "Running local models meant a different set of flags per engine and no way to know whether a model would actually fit the machine before launching it.",
+        what: "Built a terminal control plane that treats model, engine, and config as one profile shape — the same control surface for llama.cpp and vLLM — and runs several models at once with live tokens/sec alongside CPU, RAM, and VRAM telemetry.",
+        how: "Shipped as a single Go binary for macOS and Linux, with GGUF downloads from Hugging Face and a hardware-fit check that runs before launch instead of after a failed load.",
+      },
+      {
+        title: "infaiw — Agent Harness with Approval Gates",
+        why: "Agent work was tied to the terminal session that started it, and delegated subagent output counted without being verified.",
+        what: "Built an agent harness that runs as a background service, so sessions keep going after the terminal closes and several clients can attach to the same one.",
+        how: "Sidecar loops delegate to subagents that must pass an acceptance check, sessions live on durable branching timelines, and risky actions wait for human approval. MCP, a skill library, and evals are built in.",
+      },
+    ],
+  },
   {
     company: "Kubmin - Ksctl",
     role: "Founder & Principal Engineer",
@@ -251,39 +278,6 @@ export const experiences: Experience[] = [
         why: "LLM inference at scale required elastic capacity and strict network isolation without exposing endpoints publicly.",
         what: "Deployed vLLM and Ollama on AWS for production-scale LLM inference.",
         how: "Used Auto Scaling Groups and VPC PrivateLink to deliver secure, elastic inference capacity without public endpoint exposure.",
-      },
-    ],
-  },
-  {
-    company: "kli - ksctl",
-    role: "Creator",
-    tenure: "Jul 2022 - Jul 2025",
-    logo: "/img/experience/ksctl-logo.webp",
-    link: "https://ksctl.com/product/kli/",
-    contributions: [
-      {
-        title: "High-Performance CLI Engineering",
-        why: "Provisioning Kubernetes clusters across multiple cloud providers required deep provider expertise and many tedious manual steps.",
-        what: "Architected kli — a multi-cloud CLI using Cobra and Viper — to abstract the full Kubernetes lifecycle.",
-        how: "Built a pluggable architecture with robust configuration management, enabling single-command cluster creation and teardown across AWS, Azure, and Civo.",
-      },
-      {
-        title: "Custom Kubernetes Controllers",
-        why: "Cluster state could drift between local CLI metadata and remote cloud infrastructure, causing hard-to-debug inconsistencies.",
-        what: "Developed custom Kubernetes controllers and reconciliation logic using client-go.",
-        how: "Ensured idempotent state management that reliably kept local metadata and remote infrastructure in sync.",
-      },
-      {
-        title: "Automated Addon & Helm Integration",
-        why: "Manual post-provisioning addon setup was repetitive, error-prone, and delayed clusters reaching a ready state.",
-        what: "Automated deployment of core cluster components — CNI, Storage Classes, and Ingress — as part of provisioning.",
-        how: "Leveraged native Helm SDKs and Go client packages to install components consistently on every cluster without manual intervention.",
-      },
-      {
-        title: "Secure Distribution & Artifact Signing",
-        why: "Users needed confidence that CLI binaries were tamper-free and reliably distributed across all platforms.",
-        what: "Implemented secure artifact signing and automated multi-platform binary releases.",
-        how: "Integrated Cosign for signing and GitHub Actions for cross-platform builds, delivering a trusted and seamless developer distribution experience.",
       },
     ],
   },
